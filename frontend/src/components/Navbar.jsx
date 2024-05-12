@@ -6,6 +6,6 @@ const Navbar = () => {
             <h2 className='text-3xl font-medium py-2'>Notes</h2>
         </div>
     )
-}sdads
+}
 
 export default Navbar
