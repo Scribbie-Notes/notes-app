@@ -149,7 +149,7 @@ app.post("/add-note", authenticationToken, async (req, res) => {
 })
 
 // edit note
-app.post("/edit-note", authenticationToken, async (req, res) => {
+app.put("/edit-note/:noteId", authenticationToken, async (req, res) => {
     const noteId = req.params.noteId;
     const { title, content, tags, isPinned } = req.body;
     const { user } = req.user;
@@ -186,6 +186,27 @@ app.post("/edit-note", authenticationToken, async (req, res) => {
 
 })
 
+// get note
+app.get("/get-all-notes/:noteId", authenticationToken, async (req, res) => {
+    const { user } = req.user;
+
+    try {
+        const notes = await Note.find({
+            userId: user._id
+        }).sort({ isPinned: -1 })
+
+        return res.json({
+            error: false,
+            notes,
+            message: "Notes fetched successfully",
+        });
+    } catch (error) {
+        return res.status(500).json({
+            error: true,
+            message: "Something went wrong",
+        })
+    }
+})
 
 app.listen(8000);
 
