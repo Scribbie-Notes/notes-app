@@ -1,8 +1,9 @@
-import React, { useState } from 'react'
-import TagInput from '../../components/Input/TagInput'
+import React, { useState } from 'react';
+import TagInput from '../../components/Input/TagInput';
 import { MdClose } from 'react-icons/md';
+import axiosInstance from '../../utils/axiosInstance';
 
-const AddEditNotes = ({ noteData, type, onClose }) => {
+const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
 
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
@@ -11,11 +12,45 @@ const AddEditNotes = ({ noteData, type, onClose }) => {
     const [error, setError] = useState(null);
 
     // add note
-    const addNewNote = async () => { }
+    // Add note function
+    // Add note function
+    const addNewNote = async () => {
+        try {
+            const response = await axiosInstance.post("/add-note", {
+                title,
+                content,
+                tags,
+                isPinned: false // Provide a default value if needed
+            });
+
+            if (response.data && response.data.note) {
+                getAllNotes();
+                onClose();
+            }
+        } catch (error) {
+            console.error("Error adding note:", error); // Log the full error
+            if (error.response) {
+                console.error("Response data:", error.response.data);
+                console.error("Response status:", error.response.status);
+                console.error("Response headers:", error.response.headers);
+                if (error.response.data && error.response.data.message) {
+                    setError(error.response.data.message);
+                } else {
+                    setError("An unexpected error occurred.");
+                }
+            } else if (error.request) {
+                console.error("Request data:", error.request);
+                setError("No response received from the server.");
+            } else {
+                console.error("Error message:", error.message);
+                setError("An unexpected error occurred.");
+            }
+        }
+    };
+
 
     // edit note 
     const editNote = async () => { }
-
 
     const handleAddNote = () => {
         if (!title) {
@@ -31,11 +66,10 @@ const AddEditNotes = ({ noteData, type, onClose }) => {
         setError('');
 
         if (type === 'edit') {
-            editNote()
+            editNote();
         } else {
-            addNewNote()
+            addNewNote();
         }
-
     }
 
     return (
@@ -84,7 +118,7 @@ const AddEditNotes = ({ noteData, type, onClose }) => {
             </button>
 
         </div>
-    )
+    );
 }
 
-export default AddEditNotes
+export default AddEditNotes;

@@ -7,6 +7,8 @@ import Modal from 'react-modal';
 import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../../utils/axiosInstance';
 
+Modal.setAppElement('#root');
+
 const Home = () => {
     const [openAddEditModal, setOpenAddEditModal] = useState({
         isShown: false,
@@ -55,14 +57,14 @@ const Home = () => {
 
             <div className='container mx-auto'>
                 <div className='grid grid-cols-3 gap-4 mt-8'>
-                    {allNotes.map(note => (
+                    {allNotes.map((item, index) => (
                         <NoteCard
-                            key={note._id}
-                            title={note.title}
-                            date={note.date}
-                            content={note.content}
-                            tags={note.tags.join(', ')}
-                            isPinned={note.isPinned}
+                            key={item._id}
+                            title={item.title}
+                            date={item.createdOn}
+                            content={item.content}
+                            tags={item.tags.join(', ')}
+                            isPinned={item.isPinned}
                             onEdit={() => { }}
                             onDelete={() => { }}
                             onPinNote={() => { }}
@@ -99,6 +101,7 @@ const Home = () => {
                     onClose={() => {
                         setOpenAddEditModal({ isShown: false, type: "add", data: null });
                     }}
+                    getAllNotes={getAllNotes}
                 />
             </Modal>
         </div>
