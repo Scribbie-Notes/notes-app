@@ -1,5 +1,5 @@
-import React from 'react'
-import { getInitials } from '../../utils/helper'
+import React from 'react';
+import { getInitials } from '../../utils/helper';
 
 const ProfileInfo = ({ onLogout }) => {
     return (
@@ -7,7 +7,6 @@ const ProfileInfo = ({ onLogout }) => {
             <div className='w-12 h-12 flex items-center justify-center rounded-full text-slate-950 font-medium bg-slate-100'>
                 {getInitials("Yash Mandi")}
             </div>
-
             <div>
                 <p className='text-sm font-medium'>Yash Mandi</p>
                 <button className='underline text-sm' onClick={onLogout}>
@@ -15,7 +14,7 @@ const ProfileInfo = ({ onLogout }) => {
                 </button>
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default ProfileInfo
+export default ProfileInfo;
