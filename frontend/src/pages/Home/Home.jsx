@@ -7,6 +7,7 @@ import Modal from 'react-modal';
 import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../../utils/axiosInstance';
 import Toast from '../../components/ToastMessage/Toast';
+import EmptyCard from '../../components/EmptyCard/EmptyCard';
 
 Modal.setAppElement('#root');
 
@@ -115,21 +116,28 @@ const Home = () => {
         <div>
             <Navbar userInfo={userInfo} />
             <div className='container mx-auto'>
-                <div className='grid grid-cols-3 gap-4 mt-8'>
-                    {allNotes.map((item) => (
-                        <NoteCard
-                            key={item._id}
-                            title={item.title}
-                            date={item.createdOn}
-                            content={item.content}
-                            tags={item.tags}
-                            isPinned={item.isPinned}
-                            onEdit={() => handleEdit(item)}
-                            onDelete={() => deleteNote(item)}
-                            onPinNote={() => { }}
+                {allNotes.length > 0 ? (
+                    <div className='grid grid-cols-3 gap-4 mt-8'>
+                        {allNotes.map((item) => (
+                            <NoteCard
+                                key={item._id}
+                                title={item.title}
+                                date={item.createdOn}
+                                content={item.content}
+                                tags={item.tags}
+                                isPinned={item.isPinned}
+                                onEdit={() => handleEdit(item)}
+                                onDelete={() => deleteNote(item)}
+                                onPinNote={() => { }}
+                            />
+                        ))}
+                    </div>)
+                    : (
+                        <EmptyCard
+                            imgSrc={AddNotesImg}
+                            message={`Start adding notes by clicking on the "+" button. Lets get started!`}
                         />
-                    ))}
-                </div>
+                    )}
             </div>
 
             <button
