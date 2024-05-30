@@ -240,16 +240,15 @@ app.delete("/delete-note/:noteId", authenticationToken, async (req, res) => {
         return res.json({
             error: false,
             message: "Note deleted successfully",
-        })
+        });
     } catch (error) {
-        error: true
         return res.status(500).json({
             error: true,
             message: "Something went wrong",
-        })
+        });
     }
+});
 
-})
 
 // update isPinned
 app.put("/update-note-pinned/:noteId", authenticationToken, async (req, res) => {

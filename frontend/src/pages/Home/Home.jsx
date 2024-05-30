@@ -6,11 +6,18 @@ import AddEditNotes from './AddEditNotes';
 import Modal from 'react-modal';
 import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../../utils/axiosInstance';
+import Toast from '../../components/ToastMessage/Toast';
 
 Modal.setAppElement('#root');
 
 const Home = () => {
     const [openAddEditModal, setOpenAddEditModal] = useState({
+        isShown: false,
+        type: "add",
+        data: null
+    });
+
+    const [showToastMsg, setShowToastMsg] = useState({
         isShown: false,
         type: "add",
         data: null
@@ -25,6 +32,22 @@ const Home = () => {
         setOpenAddEditModal({ isShown: true, type: "edit", data: noteDetails });
     };
 
+    const showToastMessage = (message, type) => {
+        setShowToastMsg({
+            isShown: true,
+            message,
+            type
+        });
+    };
+
+    const handleCloseToast = () => {
+        setShowToastMsg({
+            isShown: false,
+            message: ""
+        });
+    };
+
+    // get user
     const getUserInfo = async () => {
         try {
             const response = await axiosInstance.get("/get-user");
@@ -39,6 +62,7 @@ const Home = () => {
         }
     };
 
+    // get all notes
     const getAllNotes = async () => {
         try {
             const response = await axiosInstance.get("/get-all-notes");
@@ -55,6 +79,29 @@ const Home = () => {
         }
     };
 
+    // delete notes
+    const deleteNote = async (data) => {
+        const noteId = data._id;
+
+        try {
+            const response = await axiosInstance.delete(`/delete-note/${noteId}`);
+
+            if (response.data && !response.data.error) {
+                showToastMessage("Note deleted successfully!", "delete");
+                console.log('Deleted Note:', response.data.note); // Add this line
+                getAllNotes();
+            }
+        } catch (error) {
+            if (
+                error.response &&
+                error.response.data &&
+                error.response.data.message
+            ) {
+                console.log(error.response.data.message);
+            }
+        }
+    };
+
     useEffect(() => {
         getAllNotes();
         getUserInfo();
@@ -67,7 +114,6 @@ const Home = () => {
     return (
         <div>
             <Navbar userInfo={userInfo} />
-
             <div className='container mx-auto'>
                 <div className='grid grid-cols-3 gap-4 mt-8'>
                     {allNotes.map((item) => (
@@ -79,7 +125,7 @@ const Home = () => {
                             tags={item.tags}
                             isPinned={item.isPinned}
                             onEdit={() => handleEdit(item)}
-                            onDelete={() => { }}
+                            onDelete={() => deleteNote(item)}
                             onPinNote={() => { }}
                         />
                     ))}
@@ -115,8 +161,16 @@ const Home = () => {
                         setOpenAddEditModal({ isShown: false, type: "add", data: null });
                     }}
                     getAllNotes={getAllNotes}
+                    showToastMessage={showToastMessage}
                 />
             </Modal>
+
+            <Toast
+                isShown={showToastMsg.isShown}
+                message={showToastMsg.message}
+                type={showToastMsg.type}
+                onClose={handleCloseToast}
+            />
         </div>
     );
 };
