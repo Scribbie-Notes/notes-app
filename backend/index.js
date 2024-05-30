@@ -249,7 +249,6 @@ app.delete("/delete-note/:noteId", authenticationToken, async (req, res) => {
     }
 });
 
-
 // update isPinned
 app.put("/update-note-pinned/:noteId", authenticationToken, async (req, res) => {
     const noteId = req.params.noteId;
@@ -284,6 +283,41 @@ app.put("/update-note-pinned/:noteId", authenticationToken, async (req, res) => 
     }
 })
 
-app.listen(8000);
+// search notes
+app.get("/search-notes/", authenticationToken, async (req, res) => {
+    const { user } = req.user;
+    const { query } = req.query;
+
+    if (!query) {
+        return res.status(400).json({ error: true, message: "Please provide at least one field to search" });
+    }
+
+    try {
+        const matchingNotes = await Note.find({
+            userId: user._id,
+            $or: [
+                { title: { $regex: new RegExp(query, "i") } },
+                { content: { $regex: new RegExp(query, "i") } }
+            ],
+        });
+
+        return res.json({
+            error: false,
+            notes: matchingNotes,
+            message: "Notes fetched successfully",
+        })
+
+    } catch (error) {
+        return res.status(500).json({
+            error: true,
+            message: "Internal server error",
+        })
+    }
+
+})
+
+app.listen(8000, () => {
+    console.log("Server is running on port 8000");
+});
 
 module.exports = app;

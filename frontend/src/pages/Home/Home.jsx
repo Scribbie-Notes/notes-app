@@ -6,8 +6,9 @@ import AddEditNotes from './AddEditNotes';
 import Modal from 'react-modal';
 import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../../utils/axiosInstance';
-import Toast from '../../components/ToastMessage/Toast';
 import EmptyCard from '../../components/EmptyCard/EmptyCard';
+import AddNotesImg from '../../assets/images/add-notes.svg';
+import NoDataImg from '../../assets/images/no-data.svg';
 
 Modal.setAppElement('#root');
 
@@ -18,34 +19,15 @@ const Home = () => {
         data: null
     });
 
-    const [showToastMsg, setShowToastMsg] = useState({
-        isShown: false,
-        type: "add",
-        data: null
-    });
 
     const [allNotes, setAllNotes] = useState([]);
     const [userInfo, setUserInfo] = useState(null);
+    const [isSearch, setIsSearch] = useState(false);
 
     const navigate = useNavigate();
 
     const handleEdit = (noteDetails) => {
         setOpenAddEditModal({ isShown: true, type: "edit", data: noteDetails });
-    };
-
-    const showToastMessage = (message, type) => {
-        setShowToastMsg({
-            isShown: true,
-            message,
-            type
-        });
-    };
-
-    const handleCloseToast = () => {
-        setShowToastMsg({
-            isShown: false,
-            message: ""
-        });
     };
 
     // get user
@@ -56,7 +38,7 @@ const Home = () => {
                 setUserInfo(response.data.user);
             }
         } catch (error) {
-            if (error.response.status === 401) {
+            if (error.response && error.response.status === 401) {
                 localStorage.clear();
                 navigate("/login");
             }
@@ -87,21 +69,43 @@ const Home = () => {
         try {
             const response = await axiosInstance.delete(`/delete-note/${noteId}`);
 
-            if (response.data && !response.data.error) {
-                showToastMessage("Note deleted successfully!", "delete");
-                console.log('Deleted Note:', response.data.note); // Add this line
+            if (response.data && response.data.note) {
+                console.log('Deleted Note:', response.data.note);
                 getAllNotes();
             }
         } catch (error) {
             if (
                 error.response &&
                 error.response.data &&
-                error.response.data.message
+                error.response.data.messages
             ) {
-                console.log(error.response.data.message);
+                console.log(error.response.data.messages);
             }
         }
     };
+
+    // search for notes
+    const onSearchNote = async (query) => {
+        try {
+            const response = await axiosInstance.get("/search-notes", {
+                params: {
+                    query
+                }
+            });
+
+            if (response.data && response.data.notes) {
+                setIsSearch(true);
+                setAllNotes(response.data.notes);
+            }
+        } catch (error) {
+            console.log("Error while fetching notes");
+        }
+    };
+
+    const handleClearSearch = () => {
+        setIsSearch(false);
+        getAllNotes();
+    }
 
     useEffect(() => {
         getAllNotes();
@@ -114,7 +118,7 @@ const Home = () => {
 
     return (
         <div>
-            <Navbar userInfo={userInfo} />
+            <Navbar userInfo={userInfo} onSearchNote={onSearchNote} handleClearSearch={handleClearSearch} />
             <div className='container mx-auto'>
                 {allNotes.length > 0 ? (
                     <div className='grid grid-cols-3 gap-4 mt-8'>
@@ -131,13 +135,13 @@ const Home = () => {
                                 onPinNote={() => { }}
                             />
                         ))}
-                    </div>)
-                    : (
-                        <EmptyCard
-                            imgSrc={AddNotesImg}
-                            message={`Start adding notes by clicking on the "+" button. Lets get started!`}
-                        />
-                    )}
+                    </div>
+                ) : (
+                    <EmptyCard
+                        imgSrc={isSearch ? NoDataImg : AddNotesImg}
+                        message={isSearch ? "Oops! No notes found matching" : `Start adding notes by clicking on the "+" button. Lets get started!`}
+                    />
+                )}
             </div>
 
             <button
@@ -169,16 +173,10 @@ const Home = () => {
                         setOpenAddEditModal({ isShown: false, type: "add", data: null });
                     }}
                     getAllNotes={getAllNotes}
-                    showToastMessage={showToastMessage}
                 />
             </Modal>
 
-            <Toast
-                isShown={showToastMsg.isShown}
-                message={showToastMsg.message}
-                type={showToastMsg.type}
-                onClose={handleCloseToast}
-            />
+
         </div>
     );
 };
