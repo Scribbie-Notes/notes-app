@@ -21,6 +21,10 @@ const Home = () => {
 
     const navigate = useNavigate();
 
+    const handleEdit = (noteDetails) => {
+        setOpenAddEditModal({ isShown: true, type: "edit", data: noteDetails });
+    };
+
     const getUserInfo = async () => {
         try {
             const response = await axiosInstance.get("/get-user");
@@ -39,7 +43,12 @@ const Home = () => {
         try {
             const response = await axiosInstance.get("/get-all-notes");
             if (response.data && response.data.notes) {
-                setAllNotes(response.data.notes);
+                const notes = response.data.notes.map(note => ({
+                    ...note,
+                    tags: Array.isArray(note.tags) ? note.tags : [] // Ensure tags is always an array
+                }));
+                console.log('Fetched Notes:', notes);
+                setAllNotes(notes);
             }
         } catch (error) {
             console.log("Error while fetching notes");
@@ -51,21 +60,25 @@ const Home = () => {
         getUserInfo();
     }, []);
 
+    useEffect(() => {
+        console.log('Updated allNotes:', allNotes);
+    }, [allNotes]);
+
     return (
         <div>
             <Navbar userInfo={userInfo} />
 
             <div className='container mx-auto'>
                 <div className='grid grid-cols-3 gap-4 mt-8'>
-                    {allNotes.map((item, index) => (
+                    {allNotes.map((item) => (
                         <NoteCard
                             key={item._id}
                             title={item.title}
                             date={item.createdOn}
                             content={item.content}
-                            tags={item.tags.join(', ')}
+                            tags={item.tags}
                             isPinned={item.isPinned}
-                            onEdit={() => { }}
+                            onEdit={() => handleEdit(item)}
                             onDelete={() => { }}
                             onPinNote={() => { }}
                         />

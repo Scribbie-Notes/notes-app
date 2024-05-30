@@ -130,7 +130,6 @@ app.post("/get-user", async (req, res) => {
     });
 })
 
-// add note
 app.post("/add-note", authenticationToken, async (req, res) => {
     const { title, content, tags } = req.body;
     const { user } = req.user;
@@ -159,9 +158,10 @@ app.post("/add-note", authenticationToken, async (req, res) => {
             message: "Note added successfully",
         });
     } catch (error) {
-        return res.status(500).json({ error: true, message: "Something went wrong" });
+        console.error("Error adding note:", error); // Detailed error logging
+        return res.status(500).json({ error: true, message: "Something went wrong", details: error.message });
     }
-})
+});
 
 // edit note
 app.put("/edit-note/:noteId", authenticationToken, async (req, res) => {
@@ -202,13 +202,13 @@ app.put("/edit-note/:noteId", authenticationToken, async (req, res) => {
 })
 
 // get note
-app.get("/get-all-notes/:noteId", authenticationToken, async (req, res) => {
+app.get("/get-all-notes", authenticationToken, async (req, res) => {
     const { user } = req.user;
 
     try {
         const notes = await Note.find({
             userId: user._id
-        }).sort({ isPinned: -1 })
+        }).sort({ isPinned: -1 });
 
         return res.json({
             error: false,
@@ -219,9 +219,9 @@ app.get("/get-all-notes/:noteId", authenticationToken, async (req, res) => {
         return res.status(500).json({
             error: true,
             message: "Something went wrong",
-        })
+        });
     }
-})
+});
 
 // delete note
 app.delete("/delete-note/:noteId", authenticationToken, async (req, res) => {

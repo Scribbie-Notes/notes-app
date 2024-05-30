@@ -7,7 +7,7 @@ const axiosInstance = axios.create({
     headers: {
         "Content-Type": "application/json",
     }
-})
+});
 
 axiosInstance.interceptors.request.use(
     (config) => {
@@ -20,6 +20,6 @@ axiosInstance.interceptors.request.use(
     (error) => {
         return Promise.reject(error);
     }
-)
+);
 
-export default axiosInstance
+export default axiosInstance;

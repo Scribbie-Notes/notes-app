@@ -1,6 +1,7 @@
-import moment from 'moment'
-import React from 'react'
-import { MdCreate, MdDelete, MdOutlinePushPin } from 'react-icons/md'
+import React from 'react';
+import PropTypes from 'prop-types';
+import moment from 'moment';
+import { MdCreate, MdDelete, MdOutlinePushPin } from 'react-icons/md';
 
 const NoteCard = ({
     title,
@@ -25,7 +26,7 @@ const NoteCard = ({
             <p className='text-xs text-slate-600 mt-2'>{content?.slice(0, 60)}</p>
 
             <div className='flex items-center justify-between mt-2'>
-                <div className='text-xs text-slate-500'>{tags.map((item) => `#${item}`)}</div>
+                <div className='text-xs text-slate-500'>{tags.map((item) => `#${item}`).join(' ')}</div>
 
                 <div className='flex items-center gap-2'>
                     <MdCreate
@@ -41,7 +42,25 @@ const NoteCard = ({
             </div>
 
         </div>
-    )
+    );
 }
 
-export default NoteCard
+NoteCard.propTypes = {
+    title: PropTypes.string.isRequired,
+    date: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Date)]).isRequired,
+    content: PropTypes.string.isRequired,
+    tags: PropTypes.arrayOf(PropTypes.string).isRequired,
+    isPinned: PropTypes.bool,
+    onEdit: PropTypes.func,
+    onDelete: PropTypes.func,
+    onPinNote: PropTypes.func,
+};
+
+NoteCard.defaultProps = {
+    isPinned: false,
+    onEdit: () => { },
+    onDelete: () => { },
+    onPinNote: () => { },
+};
+
+export default NoteCard;
