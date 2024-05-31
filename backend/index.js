@@ -242,9 +242,11 @@ app.delete("/delete-note/:noteId", authenticationToken, async (req, res) => {
             message: "Note deleted successfully",
         });
     } catch (error) {
+        console.error("Error deleting note:", error); // Add more detailed error logging
         return res.status(500).json({
             error: true,
             message: "Something went wrong",
+            details: error.message
         });
     }
 });

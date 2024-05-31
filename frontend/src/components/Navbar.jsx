@@ -39,4 +39,12 @@ const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
     );
 };
 
+// Navbar.propTypes = {
+//     userInfo: PropTypes.shape({
+//         fullName: PropTypes.string.isRequired,
+//     }),
+//     onSearchNote: PropTypes.func.isRequired,
+//     handleClearSearch: PropTypes.func.isRequired,
+// };
+
 export default Navbar;

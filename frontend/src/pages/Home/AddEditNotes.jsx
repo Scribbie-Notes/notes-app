@@ -3,19 +3,19 @@ import TagInput from '../../components/Input/TagInput';
 import { MdClose } from 'react-icons/md';
 import axiosInstance from '../../utils/axiosInstance';
 
-const AddEditNotes = ({ noteData, type, getAllNotes, onClose, showToastMessage }) => {
-    const [title, setTitle] = useState(noteData?.title || '');
-    const [content, setContent] = useState(noteData?.content || '');
-    const [tags, setTags] = useState(noteData?.tags || []);
+const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
+    const [title, setTitle] = useState('');
+    const [content, setContent] = useState('');
+    const [tags, setTags] = useState([]);
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        if (noteData) {
+        if (type === 'edit' && noteData) {
             setTitle(noteData.title);
             setContent(noteData.content);
             setTags(noteData.tags);
         }
-    }, [noteData]);
+    }, [type, noteData]);
 
     const addNewNote = async () => {
         try {
@@ -23,43 +23,45 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose, showToastMessage }
                 title,
                 content,
                 tags,
-                isPinned: false,
+                isPinned: false
             });
 
             if (response.data && response.data.note) {
-                showToastMessage("Note added successfully!");
-                console.log('Added Note:', response.data.note); // Add this line
                 getAllNotes();
                 onClose();
             }
         } catch (error) {
             console.error("Error adding note:", error);
-            setError(error.response?.data?.message || "An unexpected error occurred.");
+            setError("An error occurred while adding the note.");
         }
     };
 
     const editNote = async () => {
         try {
+            if (!noteData || !noteData._id) {
+                setError("Invalid note data.");
+                return;
+            }
+
+            console.log(`Updating note with ID: ${noteData._id}`);
+
             const response = await axiosInstance.put(`/edit-note/${noteData._id}`, {
                 title,
                 content,
-                tags,
-                isPinned: noteData.isPinned,
+                tags
             });
 
             if (response.data && response.data.note) {
-                showToastMessage("Note updated successfully!");
-                console.log('Edited Note:', response.data.note); // Add this line
                 getAllNotes();
                 onClose();
             }
         } catch (error) {
-            console.error("Error editing note:", error);
-            setError(error.response?.data?.message || "An unexpected error occurred.");
+            console.error("Error updating note:", error);
+            setError("An error occurred while updating the note.");
         }
     };
 
-    const handleSave = () => {
+    const handleSaveNote = () => {
         if (!title) {
             setError("Title is required");
             return;
@@ -70,7 +72,7 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose, showToastMessage }
             return;
         }
 
-        setError(null);
+        setError('');
 
         if (type === 'edit') {
             editNote();
@@ -89,40 +91,39 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose, showToastMessage }
             </button>
 
             <div className='flex flex-col gap-2'>
-                <label className='input-label'>TITLE</label>
+                <label className='font-medium'>Title</label>
                 <input
                     type="text"
-                    className='text-2xl text-slate-950 outline-none'
-                    placeholder='Go to Gym at 7am'
+                    className='p-2 border rounded-md'
                     value={title}
-                    onChange={({ target }) => setTitle(target.value)}
+                    onChange={(e) => setTitle(e.target.value)}
                 />
             </div>
 
             <div className='flex flex-col gap-2 mt-4'>
-                <label className='input-label'>CONTENT</label>
+                <label className='font-medium'>Content</label>
                 <textarea
-                    type="text"
-                    className='text-sm text-slate-950 outline-none bg-slate-50 rounded'
-                    placeholder='Content'
-                    rows={10}
+                    className='p-2 border rounded-md h-40'
                     value={content}
-                    onChange={({ target }) => setContent(target.value)}
-                />
+                    onChange={(e) => setContent(e.target.value)}
+                ></textarea>
             </div>
 
-            <div className='mt-3'>
-                <label className='input-label'>TAGS</label>
+            <div className='flex flex-col gap-2 mt-4'>
+                <label className='font-medium'>Tags</label>
                 <TagInput tags={tags} setTags={setTags} />
             </div>
 
-            {error && <p className='text-red-500 text-xs pt-4'>{error}</p>}
+            {error && <p className='text-red-500 mt-2'>{error}</p>}
 
-            <button className='btn-primary font-medium mt-5 p-3' onClick={handleSave}>
-                {type === 'edit' ? 'UPDATE' : 'ADD'}
+            <button
+                className='w-full mt-6 p-2 bg-blue-500 text-white rounded-md'
+                onClick={handleSaveNote}
+            >
+                {type === 'edit' ? 'Update Note' : 'Add Note'}
             </button>
         </div>
     );
-}
+};
 
 export default AddEditNotes;

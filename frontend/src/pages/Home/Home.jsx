@@ -19,7 +19,6 @@ const Home = () => {
         data: null
     });
 
-
     const [allNotes, setAllNotes] = useState([]);
     const [userInfo, setUserInfo] = useState(null);
     const [isSearch, setIsSearch] = useState(false);
@@ -30,7 +29,6 @@ const Home = () => {
         setOpenAddEditModal({ isShown: true, type: "edit", data: noteDetails });
     };
 
-    // get user
     const getUserInfo = async () => {
         try {
             const response = await axiosInstance.get("/get-user");
@@ -45,7 +43,7 @@ const Home = () => {
         }
     };
 
-    // get all notes
+
     const getAllNotes = async () => {
         try {
             const response = await axiosInstance.get("/get-all-notes");
@@ -62,29 +60,18 @@ const Home = () => {
         }
     };
 
-    // delete notes
-    const deleteNote = async (data) => {
-        const noteId = data._id;
-
+    const deleteNote = async (noteId) => {
         try {
             const response = await axiosInstance.delete(`/delete-note/${noteId}`);
-
-            if (response.data && response.data.note) {
-                console.log('Deleted Note:', response.data.note);
+            if (response.data && !response.data.error) {
                 getAllNotes();
             }
         } catch (error) {
-            if (
-                error.response &&
-                error.response.data &&
-                error.response.data.messages
-            ) {
-                console.log(error.response.data.messages);
-            }
+            console.error("Error deleting note:", error);
         }
     };
 
-    // search for notes
+
     const onSearchNote = async (query) => {
         try {
             const response = await axiosInstance.get("/search-notes", {
@@ -105,16 +92,12 @@ const Home = () => {
     const handleClearSearch = () => {
         setIsSearch(false);
         getAllNotes();
-    }
+    };
 
     useEffect(() => {
         getAllNotes();
         getUserInfo();
     }, []);
-
-    useEffect(() => {
-        console.log('Updated allNotes:', allNotes);
-    }, [allNotes]);
 
     return (
         <div>
@@ -131,7 +114,7 @@ const Home = () => {
                                 tags={item.tags}
                                 isPinned={item.isPinned}
                                 onEdit={() => handleEdit(item)}
-                                onDelete={() => deleteNote(item)}
+                                onDelete={() => deleteNote(item._id)}
                                 onPinNote={() => { }}
                             />
                         ))}
@@ -175,7 +158,6 @@ const Home = () => {
                     getAllNotes={getAllNotes}
                 />
             </Modal>
-
 
         </div>
     );
