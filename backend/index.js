@@ -115,20 +115,21 @@ app.post("/login", async (req, res) => {
 })
 
 // get user
-app.post("/get-user", async (req, res) => {
+app.get("/get-user", authenticationToken, async (req, res) => {
     const { user } = req.user;
-
-    const isUser = await User.findOne({ _id: user._id });
 
     if (!user) {
         return res.sendStatus(401);
     }
 
+    const isUser = await User.findOne({ _id: user._id });
+
     return res.json({
         user: { fullName: isUser.fullName, email: isUser.email, _id: isUser._id, createdOn: isUser.createdOn },
         message: "",
     });
-})
+});
+
 
 app.post("/add-note", authenticationToken, async (req, res) => {
     const { title, content, tags } = req.body;

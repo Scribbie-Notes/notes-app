@@ -10,8 +10,6 @@ import EmptyCard from '../../components/EmptyCard/EmptyCard';
 import AddNotesImg from '../../assets/images/add-notes.svg';
 import NoDataImg from '../../assets/images/no-data.svg';
 
-Modal.setAppElement('#root');
-
 const Home = () => {
     const [openAddEditModal, setOpenAddEditModal] = useState({
         isShown: false,
@@ -36,12 +34,17 @@ const Home = () => {
                 setUserInfo(response.data.user);
             }
         } catch (error) {
-            if (error.response && error.response.status === 401) {
+            if (error.response.status === 401) {
                 localStorage.clear();
                 navigate("/login");
             }
         }
     };
+
+    useEffect(() => {
+        getUserInfo();
+        return () => { }
+    }, [])
 
 
     const getAllNotes = async () => {
@@ -101,7 +104,7 @@ const Home = () => {
 
     return (
         <div>
-            <Navbar userInfo={userInfo} onSearchNote={onSearchNote} handleClearSearch={handleClearSearch} />
+            <Navbar userInfo={userInfo} onSearchNote={onSearchNote} handleClearSearch={handleClearSearch} setUserInfo={setUserInfo} />
             <div className='container mx-auto'>
                 {allNotes.length > 0 ? (
                     <div className='grid grid-cols-3 gap-4 mt-8'>

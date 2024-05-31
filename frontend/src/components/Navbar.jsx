@@ -34,17 +34,17 @@ const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
                 onClearSearch={onClearSearch}
             />
 
-            <ProfileInfo userInfo={userInfo} onLogout={onLogout} />
+            {userInfo ? (
+                <ProfileInfo userInfo={userInfo} onLogout={onLogout} >
+                </ProfileInfo>
+
+            ) : (
+                <button onClick={() => navigate('/login')} className='text-sm text-slate-700 underline'>
+                    Login
+                </button>
+            )}
         </div>
     );
 };
-
-// Navbar.propTypes = {
-//     userInfo: PropTypes.shape({
-//         fullName: PropTypes.string.isRequired,
-//     }),
-//     onSearchNote: PropTypes.func.isRequired,
-//     handleClearSearch: PropTypes.func.isRequired,
-// };
 
 export default Navbar;
