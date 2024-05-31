@@ -4,6 +4,8 @@ import { Link, useNavigate } from 'react-router-dom'
 import PasswordInput from '../../components/Input/PasswordInput'
 import { validateEmail } from '../../utils/helper'
 import axiosInstance from '../../utils/axiosInstance'
+import toast from 'react-hot-toast';
+
 
 const Login = () => {
 
@@ -40,6 +42,17 @@ const Login = () => {
             if (response.data && response.data.accessToken) {
                 localStorage.setItem("token", response.data.accessToken);
                 navigate("/dashboard")
+                toast.success('Logged in successfully', {
+                    style: {
+                        fontSize: '13px',
+                        maxWidth: '400px',
+                        boxShadow: 'px 4px 8px rgba(0, 1, 4, 0.1)',
+                        borderRadius: '8px',
+                        borderColor: 'rgba(0, 0, 0, 0.8)',
+                        marginTop: '60px',
+                        marginRight: '10px',
+                    }
+                });
             }
 
         } catch (error) {

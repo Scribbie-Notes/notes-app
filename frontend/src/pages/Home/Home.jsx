@@ -9,6 +9,7 @@ import axiosInstance from '../../utils/axiosInstance';
 import EmptyCard from '../../components/EmptyCard/EmptyCard';
 import AddNotesImg from '../../assets/images/add-notes.svg';
 import NoDataImg from '../../assets/images/no-data.svg';
+import toast from 'react-hot-toast';
 
 const Home = () => {
     const [openAddEditModal, setOpenAddEditModal] = useState({
@@ -46,7 +47,6 @@ const Home = () => {
         return () => { }
     }, [])
 
-
     const getAllNotes = async () => {
         try {
             const response = await axiosInstance.get("/get-all-notes");
@@ -68,12 +68,33 @@ const Home = () => {
             const response = await axiosInstance.delete(`/delete-note/${noteId}`);
             if (response.data && !response.data.error) {
                 getAllNotes();
+                toast.success('Note deleted successfully', {
+                    style: {
+                        fontSize: '13px',
+                        maxWidth: '400px',
+                        boxShadow: 'px 4px 8px rgba(0, 1, 4, 0.1)',
+                        borderRadius: '8px',
+                        borderColor: 'rgba(0, 0, 0, 0.8)',
+                        marginTop: '60px',
+                        marginRight: '10px',
+                    }
+                });
             }
         } catch (error) {
             console.error("Error deleting note:", error);
+            toast.error('Failed to delete note', {
+                style: {
+                    fontSize: '13px',
+                    maxWidth: '400px',
+                    boxShadow: 'px 4px 8px rgba(0, 1, 4, 0.1)',
+                    borderRadius: '8px',
+                    borderColor: 'rgba(0, 0, 0, 0.8)',
+                    marginTop: '60px',
+                    marginRight: '10px',
+                }
+            });
         }
     };
-
 
     const onSearchNote = async (query) => {
         try {
@@ -161,7 +182,6 @@ const Home = () => {
                     getAllNotes={getAllNotes}
                 />
             </Modal>
-
         </div>
     );
 };

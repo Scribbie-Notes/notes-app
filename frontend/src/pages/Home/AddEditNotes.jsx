@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import TagInput from '../../components/Input/TagInput';
 import { MdClose } from 'react-icons/md';
 import axiosInstance from '../../utils/axiosInstance';
+import toast from 'react-hot-toast';
 
 const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
     const [title, setTitle] = useState('');
@@ -29,10 +30,32 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
             if (response.data && response.data.note) {
                 getAllNotes();
                 onClose();
+                toast.success('Note added successfully', {
+                    style: {
+                        fontSize: '13px',
+                        maxWidth: '400px',
+                        boxShadow: 'px 4px 8px rgba(0, 1, 4, 0.1)',
+                        borderRadius: '8px',
+                        borderColor: 'rgba(0, 0, 0, 0.8)',
+                        marginTop: '60px',
+                        marginRight: '10px',
+                    }
+                });
             }
         } catch (error) {
             console.error("Error adding note:", error);
             setError("An error occurred while adding the note.");
+            toast.error('Failed to add a note', {
+                style: {
+                    fontSize: '13px',
+                    maxWidth: '400px',
+                    boxShadow: 'px 4px 8px rgba(0, 1, 4, 0.1)',
+                    borderRadius: '8px',
+                    borderColor: 'rgba(0, 0, 0, 0.8)',
+                    marginTop: '60px',
+                    marginRight: '10px',
+                }
+            });
         }
     };
 
@@ -54,10 +77,32 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
             if (response.data && response.data.note) {
                 getAllNotes();
                 onClose();
+                toast.success('Note updated successfully', {
+                    style: {
+                        fontSize: '13px',
+                        maxWidth: '400px',
+                        boxShadow: 'px 4px 8px rgba(0, 1, 4, 0.1)',
+                        borderRadius: '8px',
+                        borderColor: 'rgba(0, 0, 0, 0.8)',
+                        marginTop: '60px',
+                        marginRight: '10px',
+                    }
+                });
             }
         } catch (error) {
             console.error("Error updating note:", error);
             setError("An error occurred while updating the note.");
+            toast.error('Failed to update a note', {
+                style: {
+                    fontSize: '13px',
+                    maxWidth: '400px',
+                    boxShadow: 'px 4px 8px rgba(0, 1, 4, 0.1)',
+                    borderRadius: '8px',
+                    borderColor: 'rgba(0, 0, 0, 0.8)',
+                    marginTop: '60px',
+                    marginRight: '10px',
+                }
+            });
         }
     };
 
