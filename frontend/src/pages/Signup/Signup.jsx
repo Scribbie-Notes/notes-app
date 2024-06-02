@@ -154,18 +154,17 @@ const Signup = () => {
                     <section className="relative flex h-32 items-end bg-gray-900 lg:col-span-5 lg:h-full xl:col-span-6">
                         <img
                             alt=""
-                            src="https://images.unsplash.com/photo-1617195737496-bc30194e3a19?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80"
-                            className="absolute inset-0 h-full w-full object-cover opacity-80"
+                            src="https://images.unsplash.com/photo-1569759276108-31b8e7e43e7b?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                            className="absolute inset-0 h-full w-full object-cover opacity-30 "
                         />
 
                         <div className="hidden lg:relative lg:block lg:p-12">
                             <h2 className="mt-6 text-2xl font-bold text-white sm:text-3xl md:text-4xl">
-                                Welcome to Notes App!
+                                Welcome to Scribbie!
                             </h2>
 
                             <p className="mt-4 leading-relaxed text-white/90">
-                                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Eligendi nam dolorum aliquam,
-                                quibusdam aperiam voluptatum.
+                                Organize your thoughts with precision and amplify your productivity. Discover a seamless way to manage all your ideas in one place.
                             </p>
                         </div>
                     </section>
@@ -176,12 +175,11 @@ const Signup = () => {
                         <div className="max-w-xl lg:max-w-3xl">
                             <div className="relative -mt-16 block lg:hidden">
                                 <h1 className="mt-12 text-2xl font-bold text-gray-900 sm:text-3xl md:text-4xl">
-                                    Welcome to Notes App!
+                                    Welcome to Scribbie!
                                 </h1>
 
                                 <p className="mt-4 leading-relaxed text-gray-500">
-                                    Lorem, ipsum dolor sit amet consectetur adipisicing elit. Eligendi nam dolorum aliquam,
-                                    quibusdam aperiam voluptatum.
+                                    Effortless notes for a more productive you every day. Enhance your workflow with intuitive, organized note-taking.
                                 </p>
                             </div>
 
@@ -305,7 +303,7 @@ const Signup = () => {
 
                                 <div className="col-span-6 sm:flex sm:items-center sm:gap-4">
                                     <button
-                                        className="inline-block shrink-0 rounded-md border border-blue-600 bg-blue-600 px-12 py-3 text-sm font-medium text-white transition hover:bg-transparent hover:text-blue-600 focus:outline-none focus:ring active:text-blue-500"
+                                        className="inline-flex items-center text-white bg-gray-800 hover:bg-gray-900 focus:outline-none  font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700  dark:border-gray-700"
                                         type="submit"
                                     >
                                         Create an account
@@ -324,5 +322,6 @@ const Signup = () => {
         </div>
     );
 };
+
 
 export default Signup;

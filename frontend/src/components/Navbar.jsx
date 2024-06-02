@@ -3,6 +3,7 @@ import ProfileInfo from './Cards/ProfileInfo';
 import { useNavigate } from 'react-router-dom';
 import SearchBar from './SearchBar/SearchBar';
 import { toast } from 'react-hot-toast';
+import { Link } from 'react-router-dom';
 
 const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
     const [searchQuery, setSearchQuery] = useState("");
@@ -37,7 +38,9 @@ const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
 
     return (
         <div className='bg-white flex items-center justify-between px-6 py-2 drop-shadow-lg'>
-            <h2 className='text-2xl font-medium py-2'>Notes</h2>
+            <Link to='/'>
+                <h2 className='text-2xl font-medium py-2'>Scribbie</h2>
+            </Link>
 
             {userInfo && (
                 <SearchBar

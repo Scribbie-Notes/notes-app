@@ -1,11 +1,20 @@
-import React from 'react'
-import { FaMagnifyingGlass } from 'react-icons/fa6'
-import { IoMdClose } from 'react-icons/io'
+import React, { useState } from 'react';
+import { FaMagnifyingGlass } from 'react-icons/fa6';
+import { IoMdClose } from 'react-icons/io';
 
 const SearchBar = ({ value, onChange, handleSearch, onClearSearch }) => {
+    const [isClicked, setIsClicked] = useState(false);
+
+    const handleClick = () => {
+        setIsClicked(true);
+    };
+
+    const handleBlur = () => {
+        setIsClicked(false);
+    };
 
     return (
-        <div className='w-80 flex items-center px-4 bg-slate-100 rounded-md ' >
+        <div className={`w-80 flex items-center px-4 bg-slate-100 rounded-md ${isClicked ? 'shadow-md border-2 border-gray-400' : ''}`} onClick={handleClick} onBlur={handleBlur}>
             <input
                 type="text"
                 placeholder='Search Notes'
@@ -19,9 +28,8 @@ const SearchBar = ({ value, onChange, handleSearch, onClearSearch }) => {
             )}
 
             <FaMagnifyingGlass className='text-slate-400 cursor-pointer hover:text-black' onClick={handleSearch} />
-
         </div>
-    )
-}
+    );
+};
 
-export default SearchBar    
+export default SearchBar;

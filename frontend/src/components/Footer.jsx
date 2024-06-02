@@ -5,10 +5,9 @@ const Footer = () => {
         <div>
             <footer className="bg-gray-100 ">
                 <div className="mx-auto max-w-5xl px-4 py-16 sm:px-6 lg:px-8">
-                    <h1 className="text-3xl font-medium text-center">Notes</h1>
+                    <h1 className="text-3xl font-medium text-center">Scribbie</h1>
                     <p className="mx-auto mt-6 max-w-md text-center leading-relaxed text-gray-500">
-                        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Incidunt consequuntur amet culpa cum
-                        itaque neque.
+                        Capture every thought and organize with ease. Unlock your full potential with our intuitive Scribble.
                     </p>
 
                     <ul className="mt-12 flex flex-wrap justify-center gap-6 md:gap-8 lg:gap-12">

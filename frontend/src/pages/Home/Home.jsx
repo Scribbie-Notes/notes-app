@@ -161,7 +161,7 @@ const Home = () => {
     return (
         <div>
             <Navbar userInfo={userInfo} onSearchNote={onSearchNote} handleClearSearch={handleClearSearch} setUserInfo={setUserInfo} />
-            <div className='container mx-auto'>
+            <div className='container mx-auto h-screen'>
                 {allNotes.length > 0 ? (
                     <div className='grid grid-cols-3 gap-4 mt-8'>
                         {allNotes.map((item) => (
@@ -220,5 +220,7 @@ const Home = () => {
         </div>
     );
 };
+
+
 
 export default Home;

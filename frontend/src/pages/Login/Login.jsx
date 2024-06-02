@@ -110,8 +110,8 @@ const Login = () => {
                     <section className="relative flex h-32 items-end bg-gray-900 lg:col-span-5 lg:h-full xl:col-span-6">
                         <img
                             alt=""
-                            src="https://images.unsplash.com/photo-1617195737496-bc30194e3a19?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80"
-                            className="absolute h-full w-full object-cover opacity-80 "
+                            src="https://images.unsplash.com/photo-1579783901586-d88db74b4fe4?q=80&w=1496&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                            className="absolute h-full w-full object-cover opacity-30"
                         />
 
                         <div className="hidden lg:relative lg:block lg:p-12">
@@ -124,12 +124,10 @@ const Login = () => {
                             </h2>
 
                             <p className="mt-4 leading-relaxed text-white/90">
-                                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Eligendi nam dolorum aliquam,
-                                quibusdam aperiam voluptatum.
+                                Smart note-taking for smarter work and better results. Stay organized, stay inspired, and stay ahead.
                             </p>
                         </div>
                     </section>
-
                     <main
                         className="flex items-center justify-center px-8 py-8 sm:px-12 lg:col-span-7 lg:px-16 lg:py-12 xl:col-span-6"
                     >
@@ -140,13 +138,12 @@ const Login = () => {
                                 </h1>
 
                                 <p className="mt-4 leading-relaxed text-gray-500">
-                                    Lorem, ipsum dolor sit amet consectetur adipisicing elit. Eligendi nam dolorum aliquam,
-                                    quibusdam aperiam voluptatum.
+                                    Smart note-taking for smarter work and better results. Stay organized, stay inspired, and stay ahead.
                                 </p>
                             </div>
 
                             <form onSubmit={handleLogin} className="mt-8 grid grid-cols-6 gap-6">
-                                <div className="col-span-10">
+                                <div className="col-span-12">
                                     <label htmlFor="Email" className="block text-sm font-medium text-gray-700"> Email </label>
                                     <input
                                         type="email"
@@ -158,7 +155,7 @@ const Login = () => {
                                     />
                                 </div>
 
-                                <div className="col-span-10">
+                                <div className="col-span-12">
                                     <label htmlFor="Password" className="block text-sm font-medium text-gray-700"> Password </label>
                                     <div className="relative">
                                         <input
@@ -179,9 +176,24 @@ const Login = () => {
                                     </div>
                                 </div>
 
-                                <div className="col-span-6 sm:flex sm:items-center mt-4 sm:gap-4">
+                                <div className="col-span-6">
+                                    <label htmlFor="MarketingAccept" className="flex gap-2">
+                                        <input
+                                            type="checkbox"
+                                            id="MarketingAccept"
+                                            name="marketing_accept"
+                                            className="size-4 rounded-md border border-gray-100 bg-white shadow-sm"
+                                        />
+
+                                        <span className="text-xs text-gray-700">
+                                            Remember for next 30 days
+                                        </span>
+                                    </label>
+                                </div>
+
+                                <div className="col-span-12 sm:flex sm:items-center mt-4 sm:gap-4">
                                     <button
-                                        className="inline-block shrink-0 rounded-md border border-blue-600 bg-blue-600 px-12 py-3 text-sm font-medium text-white transition hover:bg-transparent hover:text-blue-600 focus:outline-none focus:ring active:text-blue-500"
+                                        className="inline-flex items-center text-white bg-gray-800 hover:bg-gray-900 focus:outline-none  font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700  dark:border-gray-700"
                                         type="submit"
                                     >
                                         Login
@@ -200,5 +212,6 @@ const Login = () => {
         </div>
     )
 }
+
 
 export default Login
