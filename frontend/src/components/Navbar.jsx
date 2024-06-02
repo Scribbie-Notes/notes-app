@@ -39,19 +39,19 @@ const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
         <div className='bg-white flex items-center justify-between px-6 py-2 drop-shadow-lg'>
             <h2 className='text-2xl font-medium py-2'>Notes</h2>
 
-            <SearchBar
-                value={searchQuery}
-                onChange={({ target }) => setSearchQuery(target.value)}
-                handleSearch={handleSearch}
-                onClearSearch={onClearSearch}
-            />
+            {userInfo && (
+                <SearchBar
+                    value={searchQuery}
+                    onChange={({ target }) => setSearchQuery(target.value)}
+                    handleSearch={handleSearch}
+                    onClearSearch={onClearSearch}
+                />
+            )}
 
             {userInfo ? (
                 <div>
-                    <ProfileInfo userInfo={userInfo} onLogout={onLogout} >
-                    </ProfileInfo>
+                    <ProfileInfo userInfo={userInfo} onLogout={onLogout} />
                 </div>
-
             ) : (
                 <button onClick={() => navigate('/login')} className='text-sm text-slate-700 underline'>
                     Login

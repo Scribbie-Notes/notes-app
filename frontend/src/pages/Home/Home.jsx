@@ -46,7 +46,7 @@ const Home = () => {
     useEffect(() => {
         getUserInfo();
         return () => { }
-    }, [])
+    }, []);
 
     // get all notes
     const getAllNotes = async () => {
@@ -147,8 +147,6 @@ const Home = () => {
             console.log("Error while updating note pinned status:", error);
         }
     };
-
-
 
     const handleClearSearch = () => {
         setIsSearch(false);
