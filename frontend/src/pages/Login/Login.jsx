@@ -1,22 +1,22 @@
 import React, { useState } from 'react'
 import Navbar from '../../components/Navbar'
 import { Link, useNavigate } from 'react-router-dom'
-import PasswordInput from '../../components/Input/PasswordInput'
 import { validateEmail } from '../../utils/helper'
 import axiosInstance from '../../utils/axiosInstance'
-import toast from 'react-hot-toast';
-
+import toast from 'react-hot-toast'
+import { FaEye, FaEyeSlash } from 'react-icons/fa'
 
 const Login = () => {
 
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [error, setError] = useState(null);
+    const [email, setEmail] = useState("")
+    const [password, setPassword] = useState("")
+    const [showPassword, setShowPassword] = useState(false)
+    const [error, setError] = useState(null)
 
-    const navigate = useNavigate();
+    const navigate = useNavigate()
 
     const handleLogin = async (e) => {
-        e.preventDefault();
+        e.preventDefault()
 
         if (!validateEmail(email)) {
             toast.error('Please enter a valid email', {
@@ -29,8 +29,8 @@ const Login = () => {
                     marginTop: '60px',
                     marginRight: '10px',
                 }
-            });
-            return;
+            })
+            return
         }
 
         if (!password) {
@@ -44,11 +44,11 @@ const Login = () => {
                     marginTop: '60px',
                     marginRight: '10px',
                 }
-            });
-            return;
+            })
+            return
         }
 
-        setError("");
+        setError("")
 
         // login api call
 
@@ -60,7 +60,7 @@ const Login = () => {
 
             // handle successful login response
             if (response.data && response.data.accessToken) {
-                localStorage.setItem("token", response.data.accessToken);
+                localStorage.setItem("token", response.data.accessToken)
                 navigate("/dashboard")
                 toast.success('Logged in successfully', {
                     style: {
@@ -72,7 +72,7 @@ const Login = () => {
                         marginTop: '60px',
                         marginRight: '10px',
                     }
-                });
+                })
             }
 
         } catch (error) {
@@ -88,53 +88,22 @@ const Login = () => {
                         marginTop: '60px',
                         marginRight: '10px',
                     }
-                });
+                })
             } else {
                 setError("Something went wrong. Please try again later.")
             }
         }
     }
 
+    const togglePasswordVisibility = () => {
+        setShowPassword(!showPassword)
+    }
+
     return (
         <div>
             <div className='fixed top-0 left-0 right-0 z-50'>
-
                 <Navbar />
             </div>
-
-            {/* <div className='flex items-center justify-center mt-28 '>
-                <div className='w-96 border-rounded bg-white px-7 py-10  border shadow shadow-lg'>
-                    <form onSubmit={handleLogin}>
-                        <h4 className='text-2xl mb-7'>Login</h4>
-
-                        <input
-                            type="text"
-                            placeholder='Email'
-                            className='input-box'
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                        />
-
-                        <PasswordInput
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                        />
-
-                        {error && <p className='text-red-500'>{error} </p>}
-
-                        <button type='submit' className='btn-primary'>
-                            Login
-                        </button>
-
-                        <p className='text-sm text-center mt-4'>
-                            Not registered yet?{' '}
-                            <Link to='/signup' className="font-medium text-primary underline">
-                                Create an Account
-                            </Link>
-                        </p>
-                    </form>
-                </div>
-            </div> */}
 
             <section className="bg-white">
                 <div className="lg:grid lg:min-h-screen lg:grid-cols-12">
@@ -148,7 +117,6 @@ const Login = () => {
                         <div className="hidden lg:relative lg:block lg:p-12">
                             <a className="block text-white" href="#">
                                 <span className="sr-only">Home</span>
-
                             </a>
 
                             <h2 className="mt-6 text-2xl font-bold text-white sm:text-3xl md:text-4xl">
@@ -167,8 +135,6 @@ const Login = () => {
                     >
                         <div className="max-w-xl lg:max-w-3xl">
                             <div className="relative -mt-16 block lg:hidden">
-
-
                                 <h1 className="mt-12 text-2xl font-bold text-gray-900 sm:text-3xl md:text-4xl">
                                     Welcome Back!
                                 </h1>
@@ -180,11 +146,8 @@ const Login = () => {
                             </div>
 
                             <form onSubmit={handleLogin} className="mt-8 grid grid-cols-6 gap-6">
-
-
                                 <div className="col-span-10">
-                                    <label for="Email" className="block text-sm font-medium text-gray-700"> Email </label>
-
+                                    <label htmlFor="Email" className="block text-sm font-medium text-gray-700"> Email </label>
                                     <input
                                         type="email"
                                         id="Email"
@@ -196,27 +159,25 @@ const Login = () => {
                                 </div>
 
                                 <div className="col-span-10">
-                                    <label for="Password" className="block text-sm font-medium text-gray-700"> Password </label>
-
-                                    <input
-                                        type="password"
-                                        id="Password"
-                                        name="password"
-                                        value={password}
-                                        onChange={(e) => setPassword(e.target.value)}
-                                        className="mt-1 p-2 w-full rounded-md border border-gray-100 bg-white text-sm text-gray-700 shadow-sm "
-                                    />
+                                    <label htmlFor="Password" className="block text-sm font-medium text-gray-700"> Password </label>
+                                    <div className="relative">
+                                        <input
+                                            type={showPassword ? "text" : "password"}
+                                            id="Password"
+                                            name="password"
+                                            value={password}
+                                            onChange={(e) => setPassword(e.target.value)}
+                                            className="mt-1 p-2 w-full rounded-md border border-gray-100 bg-white text-sm text-gray-700 shadow-sm"
+                                        />
+                                        <button
+                                            type="button"
+                                            onClick={togglePasswordVisibility}
+                                            className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5"
+                                        >
+                                            {showPassword ? <FaEyeSlash /> : <FaEye />}
+                                        </button>
+                                    </div>
                                 </div>
-
-
-                                {/* <div className="col-span-6">
-                                    <p className="text-sm text-gray-500">
-                                        By creating an account, you agree to our
-                                        <a href="#" className="text-gray-700 underline"> terms and conditions </a>
-                                        and
-                                        <a href="#" className="text-gray-700 underline">privacy policy</a>.
-                                    </p>
-                                </div> */}
 
                                 <div className="col-span-6 sm:flex sm:items-center mt-4 sm:gap-4">
                                     <button
@@ -226,13 +187,9 @@ const Login = () => {
                                         Login
                                     </button>
 
-
                                     <p className="mt-4 text-sm text-gray-500 sm:mt-0">
-                                        Dont have an account? <span> </span>
-
-                                        <Link to="/signup">
-                                            <a className="text-gray-700 underline font-semibold">Signup</a>.
-                                        </Link>
+                                        Don't have an account? <span> </span>
+                                        <Link to="/signup" className="text-gray-700 underline font-semibold">Signup</Link>.
                                     </p>
                                 </div>
                             </form>
@@ -240,8 +197,7 @@ const Login = () => {
                     </main>
                 </div>
             </section>
-
-        </div >
+        </div>
     )
 }
 

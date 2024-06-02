@@ -9,7 +9,7 @@ const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
     const navigate = useNavigate();
 
     const onLogout = () => {
-        localStorage.clear();s
+        localStorage.clear();
         navigate("/login");
         toast.success('Logged out successfully', {
             style: {

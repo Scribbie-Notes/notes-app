@@ -1,16 +1,19 @@
 import React, { useState } from 'react';
 import Navbar from '../../components/Navbar';
-import PasswordInput from '../../components/Input/PasswordInput';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { validateEmail } from '../../utils/helper';
 import axiosInstance from '../../utils/axiosInstance';
-import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
+import { FaRegEye } from "react-icons/fa";
+import { FaEyeSlash } from "react-icons/fa";
 
 const Signup = () => {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
+    const [passwordVisible, setPasswordVisible] = useState(false);
+    const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
     const [error, setError] = useState(null);
 
     const navigate = useNavigate();
@@ -50,6 +53,21 @@ const Signup = () => {
 
         if (!password) {
             toast.error('Please enter a password', {
+                style: {
+                    fontSize: '13px',
+                    maxWidth: '400px',
+                    boxShadow: 'px 4px 8px rgba(0, 1, 4, 0.1)',
+                    borderRadius: '8px',
+                    borderColor: 'rgba(0, 0, 0, 0.8)',
+                    marginTop: '60px',
+                    marginRight: '10px',
+                }
+            });
+            return;
+        }
+
+        if (password !== confirmPassword) {
+            toast.error('Passwords do not match', {
                 style: {
                     fontSize: '13px',
                     maxWidth: '400px',
@@ -116,53 +134,19 @@ const Signup = () => {
         }
     };
 
+    const togglePasswordVisibility = () => {
+        setPasswordVisible(!passwordVisible);
+    };
+
+    const toggleConfirmPasswordVisibility = () => {
+        setConfirmPasswordVisible(!confirmPasswordVisible);
+    };
+
     return (
         <div>
             <div className='fixed top-0 left-0 right-0 z-50'>
                 <Navbar />
             </div>
-            {/* <div className='flex items-center justify-center mt-28'>
-                <div className='w-96 border-rounded bg-white px-7 py-10 border shadow shadow-lg'>
-                    <form onSubmit={handleSignup}>
-                        <h4 className='text-2xl mb-7'>Signup</h4>
-
-                        <input
-                            type="text"
-                            placeholder='Name'
-                            className='input-box'
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
-                        />
-
-                        <input
-                            type="text"
-                            placeholder='Email'
-                            className='input-box'
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                        />
-
-                        <PasswordInput
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                        />
-
-                        {error && <p className='text-red-500'>{error}</p>}
-
-                        <button type='submit' className='btn-primary'>
-                            Create Account
-                        </button>
-
-                        <p className='text-sm text-center mt-4'>
-                            Already have an account?{' '}
-                            <Link to='/login' className="font-medium text-primary underline">
-                                Login
-                            </Link>
-                        </p>
-                    </form>
-                </div>
-            </div> */}
-
 
             <section className="bg-white">
                 <div className="lg:grid lg:min-h-screen lg:grid-cols-12">
@@ -174,7 +158,6 @@ const Signup = () => {
                         />
 
                         <div className="hidden lg:relative lg:block lg:p-12">
-
                             <h2 className="mt-6 text-2xl font-bold text-white sm:text-3xl md:text-4xl">
                                 Welcome to Notes App!
                             </h2>
@@ -191,7 +174,6 @@ const Signup = () => {
                     >
                         <div className="max-w-xl lg:max-w-3xl">
                             <div className="relative -mt-16 block lg:hidden">
-
                                 <h1 className="mt-12 text-2xl font-bold text-gray-900 sm:text-3xl md:text-4xl">
                                     Welcome to Notes App!
                                 </h1>
@@ -204,7 +186,7 @@ const Signup = () => {
 
                             <form onSubmit={handleSignup} className="mt-8 grid grid-cols-6 gap-6">
                                 <div className="col-span-6">
-                                    <label for="FirstName" className="block text-sm font-medium text-gray-700">
+                                    <label htmlFor="FirstName" className="block text-sm font-medium text-gray-700">
                                         Name
                                     </label>
 
@@ -219,7 +201,7 @@ const Signup = () => {
                                 </div>
 
                                 <div className="col-span-6">
-                                    <label for="Email" className="block text-sm font-medium text-gray-700"> Email </label>
+                                    <label htmlFor="Email" className="block text-sm font-medium text-gray-700"> Email </label>
 
                                     <input
                                         type="email"
@@ -231,36 +213,71 @@ const Signup = () => {
                                     />
                                 </div>
 
-                                <div className="col-span-6 sm:col-span-3">
-                                    <label for="Password" className="block text-sm font-medium text-gray-700"> Password </label>
+                                <div className="col-span-6 sm:col-span-3 relative">
+                                    <label htmlFor="Password" className="block text-sm font-medium text-gray-700"> Password </label>
 
                                     <input
-                                        type="password"
+                                        type={passwordVisible ? "text" : "password"}
                                         id="Password"
                                         name="password"
                                         value={password}
                                         onChange={(e) => setPassword(e.target.value)}
-                                        className="mt-1 p-2 w-full rounded-md border border-gray-100 bg-white text-sm text-gray-700 shadow-sm "
+                                        className="mt-1 p-2 w-full rounded-md border border-gray-100 bg-white text-sm text-gray-700 shadow-sm"
                                     />
+                                    <button
+                                        type="button"
+                                        className="absolute inset-y-0 right-0 pr-3 pt-6 flex items-center text-sm leading-5"
+                                        onClick={togglePasswordVisibility}
+                                    >
+                                        {passwordVisible ?
+
+                                            <div
+                                            >
+                                                <FaEyeSlash />
+                                            </div>
+                                            :
+
+                                            <div>
+                                                <FaRegEye />
+                                            </div>
+                                        }
+                                    </button>
                                 </div>
 
-                                <div className="col-span-6 sm:col-span-3">
-                                    <label for="PasswordConfirmation" className="block text-sm font-medium text-gray-700">
+                                <div className="col-span-6 sm:col-span-3 relative">
+                                    <label htmlFor="PasswordConfirmation" className="block text-sm font-medium text-gray-700">
                                         Confirm Password
                                     </label>
 
                                     <input
-                                        type="password"
+                                        type={confirmPasswordVisible ? "text" : "password"}
                                         id="PasswordConfirmation"
                                         name="password_confirmation"
-                                        value={password}
-                                        onChange={(e) => setPassword(e.target.value)}
+                                        value={confirmPassword}
+                                        onChange={(e) => setConfirmPassword(e.target.value)}
                                         className="mt-1 p-2 w-full rounded-md border border-gray-100 bg-white text-sm text-gray-700 shadow-sm"
                                     />
+                                    <button
+                                        type="button"
+                                        className="absolute inset-y-0 right-0 pr-3 pt-6 flex items-center text-sm leading-5"
+                                        onClick={toggleConfirmPasswordVisibility}
+                                    >
+                                        {confirmPasswordVisible ?
+                                            <div
+                                            >
+                                                <FaEyeSlash />
+                                            </div>
+                                            :
+
+                                            <div>
+                                                <FaRegEye />
+                                            </div>
+                                        }
+                                    </button>
                                 </div>
 
                                 <div className="col-span-6">
-                                    <label for="MarketingAccept" className="flex gap-4">
+                                    <label htmlFor="MarketingAccept" className="flex gap-4">
                                         <input
                                             type="checkbox"
                                             id="MarketingAccept"
@@ -283,9 +300,7 @@ const Signup = () => {
                                     </p>
                                 </div>
 
-
-                                {/* {error && <p className='text-red-500'>{error}</p>} */}
-
+                                {error && <p className='text-red-500 col-span-6'>{error}</p>}
 
                                 <div className="col-span-6 sm:flex sm:items-center sm:gap-4">
                                     <button
@@ -297,9 +312,7 @@ const Signup = () => {
 
                                     <p className="mt-4 text-sm text-gray-500 sm:mt-0">
                                         Already have an account? <span></span>
-                                        <Link to="/login">
-                                            <a className="text-gray-700 underline font-semibold">Log in</a>.
-                                        </Link>
+                                        <Link to="/login" className="text-gray-700 underline font-semibold">Log in</Link>.
                                     </p>
                                 </div>
                             </form>
@@ -307,8 +320,6 @@ const Signup = () => {
                     </main>
                 </div>
             </section>
-
-
         </div>
     );
 };
