@@ -139,8 +139,9 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
                 <label className='font-medium'>Title</label>
                 <input
                     type="text"
-                    className='p-2 border rounded-md'
+                    className='p-2 border rounded-md text-sm'
                     value={title}
+                    placeholder='Enter note title'
                     onChange={(e) => setTitle(e.target.value)}
                 />
             </div>
@@ -148,7 +149,8 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
             <div className='flex flex-col gap-2 mt-4'>
                 <label className='font-medium'>Content</label>
                 <textarea
-                    className='p-2 border rounded-md h-40'
+                    className='p-2 border rounded-md h-40 text-sm'
+                    placeholder='Enter note content'
                     value={content}
                     onChange={(e) => setContent(e.target.value)}
                 ></textarea>
@@ -162,7 +164,7 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
             {error && <p className='text-red-500 mt-2'>{error}</p>}
 
             <button
-                className='w-full mt-6 p-2 bg-blue-500 text-white rounded-md'
+                className='w-full items-center text-white bg-gray-800 hover:bg-gray-900 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700  dark:border-gray-700 mt-4'
                 onClick={handleSaveNote}
             >
                 {type === 'edit' ? 'Update Note' : 'Add Note'}
