@@ -258,8 +258,8 @@ app.put("/update-note-pinned/:noteId", authenticationToken, async (req, res) => 
     const { isPinned } = req.body;
     const { user } = req.user;
 
-    if (!isPinned) {
-        return res.status(400).json({ error: true, message: "Please provide at least one field to update" });
+    if (isPinned === undefined) {
+        return res.status(400).json({ error: true, message: "Please provide isPinned field" });
     }
 
     try {
@@ -269,7 +269,7 @@ app.put("/update-note-pinned/:noteId", authenticationToken, async (req, res) => 
             return res.status(404).json({ error: true, message: "Note not found" });
         }
 
-        note.isPinned = isPinned || false;
+        note.isPinned = isPinned;
 
         await note.save();
 
@@ -282,9 +282,10 @@ app.put("/update-note-pinned/:noteId", authenticationToken, async (req, res) => 
         return res.status(500).json({
             error: true,
             message: "Something went wrong",
-        })
+        });
     }
-})
+});
+
 
 // search notes
 app.get("/search-notes/", authenticationToken, async (req, res) => {

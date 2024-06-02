@@ -28,6 +28,7 @@ const Home = () => {
         setOpenAddEditModal({ isShown: true, type: "edit", data: noteDetails });
     };
 
+    // get user info
     const getUserInfo = async () => {
         try {
             const response = await axiosInstance.get("/get-user");
@@ -47,6 +48,7 @@ const Home = () => {
         return () => { }
     }, [])
 
+    // get all notes
     const getAllNotes = async () => {
         try {
             const response = await axiosInstance.get("/get-all-notes");
@@ -63,6 +65,7 @@ const Home = () => {
         }
     };
 
+    // delete note
     const deleteNote = async (noteId) => {
         try {
             const response = await axiosInstance.delete(`/delete-note/${noteId}`);
@@ -96,6 +99,7 @@ const Home = () => {
         }
     };
 
+    // search note
     const onSearchNote = async (query) => {
         try {
             const response = await axiosInstance.get("/search-notes", {
@@ -112,6 +116,39 @@ const Home = () => {
             console.log("Error while fetching notes");
         }
     };
+
+    const updateIsPinned = async (noteData) => {
+        const noteId = noteData._id;
+        const newIsPinnedStatus = !noteData.isPinned;
+
+        try {
+            const response = await axiosInstance.put(
+                `/update-note-pinned/${noteId}`, // Corrected URL
+                {
+                    isPinned: newIsPinnedStatus,
+                }
+            );
+
+            if (response.data && response.data.note) {
+                const message = newIsPinnedStatus ? 'Note Pinned' : 'Note Unpinned';
+                toast.success(message, {
+                    style: {
+                        fontSize: '13px',
+                        maxWidth: '400px',
+                        boxShadow: '0px 4px 8px rgba(0, 1, 4, 0.1)', // Corrected 'px' to '0px'
+                        borderRadius: '8px',
+                        borderColor: 'rgba(0, 0, 0, 0.8)',
+                        marginRight: '10px',
+                    }
+                });
+                getAllNotes();
+            }
+        } catch (error) {
+            console.log("Error while updating note pinned status:", error);
+        }
+    };
+
+
 
     const handleClearSearch = () => {
         setIsSearch(false);
@@ -139,7 +176,7 @@ const Home = () => {
                                 isPinned={item.isPinned}
                                 onEdit={() => handleEdit(item)}
                                 onDelete={() => deleteNote(item._id)}
-                                onPinNote={() => { }}
+                                onPinNote={() => { updateIsPinned(item) }}
                             />
                         ))}
                     </div>
