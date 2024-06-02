@@ -32,5 +32,19 @@
         @apply text-xs text-slate-400;
 
     }
+}
 
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.loader {
+    border-top-color: gray;
+    animation: spin 1s linear infinite;
 }

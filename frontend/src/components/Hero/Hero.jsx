@@ -1,7 +1,7 @@
 import React from 'react'
 import Navbar from '../Navbar'
 import { Link } from 'react-router-dom'
-import hero1 from "../../assets/images/hero1.jpg";
+import hero2 from "../../assets/images/hero2.png";
 
 const Hero = () => {
     return (
@@ -20,7 +20,7 @@ const Hero = () => {
                         </Link>
                     </div>
                     <div className="hidden lg:mt-0 lg:col-span-5 lg:flex">
-                        <img src={hero1} alt="landing-pic" />
+                        <img src={hero2} alt="landing-pic" />
                     </div>
                 </div>
             </section>

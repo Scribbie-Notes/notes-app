@@ -5,6 +5,7 @@ import { validateEmail } from '../../utils/helper'
 import axiosInstance from '../../utils/axiosInstance'
 import toast from 'react-hot-toast'
 import { FaEye, FaEyeSlash } from 'react-icons/fa'
+import hero3 from "../../assets/images/hero3.png";
 
 const Login = () => {
 
@@ -110,7 +111,7 @@ const Login = () => {
                     <section className="relative flex h-32 items-end bg-gray-900 lg:col-span-5 lg:h-full xl:col-span-6">
                         <img
                             alt=""
-                            src="https://images.unsplash.com/photo-1579783901586-d88db74b4fe4?q=80&w=1496&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                            src="https://images.unsplash.com/photo-1577083639236-0f560d3d771c?q=80&w=1367&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
                             className="absolute h-full w-full object-cover opacity-30"
                         />
 
