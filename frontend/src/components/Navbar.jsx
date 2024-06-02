@@ -49,9 +49,7 @@ const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
             )}
 
             {userInfo ? (
-                <div>
-                    <ProfileInfo userInfo={userInfo} onLogout={onLogout} />
-                </div>
+                <ProfileInfo userInfo={userInfo} onLogout={onLogout} />
             ) : (
                 <button onClick={() => navigate('/login')} className='text-sm text-slate-700 underline'>
                     Login

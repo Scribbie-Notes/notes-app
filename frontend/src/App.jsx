@@ -8,7 +8,7 @@ const routes = (
   < Router >
     <Routes>
       <Route path='/dashboard' exact element={<Home />} />
-      <Route path='/signup' exact element={<Signup />} />
+      <Route path='/' exact element={<Signup />} />
       <Route path='/login' exact element={<Login />} />
     </Routes>
   </ Router >
