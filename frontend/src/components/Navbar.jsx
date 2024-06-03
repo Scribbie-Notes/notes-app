@@ -37,7 +37,7 @@ const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
     };
 
     return (
-        <div className='bg-white flex items-center justify-between px-6 py-2 drop-shadow-lg'>
+        <div className='bg-white flex items-center justify-between px-6 py-2 drop-shadow-md'>
             <Link to='/'>
                 <h2 className='text-2xl font-medium py-2'>Scribbie</h2>
             </Link>
@@ -54,7 +54,7 @@ const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
             {userInfo ? (
                 <ProfileInfo userInfo={userInfo} onLogout={onLogout} />
             ) : (
-                <button onClick={() => navigate('/login')} className='text-sm text-slate-700 underline'>
+                <button onClick={() => navigate('/login')} className='text-gray-700 transition hover:text-gray-700/75'>
                     Login
                 </button>
             )}
