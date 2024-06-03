@@ -20,7 +20,7 @@ const Login = () => {
         e.preventDefault()
 
         if (!validateEmail(email)) {
-            toast.error('Please enter a valid email', {
+            toast.error('Please enter valid credentials', {
                 style: {
                     fontSize: '13px',
                     maxWidth: '400px',
