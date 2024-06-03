@@ -8,6 +8,10 @@ import { FaSync } from "react-icons/fa";
 import { MdGroupAdd } from "react-icons/md";
 import { GrSecure } from "react-icons/gr";
 import { MdEditSquare } from "react-icons/md";
+import { IoLogoApple } from "react-icons/io5";
+import { FaWindows } from "react-icons/fa";
+import { BiLogoPlayStore } from "react-icons/bi";
+
 
 const Hero = () => {
     return (
@@ -34,7 +38,8 @@ const Hero = () => {
 
             <hr />
 
-            <section className="bg-white py-12 mt-8">
+            {/* SECTION 2  */}
+            <section className="bg-white py-12 mt-8 mb-4">
                 <h1 className="text-4xl font-bold text-center text-gray-900">Unlock Powerful Features to </h1>
                 <h1 className="text-4xl font-bold mb-14 text-center text-gray-900">Enhance Your Note-Taking Experience</h1>
                 <div className="max-w-screen-xl mx-auto px-6">
@@ -87,6 +92,43 @@ const Hero = () => {
                     </div>
                 </div>
             </section>
+
+            <hr />
+
+            {/* SECTION 3  */}
+            <section className="bg-white py-12 mt-8 mb-24">
+                <div className="max-w-screen-xl mx-auto px-4">
+                    <h2 className="text-4xl font-extrabold text-center mb-14">Available on All Your Devices</h2>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+
+                        <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-xl cursor-pointer transition duration-300 ease-in-out border border-gray-200">
+                            <div className="flex items-center mb-3 gap-3">
+                                <IoLogoApple className='text-3xl text-gray-900 mb-1' />
+                                <h3 className="text-xl font-bold">Get it on the App Store</h3>
+                            </div>
+                            <p className="text-gray-700">Download our app from the App Store and take your notes on the go with your iPhone or iPad.</p>
+                        </div>
+
+                        <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-xl cursor-pointer transition duration-300 ease-in-out border border-gray-200">
+                            <div className="flex items-center mb-3 gap-3">
+                                <BiLogoPlayStore className='text-3xl text-gray-900 mb-1' />
+                                <h3 className="text-xl font-bold mb-2">Get it on the Play Store</h3>
+                            </div>
+                            <p className="text-gray-700">Android users can easily access our app from the Play Store and stay organized anywhere.</p>
+                        </div>
+
+                        <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-xl cursor-pointer transition duration-300 ease-in-out border border-gray-200">
+                            <div className="flex items-center mb-3 gap-3">
+                                <FaWindows className='text-3xl text-gray-900 mb-1' />
+                                <h3 className="text-xl font-bold mb-2">Available for Windows</h3>
+                            </div>
+                            <p className="text-gray-700">Download our app for Windows and manage your notes seamlessly on your desktop.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+
         </div>
     )
 }
