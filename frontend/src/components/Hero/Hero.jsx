@@ -11,6 +11,7 @@ import { MdEditSquare } from "react-icons/md";
 import { IoLogoApple } from "react-icons/io5";
 import { FaWindows } from "react-icons/fa";
 import { BiLogoPlayStore } from "react-icons/bi";
+import Testimonial from '../Testimonial';
 
 
 const Hero = () => {
@@ -96,6 +97,10 @@ const Hero = () => {
             <hr />
 
             {/* SECTION 3  */}
+            <Testimonial />
+            <hr />
+
+            {/* SECTION 4 */}
             <section className="bg-white py-12 mt-8 mb-24">
                 <div className="max-w-screen-xl mx-auto px-4">
                     <h2 className="text-4xl font-extrabold text-center mb-14">Available on All Your Devices</h2>

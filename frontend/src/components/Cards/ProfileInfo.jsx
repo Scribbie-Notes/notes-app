@@ -12,7 +12,7 @@ const ProfileInfo = ({ userInfo, onLogout }) => {
     };
 
     const handleMyProfile = () => {
-        navigate('/profile');
+        navigate('/my-profile');
         setIsDropdownOpen(false);
     };
 

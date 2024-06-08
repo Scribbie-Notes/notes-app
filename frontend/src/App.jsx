@@ -7,6 +7,7 @@ import Footer from './components/Footer';
 import Hero from './components/Hero/Hero';
 import About from './components/About/About';
 import Loading from './components/Loading';
+import ProfilePage from './pages/ProfilePage/ProfilePage';
 
 const App = () => {
   const [loading, setLoading] = useState(false);
@@ -33,6 +34,7 @@ const App = () => {
         <Route path='/login' exact element={<Login />} />
         <Route path='/signup' exact element={<Signup />} />
         <Route path='/about' exact element={<About />} />
+        <Route path='/my-profile' exact element={<ProfilePage />} />
       </Routes>
       <Footer />
     </div>
