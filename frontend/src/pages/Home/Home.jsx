@@ -123,7 +123,7 @@ const Home = () => {
 
         try {
             const response = await axiosInstance.put(
-                `/update-note-pinned/${noteId}`, // Corrected URL
+                `/update-note-pinned/${noteId}`,
                 {
                     isPinned: newIsPinnedStatus,
                 }
@@ -135,7 +135,7 @@ const Home = () => {
                     style: {
                         fontSize: '13px',
                         maxWidth: '400px',
-                        boxShadow: '0px 4px 8px rgba(0, 1, 4, 0.1)', // Corrected 'px' to '0px'
+                        boxShadow: '0px 4px 8px rgba(0, 1, 4, 0.1)',
                         borderRadius: '8px',
                         borderColor: 'rgba(0, 0, 0, 0.8)',
                         marginRight: '10px',

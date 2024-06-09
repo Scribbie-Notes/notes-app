@@ -51,14 +51,14 @@ const ProfileInfo = ({ userInfo, onLogout }) => {
             </div>
 
             {isDropdownOpen && (
-                <div className='absolute right-0 mt-2 w-36 bg-white rounded-md shadow-lg py-2 z-10 border border-1 mt-3'>
-                    <button className='block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100' onClick={handleMyProfile}>
-                        My Profile
+                <div className='absolute right-0 mt-2 w-44  bg-white rounded-md shadow-lg py-2 z-10 border border-1 mt-3'>
+                    <button className='block w-full text-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100' onClick={handleMyProfile}>
+                        Profile & Settings
                     </button>
-                    <button className='block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100' onClick={handleAbout}>
+                    <button className='block w-full text-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100' onClick={handleAbout}>
                         About
                     </button>
-                    <button className='block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100' onClick={handleLogout}>
+                    <button className='block w-full text-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100' onClick={handleLogout}>
                         Logout
                     </button>
                 </div>

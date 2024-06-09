@@ -1,23 +1,22 @@
-import React, { useState } from 'react'
-import Navbar from '../../components/Navbar'
-import { Link, useNavigate } from 'react-router-dom'
-import { validateEmail } from '../../utils/helper'
-import axiosInstance from '../../utils/axiosInstance'
-import toast from 'react-hot-toast'
-import { FaEye, FaEyeSlash } from 'react-icons/fa'
+import React, { useState } from 'react';
+import Navbar from '../../components/Navbar';
+import { Link, useNavigate } from 'react-router-dom';
+import { validateEmail } from '../../utils/helper';
+import axiosInstance from '../../utils/axiosInstance';
+import toast from 'react-hot-toast';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import hero3 from "../../assets/images/hero3.png";
 
-const Login = () => {
+const Login = ({ setUser }) => {
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [showPassword, setShowPassword] = useState(false);
+    const [error, setError] = useState(null);
 
-    const [email, setEmail] = useState("")
-    const [password, setPassword] = useState("")
-    const [showPassword, setShowPassword] = useState(false)
-    const [error, setError] = useState(null)
-
-    const navigate = useNavigate()
+    const navigate = useNavigate();
 
     const handleLogin = async (e) => {
-        e.preventDefault()
+        e.preventDefault();
 
         if (!validateEmail(email)) {
             toast.error('Please enter valid credentials', {
@@ -30,8 +29,8 @@ const Login = () => {
                     marginTop: '60px',
                     marginRight: '10px',
                 }
-            })
-            return
+            });
+            return;
         }
 
         if (!password) {
@@ -45,24 +44,30 @@ const Login = () => {
                     marginTop: '60px',
                     marginRight: '10px',
                 }
-            })
-            return
+            });
+            return;
         }
 
-        setError("")
-
-        // login api call
+        setError("");
 
         try {
             const response = await axiosInstance.post("/login", {
                 email: email,
                 password: password,
-            })
+            });
 
-            // handle successful login response
             if (response.data && response.data.accessToken) {
-                localStorage.setItem("token", response.data.accessToken)
-                navigate("/dashboard")
+                const userData = {
+                    fullName: response.data.fullName, // Assuming the API response includes the fullName
+                    email: email,
+                };
+
+                localStorage.setItem("token", response.data.accessToken);
+                localStorage.setItem("user", JSON.stringify(userData));
+
+                setUser(userData); // Update user state in App component
+
+                navigate("/dashboard");
                 toast.success('Logged in successfully', {
                     style: {
                         fontSize: '13px',
@@ -73,12 +78,10 @@ const Login = () => {
                         marginTop: '60px',
                         marginRight: '10px',
                     }
-                })
+                });
             }
-
         } catch (error) {
             if (error.response && error.response.data && error.response.data.message) {
-                // setError(error.response.data.message)
                 toast.error('Please enter valid credentials', {
                     style: {
                         fontSize: '13px',
@@ -89,16 +92,16 @@ const Login = () => {
                         marginTop: '60px',
                         marginRight: '10px',
                     }
-                })
+                });
             } else {
-                setError("Something went wrong. Please try again later.")
+                setError("Something went wrong. Please try again later.");
             }
         }
-    }
+    };
 
     const togglePasswordVisibility = () => {
-        setShowPassword(!showPassword)
-    }
+        setShowPassword(!showPassword);
+    };
 
     return (
         <div>
@@ -211,8 +214,7 @@ const Login = () => {
                 </div>
             </section>
         </div>
-    )
-}
+    );
+};
 
-
-export default Login
+export default Login;
