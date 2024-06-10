@@ -13,13 +13,16 @@ import { FaWindows } from "react-icons/fa";
 import { BiLogoPlayStore } from "react-icons/bi";
 import Testimonial from '../Testimonial';
 import Footer from '../Footer';
+import Brands from '../Brands';
 
 
 const Hero = () => {
     return (
         <div className="h-full scroll-smooth">
             <Navbar userInfo={null} />
+            {/* <section className="w-screen animated-background h-screen bg-gradient-to-r from-blue-500 via-blue-500 to-indigo-500"> */}
             <section className="bg-white">
+
                 <div className="grid max-w-screen-xl px-4 py-8 mx-auto lg:gap-8 xl:gap-0 lg:py-16 lg:grid-cols-12">
                     <div className="mr-auto place-self-center lg:col-span-7">
                         <h1 className="max-w-2xl mb-2 text-4xl font-extrabold tracking-tight leading-none md:text-5xl xl:text-6xl dark:text-gray-900">Capture Ideas,</h1>
@@ -38,10 +41,9 @@ const Hero = () => {
                 </div>
             </section>
 
-            <hr />
 
             {/* SECTION 2  */}
-            <section className="bg-white py-12 mt-8 mb-4">
+            <section className="bg-gradient-to-b from-gray-50 to-white py-12 mt-8 mb-4">
                 <h1 className="text-4xl font-bold text-center text-gray-900">Unlock Powerful Features to </h1>
                 <h1 className="text-4xl font-bold mb-14 text-center text-gray-900">Enhance Your Note-Taking Experience</h1>
                 <div className="max-w-screen-xl mx-auto px-6">
@@ -101,10 +103,13 @@ const Hero = () => {
             <Testimonial />
             <hr />
 
-            {/* SECTION 4 */}
-            <section className="bg-white py-12 mt-8 mb-24">
+            {/* SECTION 4  */}
+            <Brands />
+
+            {/* SECTION 5 */}
+            <section className="bg-gradient-to-b from-gray-50 to-white py-12 mt-8 mb-24">
                 <div className="max-w-screen-xl mx-auto px-4">
-                    <h2 className="text-4xl font-extrabold text-center mb-14">Available on All Your Devices</h2>
+                    <h2 className="text-4xl font-extrabold text-center text-gray-900 mb-14">Available on All Your Devices</h2>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
 
                         <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-xl cursor-pointer transition duration-300 ease-in-out border border-gray-200">

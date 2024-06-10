@@ -3,7 +3,7 @@ import React from 'react'
 const Footer = () => {
     return (
         <div>
-            <footer className="bg-gray-50 ">
+            <footer className="bg-gradient-to-b from-white to-gray-300 border-t border-gray-200">
                 <div className="mx-auto max-w-5xl px-4 py-16 sm:px-6 lg:px-8">
                     <h1 className="text-3xl font-medium text-center">Scribbie</h1>
                     <p className="mx-auto mt-6 max-w-md text-center leading-relaxed text-gray-500">
