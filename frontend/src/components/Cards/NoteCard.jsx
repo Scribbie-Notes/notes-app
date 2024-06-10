@@ -14,7 +14,7 @@ const NoteCard = ({
     onPinNote,
 }) => {
     return (
-        <div className='border rounded p-4 bg-white hover:shadow-xl transition-all ease-in-out'>
+        <div className='border rounded p-5 bg-white hover:shadow-xl transition-all ease-in-out'>
             <div className='flex items-center justify-between'>
                 <div>
                     <h6 className='text-sm font-medium'>{title}</h6>
@@ -30,11 +30,11 @@ const NoteCard = ({
 
                 <div className='flex items-center gap-2'>
                     <MdCreate
-                        className='icon-btn hover:text-green-600 cursor-pointer'
+                        className='icon-btn hover:text-green-500 cursor-pointer transition-all'
                         onClick={onEdit}
                     />
                     <MdDelete
-                        className='icon-btn hover:text-red-600 cursor-pointer'
+                        className='icon-btn hover:text-red-400 cursor-pointer transition-all'
                         onClick={onDelete}
                     />
                 </div>

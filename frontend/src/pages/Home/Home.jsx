@@ -163,7 +163,7 @@ const Home = () => {
             <Navbar userInfo={userInfo} onSearchNote={onSearchNote} handleClearSearch={handleClearSearch} setUserInfo={setUserInfo} />
             <div className='container mx-auto h-screen'>
                 {allNotes.length > 0 ? (
-                    <div className='grid grid-cols-3 gap-4 mt-8'>
+                    <div className='grid grid-cols-3 gap-4 mt-8 transition-all'>
                         {allNotes.map((item) => (
                             <NoteCard
                                 key={item._id}
@@ -192,7 +192,7 @@ const Home = () => {
                     setOpenAddEditModal({ isShown: true, type: "add", data: null });
                 }}
             >
-                <MdAdd className='text-[32px] text-white' />
+                <MdAdd className='text-[32px] text-white transition-all' />
             </button>
 
             <Modal
