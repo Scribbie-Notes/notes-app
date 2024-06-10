@@ -12,6 +12,7 @@ import { IoLogoApple } from "react-icons/io5";
 import { FaWindows } from "react-icons/fa";
 import { BiLogoPlayStore } from "react-icons/bi";
 import Testimonial from '../Testimonial';
+import Footer from '../Footer';
 
 
 const Hero = () => {
@@ -132,8 +133,7 @@ const Hero = () => {
                     </div>
                 </div>
             </section>
-
-
+            <Footer />
         </div>
     )
 }
