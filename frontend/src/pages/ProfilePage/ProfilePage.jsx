@@ -2,12 +2,21 @@ import React from 'react';
 import { getInitials } from '../../utils/helper';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
+import { Link } from 'react-router-dom';
+import { IoMdArrowRoundBack } from "react-icons/io";
 
 const ProfilePage = ({ user }) => {
     return (
         <div className="bg-gray-50">
             <Navbar userInfo={user} />
-            <div >
+            <div className='flex'>
+                <Link to='/dashboard'>
+                    <div className='p-5'>
+                        <button className='inline-flex items-center text-white bg-gray-800 hover:bg-gray-900 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-700'>
+                            <IoMdArrowRoundBack />
+                        </button>
+                    </div>
+                </Link>
                 <div className="container mx-auto my-28">
                     <div>
                         <div className="bg-white relative shadow rounded-lg w-5/6 md:w-5/6 lg:w-4/6 xl:w-3/6 mx-auto">
