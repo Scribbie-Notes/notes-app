@@ -187,7 +187,7 @@ const Home = () => {
             </div>
 
             <button
-                className='w-16 h-16 flex items-center justify-center rounded-2xl items-center text-white bg-gray-800 hover:bg-gray-900 focus:outline-none absolute right-10 bottom-10'
+                className='w-16 h-16 flex items-center justify-center rounded-2xl items-center text-white bg-gray-800 hover:bg-gray-900 transition-all focus:outline-none absolute right-10 bottom-10'
                 onClick={() => {
                     setOpenAddEditModal({ isShown: true, type: "add", data: null });
                 }}
@@ -206,7 +206,7 @@ const Home = () => {
                     },
                 }}
                 contentLabel=""
-                className="w-[40%] max-h-3/4 bg-white rounded-md mx-auto mt-14 p-5 overflow-hidden"
+                className="w-[40%] max-h-3/4 bg-white rounded-md  mx-auto mt-14 p-5 overflow-hidden"
             >
                 <AddEditNotes
                     type={openAddEditModal.type}
