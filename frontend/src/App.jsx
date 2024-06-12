@@ -10,6 +10,7 @@ import Loading from './components/Loading';
 import ProfilePage from './pages/ProfilePage/ProfilePage';
 import Navbar from './components/Navbar';
 
+
 const App = () => {
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState(null);
