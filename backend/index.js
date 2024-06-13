@@ -20,11 +20,19 @@ app.use(express.json());
 
 app.use(
     cors({
-        origin: "https://scribbie-notes.vercel.app/",
+        origin: "https://scribbie-notes.vercel.app",
         credentials: true,
         methods: ["GET", "POST", "PUT", "DELETE"],
+        allowedHeaders: ["Content-Type", "Authorization"]
     })
 );
+
+app.options("*", cors({
+    origin: "https://scribbie-notes.vercel.app",
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE"],
+}));
+
 
 app.get("/", (req, res) => {
     res.json({ data: "hello" });
