@@ -5,7 +5,6 @@ import { validateEmail } from '../../utils/helper';
 import axiosInstance from '../../utils/axiosInstance';
 import toast from 'react-hot-toast';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
-import hero3 from "../../assets/images/hero3.png";
 
 const Login = ({ setUser }) => {
     const [email, setEmail] = useState("");
@@ -19,7 +18,7 @@ const Login = ({ setUser }) => {
         e.preventDefault();
 
         if (!validateEmail(email)) {
-            toast.error('Please enter valid credentials', {
+            toast.error('Please enter valid email', {
                 style: {
                     fontSize: '13px',
                     maxWidth: '400px',
