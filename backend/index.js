@@ -16,14 +16,22 @@ const jwt = require("jsonwebtoken");
 const { authenticationToken } = require("./utilities");
 const userModel = require("./models/userModel");
 
-app.use(cors({
-    origin: "https://scribbie-notes.vercel.app",
-    credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    allowedHeaders: ["Content-Type", "Authorization"]
-}));
+// app.use(cors({
+//     origin: "https://scribbie-notes.vercel.app",
+//     credentials: true,
+//     methods: ["GET", "POST", "PUT", "DELETE"],
+//     allowedHeaders: ["Content-Type", "Authorization"]
+// }));
 
 app.use(express.json());
+
+app.use((req, res, next) => {
+    res.header("Access-Control-Allow-Origin", "https://scribbie-notes.vercel.app");
+    res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+    res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+    res.header("Access-Control-Allow-Credentials", "true");
+    next();
+});
 
 // app.options("*", cors({
 //     origin: "https://scribbie-api.vercel.app",
