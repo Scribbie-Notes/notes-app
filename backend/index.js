@@ -12,13 +12,12 @@ const Note = require("./models/noteModel");
 
 const app = express();
 
-app.use(cors(
-    {
-        origin: ["https://scribbie-notes.vercel.app"],
-        methods: ["GET", "POST", "PUT", "DELETE"],
-        credentials: true
-    }
-))
+app.use(cors({
+    origin: "https://scribbie-notes.vercel.app",
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true
+}));
 
 app.use(express.json());
 
@@ -30,6 +29,8 @@ mongoose.connect(config.connectionString, {
 });
 
 // Routes
+app.options("*", cors());
+
 app.get("/", (req, res) => {
     res.json({ data: "hello" });
 });
