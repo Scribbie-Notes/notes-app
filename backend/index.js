@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const express = require("express");
 const cors = require("cors");
 const jwt = require("jsonwebtoken");
+const bcrypt = require('bcrypt');
 
 const { authenticationToken } = require("./utilities");
 const User = require("./models/userModel");
@@ -46,7 +47,8 @@ app.post("/create-account", async (req, res) => {
             return res.status(400).json({ error: true, message: "User already exists" });
         }
 
-        const user = new User({ fullName, email, password });
+        const hashedPassword = await bcrypt.hash(password, 10);
+        const user = new User({ fullName, email, password: hashedPassword });
         await user.save();
 
         const accessToken = jwt.sign({ user }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "360000m" });
@@ -68,6 +70,11 @@ app.post("/login", async (req, res) => {
         const userInfo = await User.findOne({ email });
         if (!userInfo || userInfo.password !== password) {
             return res.status(400).json({ error: true, message: "Invalid credentials" });
+        }
+
+        const isPasswordValid = await bcrypt.compare(password, userInfo.password);
+        if (!isPasswordValid) {
+            return res.status(400).json({ error: true, message: "Invalide Credentials" })
         }
 
         const user = { user: userInfo };
