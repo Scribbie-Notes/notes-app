@@ -11,22 +11,22 @@ const Note = require("./models/noteModel");
 
 const app = express();
 
+app.use(cors(
+    {
+        origin: ["https://scribbie-notes.vercel.app"],
+        methods: ["GET", "POST", "PUT", "DELETE"],
+        credentials: true
+    }
+))
+
+app.use(express.json());
+
+
 // MongoDB Connection
 mongoose.connect(config.connectionString, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
 });
-
-// CORS Configuration
-const corsOptions = {
-    origin: "https://scribbie-notes.vercel.app",
-    credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-};
-app.use(cors(corsOptions));
-
-app.use(express.json());
 
 // Routes
 app.get("/", (req, res) => {
@@ -163,7 +163,6 @@ app.put("/edit-note/:noteId", authenticationToken, async (req, res) => {
             message: "Something went wrong",
         })
     }
-
 })
 
 // get note
