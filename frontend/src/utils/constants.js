@@ -1,1 +1,1 @@
-export const BASE_URL = "https://scribbie-api.vercel.app/";
+export const BASE_URL = "https://scribbie-api.vercel.app";
