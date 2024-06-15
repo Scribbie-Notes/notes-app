@@ -6,7 +6,6 @@ import axiosInstance from '../../utils/axiosInstance';
 import toast from 'react-hot-toast';
 import { FaRegEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa";
-import Footer from '../../components/Footer';
 
 const Signup = () => {
     const [name, setName] = useState("");

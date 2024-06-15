@@ -5,21 +5,27 @@ const express = require("express");
 const cors = require("cors");
 const jwt = require("jsonwebtoken");
 const bcrypt = require('bcrypt');
+const cors = require('cors');
+const express = require('express');
+const app = express();
 
 const { authenticationToken } = require("./utilities");
 const User = require("./models/userModel");
 const Note = require("./models/noteModel");
 
-const app = express();
-
-app.use(cors({
-    origin: "https://scribbie-notes.vercel.app",
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-    credentials: true
-}));
-
 app.use(express.json());
+
+const allowedOrigins = ['http://localhost:3000', 'http://localhost:5173'];
+app.use(cors({
+    origin: function (origin, callback) {
+        if (!origin) return callback(null, true);
+        if (allowedOrigins.indexOf(origin) === -1) {
+            const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
+            return callback(new Error(msg), false);
+        }
+        return callback(null, true);
+    }
+}));
 
 
 // MongoDB Connection
@@ -29,8 +35,6 @@ mongoose.connect(config.connectionString, {
 });
 
 // Routes
-app.options("*", cors());
-
 app.get("/", (req, res) => {
     res.json({ data: "hello" });
 });
@@ -256,7 +260,6 @@ app.put("/update-note-pinned/:noteId", authenticationToken, async (req, res) => 
         });
     }
 });
-
 
 // search notes
 app.get("/search-notes/", authenticationToken, async (req, res) => {
