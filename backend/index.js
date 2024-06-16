@@ -5,8 +5,6 @@ const express = require("express");
 const cors = require("cors");
 const jwt = require("jsonwebtoken");
 const bcrypt = require('bcrypt');
-const cors = require('cors');
-const express = require('express');
 const app = express();
 
 const { authenticationToken } = require("./utilities");
@@ -40,28 +38,45 @@ app.get("/", (req, res) => {
 });
 
 app.post("/create-account", async (req, res) => {
-    try {
-        const { fullName, email, password } = req.body;
+    const { fullName, email, password } = req.body;
 
-        if (!fullName || !email || !password) {
-            return res.status(400).json({ error: true, message: "All fields are required" });
-        }
-
-        const isUser = await User.findOne({ email });
-        if (isUser) {
-            return res.status(400).json({ error: true, message: "User already exists" });
-        }
-
-        const hashedPassword = await bcrypt.hash(password, 10);
-        const user = new User({ fullName, email, password: hashedPassword });
-        await user.save();
-
-        const accessToken = jwt.sign({ user }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "360000m" });
-        return res.json({ error: false, user, accessToken, message: "Account created successfully" });
-    } catch (error) {
-        console.error("Error creating account:", error);
-        return res.status(500).json({ error: true, message: "Internal server error" });
+    if (!fullName) {
+        return res.status(400).json({ error: true, message: "Ful l name is required" })
     }
+
+    if (!email) {
+        return res.status(400).json({ error: true, message: "Email is required" })
+    }
+
+    if (!password) {
+        return res.status(400).json({ error: true, message: "Password is required" })
+    }
+
+    const isUser = await User.findOne({ email: email });
+
+    if (isUser) {
+        return res.json({
+            error: true,
+            message: "User already exists"
+        })
+    }
+
+    const user = new User({
+        fullName,
+        email,
+        password
+    });
+
+    await user.save();
+
+    const accessToken = jwt.sign({ user }, process.env.ACCESS_TOKEN_SECRET, {
+        expiresIn: "36000m"
+    })
+
+    return res.json({
+        error: false, user, accessToken, message: "Registration Successfull"
+    })
+
 });
 
 app.post("/login", async (req, res) => {

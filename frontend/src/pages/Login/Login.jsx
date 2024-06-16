@@ -195,12 +195,12 @@ const Login = ({ setUser }) => {
                                 </div>
 
                                 <div className="col-span-12 sm:flex sm:items-center mt-4 sm:gap-4">
-                                    <button
-                                        className="inline-flex items-center text-white bg-gray-800 hover:bg-gray-900 focus:outline-none  font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700  dark:border-gray-700"
-                                        type="submit"
-                                    >
-                                        Login
-                                    </button>
+                                        <button
+                                            className="inline-flex items-center text-white bg-gray-800 hover:bg-gray-900 focus:outline-none  font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700  dark:border-gray-700"
+                                            type="submit"
+                                        >
+                                            Login
+                                        </button>
 
                                     <p className="mt-4 text-sm text-gray-500 sm:mt-0">
                                         Don't have an account? <span> </span>
