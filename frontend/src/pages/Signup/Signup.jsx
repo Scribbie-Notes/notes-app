@@ -129,6 +129,7 @@ const Signup = () => {
                     }
                 });
             } else {
+                console.log(error)
                 setError("Something went wrong. Please try again later.");
             }
         }
