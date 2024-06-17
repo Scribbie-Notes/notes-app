@@ -12,11 +12,19 @@ const Note = require("./models/noteModel");
 
 app.use(express.json());
 
-app.use(
-    cors({
-        origin: "*",
-    })
-)
+// OLD
+// app.use(
+//     cors({
+//         origin: "*",
+//     })
+// )
+
+// NEW
+app.use(cors({
+    origin: '*', // Or specify your frontend URL
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+}));
 
 // MongoDB Connection
 mongoose.connect(config.connectionString);

@@ -4,7 +4,6 @@ import Navbar from '../Navbar';
 import { IoMdArrowRoundBack } from "react-icons/io";
 import { Link } from 'react-router-dom';
 
-
 const About = ({ user }) => {
     return (
         <div>
