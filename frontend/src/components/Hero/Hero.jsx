@@ -14,7 +14,7 @@ import { BiLogoPlayStore } from "react-icons/bi";
 import Testimonial from '../Testimonial';
 import Footer from '../Footer';
 import Brands from '../Brands';
-
+import './styles.css';
 
 const Hero = () => {
     return (
