@@ -22,7 +22,6 @@ const App = () => {
         setLoading(false);
       }, 500);
     };
-
     handleRouteChange();
   }, [location]);
 
@@ -53,7 +52,6 @@ const AppWithRouter = () => (
   <Router>
     <App />
   </Router>
-  
 );
 
 export default AppWithRouter;
