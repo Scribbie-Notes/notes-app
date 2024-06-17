@@ -4,7 +4,6 @@ const mongoose = require("mongoose");
 const express = require("express");
 const cors = require("cors");
 const jwt = require("jsonwebtoken");
-const bcrypt = require('bcrypt');
 const app = express();
 
 const { authenticationToken } = require("./utilities");
@@ -27,7 +26,7 @@ app.get("/ ", (req, res) => {
     res.json({ data: "hello" });
 });
 
-app.post("/create-account ", async (req, res) => {
+app.post("/create-account", async (req, res) => {
     const { fullName, email, password } = req.body;
 
     if (!fullName) {
@@ -69,7 +68,7 @@ app.post("/create-account ", async (req, res) => {
 
 });
 
-app.post("/login ", async (req, res) => {
+app.post("/login", async (req, res) => {
     const { email, password } = req.body;
 
     if (!email) {
@@ -108,7 +107,7 @@ app.post("/login ", async (req, res) => {
 });
 
 // Protected Routes
-app.get("/get-user ", authenticationToken, async (req, res) => {
+app.get("/get-user", authenticationToken, async (req, res) => {
     try {
         const { user } = req.user;
         if (!user) return res.sendStatus(401);
@@ -122,7 +121,7 @@ app.get("/get-user ", authenticationToken, async (req, res) => {
 });
 
 
-app.post("/add-note ", authenticationToken, async (req, res) => {
+app.post("/add-note", authenticationToken, async (req, res) => {
     const { title, content, tags } = req.body;
     const { user } = req.user;
 
@@ -156,7 +155,7 @@ app.post("/add-note ", authenticationToken, async (req, res) => {
 });
 
 // edit note
-app.put("/edit-note/:noteId ", authenticationToken, async (req, res) => {
+app.put("/edit-note/:noteId", authenticationToken, async (req, res) => {
     const noteId = req.params.noteId;
     const { title, content, tags, isPinned } = req.body;
     const { user } = req.user;
@@ -193,7 +192,7 @@ app.put("/edit-note/:noteId ", authenticationToken, async (req, res) => {
 })
 
 // get note
-app.get("/get-all-notes ", authenticationToken, async (req, res) => {
+app.get("/get-all-notes", authenticationToken, async (req, res) => {
     const { user } = req.user;
 
     try {
@@ -215,7 +214,7 @@ app.get("/get-all-notes ", authenticationToken, async (req, res) => {
 });
 
 // delete note
-app.delete("/delete-note/:noteId ", authenticationToken, async (req, res) => {
+app.delete("/delete-note/:noteId", authenticationToken, async (req, res) => {
     const noteId = req.params.noteId;
     const { user } = req.user;
 
@@ -243,7 +242,7 @@ app.delete("/delete-note/:noteId ", authenticationToken, async (req, res) => {
 });
 
 // update isPinned
-app.put("/update-note-pinned/:noteId ", authenticationToken, async (req, res) => {
+app.put("/update-note-pinned/:noteId", authenticationToken, async (req, res) => {
     const noteId = req.params.noteId;
     const { isPinned } = req.body;
     const { user } = req.user;
@@ -277,7 +276,7 @@ app.put("/update-note-pinned/:noteId ", authenticationToken, async (req, res) =>
 });
 
 // search notes
-app.get("/search-notes/ ", authenticationToken, async (req, res) => {
+app.get("/search-notes/", authenticationToken, async (req, res) => {
     const { user } = req.user;
     const { query } = req.query;
 

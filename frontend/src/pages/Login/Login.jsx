@@ -18,7 +18,7 @@ const Login = ({ setUser }) => {
         e.preventDefault();
 
         if (!validateEmail(email)) {
-            toast.error('Please enter valid email', {
+            toast.error('Please enter a valid email', {
                 style: {
                     fontSize: '13px',
                     maxWidth: '400px',
@@ -47,27 +47,31 @@ const Login = ({ setUser }) => {
             return;
         }
 
-        setError("");
+        setError(null);
 
         try {
             const response = await axiosInstance.post("/login", {
-                email: email,
-                password: password,
+                email,
+                password,
             });
 
             if (response.data && response.data.accessToken) {
-                const userData = {
-                    fullName: response.data.fullName, // Assuming the API response includes the fullName
-                    email: email,
-                };
-
                 localStorage.setItem("token", response.data.accessToken);
-                localStorage.setItem("user", JSON.stringify(userData));
-
-                setUser(userData); // Update user state in App component
-
+                setUser(response.data.user); // Assuming response includes user data
                 navigate("/dashboard");
                 toast.success('Logged in successfully', {
+                    style: {
+                        fontSize: '13px',
+                        maxWidth: '400px',
+                        boxShadow: 'px 4px 8px rgba(0, 1, 4, 0.1)',
+                        borderRadius: '8px',
+                        borderColor: 'rgba(0, 0, 0, 0.8)',
+                        marginTop: '60px',
+                        marginRight: '10px',
+                    }
+                });
+            } else {
+                toast.error('Login failed, please try again', {
                     style: {
                         fontSize: '13px',
                         maxWidth: '400px',
@@ -81,7 +85,7 @@ const Login = ({ setUser }) => {
             }
         } catch (error) {
             if (error.response && error.response.data && error.response.data.message) {
-                toast.error('Please enter valid credentials', {
+                toast.error(error.response.data.message, {
                     style: {
                         fontSize: '13px',
                         maxWidth: '400px',
@@ -195,12 +199,12 @@ const Login = ({ setUser }) => {
                                 </div>
 
                                 <div className="col-span-12 sm:flex sm:items-center mt-4 sm:gap-4">
-                                        <button
-                                            className="inline-flex items-center text-white bg-gray-800 hover:bg-gray-900 focus:outline-none  font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700  dark:border-gray-700"
-                                            type="submit"
-                                        >
-                                            Login
-                                        </button>
+                                    <button
+                                        className="inline-flex items-center text-white bg-gray-800 hover:bg-gray-900 focus:outline-none  font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700  dark:border-gray-700"
+                                        type="submit"
+                                    >
+                                        Login
+                                    </button>
 
                                     <p className="mt-4 text-sm text-gray-500 sm:mt-0">
                                         Don't have an account? <span> </span>
