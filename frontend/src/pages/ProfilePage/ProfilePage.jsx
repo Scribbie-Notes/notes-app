@@ -1,12 +1,36 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { getInitials } from '../../utils/helper';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
 import { Link } from 'react-router-dom';
 import { IoMdArrowRoundBack } from "react-icons/io";
+import { toast } from 'react-hot-toast';
 
 const ProfilePage = () => {
     const user = JSON.parse(localStorage.getItem("user"))
+    const [phone, setPhone] = useState(user?.phone || '')
+    const [email, setEmail] = useState(user?.email || '')
+    const [isModalOpen, setIsModalOpen] = useState(false)
+
+    const handleModalClose = () => {
+
+        setIsModalOpen(false);
+    }
+
+    const handleModalSave = (newPhone) => {
+        setPhone(newPhone);
+        toast.success('Phone number updated', {
+            style: {
+                fontSize: '13px',
+                maxWidth: '400px',
+                boxShadow: 'px 4px 8px rgba(0, 1, 4, 0.1)',
+                borderRadius: '8px',
+                borderColor: 'rgba(0, 0, 0, 0.8)',
+                marginRight: '10px',
+            }
+        });
+        setIsModalOpen(false);
+    }
 
     return (
         <div className="bg-gray-50">
@@ -51,17 +75,51 @@ const ProfilePage = () => {
                                             <p>
                                                 {user?.email || 'User Email'}
                                             </p>
-                                            <button className="inline-flex items-center text-white bg-gray-800 hover:bg-gray-900 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 mt-2 mb-2 text-xs dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-700">
+                                            <button
+                                                className="inline-flex items-center text-white bg-gray-800 hover:bg-gray-900 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 mt-2 mb-2 text-xs dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-700">
                                                 Change Email
                                             </button>
                                         </div>
 
                                         <p className="flex justify-between items-center w-full border-t border-gray-100 text-gray-600 py-1 pl-6 pr-3 hover:bg-gray-100 transition duration-150">
                                             {user?.phone || 'User Phone'}
-                                            <button className="inline-flex items-center text-white bg-gray-800 hover:bg-gray-900 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 mt-2 mb-2 text-xs dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-700">
+                                            <button
+                                                onClick={() => setIsModalOpen(true)}
+                                                className="inline-flex items-center text-white bg-gray-800 hover:bg-gray-900 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 mt-2 mb-2 text-xs dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-700">
                                                 Add Phone
                                             </button>
                                         </p>
+
+                                        {/* Modal for phone number  */}
+                                        {isModalOpen && (
+                                            <div className='fixed inset-0 flex  items-center justify-center z-50 bg-black bg-opacity-50'>
+                                                <div className='bg-white p-6 rounded-lg shadow-lg w-96'>
+                                                    <h2 className='text-xl font-bold mb-4'>Enter Phone Number</h2>
+                                                    <input
+                                                        type="text"
+                                                        value={phone}
+                                                        onChange={(e) => setPhone(e.target.value)}
+                                                        className='w-full p-2 mb-4 border rounded'
+                                                        placeholder='Phone Number'
+                                                    />
+                                                    <div className='flex justify-end space-x-2'>
+                                                        <button
+                                                            onClick={handleModalClose}
+                                                            className='inline-flex items-center text-gray-900 bg-gray-400 hover:bg-gray-400 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5  text-xs dark:bg-gray-300 dark:hover:bg-gray-100 hover:border-1 dark:border-gray-700 transition-all'
+                                                        >
+                                                            Cancel
+                                                        </button>
+                                                        <button
+                                                            onClick={handleModalSave}
+                                                            className='inline-flex items-center text-white bg-gray-800 hover:bg-gray-900 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5  text-xs dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-700 transition-all'
+
+                                                        >
+                                                            Save
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        )}
 
                                         <p className="w-full  border-t border-gray-100 text-gray-600 py-4 pl-6 pr-3 w-full block hover:bg-gray-100 transition duration-150">
                                             Connect with:

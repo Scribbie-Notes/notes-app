@@ -18,6 +18,19 @@ const Home = () => {
         data: null
     });
 
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [noteToDelete, setNoteToDelete] = useState(null);
+
+    const handleDeleteModalOpen = (noteId) => {
+        setNoteToDelete(noteId);
+        setIsDeleteModalOpen(true);
+    }
+
+    const handleDeleteModalClose = () => {
+        setNoteToDelete(null);
+        setIsDeleteModalOpen(false);
+    }
+
     const [allNotes, setAllNotes] = useState([]);
     const [userInfo, setUserInfo] = useState(null);
     const [isSearch, setIsSearch] = useState(false);
@@ -96,6 +109,8 @@ const Home = () => {
                     marginRight: '10px',
                 }
             });
+        } finally {
+            handleDeleteModalClose();
         }
     };
 
@@ -220,7 +235,6 @@ const Home = () => {
         </div>
     );
 };
-
 
 
 export default Home;

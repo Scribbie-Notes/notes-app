@@ -4,7 +4,9 @@ import Navbar from '../Navbar';
 import { IoMdArrowRoundBack } from "react-icons/io";
 import { Link } from 'react-router-dom';
 
-const About = ({ user }) => {
+const About = () => {
+    const user = JSON.parse(localStorage.getItem("user"))
+
     return (
         <div>
             <Navbar userInfo={user} />
