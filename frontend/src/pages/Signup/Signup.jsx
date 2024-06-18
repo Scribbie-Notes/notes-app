@@ -99,6 +99,7 @@ const Signup = () => {
 
             if (response.data && response.data.accessToken) {
                 localStorage.setItem("token", response.data.accessToken);
+                localStorage.setItem("user", JSON.stringify(response.data.user));
                 navigate("/dashboard");
                 toast.success('Signed up successfully', {
                     style: {

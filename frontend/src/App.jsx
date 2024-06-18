@@ -9,6 +9,7 @@ import About from './components/About/About';
 import Loading from './components/Loading';
 import ProfilePage from './pages/ProfilePage/ProfilePage';
 import Navbar from './components/Navbar';
+import ProtectedRoute from './utils/ProtectedRoute';
 
 const App = () => {
   const [loading, setLoading] = useState(false);
@@ -41,7 +42,8 @@ const App = () => {
         <Route path='/login' exact element={<Login setUser={setUser} />} />
         <Route path='/signup' exact element={<Signup />} />
         <Route path='/about' exact element={<About />} />
-        <Route path='/my-profile' exact element={<ProfilePage user={user} />} />
+        {/* <Route path='/my-profile' exact element={<ProtectedRoute><ProfilePage user={user} /></ProtectedRoute>} /> */}
+        <Route path='/my-profile' exact element={<ProfilePage />} />
       </Routes>
       {/* <Footer /> */}
     </div>
