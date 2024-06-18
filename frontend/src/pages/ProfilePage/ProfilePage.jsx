@@ -37,7 +37,6 @@ const ProfilePage = ({ user }) => {
                                     <span></span>
                                 </p>
 
-
                                 <div className="w-full">
                                     {/* My Account */}
                                     <h3 className="font-medium text-xl  mt-12 pb-3 text-gray-900 text-center px-2">My Account</h3>
@@ -55,7 +54,6 @@ const ProfilePage = ({ user }) => {
                                             </button>
                                         </div>
 
-
                                         <p className="w-full border-t border-gray-100 text-gray-600 py-4 pl-6 pr-3 w-full block hover:bg-gray-100 transition duration-150">
                                             {user?.phone || 'User Phone'}
                                         </p>
@@ -65,10 +63,9 @@ const ProfilePage = ({ user }) => {
                                             <div className="flex pt-3 justify-between items-center gap-6 px-2 ">
                                                 <a className="text-gray-800 bg-gray-300  border border-gray-300 hover:text-gray-900 hover:bg-gray-100 rounded-md cursor-pointer transition duration-150 ease-in font-medium text-xs text-center w-full py-3">Instagram</a>
                                                 <a className="text-gray-800 bg-gray-300  border border-gray-300 hover:text-gray-900 hover:bg-gray-100 rounded-md cursor-pointer transition duration-150 ease-in font-medium text-xs text-center w-full py-3">Twitter</a>
-                                                <a className="text-gray-800 bg-gray-300  border border-gray-300 hover:text-gray-900 hover:bg-gray-100 rounded-md cursor-pointer transition duration-150 ease-in font-medium text-xs text-center w-full py-3">Email</a>
+                                                <a className="text-gray-800 bg-gray-300  border border-gray-300 hover:text-gray-900 hover:bg-gray-100    rounded-md cursor-pointer transition duration-150 ease-in font-medium text-xs text-center w-full py-3">Email</a>
                                             </div>
-                                        </p>
-
+                                        </p> 
                                     </div>
 
                                     {/* My Settings  */}
@@ -82,7 +79,6 @@ const ProfilePage = ({ user }) => {
                                                 <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
                                             </label>
                                         </p>
-
 
                                         <p className="flex justify-between items-center w-full border-t border-gray-100 text-gray-600 py-1 pl-6 pr-3 hover:bg-gray-100 transition duration-150">
                                             Appearance
@@ -99,7 +95,6 @@ const ProfilePage = ({ user }) => {
                                             </div>
                                         </p>
 
-
                                         <p className="flex justify-between items-center w-full border-t border-gray-100 text-gray-600 py-1 pl-6 pr-3 hover:bg-gray-100 transition duration-150">
                                             2-step verification
                                             <label className="inline-flex p-3 items-center cursor-pointer">
@@ -107,8 +102,6 @@ const ProfilePage = ({ user }) => {
                                                 <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
                                             </label>
                                         </p>
-
-
                                         <p className="flex justify-between items-center w-full border-t border-gray-100 text-gray-600 py-1 pl-6 pr-3 hover:bg-gray-100 transition duration-150">
                                             Set timezone automatically using your location
                                             <label className="inline-flex p-3 items-center cursor-pointer">
@@ -116,7 +109,6 @@ const ProfilePage = ({ user }) => {
                                                 <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
                                             </label>
                                         </p>
-
 
                                         <p className="w-full border-t text-red-500 border cursor-pointer border-gray-100 text-gray-600 py-4 pl-6 pr-3 w-full block hover:bg-gray-100 transition duration-150">
                                             Delete my account

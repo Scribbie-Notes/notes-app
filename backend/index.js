@@ -13,18 +13,18 @@ const Note = require("./models/noteModel");
 app.use(express.json());
 
 // OLD
-// app.use(
-//     cors({
-//         origin: "*",
-//     })
-// )
+app.use(
+    cors({
+        origin: "*",
+    })
+)
 
 // NEW
-app.use(cors({
-    origin: '*', // Or specify your frontend URL
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization']
-}));
+// app.use(cors({
+//     origin: '*', // Or specify your frontend URL
+//     methods: ['GET', 'POST', 'PUT', 'DELETE'],
+//     allowedHeaders: ['Content-Type', 'Authorization']
+// }));
 
 // MongoDB Connection
 mongoose.connect(process.env.MONGO_URI || config.connectionString, { useNewUrlParser: true, useUnifiedTopology: true })
