@@ -57,6 +57,7 @@ const Login = ({ setUser }) => {
 
             if (response.data && response.data.accessToken) {
                 localStorage.setItem("token", response.data.accessToken);
+                localStorage.setItem("user", JSON.stringify(response.data.user)); // Store user data
                 setUser(response.data.user); // Assuming response includes user data
                 navigate("/dashboard");
                 toast.success('Logged in successfully', {

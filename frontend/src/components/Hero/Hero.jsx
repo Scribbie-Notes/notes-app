@@ -17,9 +17,11 @@ import Brands from '../Brands';
 import './styles.css';
 
 const Hero = () => {
+    const user = JSON.parse(localStorage.getItem("user"))
+
     return (
         <div className="h-full scroll-smooth">
-            <Navbar userInfo={null} />
+            <Navbar userInfo={user} />
             {/* <section className="w-screen animated-background h-screen bg-gradient-to-r from-blue-500 via-blue-500 to-indigo-500"> */}
             <section className="bg-white">
 

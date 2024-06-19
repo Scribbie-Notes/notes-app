@@ -7,13 +7,21 @@ import { IoMdArrowRoundBack } from "react-icons/io";
 import { toast } from 'react-hot-toast';
 
 const ProfilePage = () => {
-    const user = JSON.parse(localStorage.getItem("user"))
-    const [phone, setPhone] = useState(user?.phone || '')
-    const [email, setEmail] = useState(user?.email || '')
-    const [isModalOpen, setIsModalOpen] = useState(false)
+    let user = null;
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+        try {
+            user = JSON.parse(storedUser);
+        } catch (e) {
+            console.error('Error parsing stored user', e);
+        }
+    }
+
+    const [phone, setPhone] = useState(user?.phone || '');
+    const [email, setEmail] = useState(user?.email || '');
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     const handleModalClose = () => {
-
         setIsModalOpen(false);
     }
 
@@ -23,7 +31,7 @@ const ProfilePage = () => {
             style: {
                 fontSize: '13px',
                 maxWidth: '400px',
-                boxShadow: 'px 4px 8px rgba(0, 1, 4, 0.1)',
+                boxShadow: '4px 4px 8px rgba(0, 1, 4, 0.1)',
                 borderRadius: '8px',
                 borderColor: 'rgba(0, 0, 0, 0.8)',
                 marginRight: '10px',
@@ -48,7 +56,7 @@ const ProfilePage = () => {
                         <div className="bg-white relative shadow rounded-lg w-5/6 md:w-5/6 lg:w-4/6 xl:w-3/6 mx-auto">
                             <div className="flex justify-center">
                                 <div className="flex items-center justify-center p-3 rounded-full text-slate-950  font-medium bg-gray-50 cursor-pointer mx-auto absolute -top-20 w-32 h-32 shadow-md border-4 border-white transition duration-200 transform hover:scale-110 text-4xl cursor-default">
-                                    {getInitials(user.fullName)}
+                                    {getInitials(user?.fullName || '')}
                                 </div>
                             </div>
 
@@ -110,9 +118,8 @@ const ProfilePage = () => {
                                                             Cancel
                                                         </button>
                                                         <button
-                                                            onClick={handleModalSave}
+                                                            onClick={() => handleModalSave(phone)}
                                                             className='inline-flex items-center text-white bg-gray-800 hover:bg-gray-900 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5  text-xs dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-700 transition-all'
-
                                                         >
                                                             Save
                                                         </button>

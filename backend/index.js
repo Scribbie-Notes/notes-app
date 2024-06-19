@@ -104,17 +104,17 @@ app.post("/login", async (req, res) => {
         return res.json({
             error: false,
             message: "Login Successful",
-            email,
+            user: userInfo, // Include user info in the response
             accessToken
         })
     } else {
         return res.status(400).json({
             error: true,
-            message: "Invalide Credentials"
+            message: "Invalid Credentials"
         })
     }
-
 });
+
 
 // Protected Routes
 app.get("/get-user", authenticationToken, async (req, res) => {
