@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { getInitials } from '../../utils/helper';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
@@ -8,21 +8,27 @@ import { toast } from 'react-hot-toast';
 import axiosInstance from '../../utils/axiosInstance';
 
 const ProfilePage = () => {
-    let user = null;
+    let initialUser = null;
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
         try {
-            user = JSON.parse(storedUser);
+            initialUser = JSON.parse(storedUser);
         } catch (e) {
             console.error('Error parsing stored user', e);
         }
     }
 
+    const [user, setUser] = useState(initialUser);
     const [phone, setPhone] = useState(user?.phone || '');
     const [email, setEmail] = useState(user?.email || '');
     const [newEmail, setNewEmail] = useState('');
     const [isEmailModalOpen, setIsEmailModalOpen] = useState(false);
     const [isPhoneModalOpen, setIsPhoneModalOpen] = useState(false);
+
+    useEffect(() => {
+        // Sync the email state with the user object
+        setEmail(user?.email || '');
+    }, [user]);
 
     const handleEmailChangeClick = () => {
         setIsEmailModalOpen(true);
@@ -39,7 +45,11 @@ const ProfilePage = () => {
             console.log("Response from API:", response);
 
             if (response.data) {
-                setEmail(newEmail);
+                // Update email in state and local storage
+                const updatedUser = { ...user, email: newEmail };
+                setUser(updatedUser);
+                localStorage.setItem('user', JSON.stringify(updatedUser));
+
                 toast.success('Email updated', {
                     style: {
                         fontSize: '13px',
@@ -80,7 +90,7 @@ const ProfilePage = () => {
 
     const handleModalClose = () => {
         setIsPhoneModalOpen(false);
-    }
+    };
 
     const handleModalSave = (newPhone) => {
         setPhone(newPhone);
@@ -95,7 +105,7 @@ const ProfilePage = () => {
             }
         });
         setIsPhoneModalOpen(false);
-    }
+    };
 
     return (
         <div className="bg-gray-50">
@@ -112,7 +122,7 @@ const ProfilePage = () => {
                     <div>
                         <div className="bg-white relative shadow rounded-lg w-5/6 md:w-5/6 lg:w-4/6 xl:w-3/6 mx-auto">
                             <div className="flex justify-center">
-                                <div className="flex items-center justify-center p-3 rounded-full text-slate-950  font-medium bg-gray-50 cursor-pointer mx-auto absolute -top-20 w-32 h-32 shadow-md border-4 border-white transition duration-200 transform hover:scale-110 text-4xl cursor-default">
+                                <div className="flex items-center justify-center p-3 rounded-full text-slate-950 font-medium bg-gray-50 cursor-pointer mx-auto absolute -top-20 w-32 h-32 shadow-md border-4 border-white transition duration-200 transform hover:scale-110 text-4xl cursor-default">
                                     {getInitials(user?.fullName || '')}
                                 </div>
                             </div>
@@ -121,7 +131,7 @@ const ProfilePage = () => {
                                 {user && (
                                     <>
                                         <h1 className="font-bold text-center text-3xl text-gray-900">{user.fullName}</h1>
-                                        <p className="text-center text-sm mt-2 text-gray-400 font-medium">{user.email}</p>
+                                        <p className="text-center text-sm mt-2 text-gray-400 font-medium">{email}</p>
                                     </>
                                 )}
                                 <p>
@@ -130,15 +140,15 @@ const ProfilePage = () => {
 
                                 <div className="w-full">
                                     {/* My Account */}
-                                    <h3 className="font-medium text-xl  mt-8 pb-3 text-gray-900 text-center px-2">My Account</h3>
-                                    <div className=" w-full flex flex-col items-center overflow-hidden text-sm">
+                                    <h3 className="font-medium text-xl mt-8 pb-3 text-gray-900 text-center px-2">My Account</h3>
+                                    <div className="w-full flex flex-col items-center overflow-hidden text-sm">
                                         <p className="w-full border-t border-gray-100 text-gray-600 py-4 pl-6 pr-3 w-full block hover:bg-gray-100 transition duration-150">
                                             {user?.fullName || 'User Name'}
                                         </p>
 
                                         <div className="flex justify-between items-center w-full border-t border-gray-100 text-gray-600 py-1 pl-6 pr-3 hover:bg-gray-100 transition duration-150">
                                             <p>
-                                                {user?.email || 'User Email'}
+                                                {email || 'User Email'}
                                             </p>
                                             <button
                                                 onClick={handleEmailChangeClick}
@@ -149,7 +159,7 @@ const ProfilePage = () => {
 
                                         {/* Modal for email  */}
                                         {isEmailModalOpen && (
-                                            <div className='fixed inset-0 flex  items-center justify-center z-50 bg-black bg-opacity-50'>
+                                            <div className='fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50'>
                                                 <div className='bg-white p-6 rounded-lg shadow-lg w-96'>
                                                     <h2 className='text-xl font-bold mb-4'>Enter Email</h2>
                                                     <input
@@ -162,13 +172,13 @@ const ProfilePage = () => {
                                                     <div className='flex justify-end space-x-2'>
                                                         <button
                                                             onClick={handleEmailModalClose}
-                                                            className='inline-flex items-center text-gray-900 bg-gray-200 hover:bg-gray-300 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5  text-xs dark:bg-gray-300 dark:hover:bg-gray-100 hover:border-1 dark:border-gray-300 transition-all'
+                                                            className='inline-flex items-center text-gray-900 bg-gray-200 hover:bg-gray-300 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-xs dark:bg-gray-300 dark:hover:bg-gray-100 hover:border-1 dark:border-gray-300 transition-all'
                                                         >
                                                             Cancel
                                                         </button>
                                                         <button
                                                             onClick={handleEmailModalSave}
-                                                            className='inline-flex items-center text-white bg-gray-800 hover:bg-gray-900 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5  text-xs dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-700 transition-all'
+                                                            className='inline-flex items-center text-white bg-gray-800 hover:bg-gray-900 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-xs dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-700 transition-all'
                                                         >
                                                             Save
                                                         </button>
@@ -182,7 +192,7 @@ const ProfilePage = () => {
                                             <button
                                                 onClick={() => setIsPhoneModalOpen(true)}
                                                 className="inline-flex items-center text-white bg-gray-800 hover:bg-gray-900 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 mt-2 mb-2 text-xs dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-700">
-                                                Add Phone
+                                                Change Phone
                                             </button>
                                         </p>
 
