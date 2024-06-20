@@ -5,6 +5,7 @@ import Footer from '../../components/Footer';
 import { Link } from 'react-router-dom';
 import { IoMdArrowRoundBack } from "react-icons/io";
 import { toast } from 'react-hot-toast';
+import axiosInstance from '../../utils/axiosInstance';
 
 const ProfilePage = () => {
     let user = null;
@@ -19,10 +20,66 @@ const ProfilePage = () => {
 
     const [phone, setPhone] = useState(user?.phone || '');
     const [email, setEmail] = useState(user?.email || '');
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [newEmail, setNewEmail] = useState('');
+    const [isEmailModalOpen, setIsEmailModalOpen] = useState(false);
+    const [isPhoneModalOpen, setIsPhoneModalOpen] = useState(false);
+
+    const handleEmailChangeClick = () => {
+        setIsEmailModalOpen(true);
+    };
+
+    const handleEmailModalClose = () => {
+        setIsEmailModalOpen(false);
+    };
+
+    const handleEmailModalSave = async () => {
+        try {
+            console.log("New email to update:", newEmail);
+            const response = await axiosInstance.put(`/update-email`, { newEmail });
+            console.log("Response from API:", response);
+
+            if (response.data) {
+                setEmail(newEmail);
+                toast.success('Email updated', {
+                    style: {
+                        fontSize: '13px',
+                        maxWidth: '400px',
+                        boxShadow: '4px 4px 8px rgba(0, 1, 4, 0.1)',
+                        borderRadius: '8px',
+                        borderColor: 'rgba(0, 0, 0, 0.8)',
+                        marginRight: '10px',
+                    }
+                });
+                setIsEmailModalOpen(false);
+            } else {
+                toast.error('Failed to update email', {
+                    style: {
+                        fontSize: '13px',
+                        maxWidth: '400px',
+                        boxShadow: '4px 4px 8px rgba(0, 1, 4, 0.1)',
+                        borderRadius: '8px',
+                        borderColor: 'rgba(0, 0, 0, 0.8)',
+                        marginRight: '10px',
+                    }
+                });
+            }
+        } catch (error) {
+            toast.error('Failed to update email', {
+                style: {
+                    fontSize: '13px',
+                    maxWidth: '400px',
+                    boxShadow: '4px 4px 8px rgba(0, 1, 4, 0.1)',
+                    borderRadius: '8px',
+                    borderColor: 'rgba(0, 0, 0, 0.8)',
+                    marginRight: '10px',
+                }
+            });
+            console.error('Error updating email:', error);
+        }
+    };
 
     const handleModalClose = () => {
-        setIsModalOpen(false);
+        setIsPhoneModalOpen(false);
     }
 
     const handleModalSave = (newPhone) => {
@@ -37,7 +94,7 @@ const ProfilePage = () => {
                 marginRight: '10px',
             }
         });
-        setIsModalOpen(false);
+        setIsPhoneModalOpen(false);
     }
 
     return (
@@ -84,23 +141,54 @@ const ProfilePage = () => {
                                                 {user?.email || 'User Email'}
                                             </p>
                                             <button
+                                                onClick={handleEmailChangeClick}
                                                 className="inline-flex items-center text-white bg-gray-800 hover:bg-gray-900 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 mt-2 mb-2 text-xs dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-700">
                                                 Change Email
                                             </button>
                                         </div>
 
+                                        {/* Modal for email  */}
+                                        {isEmailModalOpen && (
+                                            <div className='fixed inset-0 flex  items-center justify-center z-50 bg-black bg-opacity-50'>
+                                                <div className='bg-white p-6 rounded-lg shadow-lg w-96'>
+                                                    <h2 className='text-xl font-bold mb-4'>Enter Email</h2>
+                                                    <input
+                                                        type="text"
+                                                        value={newEmail}
+                                                        onChange={(e) => setNewEmail(e.target.value)}
+                                                        className='w-full p-2 mb-4 border rounded'
+                                                        placeholder='Email'
+                                                    />
+                                                    <div className='flex justify-end space-x-2'>
+                                                        <button
+                                                            onClick={handleEmailModalClose}
+                                                            className='inline-flex items-center text-gray-900 bg-gray-200 hover:bg-gray-300 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5  text-xs dark:bg-gray-300 dark:hover:bg-gray-100 hover:border-1 dark:border-gray-300 transition-all'
+                                                        >
+                                                            Cancel
+                                                        </button>
+                                                        <button
+                                                            onClick={handleEmailModalSave}
+                                                            className='inline-flex items-center text-white bg-gray-800 hover:bg-gray-900 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5  text-xs dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-700 transition-all'
+                                                        >
+                                                            Save
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        )}
+
                                         <p className="flex justify-between items-center w-full border-t border-gray-100 text-gray-600 py-1 pl-6 pr-3 hover:bg-gray-100 transition duration-150">
                                             {user?.phone || 'User Phone'}
                                             <button
-                                                onClick={() => setIsModalOpen(true)}
+                                                onClick={() => setIsPhoneModalOpen(true)}
                                                 className="inline-flex items-center text-white bg-gray-800 hover:bg-gray-900 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 mt-2 mb-2 text-xs dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-700">
                                                 Add Phone
                                             </button>
                                         </p>
 
                                         {/* Modal for phone number  */}
-                                        {isModalOpen && (
-                                            <div className='fixed inset-0 flex  items-center justify-center z-50 bg-black bg-opacity-50'>
+                                        {isPhoneModalOpen && (
+                                            <div className='fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50'>
                                                 <div className='bg-white p-6 rounded-lg shadow-lg w-96'>
                                                     <h2 className='text-xl font-bold mb-4'>Enter Phone Number</h2>
                                                     <input
@@ -108,18 +196,18 @@ const ProfilePage = () => {
                                                         value={phone}
                                                         onChange={(e) => setPhone(e.target.value)}
                                                         className='w-full p-2 mb-4 border rounded'
-                                                        placeholder='Phone Number'
+                                                        placeholder='Phone'
                                                     />
                                                     <div className='flex justify-end space-x-2'>
                                                         <button
                                                             onClick={handleModalClose}
-                                                            className='inline-flex items-center text-gray-900 bg-gray-400 hover:bg-gray-400 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5  text-xs dark:bg-gray-300 dark:hover:bg-gray-100 hover:border-1 dark:border-gray-700 transition-all'
+                                                            className='inline-flex items-center text-gray-900 bg-gray-400 hover:bg-gray-400 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-xs dark:bg-gray-300 dark:hover:bg-gray-100 hover:border-1 dark:border-gray-700 transition-all'
                                                         >
                                                             Cancel
                                                         </button>
                                                         <button
                                                             onClick={() => handleModalSave(phone)}
-                                                            className='inline-flex items-center text-white bg-gray-800 hover:bg-gray-900 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5  text-xs dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-700 transition-all'
+                                                            className='inline-flex items-center text-white bg-gray-800 hover:bg-gray-900 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-xs dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-700 transition-all'
                                                         >
                                                             Save
                                                         </button>
