@@ -24,6 +24,29 @@ const ProfilePage = () => {
     const [newEmail, setNewEmail] = useState('');
     const [isEmailModalOpen, setIsEmailModalOpen] = useState(false);
     const [isPhoneModalOpen, setIsPhoneModalOpen] = useState(false);
+    const [profilePhoto, setProfilePhoto] = useState(null);
+    const [isHovered, setIsHovered] = useState(false);
+
+    const handlePhotoUpload = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setProfilePhoto(reader.result);
+            };
+            reader.readAsDataURL(file);
+        }
+        toast.success('Profile photo updated', {
+            style: {
+                fontSize: '13px',
+                maxWidth: '400px',
+                boxShadow: '4px 4px 8px rgba(0, 1, 4, 0.1)',
+                borderRadius: '8px',
+                borderColor: 'rgba(0, 0, 0, 0.8)',
+                marginRight: '10px',
+            }
+        });
+    };
 
     useEffect(() => {
         // Sync the email state with the user object
@@ -122,9 +145,34 @@ const ProfilePage = () => {
                     <div>
                         <div className="bg-white relative shadow rounded-lg w-5/6 md:w-5/6 lg:w-4/6 xl:w-3/6 mx-auto">
                             <div className="flex justify-center">
-                                <div className="flex items-center justify-center p-3 rounded-full text-slate-950 font-medium bg-gray-50 cursor-pointer mx-auto absolute -top-20 w-32 h-32 shadow-md border-4 border-white transition duration-200 transform hover:scale-110 text-4xl cursor-default">
-                                    {getInitials(user?.fullName || '')}
+                                <div
+                                    className="flex items-center justify-center p-3 rounded-full text-slate-950 font-medium bg-gray-50 cursor-pointer mx-auto absolute -top-20 w-32 h-32 shadow-md border-4 border-white transition duration-200 transform hover:scale-110 text-4xl"
+                                    onMouseEnter={() => setIsHovered(true)}
+                                    onMouseLeave={() => setIsHovered(false)}
+                                    onClick={() => document.getElementById('fileInput').click()}
+                                >
+                                    {profilePhoto ? (
+                                        <img
+                                            src={profilePhoto}
+                                            alt="Profile"
+                                            className="w-full h-full rounded-full object-cover"
+                                        />
+                                    ) : (
+                                        getInitials(user?.fullName || '')
+                                    )}
+                                    {isHovered && (
+                                        <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 text-white text-xs rounded-full">
+                                            Add Profile Image
+                                        </div>
+                                    )}
                                 </div>
+                                <input
+                                    id="fileInput"
+                                    type="file"
+                                    accept="image/*"
+                                    onChange={handlePhotoUpload}
+                                    className="hidden"
+                                />
                             </div>
 
                             <div className="mt-16">
@@ -172,14 +220,12 @@ const ProfilePage = () => {
                                                     <div className='flex justify-end space-x-2'>
                                                         <button
                                                             onClick={handleEmailModalClose}
-                                                            className='inline-flex items-center text-gray-900 bg-gray-200 hover:bg-gray-300 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-xs dark:bg-gray-300 dark:hover:bg-gray-100 hover:border-1 dark:border-gray-300 transition-all'
-                                                        >
+                                                            className='inline-flex items-center text-gray-900 bg-gray-200 hover:bg-red-200 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-xs dark:bg-gray-300  border-gray-800 transition-all'>
                                                             Cancel
                                                         </button>
                                                         <button
                                                             onClick={handleEmailModalSave}
-                                                            className='inline-flex items-center text-white bg-gray-800 hover:bg-gray-900 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-xs dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-700 transition-all'
-                                                        >
+                                                            className='inline-flex items-center text-white bg-gray-800 hover:bg-gray-900 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-xs dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-700 transition-all'>
                                                             Save
                                                         </button>
                                                     </div>
@@ -211,7 +257,7 @@ const ProfilePage = () => {
                                                     <div className='flex justify-end space-x-2'>
                                                         <button
                                                             onClick={handleModalClose}
-                                                            className='inline-flex items-center text-gray-900 bg-gray-400 hover:bg-gray-400 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-xs dark:bg-gray-300 dark:hover:bg-gray-100 hover:border-1 dark:border-gray-700 transition-all'
+                                                            className='inline-flex items-center text-gray-900 bg-gray-200 hover:bg-red-200 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-xs dark:bg-gray-300  border-gray-800 transition-all'
                                                         >
                                                             Cancel
                                                         </button>
