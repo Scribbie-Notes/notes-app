@@ -196,8 +196,8 @@ const ProfilePage = () => {
                                     <span></span>
                                 </p>
 
+                                {/* My Account */}
                                 <div className="w-full">
-                                    {/* My Account */}
                                     <h3 className="font-medium text-xl mt-8 pb-3 text-gray-900 text-center px-2">My Account</h3>
                                     <div className="w-full flex flex-col items-center overflow-hidden text-sm">
                                         <p className="w-full border-t border-gray-100 text-gray-600 py-4 pl-6 pr-3 w-full block hover:bg-gray-100 transition duration-150">
