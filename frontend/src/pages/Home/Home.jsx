@@ -3,7 +3,6 @@ import Navbar from '../../components/Navbar';
 import NoteCard from '../../components/Cards/NoteCard';
 import { MdAdd } from 'react-icons/md';
 import AddEditNotes from './AddEditNotes';
-import Modal from 'react-modal';
 import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../../utils/axiosInstance';
 import EmptyCard from '../../components/EmptyCard/EmptyCard';
@@ -24,12 +23,12 @@ const Home = () => {
     const handleDeleteModalOpen = (noteId) => {
         setNoteToDelete(noteId);
         setIsDeleteModalOpen(true);
-    }
+    };
 
     const handleDeleteModalClose = () => {
         setNoteToDelete(null);
         setIsDeleteModalOpen(false);
-    }
+    };
 
     const [allNotes, setAllNotes] = useState([]);
     const [userInfo, setUserInfo] = useState(null);
@@ -58,7 +57,7 @@ const Home = () => {
 
     useEffect(() => {
         getUserInfo();
-        return () => { }
+        return () => { };
     }, []);
 
     // get all notes
@@ -79,9 +78,9 @@ const Home = () => {
     };
 
     // delete note
-    const deleteNote = async (noteId) => {
+    const deleteNote = async () => {
         try {
-            const response = await axiosInstance.delete(`/delete-note/${noteId}`);
+            const response = await axiosInstance.delete(`/delete-note/${noteToDelete}`);
             if (response.data && !response.data.error) {
                 getAllNotes();
                 toast.success('Note deleted successfully', {
@@ -188,7 +187,7 @@ const Home = () => {
                                 tags={item.tags}
                                 isPinned={item.isPinned}
                                 onEdit={() => handleEdit(item)}
-                                onDelete={() => deleteNote(item._id)}
+                                onDelete={() => handleDeleteModalOpen(item._id)}
                                 onPinNote={() => { updateIsPinned(item) }}
                             />
                         ))}
@@ -210,31 +209,45 @@ const Home = () => {
                 <MdAdd className='text-[32px] text-white transition-all' />
             </button>
 
-            <Modal
-                isOpen={openAddEditModal.isShown}
-                onRequestClose={() => {
-                    setOpenAddEditModal({ isShown: false, type: "add", data: null });
-                }}
-                style={{
-                    overlay: {
-                        backgroundColor: "rgba(0, 0, 0, 0.2)",
-                    },
-                }}
-                contentLabel=""
-                className="w-[40%] max-h-3/4 bg-white rounded-md  mx-auto mt-14 p-5 overflow-hidden"
-            >
-                <AddEditNotes
-                    type={openAddEditModal.type}
-                    noteData={openAddEditModal.data}
-                    onClose={() => {
-                        setOpenAddEditModal({ isShown: false, type: "add", data: null });
-                    }}
-                    getAllNotes={getAllNotes}
-                />
-            </Modal>
+            {openAddEditModal.isShown && (
+                <div className="fixed inset-0 flex items-center justify-center z-50">
+                    <div className="absolute inset-0 bg-black opacity-50"></div>
+                    <div className="bg-white p-5 rounded-lg shadow-lg z-10 w-[40%] max-h-3/4 overflow-hidden">
+                        <AddEditNotes
+                            type={openAddEditModal.type}
+                            noteData={openAddEditModal.data}
+                            onClose={() => setOpenAddEditModal({ isShown: false, type: "add", data: null })}
+                            getAllNotes={getAllNotes}
+                        />
+                    </div>
+                </div>
+            )}
+
+            {isDeleteModalOpen && (
+                <div className="fixed inset-0 flex items-center justify-center z-50">
+                    <div className="absolute inset-0 bg-black opacity-50"></div>
+                    <div className="bg-white p-5 rounded-lg shadow-lg z-10 w-[90%] max-w-md">
+                        <h2 className="text-lg font-bold mb-4">Confirm Delete</h2>
+                        <p>Are you sure you want to delete this note?</p>
+                        <div className="flex justify-end gap-2 mt-4">
+                            <button
+                                onClick={handleDeleteModalClose}
+                                className="inline-flex items-center text-gray-900 bg-gray-200 hover:bg-red-200 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-xs dark:bg-gray-300  border-gray-800 transition-all"
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                onClick={deleteNote}
+                                className="inline-flex items-center text-white bg-gray-800 hover:bg-gray-900 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-xs dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-700 transition-all"
+                            >
+                                Delete
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
-
 
 export default Home;
