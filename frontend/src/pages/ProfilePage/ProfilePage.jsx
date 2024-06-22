@@ -26,6 +26,7 @@ const ProfilePage = () => {
     const [isPhoneModalOpen, setIsPhoneModalOpen] = useState(false);
     const [profilePhoto, setProfilePhoto] = useState(null);
     const [isHovered, setIsHovered] = useState(false);
+    const [isAccountDeleteModalOpen, setIsAccountDeleteModalOpen] = useState(false);
 
     const handlePhotoUpload = (e) => {
         const file = e.target.files[0];
@@ -60,7 +61,7 @@ const ProfilePage = () => {
     const handleEmailModalClose = () => {
         setIsEmailModalOpen(false);
     };
- 
+
     const handleEmailModalSave = async () => {
         try {
             console.log("New email to update:", newEmail);
@@ -113,6 +114,15 @@ const ProfilePage = () => {
 
     const handleModalClose = () => {
         setIsPhoneModalOpen(false);
+    };
+
+    const handleAccountDelete = () => {
+        console.log("Account deleted");
+        setIsAccountDeleteModalOpen(false);
+    };
+
+    const handleAccountDeleteModalClose = () => {
+        setIsAccountDeleteModalOpen(false);
     };
 
     const handleModalSave = (newPhone) => {
@@ -318,10 +328,39 @@ const ProfilePage = () => {
                                             </label>
                                         </p>
 
-                                        <p className="w-full border-t text-red-500 border cursor-pointer border-gray-100 text-gray-600 py-4 pl-6 pr-3 w-full block hover:bg-gray-100 transition duration-150">
+
+                                        <p
+                                            className="w-full border-t text-red-500 border cursor-pointer border-gray-100 text-gray-600 py-4 pl-6 pr-3 w-full block hover:bg-gray-100 transition duration-150"
+                                            onClick={() => setIsAccountDeleteModalOpen(true)}
+                                        >
+
                                             Delete my account
                                         </p>
 
+                                        {/* Delete Account Confirmation Modal */}
+                                        {isAccountDeleteModalOpen && (
+                                            <div className="fixed inset-0 flex items-center justify-center z-50">
+                                                <div className="absolute inset-0 bg-black opacity-50"></div>
+                                                <div className="bg-white p-5 rounded-lg shadow-lg z-10 w-[90%] max-w-md">
+                                                    <h2 className="text-lg font-semibold mb-4">Confirm Delete</h2>
+                                                    <p className="mb-4">Are you sure you want to delete your account?</p>
+                                                    <div className="flex justify-end gap-2 mt-4">
+                                                        <button
+                                                            onClick={handleAccountDeleteModalClose}
+                                                            className="inline-flex items-center text-gray-900 bg-gray-200 hover:bg-red-200 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-xs dark:bg-gray-300  border-gray-800 transition-all"
+                                                        >
+                                                            Cancel
+                                                        </button>
+                                                        <button
+                                                            onClick={handleAccountDelete}
+                                                            className="inline-flex items-center text-white bg-gray-800 hover:bg-gray-900 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-xs dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-700 transition-all"
+                                                        >
+                                                            Delete
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                             </div>
