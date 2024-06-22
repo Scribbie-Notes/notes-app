@@ -42,7 +42,7 @@ const ProfilePage = () => {
                 maxWidth: '400px',
                 boxShadow: '4px 4px 8px rgba(0, 1, 4, 0.1)',
                 borderRadius: '8px',
-                borderColor: 'rgba(0, 0, 0, 0.8)', 
+                borderColor: 'rgba(0, 0, 0, 0.8)',
                 marginRight: '10px',
             }
         });
@@ -60,7 +60,7 @@ const ProfilePage = () => {
     const handleEmailModalClose = () => {
         setIsEmailModalOpen(false);
     };
-
+ 
     const handleEmailModalSave = async () => {
         try {
             console.log("New email to update:", newEmail);
