@@ -2,21 +2,24 @@ require("dotenv").config();
 const config = require("./config.json");
 const mongoose = require("mongoose");
 const express = require("express");
+const multer = require("multer");
 const cors = require("cors");
 const jwt = require("jsonwebtoken");
 const app = express();
-
+const storage = multer.memoryStorage();
+const upload = multer({ storage });
 const { authenticationToken } = require("./utilities");
 const User = require("./models/userModel");
 const Note = require("./models/noteModel");
 
-app.use(express.json());
+// Use cors middleware before defining any routes
+app.use(cors({
+    origin: 'http://localhost:5173', // Your frontend origin
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+}));
 
-app.use(
-    cors({
-        origin: "*",
-    })
-);
+app.use(express.json());
 
 mongoose.connect(process.env.MONGO_URI || config.connectionString, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => console.log("MongoDB connected"))
@@ -27,6 +30,7 @@ app.get("/", (req, res) => {
     res.json({ data: "hello" });
 });
 
+// Create Account
 app.post("/create-account", async (req, res) => {
     const { fullName, email, password } = req.body;
 
@@ -48,6 +52,7 @@ app.post("/create-account", async (req, res) => {
     return res.json({ error: false, user, accessToken, message: "Registration Successful" });
 });
 
+// Login
 app.post("/login", async (req, res) => {
     const { email, password } = req.body;
 
@@ -81,6 +86,7 @@ app.get("/get-user", authenticationToken, async (req, res) => {
     }
 });
 
+// Add note
 app.post("/add-note", authenticationToken, async (req, res) => {
     const { title, content, tags } = req.body;
     const { user } = req.user;
@@ -242,6 +248,39 @@ app.put("/update-email", authenticationToken, async (req, res) => {
     } catch (error) {
         console.error("Error updating email: ", error);
         return res.status(500).json({ error: "Internal server error" });
+    }
+});
+
+app.put('/update-phone', async (req, res) => {
+    const { newPhone } = req.body;
+    const userId = req.body.userId;
+
+    try {
+        const user = await User.findById(userId);
+        if (user) {
+            user.phone = newPhone;
+            await user.save();
+            res.status(200).json({ message: 'Phone number updated successfully' });
+        } else {
+            res.status(404).json({ message: 'User not found' });
+        }
+    } catch (error) {
+        res.status(500).json({ message: 'Server error', error });
+    }
+});
+
+// Update profile photo
+app.put('/update-profile-photo', upload.single('profilePhoto'), async (req, res) => {
+    try {
+        const { userId } = req.body;
+        const profilePhoto = req.file.buffer.toString('base64'); // Convert buffer to base64
+
+        await User.findByIdAndUpdate(userId, { profilePhoto });
+
+        res.json({ message: 'Profile photo updated successfully' });
+    } catch (error) {
+        console.error('Error updating profile photo:', error);
+        res.status(500).json({ error: 'Failed to update profile photo' });
     }
 });
 

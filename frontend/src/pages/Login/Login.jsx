@@ -11,7 +11,7 @@ const Login = ({ setUser }) => {
     const [password, setPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState(null);
-
+ 
     const navigate = useNavigate();
 
     const handleLogin = async (e) => {
@@ -50,7 +50,7 @@ const Login = ({ setUser }) => {
         setError(null);
 
         try {
-            const response = await axiosInstance.post("/login", {
+            const response = await axiosInstance.post("/api/login", {
                 email,
                 password,
             });

@@ -22,36 +22,57 @@ const ProfilePage = () => {
     const [phone, setPhone] = useState(user?.phone || '');
     const [email, setEmail] = useState(user?.email || '');
     const [newEmail, setNewEmail] = useState('');
+    const [newPhone, setNewPhone] = useState('');
     const [isEmailModalOpen, setIsEmailModalOpen] = useState(false);
     const [isPhoneModalOpen, setIsPhoneModalOpen] = useState(false);
     const [profilePhoto, setProfilePhoto] = useState(null);
     const [isHovered, setIsHovered] = useState(false);
     const [isAccountDeleteModalOpen, setIsAccountDeleteModalOpen] = useState(false);
 
-    const handlePhotoUpload = (e) => {
+    const handlePhotoUpload = async (e) => {
         const file = e.target.files[0];
         if (file) {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setProfilePhoto(reader.result);
-            };
-            reader.readAsDataURL(file);
-        }
-        toast.success('Profile photo updated', {
-            style: {
-                fontSize: '13px',
-                maxWidth: '400px',
-                boxShadow: '4px 4px 8px rgba(0, 1, 4, 0.1)',
-                borderRadius: '8px',
-                borderColor: 'rgba(0, 0, 0, 0.8)',
-                marginRight: '10px',
+            const formData = new FormData();
+            formData.append('profilePhoto', file);
+            formData.append('userId', user._id);
+
+            try {
+                const response = await axiosInstance.put('/update-profile-photo', formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                    },
+                });
+                setProfilePhoto(URL.createObjectURL(file));
+                toast.success('Profile photo updated', {
+                    style: {
+                        fontSize: '13px',
+                        maxWidth: '400px',
+                        boxShadow: '4px 4px 8px rgba(0, 1, 4, 0.1)',
+                        borderRadius: '8px',
+                        borderColor: 'rgba(0, 0, 0, 0.8)',
+                        marginRight: '10px',
+                    }
+                });
+            } catch (error) {
+                toast.error('Failed to upload profile photo', {
+                    style: {
+                        fontSize: '13px',
+                        maxWidth: '400px',
+                        boxShadow: '4px 4px 8px rgba(0, 1, 4, 0.1)',
+                        borderRadius: '8px',
+                        borderColor: 'rgba(0, 0, 0, 0.8)',
+                        marginRight: '10px',
+                    }
+                });
+                console.error('Error uploading profile photo:', error);
             }
-        });
+        }
     };
 
     useEffect(() => {
-        // Sync the email state with the user object
+        // Sync the email and phone state with the user object
         setEmail(user?.email || '');
+        setPhone(user?.phone || '');
     }, [user]);
 
     const handleEmailChangeClick = () => {
@@ -112,8 +133,62 @@ const ProfilePage = () => {
         }
     };
 
-    const handleModalClose = () => {
+    const handlePhoneChangeClick = () => {
+        setIsPhoneModalOpen(true);
+    };
+
+    const handlePhoneModalClose = () => {
         setIsPhoneModalOpen(false);
+    };
+
+    const handlePhoneModalSave = async () => {
+        try {
+            console.log("New phone to update:", newPhone);
+            const response = await axiosInstance.put(`/update-phone`, { newPhone, userId: user._id });
+            console.log("Response from API:", response);
+
+            if (response.data) {
+                // Update phone in state and local storage
+                const updatedUser = { ...user, phone: newPhone };
+                setUser(updatedUser);
+                localStorage.setItem('user', JSON.stringify(updatedUser));
+
+                toast.success('Phone number updated', {
+                    style: {
+                        fontSize: '13px',
+                        maxWidth: '400px',
+                        boxShadow: '4px 4px 8px rgba(0, 1, 4, 0.1)',
+                        borderRadius: '8px',
+                        borderColor: 'rgba(0, 0, 0, 0.8)',
+                        marginRight: '10px',
+                    }
+                });
+                setIsPhoneModalOpen(false);
+            } else {
+                toast.error('Failed to update phone number', {
+                    style: {
+                        fontSize: '13px',
+                        maxWidth: '400px',
+                        boxShadow: '4px 4px 8px rgba(0, 1, 4, 0.1)',
+                        borderRadius: '8px',
+                        borderColor: 'rgba(0, 0, 0, 0.8)',
+                        marginRight: '10px',
+                    }
+                });
+            }
+        } catch (error) {
+            toast.error('Failed to update phone number', {
+                style: {
+                    fontSize: '13px',
+                    maxWidth: '400px',
+                    boxShadow: '4px 4px 8px rgba(0, 1, 4, 0.1)',
+                    borderRadius: '8px',
+                    borderColor: 'rgba(0, 0, 0, 0.8)',
+                    marginRight: '10px',
+                }
+            });
+            console.error('Error updating phone number:', error);
+        }
     };
 
     const handleAccountDelete = () => {
@@ -123,21 +198,6 @@ const ProfilePage = () => {
 
     const handleAccountDeleteModalClose = () => {
         setIsAccountDeleteModalOpen(false);
-    };
-
-    const handleModalSave = (newPhone) => {
-        setPhone(newPhone);
-        toast.success('Phone number updated', {
-            style: {
-                fontSize: '13px',
-                maxWidth: '400px',
-                boxShadow: '4px 4px 8px rgba(0, 1, 4, 0.1)',
-                borderRadius: '8px',
-                borderColor: 'rgba(0, 0, 0, 0.8)',
-                marginRight: '10px',
-            }
-        });
-        setIsPhoneModalOpen(false);
     };
 
     return (
@@ -180,8 +240,8 @@ const ProfilePage = () => {
                                     id="fileInput"
                                     type="file"
                                     accept="image/*"
+                                    style={{ display: 'none' }}
                                     onChange={handlePhotoUpload}
-                                    className="hidden"
                                 />
                             </div>
 
@@ -246,7 +306,7 @@ const ProfilePage = () => {
                                         <p className="flex justify-between items-center w-full border-t border-gray-100 text-gray-600 py-1 pl-6 pr-3 hover:bg-gray-100 transition duration-150">
                                             {user?.phone || 'User Phone'}
                                             <button
-                                                onClick={() => setIsPhoneModalOpen(true)}
+                                                onClick={handlePhoneChangeClick}
                                                 className="inline-flex items-center text-white bg-gray-800 hover:bg-gray-900 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 mt-2 mb-2 text-xs dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-700">
                                                 Change Phone
                                             </button>
@@ -255,25 +315,25 @@ const ProfilePage = () => {
                                         {/* Modal for phone number  */}
                                         {isPhoneModalOpen && (
                                             <div className='fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50'>
-                                                <div className='bg-white p-6 rounded-lg shadow-lg w-96'>
-                                                    <h2 className='text-xl font-bold mb-4'>Enter Phone Number</h2>
+                                                <div className="bg-white p-6 rounded-lg shadow-md sm:w-full md:w-1/2 lg:w-1/3">
+                                                    <h3 className="text-lg font-semibold mb-4">Change Phone</h3>
                                                     <input
-                                                        type="text"
-                                                        value={phone}
-                                                        onChange={(e) => setPhone(e.target.value)}
-                                                        className='w-full p-2 mb-4 border rounded'
-                                                        placeholder='Phone'
+                                                        type="tel"
+                                                        value={newPhone}
+                                                        onChange={(e) => setNewPhone(e.target.value)}
+                                                        placeholder="Enter new phone number"
+                                                        className="w-full px-3 py-2 mb-4 border rounded-lg"
                                                     />
                                                     <div className='flex justify-end space-x-2'>
                                                         <button
-                                                            onClick={handleModalClose}
-                                                            className='inline-flex items-center text-gray-900 bg-gray-200 hover:bg-red-200 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-xs dark:bg-gray-300  border-gray-800 transition-all'
+                                                            className="inline-flex items-center text-gray-900 bg-gray-200 hover:bg-red-200 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-xs dark:bg-gray-300  border-gray-800 transition-all"
+                                                            onClick={handlePhoneModalClose}
                                                         >
                                                             Cancel
                                                         </button>
                                                         <button
-                                                            onClick={() => handleModalSave(phone)}
-                                                            className='inline-flex items-center text-white bg-gray-800 hover:bg-gray-900 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-xs dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-700 transition-all'
+                                                            className="inline-flex items-center text-white bg-gray-800 hover:bg-gray-900 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-xs dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-700 transition-all"
+                                                            onClick={handlePhoneModalSave}
                                                         >
                                                             Save
                                                         </button>
