@@ -6,17 +6,16 @@ const multer = require("multer");
 const cors = require("cors");
 const jwt = require("jsonwebtoken");
 const app = express();
-const storage = multer.memoryStorage();
-const upload = multer({ storage });
 const { authenticationToken } = require("./utilities");
 const User = require("./models/userModel");
 const Note = require("./models/noteModel");
 
 // Use cors middleware before defining any routes
 app.use(cors({
-    origin: 'http://localhost:5173', // Your frontend origin
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization']
+    origin: 'http://localhost:5173',
+    credentials: true, //access-control-allow-credentials:true
+    methods: "GET,PUT,POST,DELETE",
+    optionSuccessStatus: 200
 }));
 
 app.use(express.json());
@@ -269,20 +268,26 @@ app.put('/update-phone', async (req, res) => {
     }
 });
 
+// configure multer for file uploads
+// const storage = multer.diskStorage({
+//     destination: (req, file, cb) => {
+//         const uploadPath = path.join(__dirname, 'uploads')
+//         if (!fs.existsSync(uploadPath)) {
+//             fs.mkdirSync(uploadPath)
+//         }
+//         cb(null, uploadPath)
+//     },
+//     filename: (req, file, cb) => {
+//         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+//         cb(null, file.filename + '-' + uniqueSuffix + path.extname(file.originalname))
+//     }
+// })
+// const upload = multer({ storage: storage });
+
 // Update profile photo
-app.put('/update-profile-photo', upload.single('profilePhoto'), async (req, res) => {
-    try {
-        const { userId } = req.body;
-        const profilePhoto = req.file.buffer.toString('base64'); // Convert buffer to base64
+// app.put('/update-profile-photo', upload.single('profilePhoto'), async (req, res) => {
 
-        await User.findByIdAndUpdate(userId, { profilePhoto });
-
-        res.json({ message: 'Profile photo updated successfully' });
-    } catch (error) {
-        console.error('Error updating profile photo:', error);
-        res.status(500).json({ error: 'Failed to update profile photo' });
-    }
-});
+// });
 
 app.listen(8000, () => {
     console.log("Server is running on port 8000");
