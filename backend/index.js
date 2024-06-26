@@ -9,6 +9,8 @@ const app = express();
 const { authenticationToken } = require("./utilities");
 const User = require("./models/userModel");
 const Note = require("./models/noteModel");
+const { OAuth2Client } = require('google-auth-library');
+const client = new OAuth2Client(process.env.GOOGLE_API_TOKEN)
 
 // Use cors middleware before defining any routes
 app.use(cors({
@@ -292,24 +294,34 @@ app.put('/update-phone', async (req, res) => {
 //google oauth
 app.post('/google-auth', async (req, res) => {
     const { token } = req.body;
-    
+
     try {
         const ticket = await client.verifyIdToken({
             idToken: token,
-            audience: process.env.GOOGLE_CLIENT_ID,
+            audience: process.env.GOOGLE_API_TOKEN,
         });
-        const { name, email, picture } = ticket.getPayload();
-        
+
+        const payload = ticket.getPayload();
+        const userid = payload['sub'];
+        const email = payload['email'];
+
         let user = await User.findOne({ email });
+
         if (!user) {
-            user = new User({ fullName: name, email, picture });
+            user = new User({
+                fullName: payload['name'],
+                email: email,
+                password: '',  // You might want to generate a random password or handle this differently
+            });
             await user.save();
         }
 
         const accessToken = jwt.sign({ user }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "36000m" });
-        res.status(201).json({ user, accessToken });
+
+        res.json({ error: false, user, accessToken, message: "Google authentication successful" });
     } catch (error) {
-        res.status(400).json({ error: true, message: "Invalid Google token" });
+        console.error(error);
+        res.status(400).json({ error: true, message: 'Invalid Google token' });
     }
 });
 

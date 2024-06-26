@@ -53,7 +53,7 @@ const Signup = () => {
         });
       }
     } catch (error) {
-      console.log(error);
+      console.log("Error response:", error.response);
       toast.error("Failed to sign in with Google", {
         style: {
           fontSize: "13px",
@@ -392,9 +392,16 @@ const Signup = () => {
                       Create an account
                     </button>
 
-                    <div className="mb-2 sm:text-sm text-gray-500 sm:mt-0">
+                    {/* <div className="mb-2 sm:text-sm text-gray-500 sm:mt-0">
                       <GoogleLogin onSuccess={responseMsg} onError={errorMsg} />
-                    </div>
+                    </div> */}
+
+                    <GoogleLogin
+                      clientId={import.meta.env.VITE_REACT_APP_GOOGLE_API_TOKEN}
+                      onSuccess={responseMsg}
+                      onError={errorMsg}
+                    />
+
                   </div>
                 </div>
               </form>
