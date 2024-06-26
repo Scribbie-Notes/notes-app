@@ -37,6 +37,8 @@ const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
         handleClearSearch();
     };
 
+    const hideSearchBarPaths = ['/', '/my-profile', '/about'];
+
     return (
         <div className='bg-white flex items-center justify-between px-4 py-2 drop-shadow-md '>
             <Link to='/'>
@@ -46,7 +48,7 @@ const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
                 </div>
             </Link>
 
-            {userInfo && (
+            {userInfo && !hideSearchBarPaths.includes(location.pathname) && (
                 <SearchBar
                     value={searchQuery}
                     onChange={({ target }) => setSearchQuery(target.value)}
@@ -58,7 +60,7 @@ const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
             {userInfo ? (
                 <ProfileInfo userInfo={userInfo} onLogout={onLogout} />
             ) : (
-                location.pathname !== '/login' && location.pathname !== '/' && (
+                location.pathname !== '/login' && (
                     <button onClick={() => navigate('/login')} className='text-gray-700 pr-3 transition hover:text-gray-700/75'>
                         Login
                     </button>
