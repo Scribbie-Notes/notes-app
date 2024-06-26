@@ -253,7 +253,7 @@ const Login = ({ setUser }) => {
                                     </label>
                                 </div>
 
-                                <div className="col-span-12 sm:flex sm:items-center mt-4 sm:gap-4">
+                                <div className="col-span-12 sm:flex sm:items-center mt-4 sm:gap-4 mb-6">
                                     <button
                                         className="inline-flex items-center text-white bg-gray-800 hover:bg-gray-900 focus:outline-none  font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700  dark:border-gray-700 transition-all"
                                         type="submit"
@@ -269,11 +269,9 @@ const Login = ({ setUser }) => {
                                             onError={errorMsg}
                                         />
                                     </div>
-
-
                                 </div>
                             </form>
-                            <p className="mt-6 text-sm text-gray-500 sm:mt-0">
+                            <p className="mt-8 text-sm text-gray-500 sm:mt-0">
                                 Don't have an account? <span> </span>
                                 <Link to="/signup" className="text-gray-700 underline font-semibold">Signup</Link>.
                             </p>

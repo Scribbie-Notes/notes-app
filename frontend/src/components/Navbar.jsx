@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import ProfileInfo from './Cards/ProfileInfo';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import SearchBar from './SearchBar/SearchBar';
 import { toast } from 'react-hot-toast';
 import { Link } from 'react-router-dom';
@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom';
 const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
     const [searchQuery, setSearchQuery] = useState("");
     const navigate = useNavigate();
+    const location = useLocation();
 
     const onLogout = () => {
         localStorage.clear();
@@ -38,7 +39,6 @@ const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
 
     return (
         <div className='bg-white flex items-center justify-between px-4 py-2 drop-shadow-md '>
-
             <Link to='/'>
                 <div className='flex items-center p-1 '>
                     <img src="/logo.png" className='h-10 ' />
@@ -58,9 +58,11 @@ const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
             {userInfo ? (
                 <ProfileInfo userInfo={userInfo} onLogout={onLogout} />
             ) : (
-                <button onClick={() => navigate('/login')} className='text-gray-700 pr-3 transition hover:text-gray-700/75'>
-                    Login
-                </button>
+                location.pathname !== '/login' && location.pathname !== '/' && (
+                    <button onClick={() => navigate('/login')} className='text-gray-700 pr-3 transition hover:text-gray-700/75'>
+                        Login
+                    </button>
+                )
             )}
         </div>
     );
