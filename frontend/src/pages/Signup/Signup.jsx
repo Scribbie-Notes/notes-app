@@ -369,12 +369,12 @@ const Signup = () => {
 
                 <div className="col-span-6">
                   <p className="text-sm text-gray-500">
-                    By creating an account, you agree to our
+                    By creating an account, you agree to our {" "}
                     <a href="#" className="text-gray-700 underline">
-                      {" "}
-                      terms and conditions{" "}
+
+                      terms and conditions
                     </a>
-                    and
+                    {" "}and   {" "}
                     <a href="#" className="text-gray-700 underline">
                       privacy policy
                     </a>
@@ -396,11 +396,13 @@ const Signup = () => {
                       <GoogleLogin onSuccess={responseMsg} onError={errorMsg} />
                     </div> */}
 
-                    <GoogleLogin
-                      clientId={import.meta.env.VITE_REACT_APP_GOOGLE_API_TOKEN}
-                      onSuccess={responseMsg}
-                      onError={errorMsg}
-                    />
+                    <div className="mb-3">
+                      <GoogleLogin
+                        clientId={import.meta.env.VITE_REACT_APP_GOOGLE_API_TOKEN}
+                        onSuccess={responseMsg}
+                        onError={errorMsg}
+                      />
+                    </div>
 
                   </div>
                 </div>
