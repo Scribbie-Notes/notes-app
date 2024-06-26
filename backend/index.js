@@ -289,6 +289,30 @@ app.put('/update-phone', async (req, res) => {
 
 // });
 
+//google oauth
+app.post('/google-auth', async (req, res) => {
+    const { token } = req.body;
+    
+    try {
+        const ticket = await client.verifyIdToken({
+            idToken: token,
+            audience: process.env.GOOGLE_CLIENT_ID,
+        });
+        const { name, email, picture } = ticket.getPayload();
+        
+        let user = await User.findOne({ email });
+        if (!user) {
+            user = new User({ fullName: name, email, picture });
+            await user.save();
+        }
+
+        const accessToken = jwt.sign({ user }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "36000m" });
+        res.status(201).json({ user, accessToken });
+    } catch (error) {
+        res.status(400).json({ error: true, message: "Invalid Google token" });
+    }
+});
+
 app.listen(8000, () => {
     console.log("Server is running on port 8000");
 });

@@ -6,7 +6,7 @@ import { Toaster } from 'react-hot-toast';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 
 createRoot(document.getElementById('root')).render(
-  <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_API_TOKEN}>
+  <GoogleOAuthProvider clientId={import.meta.env.VITE_REACT_APP_GOOGLE_API_TOKEN}>
     <React.StrictMode>
       <App />
       <Toaster />

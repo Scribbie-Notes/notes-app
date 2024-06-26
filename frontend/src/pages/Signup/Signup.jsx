@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "../../components/Navbar";
 import { Link, useNavigate } from "react-router-dom";
 import { validateEmail } from "../../utils/helper";
@@ -19,8 +19,53 @@ const Signup = () => {
 
   const navigate = useNavigate();
 
-  const responseMsg = (response) => {
-    console.log(response);
+  const responseMsg = async (response) => {
+    try {
+      const token = response.credential;
+      const res = await axiosInstance.post('/google-auth', { token });
+
+      if (res.data && res.data.accessToken) {
+        localStorage.setItem("token", res.data.accessToken);
+        localStorage.setItem("user", JSON.stringify(res.data.user));
+        navigate("/dashboard");
+        toast.success("Signed in successfully", {
+          style: {
+            fontSize: "13px",
+            maxWidth: "400px",
+            boxShadow: "4px 4px 8px rgba(0, 1, 4, 0.1)",
+            borderRadius: "8px",
+            borderColor: "rgba(0, 0, 0, 0.8)",
+            marginTop: "60px",
+            marginRight: "10px",
+          },
+        });
+      } else {
+        toast.error("Failed to sign in with Google", {
+          style: {
+            fontSize: "13px",
+            maxWidth: "400px",
+            boxShadow: "4px 4px 8px rgba(0, 1, 4, 0.1)",
+            borderRadius: "8px",
+            borderColor: "rgba(0, 0, 0, 0.8)",
+            marginTop: "60px",
+            marginRight: "10px",
+          },
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Failed to sign in with Google", {
+        style: {
+          fontSize: "13px",
+          maxWidth: "400px",
+          boxShadow: "4px 4px 8px rgba(0, 1, 4, 0.1)",
+          borderRadius: "8px",
+          borderColor: "rgba(0, 0, 0, 0.8)",
+          marginTop: "60px",
+          marginRight: "10px",
+        },
+      });
+    }
   };
 
   const errorMsg = (error) => {
