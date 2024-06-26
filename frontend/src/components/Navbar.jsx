@@ -41,7 +41,7 @@ const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
 
     return (
         <div className='bg-white flex items-center justify-between px-4 py-2 drop-shadow-md '>
-            <Link to='/'>
+            <Link to={userInfo ? '/dashboard' : '/'}>
                 <div className='flex items-center p-1 '>
                     <img src="/logo.png" className='h-10 ' />
                     <h2 className='text-2xl font-medium py- ml-[-12px] text-[#2B2B2B] mt-2'>cribbie</h2>

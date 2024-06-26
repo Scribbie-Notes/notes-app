@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import Home from './pages/Home/Home';
 import Signup from './pages/Signup/Signup';
 import Login from './pages/Login/Login';
@@ -40,18 +40,19 @@ const App = () => {
   return (
     <div>
       {loading && <Loading />}
-      {/* <Navbar userInfo={user} /> */}
-      <Routes>
-        <Route path='/landing' exact element={<Hero />} />
-        <Route path='/dashboard' exact element={<Home />} />
-        <Route path='/' exact element={<Hero />} />
-        <Route path='/login' exact element={<Login setUser={setUser} />} />
-        <Route path='/signup' exact element={<Signup />} />
-        <Route path='/about' exact element={<About />} />
-        {/* <Route path='/my-profile' exact element={<ProtectedRoute><ProfilePage user={user} /></ProtectedRoute>} /> */}
-        <Route path='/my-profile' exact element={<ProfilePage />} />
-      </Routes>
-      {/* <Footer /> */}
+      {user && location.pathname === '/' ? (
+        <Navigate to='/dashboard' replace />
+      ) : (
+        <Routes>
+          <Route path='/landing' exact element={<Hero />} />
+          <Route path='/dashboard' exact element={<Home />} />
+          <Route path='/' exact element={<Hero />} />
+          <Route path='/login' exact element={<Login setUser={setUser} />} />
+          <Route path='/signup' exact element={<Signup />} />
+          <Route path='/about' exact element={<About />} />
+          <Route path='/my-profile' exact element={<ProfilePage />} />
+        </Routes>
+      )}
     </div>
   );
 };
