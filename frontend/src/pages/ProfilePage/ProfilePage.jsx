@@ -211,7 +211,7 @@ const ProfilePage = () => {
                         </button>
                     </div>
                 </Link>
-                <div className="container mx-auto my-28">
+                <div className="container items-center justify-center pr-14 my-28">
                     <div>
                         <div className="bg-white relative shadow rounded-lg w-5/6 md:w-5/6 lg:w-4/6 xl:w-3/6 mx-auto">
                             <div className="flex justify-center">
