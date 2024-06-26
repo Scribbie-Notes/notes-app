@@ -5,6 +5,7 @@ import { validateEmail } from '../../utils/helper';
 import axiosInstance from '../../utils/axiosInstance';
 import toast from 'react-hot-toast';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import { GoogleLogin } from "@react-oauth/google";
 
 const Login = ({ setUser }) => {
     const [email, setEmail] = useState("");
@@ -13,6 +14,59 @@ const Login = ({ setUser }) => {
     const [error, setError] = useState(null);
 
     const navigate = useNavigate();
+
+    const responseMsg = async (response) => {
+        try {
+            const token = response.credential;
+            const res = await axiosInstance.post('/google-auth', { token });
+
+            if (res.data && res.data.accessToken) {
+                localStorage.setItem("token", res.data.accessToken);
+                localStorage.setItem("user", JSON.stringify(res.data.user));
+                navigate("/dashboard");
+                toast.success("Signed in successfully", {
+                    style: {
+                        fontSize: "13px",
+                        maxWidth: "400px",
+                        boxShadow: "4px 4px 8px rgba(0, 1, 4, 0.1)",
+                        borderRadius: "8px",
+                        borderColor: "rgba(0, 0, 0, 0.8)",
+                        marginTop: "60px",
+                        marginRight: "10px",
+                    },
+                });
+            } else {
+                toast.error("Failed to sign in with Google", {
+                    style: {
+                        fontSize: "13px",
+                        maxWidth: "400px",
+                        boxShadow: "4px 4px 8px rgba(0, 1, 4, 0.1)",
+                        borderRadius: "8px",
+                        borderColor: "rgba(0, 0, 0, 0.8)",
+                        marginTop: "60px",
+                        marginRight: "10px",
+                    },
+                });
+            }
+        } catch (error) {
+            console.log("Error response:", error.response);
+            toast.error("Failed to sign in with Google", {
+                style: {
+                    fontSize: "13px",
+                    maxWidth: "400px",
+                    boxShadow: "4px 4px 8px rgba(0, 1, 4, 0.1)",
+                    borderRadius: "8px",
+                    borderColor: "rgba(0, 0, 0, 0.8)",
+                    marginTop: "60px",
+                    marginRight: "10px",
+                },
+            });
+        }
+    };
+
+    const errorMsg = (error) => {
+        console.log(error);
+    };
 
     const handleLogin = async (e) => {
         e.preventDefault();
@@ -201,18 +255,28 @@ const Login = ({ setUser }) => {
 
                                 <div className="col-span-12 sm:flex sm:items-center mt-4 sm:gap-4">
                                     <button
-                                        className="inline-flex items-center text-white bg-gray-800 hover:bg-gray-900 focus:outline-none  font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700  dark:border-gray-700"
+                                        className="inline-flex items-center text-white bg-gray-800 hover:bg-gray-900 focus:outline-none  font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700  dark:border-gray-700 transition-all"
                                         type="submit"
                                     >
                                         Login
                                     </button>
 
-                                    <p className="mt-4 text-sm text-gray-500 sm:mt-0">
-                                        Don't have an account? <span> </span>
-                                        <Link to="/signup" className="text-gray-700 underline font-semibold">Signup</Link>.
-                                    </p>
+
+                                    <div className="mb-3">
+                                        <GoogleLogin
+                                            clientId={import.meta.env.VITE_REACT_APP_GOOGLE_API_TOKEN}
+                                            onSuccess={responseMsg}
+                                            onError={errorMsg}
+                                        />
+                                    </div>
+
+
                                 </div>
                             </form>
+                            <p className="mt-6 text-sm text-gray-500 sm:mt-0">
+                                Don't have an account? <span> </span>
+                                <Link to="/signup" className="text-gray-700 underline font-semibold">Signup</Link>.
+                            </p>
                         </div>
                     </main>
                 </div>
