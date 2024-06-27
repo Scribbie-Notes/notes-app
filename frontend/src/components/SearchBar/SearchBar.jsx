@@ -14,7 +14,7 @@ const SearchBar = ({ value, onChange, handleSearch, onClearSearch }) => {
     };
 
     return (
-        <div className={`w-auto flex items-center px-4 bg-slate-100 rounded-md ${isClicked ? 'shadow-md border-2 border-gray-600' : ''}`} onClick={handleClick} onBlur={handleBlur}>
+        <div className={`w-64 flex items-center px-4 bg-slate-100 rounded-md ${isClicked ? 'shadow-md border-2 border-gray-600' : ''}`} onClick={handleClick} onBlur={handleBlur}>
             <input
                 type="text"
                 placeholder='Search Notes'

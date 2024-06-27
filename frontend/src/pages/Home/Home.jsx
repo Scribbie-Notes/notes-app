@@ -171,7 +171,7 @@ const Home = () => {
         getUserInfo();
     }, []);
 
-    return (
+    return (    
         <div>
             <Navbar userInfo={userInfo} onSearchNote={onSearchNote} handleClearSearch={handleClearSearch} setUserInfo={setUserInfo} />
             <div className='container mx-auto h-screen p-6 mb-12'>
