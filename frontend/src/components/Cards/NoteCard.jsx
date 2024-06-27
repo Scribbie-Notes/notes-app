@@ -23,10 +23,30 @@ const NoteCard = ({
 
                 <MdOutlinePushPin className={`icon-btn ${isPinned ? 'text-primary' : 'text-slate-300'}`} onClick={onPinNote} />
             </div>
-            <p className='text-xs text-slate-600 mt-2'>{content?.slice(0, 60)}</p>
+            <p
+                style={{
+                    display: '-webkit-box',
+                    WebkitLineClamp: 3,
+                    WebkitBoxOrient: 'vertical',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis'
+                }}
+                className='text-xs text-slate-600 mt-2'
+            >
+                {content}
+            </p>
 
-            <div className='flex items-center justify-between mt-2'>
-                <div className='text-xs text-slate-500'>{tags.map((item) => `#${item}`).join(' ')}</div>
+            <div className='flex items-center justify-between mt-3 mb-[-12px]'>
+                <div className='flex flex-wrap gap-1'>
+                    {tags.length > 0 && tags.map((tag, index) => (
+                        <span
+                            key={index}
+                            className='bg-gray-100 text-gray-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-blue-100 dark:text-gray-800'
+                        >
+                            #{tag}
+                        </span>
+                    ))}
+                </div>
 
                 <div className='flex items-center gap-2'>
                     <MdCreate
@@ -38,9 +58,7 @@ const NoteCard = ({
                         onClick={onDelete}
                     />
                 </div>
-
             </div>
-
         </div>
     );
 }
