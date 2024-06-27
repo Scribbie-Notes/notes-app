@@ -58,7 +58,9 @@ const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
             )}
 
             {userInfo ? (
-                <ProfileInfo userInfo={userInfo} onLogout={onLogout} />
+                <ProfileInfo
+                userInfo={userInfo} onLogout={onLogout}
+                />
             ) : (
                 location.pathname !== '/login' && (
                     <button onClick={() => navigate('/login')} className='text-gray-700 pr-3 transition hover:text-gray-700/75'>
