@@ -36,7 +36,7 @@ const NoteCard = ({
                 {content}
             </p>
 
-            <div className='flex items-center justify-between mt-3 mb-[-12px]'>
+            <div className='flex items-center justify-between mt-3 mb-[-8px]'>
                 <div className='flex flex-wrap gap-1'>
                     {tags.length > 0 && tags.map((tag, index) => (
                         <span
