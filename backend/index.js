@@ -1,4 +1,3 @@
-// require("dotenv").config();
 const dotenv = require("dotenv");
 const path = require("path");
 const config = require("./config.json");
@@ -12,23 +11,28 @@ const { authenticationToken } = require("./utilities");
 const User = require("./models/userModel");
 const Note = require("./models/noteModel");
 const { OAuth2Client } = require('google-auth-library');
-const client = new OAuth2Client(process.env.GOOGLE_API_TOKEN)
+
 const envPath = process.env.NODE_ENV === "production" ? ".env.production" : ".env.development";
 dotenv.config({ path: path.resolve(__dirname, envPath) });
 
 const { ACCESS_TOKEN_SECRET, MONGO_URI, GOOGLE_API_TOKEN } = process.env;
+const client = new OAuth2Client(GOOGLE_API_TOKEN);
 
 // Use cors middleware before defining any routes
+const allowedOrigins = process.env.NODE_ENV === "production"
+    ? ['https://scribbie-notes.vercel.app']
+    : ['http://localhost:5173'];
+
 app.use(cors({
-    origin: 'http://localhost:5173',
-    credentials: true, //access-control-allow-credentials:true
+    origin: allowedOrigins,
+    credentials: true, // access-control-allow-credentials:true
     methods: "GET,PUT,POST,DELETE",
     optionSuccessStatus: 200
 }));
 
 app.use(express.json());
 
-mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => console.log("MongoDB connected"))
     .catch(err => console.log(err));
 
