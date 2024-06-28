@@ -1,4 +1,6 @@
-require("dotenv").config();
+// require("dotenv").config();
+const dotenv = require("dotenv");
+const path = require("path");
 const config = require("./config.json");
 const mongoose = require("mongoose");
 const express = require("express");
@@ -11,6 +13,10 @@ const User = require("./models/userModel");
 const Note = require("./models/noteModel");
 const { OAuth2Client } = require('google-auth-library');
 const client = new OAuth2Client(process.env.GOOGLE_API_TOKEN)
+const envPath = process.env.NODE_ENV === "production" ? ".env.production" : ".env.development";
+dotenv.config({ path: path.resolve(__dirname, envPath) });
+
+const { ACCESS_TOKEN_SECRET, MONGO_URI, GOOGLE_API_TOKEN } = process.env;
 
 // Use cors middleware before defining any routes
 app.use(cors({
@@ -22,7 +28,7 @@ app.use(cors({
 
 app.use(express.json());
 
-mongoose.connect(process.env.MONGO_URI || config.connectionString, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => console.log("MongoDB connected"))
     .catch(err => console.log(err));
 
