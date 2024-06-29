@@ -175,27 +175,6 @@ const About = () => {
           </section>
 
           <section className="mb-12">
-            <h2 className="text-3xl font-bold mb-4">Careers</h2>
-            <p className="text-md mb-6">
-              Join our team and help us build the future of note-taking! At
-              Scribbie, we are always looking for talented individuals who are
-              passionate about technology and innovation. If you are interested
-              in joining our team, please visit our{" "}
-              <a href="/careers" className="text-blue-500 underline">
-                Careers
-              </a>{" "}
-              page for more information.
-            </p>
-            <p className="text-md mb-6">
-              We offer a dynamic and inclusive work environment where creativity
-              and collaboration thrive. At Scribbie, you will have the
-              opportunity to work on exciting projects, develop your skills, and
-              make a meaningful impact. We value diversity and are committed to
-              creating an environment where everyone feels welcome and valued.
-            </p>
-          </section>
-
-          <section className="mb-12">
             <h2 className="text-3xl font-bold mb-4">Security</h2>
             <p className="text-md mb-6">
               Your security is our top priority. We use the latest technologies
@@ -216,25 +195,6 @@ const About = () => {
           </section>
 
           <section className="mb-12">
-            <h2 className="text-3xl font-bold mb-4">Status</h2>
-            <p className="text-md mb-6">
-              Stay up-to-date with the latest status updates and system
-              performance information. Visit our{" "}
-              <a href="/status" className="text-blue-500 underline">
-                Status
-              </a>{" "}
-              page to learn more about any current or past issues.
-            </p>
-            <p className="text-md mb-6">
-              We are committed to providing a reliable service and keeping our
-              users informed about any disruptions. Our status page offers
-              real-time updates on system performance, scheduled maintenance,
-              and any incidents affecting our services. Your productivity is
-              important to us, and we strive to minimize any downtime.
-            </p>
-          </section>
-
-          <section className="mb-12">
             <h2 className="text-3xl font-bold mb-4">Terms & Privacy</h2>
             <p className="text-md mb-6">
               We value your privacy and are committed to protecting your
@@ -250,6 +210,17 @@ const About = () => {
               use, and protect your data. We believe in transparency and are
               dedicated to maintaining your trust. If you have any questions
               about our policies, please do not hesitate to contact us.
+            </p>
+          </section>
+
+          <section className="mb-12">
+            <h2 className="text-3xl font-bold mb-4">Version and Source Code</h2>
+            <p className="text-md mb-2">
+            <p>Current Version: v0.1.0 (29 June 2024)</p>
+            </p>
+            <p className="text-md mb-6">
+              The Source Code is available on <span className="text-blue-500 underline"><a href="https://github.com/yashmandi/notes-app" target="_blank" rel="noopener noreferrer">GitHub</a></span> feel free to explore, contribute and find issues.
+              Here
             </p>
           </section>
         </div>
