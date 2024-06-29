@@ -181,9 +181,9 @@ const Home = () => {
         handleClearSearch={handleClearSearch}
         setUserInfo={setUserInfo}
       />
-      <div className="container mx-auto h-screen p-6 mb-12">
+      <div className="container h-screen p-6 pb-6">
         {allNotes.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 mt-8 transition-all">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 mt-4 transition-all">
             {allNotes.map((item) => (
               <NoteCard
                 key={item._id}

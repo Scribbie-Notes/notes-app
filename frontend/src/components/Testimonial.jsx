@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 
 const Testimonial = () => {
     return (
@@ -14,7 +14,7 @@ const Testimonial = () => {
                             <div className="grid gap-4 md:grid-cols-2">
                                 <div className="grid content-center gap-4">
                                     <div className="p-6 rounded-lg shadow-md hover:shadow-xl cursor-default transition duration-300 ease-in-out border border-gray-200 dark:bg-gray-50">
-                                        <p>"Since I started using this notes application, my productivity has skyrocketed. The intuitive design and seamless syncing across devices make it an essential tool for organizing my thoughts and tasks. The powerful search functionality ensures I can always find what I need, and the ability to collaborate with others has transformed the way I work on projects. It’s truly a game-changer for anyone looking to stay organized and efficient."</p>
+                                        <p className="testimonial-text">"Since I started using this notes application, my productivity has skyrocketed. The intuitive design and seamless syncing across devices make it an essential tool for organizing my thoughts and tasks. The powerful search functionality ensures I can always find what I need, and the ability to collaborate with others has transformed the way I work on projects. It’s truly a game-changer for anyone looking to stay organized and efficient."</p>
                                         <div className="flex items-center mt-4 space-x-4">
                                             <img src="https://i.pinimg.com/736x/a8/9f/67/a89f67343169f2a76369d2df3b364875.jpg" alt="" className="w-12 h-12 bg-center bg-cover rounded-full dark:bg-gray-500" />
                                             <div>
@@ -24,7 +24,7 @@ const Testimonial = () => {
                                         </div>
                                     </div>
                                     <div className="p-6 rounded-lg shadow-md hover:shadow-xl cursor-default transition duration-300 ease-in-out border border-gray-200 dark:bg-gray-50">
-                                        <p>"With this notes app, staying organized is a breeze. Its user-friendly interface and powerful features make it an essential tool. Perfect for managing tasks and capturing ideas on the go. Highly recommended!"</p>
+                                        <p className="testimonial-text">"With this notes app, staying organized is a breeze. Its user-friendly interface and powerful features make it an essential tool. Perfect for managing tasks and capturing ideas on the go. Highly recommended!"</p>
                                         <div className="flex items-center mt-4 space-x-4">
                                             <img src="https://i.pinimg.com/736x/a8/9f/67/a89f67343169f2a76369d2df3b364875.jpg" alt="" className="w-12 h-12 bg-center bg-cover rounded-full dark:bg-gray-500" />
                                             <div>
@@ -36,7 +36,7 @@ const Testimonial = () => {
                                 </div>
                                 <div className="grid content-center gap-4">
                                     <div className="p-6 rounded-lg shadow-md hover:shadow-xl cursor-default transition duration-300 ease-in-out border border-gray-200 dark:bg-gray-50">
-                                        <p>"This notes application is a game-changer. It simplifies task management and boosts productivity. Its intuitive design and robust features make organizing notes effortless, ensuring I never miss a detail. Highly recommended!"</p>
+                                        <p className="testimonial-text">"This notes application is a game-changer. It simplifies task management and boosts productivity. Its intuitive design and robust features make organizing notes effortless, ensuring I never miss a detail. Highly recommended!"</p>
                                         <div className="flex items-center mt-4 space-x-4">
                                             <img src="https://i.pinimg.com/736x/a8/9f/67/a89f67343169f2a76369d2df3b364875.jpg" alt="" className="w-12 h-12 bg-center bg-cover rounded-full dark:bg-gray-500" />
                                             <div>
@@ -46,7 +46,7 @@ const Testimonial = () => {
                                         </div>
                                     </div>
                                     <div className="p-6 rounded-lg shadow-md hover:shadow-xl cursor-default transition duration-300 ease-in-out border border-gray-200 dark:bg-gray-50">
-                                        <p>"I've tried many note-taking apps, but this one stands out for its simplicity and functionality. The ability to categorize and tag notes makes retrieval a breeze, and the collaborative features have been invaluable for team projects. The app’s reliability and ease of use have made it an essential part of my daily routine, helping me stay on top of my tasks and ideas effortlessly."</p>
+                                        <p className="testimonial-text">"I've tried many note-taking apps, but this one stands out for its simplicity and functionality. The ability to categorize and tag notes makes retrieval a breeze, and the collaborative features have been invaluable for team projects. The app’s reliability and ease of use have made it an essential part of my daily routine, helping me stay on top of my tasks and ideas effortlessly."</p>
                                         <div className="flex items-center mt-4 space-x-4">
                                             <img src="https://i.pinimg.com/736x/a8/9f/67/a89f67343169f2a76369d2df3b364875.jpg" alt="" className="w-12 h-12 bg-center bg-cover rounded-full dark:bg-gray-500" />
                                             <div>
@@ -62,7 +62,7 @@ const Testimonial = () => {
                 </div>
             </section>
         </div>
-    )
-}
+    );
+};
 
-export default Testimonial
+export default Testimonial;

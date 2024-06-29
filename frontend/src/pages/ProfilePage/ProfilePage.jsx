@@ -209,17 +209,24 @@ const ProfilePage = () => {
   };
 
   return (
-    <div className="bg-gray-50">
+    <div className="bg-gray-50 relative">
       <Navbar userInfo={user} />
+      <Link to='/dashboard'>
+                    <div className='p-5'>
+                        <button className='inline-flex items-center text-white bg-gray-800 hover:bg-gray-900 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-700'>
+                            <IoMdArrowRoundBack />
+                        </button>
+                    </div>
+                </Link>
       <div className="flex">
-        <Link to="/dashboard">
+        {/* <Link to="/dashboard">
           <div className="p-5 hidden md:inline-block">
             <button className="inline-flex items-center text-white bg-gray-800 hover:bg-gray-900 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-700">
               <IoMdArrowRoundBack />
             </button>
           </div>
-        </Link>
-        <div className="container items-center justify-center px-4 pt-14 pb-28 md:pr-14">
+        </Link> */}
+        <div className="container items-center justify-center px-4 pb-28">
           <div>
             <div className="bg-white relative shadow rounded-lg w-full md:w-5/6 lg:w-4/6 xl:w-3/6 mx-auto mt-12">
               <div className="flex justify-center">
