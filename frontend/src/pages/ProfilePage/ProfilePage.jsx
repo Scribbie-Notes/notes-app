@@ -374,13 +374,13 @@ const ProfilePage = () => {
                     <p className="w-full  border-t border-gray-100 text-gray-600 py-4 pl-6 pr-3 w-full block hover:bg-gray-100 transition duration-150">
                       Connect with:
                       <div className="flex pt-3 justify-between items-center gap-6 px-2 ">
-                        <a className="text-gray-800 bg-gray-300  border border-gray-300 hover:text-gray-900 hover:bg-gray-100 rounded-md cursor-pointer transition duration-150 ease-in font-medium text-xs text-center w-full py-3">
+                        <a className="text-gray-800  bg-gray-300  border border-gray-300 hover:text-gray-900 hover:bg-gray-100 rounded-md cursor-pointer transition duration-150 ease-in font-medium text-xs text-center w-full py-3">
                           Instagram
                         </a>
-                        <a className="text-gray-800 bg-gray-300  border border-gray-300 hover:text-gray-900 hover:bg-gray-100 rounded-md cursor-pointer transition duration-150 ease-in font-medium text-xs text-center w-full py-3">
+                        <a className="text-gray-800  bg-gray-300  border border-gray-300 hover:text-gray-900 hover:bg-gray-100 rounded-md cursor-pointer transition duration-150 ease-in font-medium text-xs text-center w-full py-3">
                           Twitter
                         </a>
-                        <a className="text-gray-800 bg-gray-300  border border-gray-300 hover:text-gray-900 hover:bg-gray-100    rounded-md cursor-pointer transition duration-150 ease-in font-medium text-xs text-center w-full py-3">
+                        <a className="text-gray-800  bg-gray-300  border border-gray-300 hover:text-gray-900 hover:bg-gray-100    rounded-md cursor-pointer transition duration-150 ease-in font-medium text-xs text-center w-full py-3">
                           Email
                         </a>
                       </div>

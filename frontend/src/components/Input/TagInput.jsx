@@ -42,7 +42,7 @@ const TagInput = ({ tags, setTags }) => {
                 </div>
             )}
 
-            <div className='flex items-center gap-4 '>
+            <div className='flex items-center gap-4'>
                 <input
                     type="text"
                     value={inputValue}
@@ -54,7 +54,7 @@ const TagInput = ({ tags, setTags }) => {
 
                 <button className='w-9 h-9 flex items-center transition-all rounded-xl border items-center text-white bg-gray-800 hover:bg-gray-900'>
                     <MdAdd
-                        className='text-2xl text-white-700 hover:text-white ml-[5px]'
+                        className='text-xl text-white-700 hover:text-white ml-[8px]'
                         onClick={() => {
                             addNewTag();
                         }}

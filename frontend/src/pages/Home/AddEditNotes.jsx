@@ -156,7 +156,7 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
             </div>
 
             <div className='flex flex-col gap-2 mt-4'>
-                <label className='font-medium'>Tags</label>
+                <label className='font-medium md:text-base'>Tags</label>
                 <TagInput tags={tags} setTags={setTags} />
             </div>
 
