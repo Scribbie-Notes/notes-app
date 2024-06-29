@@ -1,4 +1,4 @@
-- page responsiveness 
+- page responsiveness [DONE]
 - enable attachments (image, video, etc.) to notes
 - on clicking on a note, new page / modal should appear that display the notes content
 - adding the loading spinner on every point
