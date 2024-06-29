@@ -213,13 +213,13 @@ const Home = () => {
       </div>
 
       <button
-        className="w-16 h-16 flex items-center justify-center rounded-2xl items-center text-white bg-gray-800 hover:bg-gray-900 transition-all focus:outline-none absolute right-10 bottom-10"
-        onClick={() => {
-          setOpenAddEditModal({ isShown: true, type: "add", data: null });
-        }}
-      >
-        <MdAdd className="text-[32px] text-white transition-all" />
-      </button>
+  className="w-16 h-16 flex items-center justify-center rounded-2xl items-center text-white bg-gray-800 hover:bg-gray-900 transition-all focus:outline-none fixed right-10 bottom-10 z-50"
+  onClick={() => {
+    setOpenAddEditModal({ isShown: true, type: "add", data: null });
+  }}
+>
+  <MdAdd className="text-[32px] text-white transition-all" />
+</button>
 
       {openAddEditModal.isShown && (
         <div className="fixed inset-0 flex items-center justify-center z-50">
