@@ -49,7 +49,7 @@ const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
             </Link>
 
             {userInfo && !hideSearchBarPaths.includes(location.pathname) && (
-                <div className='flex-grow flex justify-center mr-20'>
+                <div className='hidden md:flex flex-grow justify-center mr-20'>
                     <SearchBar
                         value={searchQuery}
                         onChange={({ target }) => setSearchQuery(target.value)}

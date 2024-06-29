@@ -10,7 +10,6 @@ const About = () => {
     return (
         <div>
             <Navbar userInfo={user} />
-            <div className='flex'>
                 <Link to='/dashboard'>
                     <div className='p-5'>
                         <button className='inline-flex items-center text-white bg-gray-800 hover:bg-gray-900 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-700'>
@@ -18,8 +17,8 @@ const About = () => {
                         </button>
                     </div>
                 </Link>
-                <div className="container text-gray-800 mx-auto mt-10 p-6 bg-white">
-
+            <div className='flex'>
+                <div className="container text-gray-800 mx-auto p-6 bg-white">
                     <h1 className="text-4xl font-bold mb-8">About Scribbie</h1>
 
                     <section className="mb-12">
