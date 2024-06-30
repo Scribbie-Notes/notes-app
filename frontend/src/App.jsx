@@ -10,6 +10,7 @@ import Loading from './components/Loading';
 import ProfilePage from './pages/ProfilePage/ProfilePage';
 import Navbar from './components/Navbar';
 import ProtectedRoute from './utils/ProtectedRoute';
+import ErrorPage from './components/ErrorPage';
 
 const App = () => {
   const [loading, setLoading] = useState(false);
@@ -51,6 +52,7 @@ const App = () => {
           <Route path='/signup' exact element={<Signup />} />
           <Route path='/about' exact element={<About />} />
           <Route path='/my-profile' exact element={<ProfilePage />} />
+            {/* <Route path="/404" exact element={<ErrorPage/>} /> */}
         </Routes>
       )}
     </div>
