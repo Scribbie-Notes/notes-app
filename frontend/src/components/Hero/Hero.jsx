@@ -15,6 +15,7 @@ import Testimonial from '../Testimonial';
 import Footer from '../Footer';
 import Brands from '../Brands';
 import './styles.css';
+import Pricing from '../Pricing';
 
 const Hero = () => {
     const user = JSON.parse(localStorage.getItem("user"))
@@ -24,7 +25,6 @@ const Hero = () => {
             <Navbar userInfo={user} />
             {/* <section className="w-screen animated-background h-screen bg-gradient-to-r from-blue-500 via-blue-500 to-indigo-500"> */}
             <section className="bg-white">
-
                 <div className="grid max-w-screen-xl px-4 py-8 mx-auto lg:gap-8 xl:gap-0 lg:py-16 lg:grid-cols-12">
                     <div className="mr-auto place-self-center lg:col-span-7">
                         <h1 className="max-w-2xl mb-2 text-4xl font-extrabold tracking-tight leading-none md:text-5xl xl:text-6xl dark:text-gray-900">Capture Ideas,</h1>
@@ -106,9 +106,12 @@ const Hero = () => {
             <hr />
 
             {/* SECTION 4  */}
+            <Pricing/>
+
+            {/* SECTION 5  */}
             <Brands />
 
-            {/* SECTION 5 */}
+            {/* SECTION 6 */}
             <section className="bg-gradient-to-b from-gray-50 to-white py-12 mt-8 mb-24">
                 <div className="max-w-screen-xl mx-auto px-4">
                     <h2 className="text-4xl font-extrabold text-center text-gray-900 mb-14">Available on All Your Devices</h2>
