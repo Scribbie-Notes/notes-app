@@ -109,6 +109,7 @@ const Hero = () => {
             <Pricing/>
 
             {/* SECTION 5  */}
+            <hr />
             <Brands />
 
             {/* SECTION 6 */}
