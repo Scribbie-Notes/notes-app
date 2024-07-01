@@ -1,4 +1,3 @@
-// src/components/ErrorPage.jsx
 import React from "react";
 import { useLocation } from "react-router-dom";
 
@@ -6,6 +5,7 @@ const ErrorPage = () => {
   const location = useLocation();
   const errorCode = location.state?.errorCode || 404;
   const errorMessage = location.state?.errorMessage || "We can't find that page.";
+  
 
   return (
     <div className="grid h-screen place-content-center bg-white px-4">
