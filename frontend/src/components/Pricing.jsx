@@ -10,7 +10,7 @@ const Pricing = () => {
               Designed for business teams like yours
             </h2>
             <p className="mb-5  text-slate-800 sm:text-xl">
-              Here at Scrib we focus on markets where technology, innovation,
+              Here at Scribie we focus on markets where technology, innovation,
               and capital can unlock long-term value and drive economic growth.
             </p>
           </div>
