@@ -1,131 +1,108 @@
-```markdown
-# Scribbie
+## 🚀 Introduction
+Scribbie is a powerful note-taking website designed for working professionals. (Visit: https://scribbie-notes.vercel.app)
 
-Scribbie is a notes application that allows users to create, read, update, and delete notes. It also supports user authentication using Google OAuth.
+## 🔥 Tech Stack
+- React.js
+- Node.js
+- MongoDB
+- Express.js
+- TailwindCSS
+- React Hot Toast
+- Vercel
+- Google Auth
 
-## Features
-
-- User authentication with Google OAuth
-- Create, read, update, and delete notes
-- Pin notes
-- Tag notes with hashtags
-- Responsive UI
-
-## Tech Stack
-
-- Frontend: React, Vite, Mantine
-- Backend: Node.js, Express, MongoDB
-- Deployment: Vercel
-
-## Installation
+## 💻 Getting started
 
 ### Prerequisites
+Before you begin, ensure you have met the following requirements:
 
-- Node.js and npm installed
-- MongoDB instance running
+Node.js: Ensure you have Node.js installed. You can download it from Node.js official website.
 
-### Clone the Repository
+MongoDB: Ensure you have MongoDB installed and running. You can download it from MongoDB official website.
 
-```bash
-git clone https://github.com/your-username/scribbie.git
-cd scribbie
+Git: Ensure you have Git installed. You can download it from Git official website.
+
+### Run on your local machine
+
+#### 1. Clone the repository
+
+```
+git clone https://github.com/yashmandi/notes-app.git
 ```
 
-### Frontend Setup
-
-1. Navigate to the `frontend` directory:
-
-```bash
-cd frontend
+#### 2. Navigate to the project directory:
+```
+cd notes-app
 ```
 
-2. Install dependencies:
-
-```bash
-npm install
+#### 3. Install dependencies for both backend and frontend:
 ```
-
-3. Create a `.env` file in the `frontend` directory and add your environment variables:
-
-```plaintext
-VITE_REACT_APP_GOOGLE_API_TOKEN=<Your-Google-Client-ID>
-VITE_API_BASE_URL=http://localhost:8000
-```
-
-4. Run the development server:
-
-```bash
-npm run dev
-```
-
-### Backend Setup
-
-1. Navigate to the `backend` directory:
-
-```bash
 cd backend
-```
-
-2. Install dependencies:
-
-```bash
+npm install
+cd ..frontend
 npm install
 ```
+#### 4. Create .env files for both backend and frontend with the necessary environment variables.
 
-3. Create a `.env.development` file in the `backend` directory and add your environment variables:
+Sample ```.env``` for backend:
+```
+# Backend Environment Variables
 
-```plaintext
-ACCESS_TOKEN_SECRET=your_secret_key
-MONGO_URI=your_mongo_uri
-GOOGLE_API_TOKEN=your_google_api_token
+# Port number for the backend server
+PORT=5000
+
+# MongoDB connection string
+MONGODB_URI=mongodb://localhost:27017/your-database-name
+
+# API key for Indeed Jobs API
+GOOGLE_API_TOKEN=your_google_api_token_here
 ```
 
-4. Run the server:
+Sample ```.env``` for frontend:
+```
+# Frontend Environment Variables
 
-```bash
-npm start
+# Base URL of the backend server
+VITE_BACKEND_URL=http://localhost:5000
+
+# API key for Google services (if used in frontend)
+VITE_REACT_APP_GOOGLE_API_TOKEN=your_google_api_token_here
 ```
 
-## Usage
+## Contribution Guidelines
+We welcome contributions from the community! To ensure a smooth process for everyone, please follow these guidelines:
 
-After setting up the project, you can access the frontend at `http://localhost:5173` and the backend at `http://localhost:8000`.
+1. Fork the repository: Click the "Fork" button at the top right of the repository page to create a copy of the repository under your GitHub account.
+2. Clone your fork: Clone your forked repository to your local machine.
+3. Create a new branch: Create a new branch for your feature or bug fix. Use a descriptive name for your branch.
+4. Make your changes: Implement your feature or fix the bug.
+5. Write tests: If applicable, write tests to cover your changes.
+6. Commit your changes: Write clear, concise commit messages.
+7. Push your changes: Push your changes to your forked repository.
+8. Submit a pull request: Open a pull request to merge your changes into the main repository.
 
-## Environment Variables
+### 🍰 Steps to contribute 
+1. Fork the Repository: Click the "Fork" button on the top right of this page to fork this repository to your GitHub account.
 
-### Frontend
-
-- `VITE_REACT_APP_GOOGLE_API_TOKEN`: Google Client ID
-- `VITE_API_BASE_URL`: API base URL (e.g., `http://localhost:8000` for development)
-
-### Backend
-
-- `ACCESS_TOKEN_SECRET`: Secret key for JWT
-- `MONGO_URI`: MongoDB connection string
-- `GOOGLE_API_TOKEN`: Google API token
-
-## Testing
-
-To test the project, you can use the following commands:
-
-### Frontend
-
-```bash
-npm run test
+2. Clone Your Fork: Clone your forked repository to your local machine.
+```
+git clone https://github.com/yashmandi/notes-app.git
 ```
 
-### Backend
-
-```bash
-npm run test
+3. Create a New Branch: Create a new branch for your feature or bug fix.
+```
+git checkout -b feature-name
 ```
 
-## Deployment
+4. Make Your Changes: Implement your feature or fix the bug.
+Commit Your Changes: Commit your changes with a clear and concise message.
+```
+git commit -m "Add feature or fix bug"
+```
 
-The project is deployed on Vercel.
+5. Push Your Changes: Push your changes to your forked repository.
+```
+git push origin feature-name
+```
 
-- Frontend: [https://scribbie-notes.vercel.app/](https://scribbie-notes.vercel.app/)
-- Backend: [https://scribbie-api.vercel.app/](https://scribbie-api.vercel.app/)
-
-## Contributing
-
-Contributions are welcome! Please create an issue or submit a pull request.
+6. Submit a Pull Request: Open a pull request to merge your changes into the main repository. Provide a clear description of the changes you made and why they are necessary.
