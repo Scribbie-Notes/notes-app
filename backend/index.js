@@ -10,7 +10,7 @@ const { authenticationToken } = require("./utilities");
 const User = require("./models/userModel");
 const Note = require("./models/noteModel");
 const { OAuth2Client } = require("google-auth-library");
-const multer = require('multer');
+const multer = require("multer");
 
 const envPath =
   process.env.NODE_ENV === "production"
@@ -18,9 +18,8 @@ const envPath =
     : ".env.development";
 dotenv.config({ path: path.resolve(__dirname, envPath) });
 
-const { ACCESS_TOKEN_SECRET, MONGO_URI, GOOGLE_API_TOKEN } = process.env; 
+const { ACCESS_TOKEN_SECRET, MONGO_URI, GOOGLE_API_TOKEN } = process.env;
 const client = new OAuth2Client(GOOGLE_API_TOKEN);
-
 
 // Use cors middleware before defining any routes
 const allowedOrigins =
@@ -167,12 +166,10 @@ app.put("/edit-note/:noteId", authenticationToken, async (req, res) => {
   const { user } = req.user;
 
   if (!title && !content && !tags) {
-    return res
-      .status(400)
-      .json({
-        error: true,
-        message: "Please provide at least one field to update",
-      });
+    return res.status(400).json({
+      error: true,
+      message: "Please provide at least one field to update",
+    });
   }
 
   try {
@@ -288,12 +285,10 @@ app.get("/search-notes/", authenticationToken, async (req, res) => {
   const { query } = req.query;
 
   if (!query) {
-    return res
-      .status(400)
-      .json({
-        error: true,
-        message: "Please provide at least one field to search",
-      });
+    return res.status(400).json({
+      error: true,
+      message: "Please provide at least one field to search",
+    });
   }
 
   try {
@@ -373,35 +368,48 @@ app.put("/update-phone", async (req, res) => {
 
 // configure multer for file uploads
 const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        const uploadPath = path.join(__dirname, 'uploads')
-        if (!fs.existsSync(uploadPath)) {
-            fs.mkdirSync(uploadPath)
-        }
-        cb(null, uploadPath)
-    },
-    filename: (req, file, cb) => {
-        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-        cb(null, file.filename + '-' + uniqueSuffix + path.extname(file.originalname))
+  destination: (req, file, cb) => {
+    const uploadPath = path.join(__dirname, "uploads");
+    if (!fs.existsSync(uploadPath)) {
+      fs.mkdirSync(uploadPath);
     }
-})
+    cb(null, uploadPath);
+  },
+  filename: (req, file, cb) => {
+    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+    cb(
+      null,
+      file.fieldname + "-" + uniqueSuffix + path.extname(file.originalname)
+    );
+  },
+});
+
 const upload = multer({ storage: storage });
 
 // Update profile photo
-app.put('/update-profile-photo', upload.single('profilePhoto'), async (req, res) => {
-  try {
+app.put(
+  "/update-profile-photo",
+  upload.single("profilePhoto"),
+  async (req, res) => {
+    try {
       const userId = req.body.userId;
       const profilePhotoPath = req.file.path;
-      
+
       // Update user's profile photo in the database
       await User.findByIdAndUpdate(userId, { profilePhoto: profilePhotoPath });
-      
-      res.status(200).json({ message: 'Profile photo updated successfully', profilePhoto: profilePhotoPath });
-  } catch (error) {
+
+      res
+        .status(200)
+        .json({
+          message: "Profile photo updated successfully",
+          profilePhoto: profilePhotoPath,
+        });
+    } catch (error) {
       console.error("Error updating profile photo:", error);
-      res.status(500).json({ message: 'Failed to update profile photo' });
+      res.status(500).json({ message: "Failed to update profile photo" });
+    }
   }
-});
+);
 
 //google oauth
 app.post("/google-auth", async (req, res) => {
