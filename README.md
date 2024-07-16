@@ -1,7 +1,7 @@
-### Introduction
+## Introduction
 Scribbie is a powerful note-taking website designed for working professionals. 
 
-### Tech Stack
+## Tech Stack
 - React.js
 - Node.js
 - MongoDB
@@ -11,9 +11,9 @@ Scribbie is a powerful note-taking website designed for working professionals.
 - Vercel
 - Google Auth
 
-### Getting started
+## Getting started
 
-#### Prerequisites
+### Prerequisites
 Before you begin, ensure you have met the following requirements:
 
 Node.js: Ensure you have Node.js installed. You can download it from Node.js official website.
@@ -22,27 +22,27 @@ MongoDB: Ensure you have MongoDB installed and running. You can download it from
 
 Git: Ensure you have Git installed. You can download it from Git official website.
 
-#### Run on your local machine
+### Run on your local machine
 
-##### 1. Clone the repository
+#### 1. Clone the repository
 
 ```
 git clone https://github.com/yashmandi/notes-app.git
 ```
 
-##### 2. Navigate to the project directory:
+#### 2. Navigate to the project directory:
 ```
 cd notes-app
 ```
 
-##### 3. Install dependencies for both backend and frontend:
+#### 3. Install dependencies for both backend and frontend:
 ```
 cd backend
 npm install
 cd ..frontend
 npm install
 ```
-##### 4. Create .env files for both backend and frontend with the necessary environment variables.
+#### 4. Create .env files for both backend and frontend with the necessary environment variables.
 
 Sample ```.env``` for backend:
 ```
@@ -69,7 +69,7 @@ VITE_BACKEND_URL=http://localhost:5000
 VITE_REACT_APP_GOOGLE_API_TOKEN=your_google_api_token_here
 ```
 
-### Contribution Guidelines
+## Contribution Guidelines
 We welcome contributions from the community! To ensure a smooth process for everyone, please follow these guidelines:
 
 1. Fork the repository: Click the "Fork" button at the top right of the repository page to create a copy of the repository under your GitHub account.
@@ -81,7 +81,7 @@ We welcome contributions from the community! To ensure a smooth process for ever
 7. Push your changes: Push your changes to your forked repository.
 8. Submit a pull request: Open a pull request to merge your changes into the main repository.
 
-#### Steps to contribute
+### Steps to contribute
 1. Fork the Repository: Click the "Fork" button on the top right of this page to fork this repository to your GitHub account.
 
 2. Clone Your Fork: Clone your forked repository to your local machine.
@@ -106,7 +106,3 @@ git push origin feature-name
 ```
 
 6. Submit a Pull Request: Open a pull request to merge your changes into the main repository. Provide a clear description of the changes you made and why they are necessary.
-
-
-
-
