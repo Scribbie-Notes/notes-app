@@ -128,7 +128,7 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
     return (
         <div className='relative'>
             <button
-                className='w-10 h-10 rounded-full flex items-center justify-center absolute -top-3 -right-3 hover:bg-slate-50'
+                className='w-10 h-10 rounded-full flex items-center bg-gray-50 transition-all justify-center absolute -top-3 -right-3 hover:bg-red-100'
                 onClick={onClose}
             >
                 <MdClose className='text-xl text-slate-400' />
