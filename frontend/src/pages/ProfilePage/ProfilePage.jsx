@@ -25,7 +25,7 @@ const ProfilePage = () => {
   const [newPhone, setNewPhone] = useState("");
   const [isEmailModalOpen, setIsEmailModalOpen] = useState(false);
   const [isPhoneModalOpen, setIsPhoneModalOpen] = useState(false);
-  const [profilePhoto, setProfilePhoto] = useState(null);
+  const [profilePhoto, setProfilePhoto] = useState(user.profilePhoto || null);
   const [isHovered, setIsHovered] = useState(false);
   const [isAccountDeleteModalOpen, setIsAccountDeleteModalOpen] =
     useState(false);
@@ -47,7 +47,7 @@ const ProfilePage = () => {
             },
           }
         );
-        setProfilePhoto(URL.createObjectURL(file));
+        setProfilePhoto(response.data.profilePhoto);
         toast.success("Profile photo updated", {
           style: {
             fontSize: "13px",
@@ -211,21 +211,14 @@ const ProfilePage = () => {
   return (
     <div className="bg-gray-50 relative">
       <Navbar userInfo={user} />
-      <Link to='/dashboard'>
-                    <div className='p-5'>
-                        <button className='inline-flex items-center text-white bg-gray-800 hover:bg-gray-900 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-700'>
-                            <IoMdArrowRoundBack />
-                        </button>
-                    </div>
-                </Link>
+      <Link to="/dashboard">
+        <div className="p-5">
+          <button className="inline-flex items-center text-white bg-gray-800 hover:bg-gray-900 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-700">
+            <IoMdArrowRoundBack />
+          </button>
+        </div>
+      </Link>
       <div className="flex">
-        {/* <Link to="/dashboard">
-          <div className="p-5 hidden md:inline-block">
-            <button className="inline-flex items-center text-white bg-gray-800 hover:bg-gray-900 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-700">
-              <IoMdArrowRoundBack />
-            </button>
-          </div>
-        </Link> */}
         <div className="container items-center justify-center px-4 pb-28">
           <div>
             <div className="bg-white relative shadow rounded-lg w-full md:w-5/6 lg:w-4/6 xl:w-3/6 mx-auto mt-12">
@@ -258,6 +251,12 @@ const ProfilePage = () => {
                   style={{ display: "none" }}
                   onChange={handlePhotoUpload}
                 />
+                {/* {profilePhoto && (
+                  <img
+                    src={`http://localhost:8000${profilePhoto}`}
+                    alt="Profile"
+                  />
+                )} */}
               </div>
 
               <div className="mt-16">
@@ -297,9 +296,9 @@ const ProfilePage = () => {
 
                     {/* Modal for email  */}
                     {isEmailModalOpen && (
-                       <div className="fixed inset-0 flex items-center justify-center z-50">
-                       <div className="absolute inset-0 bg-black opacity-50"></div>
-                       <div className="bg-white p-5 rounded-lg shadow-lg z-10 w-[90%] max-w-md">
+                      <div className="fixed inset-0 flex items-center justify-center z-50">
+                        <div className="absolute inset-0 bg-black opacity-50"></div>
+                        <div className="bg-white p-5 rounded-lg shadow-lg z-10 w-[90%] max-w-md">
                           <h2 className="text-xl font-bold mb-4">
                             Enter Email
                           </h2>
@@ -341,8 +340,8 @@ const ProfilePage = () => {
                     {/* Modal for phone number  */}
                     {isPhoneModalOpen && (
                       <div className="fixed inset-0 flex items-center justify-center z-50">
-                      <div className="absolute inset-0 bg-black opacity-50"></div>
-                      <div className="bg-white p-5 rounded-lg shadow-lg z-10 w-[90%] max-w-md">
+                        <div className="absolute inset-0 bg-black opacity-50"></div>
+                        <div className="bg-white p-5 rounded-lg shadow-lg z-10 w-[90%] max-w-md">
                           <h3 className="text-lg font-semibold mb-4">
                             Change Phone
                           </h3>

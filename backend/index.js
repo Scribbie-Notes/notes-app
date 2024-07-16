@@ -393,7 +393,7 @@ app.put(
   async (req, res) => {
     try {
       const userId = req.body.userId;
-      const profilePhotoPath = req.file.path;
+      const profilePhotoPath = `/uploads/${req.file.filename}`;
 
       // Update user's profile photo in the database
       await User.findByIdAndUpdate(userId, { profilePhoto: profilePhotoPath });
