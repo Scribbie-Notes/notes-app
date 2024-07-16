@@ -1,7 +1,7 @@
-## Introduction
-Scribbie is a powerful note-taking website designed for working professionals. 
+## 🚀 Introduction
+Scribbie is a powerful note-taking website designed for working professionals. (Visit: https://scribbie-notes.vercel.app)
 
-## Tech Stack
+## 🔥 Tech Stack
 - React.js
 - Node.js
 - MongoDB
@@ -11,7 +11,7 @@ Scribbie is a powerful note-taking website designed for working professionals.
 - Vercel
 - Google Auth
 
-## Getting started
+## 💻 Getting started
 
 ### Prerequisites
 Before you begin, ensure you have met the following requirements:
@@ -81,7 +81,7 @@ We welcome contributions from the community! To ensure a smooth process for ever
 7. Push your changes: Push your changes to your forked repository.
 8. Submit a pull request: Open a pull request to merge your changes into the main repository.
 
-### Steps to contribute
+### 🍰 Steps to contribute 
 1. Fork the Repository: Click the "Fork" button on the top right of this page to fork this repository to your GitHub account.
 
 2. Clone Your Fork: Clone your forked repository to your local machine.
