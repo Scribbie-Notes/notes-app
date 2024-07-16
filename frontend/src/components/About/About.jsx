@@ -17,8 +17,8 @@ const About = () => {
           </button>
         </div>
       </Link>
-      <div className="flex">
-        <div className="container text-gray-800 mx-auto pl-72 pr-60 p-4 bg-white">
+      <div className="flex justify-center">
+        <div className="container text-gray-800 mx-auto p-6 bg-white max-w-screen-lg">
           <h1 className="text-3xl font-bold mb-4">About Scribbie</h1>
           <section className="mb-12">
             <p className="text-md mb-2">
