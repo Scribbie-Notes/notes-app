@@ -246,7 +246,7 @@ const ProfilePage = () => {
                     getInitials(user?.fullName || "")
                   )}
                   {isHovered && (
-                    <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 text-white text-xs rounded-full">
+                    <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-30 text-white text-[10px] rounded-full">
                       Add Profile Image
                     </div>
                   )}
