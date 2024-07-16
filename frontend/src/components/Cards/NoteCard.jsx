@@ -12,16 +12,20 @@ const NoteCard = ({
     onEdit,
     onDelete,
     onPinNote,
+    onClick,
 }) => {
     return (
-        <div className='border rounded p-5 bg-white hover:bg-slate-100 cursor-pointer  transition duration-300 ease-in-out'>
+        <div 
+            className='border rounded p-5 bg-white hover:bg-slate-100 cursor-pointer transition duration-300 ease-in-out' 
+            onClick={onClick}
+        >
             <div className='flex items-center justify-between'>
                 <div>
                     <h6 className='text-sm font-medium'>{title}</h6>
                     <span className='text-xs text-slate-500'>{moment(date).format('Do MMM YYYY')}</span>
                 </div>
 
-                <MdOutlinePushPin className={`icon-btn ${isPinned ? 'text-primary' : 'text-slate-300'}`} onClick={onPinNote} />
+                <MdOutlinePushPin className={`icon-btn ${isPinned ? 'text-primary' : 'text-slate-300'}`} onClick={(e) => { e.stopPropagation(); onPinNote(); }} />
             </div>
             <p
                 style={{
@@ -51,11 +55,11 @@ const NoteCard = ({
                 <div className='flex items-center gap-2'>
                     <MdCreate
                         className='icon-btn hover:text-green-500 cursor-pointer transition-all'
-                        onClick={onEdit}
+                        onClick={(e) => { e.stopPropagation(); onEdit(); }}
                     />
                     <MdDelete
                         className='icon-btn hover:text-red-400 cursor-pointer transition-all'
-                        onClick={onDelete}
+                        onClick={(e) => { e.stopPropagation(); onDelete(); }}
                     />
                 </div>
             </div>
@@ -72,6 +76,7 @@ NoteCard.propTypes = {
     onEdit: PropTypes.func,
     onDelete: PropTypes.func,
     onPinNote: PropTypes.func,
+    onClick: PropTypes.func,
 };
 
 NoteCard.defaultProps = {
@@ -79,6 +84,7 @@ NoteCard.defaultProps = {
     onEdit: () => { },
     onDelete: () => { },
     onPinNote: () => { },
+    onClick: () => { },
 };
 
 export default NoteCard;

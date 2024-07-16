@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Navbar from "../../components/Navbar";
 import NoteCard from "../../components/Cards/NoteCard";
-import { MdAdd } from "react-icons/md";
+import { MdAdd, MdClose } from "react-icons/md";
 import AddEditNotes from "./AddEditNotes";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../utils/axiosInstance";
@@ -19,6 +19,10 @@ const Home = () => {
 
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [noteToDelete, setNoteToDelete] = useState(null);
+  const [viewNoteModal, setViewNoteModal] = useState({
+    isShown: false,
+    data: null,
+  });
 
   const handleDeleteModalOpen = (noteId) => {
     setNoteToDelete(noteId);
@@ -38,6 +42,10 @@ const Home = () => {
 
   const handleEdit = (noteDetails) => {
     setOpenAddEditModal({ isShown: true, type: "edit", data: noteDetails });
+  };
+
+  const handleViewNote = (noteDetails) => {
+    setViewNoteModal({ isShown: true, data: noteDetails });
   };
 
   // get user info
@@ -197,6 +205,7 @@ const Home = () => {
                 onPinNote={() => {
                   updateIsPinned(item);
                 }}
+                onClick={() => handleViewNote(item)}
               />
             ))}
           </div>
@@ -213,13 +222,13 @@ const Home = () => {
       </div>
 
       <button
-  className="w-16 h-16 flex items-center justify-center rounded-2xl items-center text-white bg-gray-800 hover:bg-gray-900 transition-all focus:outline-none fixed right-10 bottom-10 z-50"
-  onClick={() => {
-    setOpenAddEditModal({ isShown: true, type: "add", data: null });
-  }}
->
-  <MdAdd className="text-[32px] text-white transition-all" />
-</button>
+        className="w-16 h-16 flex items-center justify-center rounded-2xl items-center text-white bg-gray-800 hover:bg-gray-900 transition-all focus:outline-none fixed right-10 bottom-10 z-50"
+        onClick={() => {
+          setOpenAddEditModal({ isShown: true, type: "add", data: null });
+        }}
+      >
+        <MdAdd className="text-[32px] text-white transition-all" />
+      </button>
 
       {openAddEditModal.isShown && (
         <div className="fixed inset-0 flex items-center justify-center z-50">
@@ -233,6 +242,36 @@ const Home = () => {
               }
               getAllNotes={getAllNotes}
             />
+          </div>
+        </div>
+      )}
+
+      {viewNoteModal.isShown && (
+        <div className="fixed inset-0 flex items-center justify-center z-50">
+          <div className="absolute inset-0 bg-black opacity-50"></div>
+          <div className="bg-white p-5 rounded-lg shadow-lg z-10 w-[90%] sm:w-[80%] md:w-[60%] lg:w-[40%] max-h-3/4 overflow-hidden">
+            <div className="overflow-auto">
+              <h2 className="text-2xl font-bold mb-4">{viewNoteModal.data.title}</h2>
+              <p className="text-gray-700">{viewNoteModal.data.content}</p>
+              <div className="mt-4">
+                {viewNoteModal.data.tags.map((tag, index) => (
+                  <span
+                    key={index}
+                    className="inline-block bg-gray-200 text-gray-800 text-sm font-semibold mr-2 mb-2 px-3 py-1 rounded-full"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+              <button
+                className="mt-4 inline-flex items-center text-gray-900 bg-gray-50 hover:bg-red-100 hover:text-gray-500 focus:outline-none font-medium rounded-full text-sm px-2.5 py-2.5 text-xs"
+                onClick={() =>
+                  setViewNoteModal({ isShown: false, data: null })
+                }
+              >
+                <MdClose className="text-xl text-slate-400" />
+              </button>
+            </div>
           </div>
         </div>
       )}
