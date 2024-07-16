@@ -2,10 +2,10 @@
 - add otp verification for signup
 - add feedback popup for logged in users
 - enable attachments (image, video, etc.) to notes
-- on clicking on a note, new page / modal should appear that display the notes content
 - adding the loading spinner on every point
 - creating different branches for production and development on github
 
+- on clicking on a note, new page / modal should appear that display the notes content [DONE] 16/7
 - footer enhancement [DONE]
 - add a subscriptions section in Hero.jsx page [DONE]
 - page responsiveness [DONE]
