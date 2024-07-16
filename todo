@@ -5,7 +5,8 @@
 - adding the loading spinner on every point
 - creating different branches for production and development on github
 
-- on clicking on a note, new page / modal should appear that display the notes content [DONE] 16/7
+- on clicking on a note, new page / modal should appear that display the notes content [DONE]
+- name initials bug fixed in profile page [DONE]
 - footer enhancement [DONE]
 - add a subscriptions section in Hero.jsx page [DONE]
 - page responsiveness [DONE]
