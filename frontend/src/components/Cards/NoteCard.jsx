@@ -45,7 +45,7 @@ const NoteCard = ({
                     {tags.length > 0 && tags.map((tag, index) => (
                         <span
                             key={index}
-                            className='bg-gray-100 text-gray-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-blue-100 dark:text-gray-800'
+                            className='bg-gray-100 text-gray-800 text-xs font-medium px-1.5 py-0.5 rounded dark:bg-blue-100 dark:text-gray-800'
                         >
                             #{tag}
                         </span>
