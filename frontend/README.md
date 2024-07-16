@@ -93,3 +93,20 @@ git clone https://github.com/yashmandi/notes-app.git
 ```
 git checkout -b feature-name
 ```
+
+4. Make Your Changes: Implement your feature or fix the bug.
+Commit Your Changes: Commit your changes with a clear and concise message.
+```
+git commit -m "Add feature or fix bug"
+```
+
+5. Push Your Changes: Push your changes to your forked repository.
+```
+git push origin feature-name
+```
+
+6. Submit a Pull Request: Open a pull request to merge your changes into the main repository. Provide a clear description of the changes you made and why they are necessary.
+
+
+
+
