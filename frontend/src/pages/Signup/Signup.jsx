@@ -22,7 +22,7 @@ const Signup = () => {
   const responseMsg = async (response) => {
     try {
       const token = response.credential;
-      const res = await axiosInstance.post('/google-auth', { token });
+      const res = await axiosInstance.post("/google-auth", { token });
 
       if (res.data && res.data.accessToken) {
         localStorage.setItem("token", res.data.accessToken);
@@ -369,12 +369,11 @@ const Signup = () => {
 
                 <div className="col-span-6">
                   <p className="text-sm text-gray-500">
-                    By creating an account, you agree to our {" "}
+                    By creating an account, you agree to our{" "}
                     <a href="#" className="text-gray-700 underline">
-
                       terms and conditions
-                    </a>
-                    {" "}and   {" "}
+                    </a>{" "}
+                    and{" "}
                     <a href="#" className="text-gray-700 underline">
                       privacy policy
                     </a>
@@ -398,12 +397,13 @@ const Signup = () => {
 
                     <div className="mb-3">
                       <GoogleLogin
-                        clientId={import.meta.env.VITE_REACT_APP_GOOGLE_API_TOKEN}
+                        clientId={
+                          import.meta.env.VITE_REACT_APP_GOOGLE_API_TOKEN
+                        }
                         onSuccess={responseMsg}
                         onError={errorMsg}
                       />
                     </div>
-
                   </div>
                 </div>
               </form>
