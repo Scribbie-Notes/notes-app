@@ -1,14 +1,36 @@
-import React from "react";
+import React, { useState } from "react";
+import Modal from "react-modal";
 import Footer from "../Footer";
 import Navbar from "../Navbar";
 import { IoMdArrowRoundBack } from "react-icons/io";
 import { Link } from "react-router-dom";
 
+// Tailwind CSS classes for the modal and overlay
+const customStyles = {
+  overlay: {
+    backgroundColor: "rgba(0, 0, 0, 0.75)",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  content: {
+    maxWidth: "500px",
+    width: "90%",
+    padding: "20px",
+    borderRadius: "8px",
+    inset: "auto",
+  },
+};
+
 const About = () => {
   const user = JSON.parse(localStorage.getItem("user"));
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+
+  const openModal = () => setModalIsOpen(true);
+  const closeModal = () => setModalIsOpen(false);
 
   return (
-    <div>
+    <div className="relative">
       <Navbar userInfo={user} />
       <Link to="/dashboard">
         <div className="p-5">
@@ -216,7 +238,7 @@ const About = () => {
           <section className="mb-12">
             <h2 className="text-3xl font-bold mb-4">Version and Source Code</h2>
             <p className="text-md mb-2">
-            <p>Current Version: v0.1.0 (29 June 2024)</p>
+              <p>Current Version: v0.1.0 (29 June 2024)</p>
             </p>
             <p className="text-md mb-6">
               The Source Code is available on <span className="text-blue-500 underline"><a href="https://github.com/yashmandi/notes-app" target="_blank" rel="noopener noreferrer">GitHub</a></span> feel free to explore, contribute and find issues.
@@ -224,6 +246,59 @@ const About = () => {
             </p>
           </section>
         </div>
+        <button
+          className="fixed top-1/2 right-1 transform -translate-y-1/2 bg-gray-800 text-white py-3 px-2 p-4 rounded-lg flex flex-col items-center"
+          onClick={openModal}
+          style={{ writingMode: 'vertical-rl', textOrientation: 'mixed' }}
+        >
+          <span className="transform rotate-90">{/* Empty span to rotate */}</span>
+          Feedback
+        </button>
+        <Modal
+          isOpen={modalIsOpen}
+          onRequestClose={closeModal}
+          contentLabel="Feedback Modal"
+          style={customStyles}
+        >
+          <div className="bg-white p-6 rounded-lg">
+            <h2 className="text-2xl mb-4">Feedback</h2>
+            <form>
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700">Name</label>
+                <input
+                  type="text"
+                  className="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
+                />
+              </div>
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700">Email</label>
+                <input
+                  type="email"
+                  className="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
+                />
+              </div>
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700">Feedback</label>
+                <textarea
+                  className="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
+                  rows="4"
+                ></textarea>
+              </div>
+              <button
+                type="submit"
+                className="bg-gray-800 text-white py-2 px-4 rounded-lg"
+              >
+                Submit
+              </button>
+            </form>
+            <button
+              className="mt-4 text-gray-500 hover:text-gray-800"
+              onClick={closeModal}
+            >
+              Close
+            </button>
+          </div>
+        </Modal>
       </div>
       <Footer />
     </div>
