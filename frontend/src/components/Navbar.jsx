@@ -41,41 +41,43 @@ const Navbar = ({ userInfo, onSearchNote, handleClearSearch, isDarkMode }) => {
   const hideSearchBarPaths = ["/", "/my-profile", "/about"];
 
   return (
-    <div className={`bg-gray-50 ${isDarkMode ? "dark" : ""} py-4`}>
-      <div className="bg-white flex items-center justify-between px-4 py-2 drop-shadow-md">
-        <Link to={userInfo ? "/dashboard" : "/"}>
-          <div className="flex items-center p-1">
-            <img src="/logo.png" className="h-10" />
-            <h2 className="text-2xl font-medium ml-[-12px] text-[#2B2B2B] mt-2">
-              cribbie
-            </h2>
-          </div>
-        </Link>
+    <div
+      className={`bg-white ${
+        isDarkMode ? "dark" : ""
+      } flex items-center justify-between px-4 py-2 drop-shadow-md`}
+    >
+      <Link to={userInfo ? "/dashboard" : "/"}>
+        <div className="flex items-center p-1">
+          <img src="/logo.png" className="h-10" />
+          <h2 className="text-2xl font-medium ml-[-12px] text-[#2B2B2B] mt-2">
+            cribbie
+          </h2>
+        </div>
+      </Link>
 
-        {userInfo && !hideSearchBarPaths.includes(location.pathname) && (
-          <div className="hidden md:flex flex-grow justify-center mr-20">
-            <SearchBar
-              value={searchQuery}
-              onChange={({ target }) => setSearchQuery(target.value)}
-              handleSearch={handleSearch}
-              onClearSearch={onClearSearch}
-            />
-          </div>
-        )}
+      {userInfo && !hideSearchBarPaths.includes(location.pathname) && (
+        <div className="hidden md:flex flex-grow justify-center mr-20">
+          <SearchBar
+            value={searchQuery}
+            onChange={({ target }) => setSearchQuery(target.value)}
+            handleSearch={handleSearch}
+            onClearSearch={onClearSearch}
+          />
+        </div>
+      )}
 
-        {userInfo ? (
-          <ProfileInfo userInfo={userInfo} onLogout={onLogout} />
-        ) : (
-          location.pathname !== "/login" && (
-            <button
-              onClick={() => navigate("/login")}
-              className="text-gray-700 pr-3 transition hover:text-gray-700/75"
-            >
-              Login
-            </button>
-          )
-        )}
-      </div>
+      {userInfo ? (
+        <ProfileInfo userInfo={userInfo} onLogout={onLogout} />
+      ) : (
+        location.pathname !== "/login" && (
+          <button
+            onClick={() => navigate("/login")}
+            className="text-gray-700 pr-3 transition hover:text-gray-700/75"
+          >
+            Login
+          </button>
+        )
+      )}
     </div>
   );
 };
