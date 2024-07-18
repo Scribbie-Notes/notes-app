@@ -1,0 +1,13 @@
+.dark {
+    /* dark mode styles here */
+    background-color: #333;
+    color: #fff;
+  }
+  
+  .dark .bg-gray-50 {
+    background-color: #444;
+  }
+  
+  .dark .text-gray-600 {
+    color: #ccc;
+  }

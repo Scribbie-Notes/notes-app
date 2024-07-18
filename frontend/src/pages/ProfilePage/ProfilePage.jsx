@@ -6,8 +6,10 @@ import { Link } from "react-router-dom";
 import { IoMdArrowRoundBack } from "react-icons/io";
 import { toast } from "react-hot-toast";
 import axiosInstance from "../../utils/axiosInstance";
+import { toggleDarkMode } from "../../redux/actions";
+import { connect } from "react-redux";
 
-const ProfilePage = () => {
+const ProfilePage = ({ isDarkMode, toggleDarkMode }) => {
   let initialUser = null;
   const storedUser = localStorage.getItem("user");
   if (storedUser) {
@@ -209,7 +211,7 @@ const ProfilePage = () => {
   };
 
   return (
-    <div className="bg-gray-50 relative">
+    <div className={`bg-gray-50 ${isDarkMode ? "dark" : ""} relative`}>
       <Navbar userInfo={user} />
       <Link to="/dashboard">
         <div className="p-5">
@@ -218,7 +220,7 @@ const ProfilePage = () => {
           </button>
         </div>
       </Link>
-      <div className="flex">
+      <div className={`flex ${isDarkMode ? "dark" : ""}`}>
         <div className="container items-center justify-center px-4 pb-28">
           <div>
             <div className="bg-white relative shadow rounded-lg w-full md:w-5/6 lg:w-4/6 xl:w-3/6 mx-auto mt-12">
@@ -410,6 +412,8 @@ const ProfilePage = () => {
                           type="checkbox"
                           value=""
                           className="sr-only peer"
+                          checked={isDarkMode}
+                          onChange={toggleDarkMode}
                         />
                         <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
                       </label>
@@ -485,4 +489,8 @@ const ProfilePage = () => {
   );
 };
 
-export default ProfilePage;
+const mapStateToProps = (state) => {
+  return { isDarkMode: state.isDarkMode };
+};
+
+export default connect(mapStateToProps, { toggleDarkMode })(ProfilePage);

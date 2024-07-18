@@ -14,5 +14,8 @@ export default {
   },
   plugins: [
   ],
+  variants: {
+    dark: ['dark'],
+  },
 }
 
