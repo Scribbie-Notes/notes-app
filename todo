@@ -1,10 +1,13 @@
+pending: (v0.2.0)
 - fix profile pic uploading error
 - add otp verification for signup
-- add feedback popup for logged in users
 - enable attachments (image, video, etc.) to notes
 - adding the loading spinner on every point
+- complete backend of feedback form
 - creating different branches for production and development on github
 
+completed: 
+- add feedback popup for logged in users [DONE]
 - on clicking on a note, new page / modal should appear that display the notes content [DONE]
 - name initials bug fixed in profile page [DONE]
 - footer enhancement [DONE]
