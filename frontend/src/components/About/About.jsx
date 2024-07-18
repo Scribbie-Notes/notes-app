@@ -41,147 +41,10 @@ const About = () => {
         </div>
       </Link>
       <div className="flex">
-        <div className="container text-gray-800 mx-auto p-6 bg-white">
-          <h1 className="text-4xl font-bold mb-8">About Scribbie</h1>
-
+        <div className="container text-gray-800 mx-auto p-6 bg-white max-w-screen-lg">
+          <h1 className="text-3xl font-bold mb-4">About Scribbie</h1>
           <section className="mb-12">
-            <h2 className="text-3xl font-bold mb-4">Welcome to Scribbie</h2>
-            <p className="text-md mb-6">
-              Welcome to <span className="font-semibold">Scribbie</span>!
-              Scribbie is your ultimate digital notebook, designed to help you
-              capture, organize, and manage your notes effortlessly. Whether
-              you're a student, professional, or someone who loves jotting down
-              ideas, Scribbie is here to make note-taking simple and enjoyable.
-              Our platform offers a seamless experience that allows you to focus
-              on your creativity and productivity without worrying about losing
-              your thoughts.
-            </p>
-            <p className="text-md mb-6">
-              With Scribbie, you can create notes on the go, organize them with
-              tags, and easily search through your content. Our goal is to
-              provide a tool that not only helps you capture ideas but also
-              helps you turn them into actionable plans. We believe that
-              everyone has the potential to be creative and productive, and
-              Scribbie is here to unlock that potential.
-            </p>
-          </section>
-
-          <section className="mb-12">
-            <h2 className="text-3xl font-bold mb-4">Features</h2>
-            <ul className="list-disc pl-6 mb-6">
-              <li className="mb-2">
-                Create and edit notes with ease using our intuitive editor.
-              </li>
-              <li className="mb-2">
-                Organize notes with tags to keep related content together.
-              </li>
-              <li className="mb-2">
-                Pin important notes to keep them at the top of your list for
-                quick access.
-              </li>
-              <li className="mb-2">
-                Search through your notes quickly and efficiently using our
-                powerful search tool.
-              </li>
-              <li className="mb-2">
-                Collaborate with others by sharing your notes and working
-                together in real-time.
-              </li>
-              <li className="mb-2">
-                Access your notes from any device, ensuring you always have your
-                information at hand.
-              </li>
-              <li className="mb-2">
-                Backup your notes to the cloud for added security and peace of
-                mind.
-              </li>
-              <li className="mb-2">
-                Customize your note-taking experience with various themes and
-                layouts.
-              </li>
-            </ul>
-          </section>
-
-          <section className="mb-12">
-            <h2 className="text-3xl font-bold mb-4">Our Mission</h2>
-            <p className="text-md mb-6">
-              At Scribbie, our mission is to provide a simple and intuitive
-              platform for managing your notes. We believe that taking notes
-              should be a seamless experience, allowing you to focus on what
-              matters most—your thoughts and ideas. Our aim is to create a tool
-              that integrates effortlessly into your workflow, enhancing your
-              productivity and creativity. We are committed to continuous
-              improvement and innovation, ensuring that Scribbie evolves with
-              your needs.
-            </p>
-            <p className="text-md mb-6">
-              We understand that every user is unique, and so are their
-              note-taking needs. That's why we are constantly adding new
-              features and improvements based on user feedback. Our vision is to
-              become the go-to digital notebook for individuals and teams across
-              the globe, empowering them to achieve more with less effort.
-            </p>
-          </section>
-
-          <section className="mb-12">
-            <h2 className="text-3xl font-bold mb-4">Meet the Team</h2>
-            <p className="text-md mb-6">
-              Our dedicated team of developers, designers, and support staff
-              work tirelessly to bring you the best note-taking experience. We
-              are passionate about productivity and committed to continuous
-              improvement. Our team is a diverse group of individuals with a
-              shared vision of making note-taking simple and effective for
-              everyone.
-            </p>
-            <p className="text-md mb-6">
-              Each member of our team brings unique skills and perspectives to
-              the table, ensuring that Scribbie is a well-rounded and innovative
-              product. From brainstorming new features to providing top-notch
-              customer support, our team is here to ensure that you have the
-              best possible experience with Scribbie.
-            </p>
-          </section>
-
-          <section className="mb-12">
-            <h2 className="text-3xl font-bold mb-4">Contact Us</h2>
-            <p className="text-md mb-6">
-              We'd love to hear from you! If you have any questions, feedback,
-              or suggestions, feel free to reach out to us at{" "}
-              <a
-                href="mailto:support@scribbie.com"
-                className="text-blue-500 underline"
-              >
-                support@scribbie.com
-              </a>
-              . Your input is invaluable to us, and we are always eager to hear
-              how we can improve Scribbie to better meet your needs.
-            </p>
-          </section>
-
-          <section className="mb-12">
-            <h2 className="text-3xl font-bold mb-4">
-              Get Started with Scribbie
-            </h2>
-            <p className="text-md mb-6">
-              Ready to take your note-taking to the next level?{" "}
-              <a href="/signup" className="text-blue-500 underline">
-                Sign up
-              </a>{" "}
-              now and start using Scribbie today! Whether you're capturing quick
-              thoughts, organizing detailed plans, or collaborating with a team,
-              Scribbie has the tools you need to succeed.
-            </p>
-            <p className="text-md mb-6">
-              Join thousands of satisfied users who have transformed their
-              note-taking experience with Scribbie. Our user-friendly interface
-              and powerful features make it easy to get started and stay
-              organized.
-            </p>
-          </section>
-
-          <section className="mb-12">
-            <h2 className="text-3xl font-bold mb-4">About Us</h2>
-            <p className="text-md mb-6">
+            <p className="text-md mb-2">
               Scribbie was founded with the vision of creating a digital
               notebook that is both powerful and easy to use. Our goal is to
               help people capture their ideas and organize their thoughts in a
@@ -198,42 +61,31 @@ const About = () => {
           </section>
 
           <section className="mb-12">
-            <h2 className="text-3xl font-bold mb-4">Security</h2>
-            <p className="text-md mb-6">
-              Your security is our top priority. We use the latest technologies
-              and best practices to ensure that your data is safe and secure.
-              For more information about our security measures, please visit our{" "}
-              <a href="/security" className="text-blue-500 underline">
-                Security
-              </a>{" "}
-              page.
-            </p>
-            <p className="text-md mb-6">
-              We understand that your notes contain sensitive information, and
-              we are committed to protecting your privacy. Our security
-              protocols include data encryption, secure servers, and regular
-              security audits. With Scribbie, you can be confident that your
-              information is in safe hands.
-            </p>
-          </section>
-
-          <section className="mb-12">
-            <h2 className="text-3xl font-bold mb-4">Terms & Privacy</h2>
-            <p className="text-md mb-6">
-              We value your privacy and are committed to protecting your
-              personal information. For more information about our terms and
-              privacy policies, please visit our{" "}
-              <a href="/terms" className="text-blue-500 underline">
-                Terms & Privacy
-              </a>{" "}
-              page.
-            </p>
-            <p className="text-md mb-6">
-              Our terms of service and privacy policy outline how we collect,
-              use, and protect your data. We believe in transparency and are
-              dedicated to maintaining your trust. If you have any questions
-              about our policies, please do not hesitate to contact us.
-            </p>
+            <h2 className="text-3xl font-bold mb-4">Features</h2>
+            <ul className="list-disc pl-6 mb-6">
+              <li className="mb-1">
+                Create and edit notes with ease using our intuitive editor.
+              </li>
+              <li className="mb-1">
+                Organize notes with tags to keep related content together.
+              </li>
+              <li className="mb-1">
+                Pin important notes to keep them at the top of your list for
+                quick access.
+              </li>
+              <li className="mb-1">
+                Search through your notes quickly and efficiently using our
+                powerful search tool.
+              </li>
+              <li className="mb-1">
+                Access your notes from any device, ensuring you always have your
+                information at hand.
+              </li>
+              <li className="mb-1">
+                Backup your notes to the cloud for added security and peace of
+                mind.
+              </li>
+            </ul>
           </section>
 
           <section className="mb-12">
@@ -242,11 +94,31 @@ const About = () => {
               <p>Current Version: v0.1.0 (29 June 2024)</p>
             </p>
             <p className="text-md mb-6">
-              The Source Code is available on <span className="text-blue-500 underline"><a href="https://github.com/yashmandi/notes-app" target="_blank" rel="noopener noreferrer">GitHub</a></span> feel free to explore, contribute and find issues.
-              Here
+              The Source Code is available on{" "}
+              <span className="text-blue-500 underline">
+                <a
+                  href="https://github.com/yashmandi/notes-app"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  GitHub
+                </a>
+              </span>{" "}
+              feel free to explore, contribute and find issues. Here
+            </p>
+          </section>
+
+          <section className="mb-12">
+            <h2 className="text-3xl font-bold mb-4">Terms & Privacy</h2>
+            <p className="text-md mb-6">
+              Our terms of service and privacy policy outline how we collect,
+              use, and protect your data. We believe in transparency and are
+              dedicated to maintaining your trust. If you have any questions
+              about our policies, please do not hesitate to contact us.
             </p>
           </section>
         </div>
+
         <button
           className="fixed top-1/2 right-1 transform -translate-y-1/2 bg-gray-800 text-white py-3 px-2 p-4 rounded-lg flex flex-col items-center"
           onClick={openModal}
