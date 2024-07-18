@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Modal from "react-modal";
 import Footer from "../Footer";
 import Navbar from "../Navbar";
+import { MdClose } from 'react-icons/md';
 import { IoMdArrowRoundBack } from "react-icons/io";
 import { Link } from "react-router-dom";
 
@@ -260,43 +261,45 @@ const About = () => {
           contentLabel="Feedback Modal"
           style={customStyles}
         >
-          <div className="bg-white p-6 rounded-lg">
-            <h2 className="text-2xl mb-4">Feedback</h2>
+          <div className="bg-white p-4 rounded-lg">
+            <h2 className="text-2xl font-bold mb-8">Feedback</h2>
             <form>
               <div className="mb-4">
                 <label className="block text-sm font-medium text-gray-700">Name</label>
                 <input
                   type="text"
-                  className="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
+                  className="mt-1 block w-full border-2 p-1 rounded-md shadow-sm"
                 />
               </div>
               <div className="mb-4">
                 <label className="block text-sm font-medium text-gray-700">Email</label>
                 <input
                   type="email"
-                  className="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
+                  className="mt-1 block w-full border-2 p-1 rounded-md shadow-sm"
                 />
               </div>
               <div className="mb-4">
                 <label className="block text-sm font-medium text-gray-700">Feedback</label>
                 <textarea
-                  className="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
+                  className="mt-1 block w-full border-2 p-1 rounded-md shadow-sm"
                   rows="4"
                 ></textarea>
               </div>
-              <button
-                type="submit"
-                className="bg-gray-800 text-white py-2 px-4 rounded-lg"
-              >
-                Submit
-              </button>
+              <div className="flex justify-end space-x-2">
+                <button
+                  onClick={closeModal}
+                  className="inline-flex items-center text-gray-900 bg-gray-200 hover:bg-red-200 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-xs dark:bg-gray-300  border-gray-800 transition-all"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="inline-flex items-center text-white bg-gray-800 hover:bg-gray-900 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-xs dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-700 transition-all"
+                >
+                  Submit
+                </button>
+              </div>
             </form>
-            <button
-              className="mt-4 text-gray-500 hover:text-gray-800"
-              onClick={closeModal}
-            >
-              Close
-            </button>
           </div>
         </Modal>
       </div>
