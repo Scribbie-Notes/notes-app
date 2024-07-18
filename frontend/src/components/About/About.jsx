@@ -1,14 +1,37 @@
-import React from "react";
+import React, { useState } from "react";
+import Modal from "react-modal";
 import Footer from "../Footer";
 import Navbar from "../Navbar";
+import { MdClose } from 'react-icons/md';
 import { IoMdArrowRoundBack } from "react-icons/io";
 import { Link } from "react-router-dom";
 
+// Tailwind CSS classes for the modal and overlay
+const customStyles = {
+  overlay: {
+    backgroundColor: "rgba(0, 0, 0, 0.75)",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  content: {
+    maxWidth: "500px",
+    width: "90%",
+    padding: "20px",
+    borderRadius: "8px",
+    inset: "auto",
+  },
+};
+
 const About = () => {
   const user = JSON.parse(localStorage.getItem("user"));
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+
+  const openModal = () => setModalIsOpen(true);
+  const closeModal = () => setModalIsOpen(false);
 
   return (
-    <div>
+    <div className="relative">
       <Navbar userInfo={user} />
       <Link to="/dashboard">
         <div className="p-5">
@@ -17,7 +40,7 @@ const About = () => {
           </button>
         </div>
       </Link>
-      <div className="flex justify-center">
+      <div className="flex">
         <div className="container text-gray-800 mx-auto p-6 bg-white max-w-screen-lg">
           <h1 className="text-3xl font-bold mb-4">About Scribbie</h1>
           <section className="mb-12">
@@ -95,6 +118,62 @@ const About = () => {
             </p>
           </section>
         </div>
+
+        <button
+          className="fixed top-1/2 right-1 transform -translate-y-1/2 bg-gray-800 text-white py-3 px-2 p-4 rounded-lg flex flex-col items-center"
+          onClick={openModal}
+          style={{ writingMode: 'vertical-rl', textOrientation: 'mixed' }}
+        >
+          <span className="transform rotate-90">{/* Empty span to rotate */}</span>
+          Feedback
+        </button>
+        <Modal
+          isOpen={modalIsOpen}
+          onRequestClose={closeModal}
+          contentLabel="Feedback Modal"
+          style={customStyles}
+        >
+          <div className="bg-white p-4 rounded-lg">
+            <h2 className="text-2xl font-bold mb-8">Feedback</h2>
+            <form>
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700">Name</label>
+                <input
+                  type="text"
+                  className="mt-1 block w-full border-2 p-1 rounded-md shadow-sm"
+                />
+              </div>
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700">Email</label>
+                <input
+                  type="email"
+                  className="mt-1 block w-full border-2 p-1 rounded-md shadow-sm"
+                />
+              </div>
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700">Feedback</label>
+                <textarea
+                  className="mt-1 block w-full border-2 p-1 rounded-md shadow-sm"
+                  rows="4"
+                ></textarea>
+              </div>
+              <div className="flex justify-end space-x-2">
+                <button
+                  onClick={closeModal}
+                  className="inline-flex items-center text-gray-900 bg-gray-200 hover:bg-red-200 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-xs dark:bg-gray-300  border-gray-800 transition-all"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="inline-flex items-center text-white bg-gray-800 hover:bg-gray-900 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-xs dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-700 transition-all"
+                >
+                  Submit
+                </button>
+              </div>
+            </form>
+          </div>
+        </Modal>
       </div>
       <Footer />
     </div>
