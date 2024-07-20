@@ -7,7 +7,6 @@ import { IoMdArrowRoundBack } from "react-icons/io";
 import { Link } from "react-router-dom";
 import { toast } from "react-hot-toast";
 
-// Tailwind CSS classes for the modal and overlay
 const customStyles = {
   overlay: {
     backgroundColor: "rgba(0, 0, 0, 0.75)",
@@ -69,6 +68,9 @@ const About = () => {
         },
       });
     }
+    setName('');
+    setEmail('');
+    setFeedback('');
   };
 
   return (
