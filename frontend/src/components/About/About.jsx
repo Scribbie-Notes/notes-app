@@ -2,9 +2,11 @@ import React, { useState } from "react";
 import Modal from "react-modal";
 import Footer from "../Footer";
 import Navbar from "../Navbar";
+import axiosInstance from "../../utils/axiosInstance";
 import { MdClose } from 'react-icons/md';
 import { IoMdArrowRoundBack } from "react-icons/io";
 import { Link } from "react-router-dom";
+import axios from 'axios';
 
 // Tailwind CSS classes for the modal and overlay
 const customStyles = {
@@ -26,9 +28,31 @@ const customStyles = {
 const About = () => {
   const user = JSON.parse(localStorage.getItem("user"));
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [feedback, setFeedback] = useState('');
 
   const openModal = () => setModalIsOpen(true);
   const closeModal = () => setModalIsOpen(false);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const feedbackData = {
+      name,
+      email,
+      feedback,
+    };
+
+    try {
+      await axiosInstance.post('/submit', feedbackData);
+      alert('Feedback submitted successfully!');
+      closeModal();
+    } catch (error) {
+      console.error('Error submitting feedback:', error);
+      alert('An error occurred while submitting your feedback.');
+    }
+  };
 
   return (
     <div className="relative">
@@ -135,11 +159,13 @@ const About = () => {
         >
           <div className="bg-white p-4 rounded-lg">
             <h2 className="text-2xl font-bold mb-8">Feedback</h2>
-            <form>
+            <form onSubmit={handleSubmit}>
               <div className="mb-4">
                 <label className="block text-sm font-medium text-gray-700">Name</label>
                 <input
                   type="text"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
                   className="mt-1 block w-full border-2 p-1 rounded-md shadow-sm"
                 />
               </div>
@@ -147,18 +173,23 @@ const About = () => {
                 <label className="block text-sm font-medium text-gray-700">Email</label>
                 <input
                   type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   className="mt-1 block w-full border-2 p-1 rounded-md shadow-sm"
                 />
               </div>
               <div className="mb-4">
                 <label className="block text-sm font-medium text-gray-700">Feedback</label>
                 <textarea
+                  value={feedback}
+                  onChange={(e) => setFeedback(e.target.value)}
                   className="mt-1 block w-full border-2 p-1 rounded-md shadow-sm"
                   rows="4"
                 ></textarea>
               </div>
               <div className="flex justify-end space-x-2">
                 <button
+                  type="button"
                   onClick={closeModal}
                   className="inline-flex items-center text-gray-900 bg-gray-200 hover:bg-red-200 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-xs dark:bg-gray-300  border-gray-800 transition-all"
                 >
