@@ -3,10 +3,9 @@ import Modal from "react-modal";
 import Footer from "../Footer";
 import Navbar from "../Navbar";
 import axiosInstance from "../../utils/axiosInstance";
-import { MdClose } from 'react-icons/md';
 import { IoMdArrowRoundBack } from "react-icons/io";
 import { Link } from "react-router-dom";
-import axios from 'axios';
+import { toast } from "react-hot-toast";
 
 // Tailwind CSS classes for the modal and overlay
 const customStyles = {
@@ -46,11 +45,29 @@ const About = () => {
 
     try {
       await axiosInstance.post('/submit', feedbackData);
-      alert('Feedback submitted successfully!');
+      toast.success("Feedback submitted successfully", {
+        style: {
+          fontSize: "13px",
+          maxWidth: "400px",
+          boxShadow: "4px 4px 8px rgba(0, 1, 4, 0.1)",
+          borderRadius: "8px",
+          borderColor: "rgba(0, 0, 0, 0.8)",
+          marginRight: "10px",
+        },
+      });
       closeModal();
     } catch (error) {
       console.error('Error submitting feedback:', error);
-      alert('An error occurred while submitting your feedback.');
+      toast.error("Error submitting feedback", {
+        style: {
+          fontSize: "13px",
+          maxWidth: "400px",
+          boxShadow: "4px 4px 8px rgba(0, 1, 4, 0.1)",
+          borderRadius: "8px",
+          borderColor: "rgba(0, 0, 0, 0.8)",
+          marginRight: "10px",
+        },
+      });
     }
   };
 
