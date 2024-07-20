@@ -9,6 +9,7 @@ const fs = require("fs");
 const { authenticationToken } = require("./utilities");
 const User = require("./models/userModel");
 const Note = require("./models/noteModel");
+const Feedback = require("./models/feedbackModel");
 const { OAuth2Client } = require("google-auth-library");
 const multer = require("multer");
 
@@ -451,6 +452,24 @@ app.post("/google-auth", async (req, res) => {
     res.status(400).json({ error: true, message: "Invalid Google token" });
   }
 });
+
+// feedback submit
+app.post("/submit", async (req, res) => {
+  const { name, email, feedback } = req.body;
+
+  try {
+    const newFeedback = new Feedback({
+      name, 
+      email, 
+      feedback
+    });
+
+    await newFeedback.save();
+    res.status(201).json({ message: "Feedback submitted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Failed to submit feedback", error });
+  }
+})
 
 app.listen(8000, () => {
   console.log("Server is running on port 8000");
