@@ -387,6 +387,9 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
+// Serve static files from the 'uploads' directory
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+
 // Update profile photo
 app.put(
   "/update-profile-photo",
@@ -399,12 +402,10 @@ app.put(
       // Update user's profile photo in the database
       await User.findByIdAndUpdate(userId, { profilePhoto: profilePhotoPath });
 
-      res
-        .status(200)
-        .json({
-          message: "Profile photo updated successfully",
-          profilePhoto: profilePhotoPath,
-        });
+      res.status(200).json({
+        message: "Profile photo updated successfully",
+        profilePhoto: `http://localhost:8000${profilePhotoPath}`, // Send the updated URL to the frontend
+      });
     } catch (error) {
       console.error("Error updating profile photo:", error);
       res.status(500).json({ message: "Failed to update profile photo" });
@@ -459,9 +460,9 @@ app.post("/submit", async (req, res) => {
 
   try {
     const newFeedback = new Feedback({
-      name, 
-      email, 
-      feedback
+      name,
+      email,
+      feedback,
     });
 
     await newFeedback.save();
@@ -469,7 +470,7 @@ app.post("/submit", async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: "Failed to submit feedback", error });
   }
-})
+});
 
 app.listen(8000, () => {
   console.log("Server is running on port 8000");

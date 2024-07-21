@@ -47,7 +47,8 @@ const ProfilePage = () => {
             },
           }
         );
-        setProfilePhoto(response.data.profilePhoto);
+        const newProfilePhotoUrl = response.data.profilePhoto;
+        setProfilePhoto(newProfilePhotoUrl); // Update the state with the new URL
         toast.success("Profile photo updated", {
           style: {
             fontSize: "13px",
@@ -231,7 +232,7 @@ const ProfilePage = () => {
                 >
                   {profilePhoto ? (
                     <img
-                      src={profilePhoto}
+                      src={`http://localhost:8000${profilePhoto}`}
                       alt="Profile"
                       className="w-full h-full rounded-full object-cover"
                     />
