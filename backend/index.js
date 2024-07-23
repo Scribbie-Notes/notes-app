@@ -349,6 +349,7 @@ app.put("/update-email", authenticationToken, async (req, res) => {
   }
 });
 
+// Update phone
 app.put("/update-phone", async (req, res) => {
   const { newPhone } = req.body;
   const userId = req.body.userId;

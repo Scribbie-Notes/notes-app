@@ -48,7 +48,7 @@ const ProfilePage = () => {
           }
         );
         const newProfilePhotoUrl = response.data.profilePhoto;
-        setProfilePhoto(newProfilePhotoUrl); // Update the state with the new URL
+        setProfilePhoto(newProfilePhotoUrl);
         toast.success("Profile photo updated", {
           style: {
             fontSize: "13px",
@@ -76,7 +76,6 @@ const ProfilePage = () => {
   };
 
   useEffect(() => {
-    // Sync the email and phone state with the user object
     setEmail(user?.email || "");
     setPhone(user?.phone || "");
   }, [user]);
@@ -233,7 +232,6 @@ const ProfilePage = () => {
                   {profilePhoto ? (
                     <img
                       src={`http://localhost:8000${profilePhoto}`}
-                      alt="Profile"
                       className="w-full h-full rounded-full object-cover"
                     />
                   ) : (
@@ -253,10 +251,7 @@ const ProfilePage = () => {
                   onChange={handlePhotoUpload}
                 />
                 {/* {profilePhoto && (
-                  <img
-                    src={`http://localhost:8000${profilePhoto}`}
-                    alt="Profile"
-                  />
+                  <img src={`http://localhost:8000${profilePhoto}`} />
                 )} */}
               </div>
 
