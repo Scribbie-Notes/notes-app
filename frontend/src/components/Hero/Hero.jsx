@@ -116,7 +116,7 @@ const Hero = () => {
             {/* SECTION 6 */}
             <section className="bg-gradient-to-b from-gray-50 to-white py-12 mt-8 mb-24">
                 <div className="max-w-screen-xl mx-auto px-4">
-                    <h2 className="text-4xl font-extrabold text-center text-gray-900 mb-14">Available on All Your Devices</h2>
+                    <h2 className="text-4xl font-extrabold text-center text-gray-900 mb-14">Coming soon on All Your Devices...</h2>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
 
                         <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-xl cursor-pointer transition duration-300 ease-in-out border border-gray-200">
