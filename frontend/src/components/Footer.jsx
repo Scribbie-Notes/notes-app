@@ -28,33 +28,34 @@ const Footer = () => {
             </li>
 
             <li>
-              <a
+              <Link
+                to="/about"
                 className="text-gray-700 transition hover:text-gray-700/75"
-                href="#"
               >
                 {" "}
                 Contact Us{" "}
-              </a>
+              </Link>
             </li>
 
             <li>
-              <a
+              <Link
+                to="/about"
                 className="text-gray-700 transition hover:text-gray-700/75"
-                href="#"
               >
                 {" "}
                 Feedback{" "}
-              </a>
+              </Link>
             </li>
 
             <li>
-              <a
+              <Link
+                to="/about"
                 className="text-gray-700 transition hover:text-gray-700/75"
                 href="#"
               >
                 {" "}
                 Help & Support{" "}
-              </a>
+              </Link>
             </li>
 
             <li>
