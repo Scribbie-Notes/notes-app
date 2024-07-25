@@ -79,7 +79,6 @@ const Login = ({ setUser }) => {
                     boxShadow: 'px 4px 8px rgba(0, 1, 4, 0.1)',
                     borderRadius: '8px',
                     borderColor: 'rgba(0, 0, 0, 0.8)',
-                    marginTop: '60px',
                     marginRight: '10px',
                 }
             });
@@ -94,7 +93,6 @@ const Login = ({ setUser }) => {
                     boxShadow: 'px 4px 8px rgba(0, 1, 4, 0.1)',
                     borderRadius: '8px',
                     borderColor: 'rgba(0, 0, 0, 0.8)',
-                    marginTop: '60px',
                     marginRight: '10px',
                 }
             });
@@ -121,7 +119,6 @@ const Login = ({ setUser }) => {
                         boxShadow: 'px 4px 8px rgba(0, 1, 4, 0.1)',
                         borderRadius: '8px',
                         borderColor: 'rgba(0, 0, 0, 0.8)',
-                        marginTop: '60px',
                         marginRight: '10px',
                     }
                 });
@@ -133,7 +130,6 @@ const Login = ({ setUser }) => {
                         boxShadow: 'px 4px 8px rgba(0, 1, 4, 0.1)',
                         borderRadius: '8px',
                         borderColor: 'rgba(0, 0, 0, 0.8)',
-                        marginTop: '60px',
                         marginRight: '10px',
                     }
                 });
@@ -147,7 +143,6 @@ const Login = ({ setUser }) => {
                         boxShadow: 'px 4px 8px rgba(0, 1, 4, 0.1)',
                         borderRadius: '8px',
                         borderColor: 'rgba(0, 0, 0, 0.8)',
-                        marginTop: '60px',
                         marginRight: '10px',
                     }
                 });
