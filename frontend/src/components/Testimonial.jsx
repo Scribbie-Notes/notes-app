@@ -28,8 +28,8 @@ const Testimonial = () => {
                                         <div className="flex items-center mt-4 space-x-4">
                                             <img src="https://i.pinimg.com/736x/a8/9f/67/a89f67343169f2a76369d2df3b364875.jpg" alt="" className="w-12 h-12 bg-center bg-cover rounded-full dark:bg-gray-500" />
                                             <div>
-                                                <p className="text-lg font-semibold">Leroy Jenkins</p>
-                                                <p className="text-sm dark:text-gray-600">CTO of Company Co.</p>
+                                                <p className="text-lg font-semibold">Kendrick Lamar</p>
+                                                <p className="text-sm dark:text-gray-600">CEO of Oklama</p>
                                             </div>
                                         </div>
                                     </div>
@@ -40,8 +40,8 @@ const Testimonial = () => {
                                         <div className="flex items-center mt-4 space-x-4">
                                             <img src="https://i.pinimg.com/736x/a8/9f/67/a89f67343169f2a76369d2df3b364875.jpg" alt="" className="w-12 h-12 bg-center bg-cover rounded-full dark:bg-gray-500" />
                                             <div>
-                                                <p className="text-lg font-semibold">Leroy Jenkins</p>
-                                                <p className="text-sm dark:text-gray-600">CTO of Company Co.</p>
+                                                <p className="text-lg font-semibold">Drake</p>
+                                                <p className="text-sm dark:text-gray-600">CTO of OVO Company</p>
                                             </div>
                                         </div>
                                     </div>
@@ -50,8 +50,8 @@ const Testimonial = () => {
                                         <div className="flex items-center mt-4 space-x-4">
                                             <img src="https://i.pinimg.com/736x/a8/9f/67/a89f67343169f2a76369d2df3b364875.jpg" alt="" className="w-12 h-12 bg-center bg-cover rounded-full dark:bg-gray-500" />
                                             <div>
-                                                <p className="text-lg font-semibold">Leroy Jenkins</p>
-                                                <p className="text-sm dark:text-gray-600">CTO of Company Co.</p>
+                                                <p className="text-lg font-semibold">Martin Garrix</p>
+                                                <p className="text-sm dark:text-gray-600">CEO of Spotify</p>
                                             </div>
                                         </div>
                                     </div>
