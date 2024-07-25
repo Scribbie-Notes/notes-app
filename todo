@@ -3,7 +3,7 @@ pending: (v0.2.0)
 - add otp verification for signup
 - enable attachments (image, video, etc.) to notes
 - adding the loading spinner on every point
-- work on landing page
+- work on landing pageb
 
 completed: 
 - complete backend of feedback form [DONE]

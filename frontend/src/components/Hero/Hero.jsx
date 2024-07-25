@@ -110,8 +110,8 @@ const Hero = () => {
             <Pricing/>
 
             {/* SECTION 5  */}
-            <hr />
-            <Brands />
+            {/* <hr />
+            <Brands /> */}
 
             {/* SECTION 6 */}
             <section className="bg-gradient-to-b from-gray-50 to-white py-12 mt-8 mb-24">
@@ -122,7 +122,7 @@ const Hero = () => {
                         <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-xl cursor-pointer transition duration-300 ease-in-out border border-gray-200">
                             <div className="flex items-center mb-3 gap-3">
                                 <IoLogoApple className='text-3xl text-gray-900 mb-1' />
-                                <h3 className="text-xl font-bold">Get it on the App Store</h3>
+                                <h3 className="text-xl font-bold">App Store</h3>
                             </div>
                             <p className="text-gray-700">Download our app from the App Store and take your notes on the go with your iPhone or iPad.</p>
                         </div>
@@ -130,7 +130,7 @@ const Hero = () => {
                         <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-xl cursor-pointer transition duration-300 ease-in-out border border-gray-200">
                             <div className="flex items-center mb-3 gap-3">
                                 <BiLogoPlayStore className='text-3xl text-gray-900 mb-1' />
-                                <h3 className="text-xl font-bold mb-2">Get it on the Play Store</h3>
+                                <h3 className="text-xl font-bold mb-2">Play Store</h3>
                             </div>
                             <p className="text-gray-700">Android users can easily access our app from the Play Store and stay organized anywhere.</p>
                         </div>
@@ -138,7 +138,7 @@ const Hero = () => {
                         <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-xl cursor-pointer transition duration-300 ease-in-out border border-gray-200">
                             <div className="flex items-center mb-3 gap-3">
                                 <FaWindows className='text-3xl text-gray-900 mb-1' />
-                                <h3 className="text-xl font-bold mb-2">Available for Windows</h3>
+                                <h3 className="text-xl font-bold mb-2">Windows</h3>
                             </div>
                             <p className="text-gray-700">Download our app for Windows and manage your notes seamlessly on your desktop.</p>
                         </div>
