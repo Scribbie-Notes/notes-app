@@ -152,7 +152,7 @@ const About = () => {
                   GitHub
                 </a>
               </span>{" "}
-              feel free to explore, contribute and find issues. Here
+              feel free to explore, contribute and find issues.
             </p>
           </section>
 
