@@ -18,6 +18,8 @@ const Home = () => {
     data: null,
   });
 
+  const [isLoading, setIsLoading] = useState(true);
+
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [noteToDelete, setNoteToDelete] = useState(null);
   const [viewNoteModal, setViewNoteModal] = useState({
@@ -71,6 +73,7 @@ const Home = () => {
 
   // get all notes
   const getAllNotes = async () => {
+    setIsLoading(true);
     try {
       const response = await axiosInstance.get("/get-all-notes");
       if (response.data && response.data.notes) {
@@ -83,6 +86,8 @@ const Home = () => {
       }
     } catch (error) {
       console.log("Error while fetching notes");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -191,7 +196,11 @@ const Home = () => {
         setUserInfo={setUserInfo}
       />
       <div className="container h-auto p-6 pb-12">
-        {allNotes.length > 0 ? (
+        {isLoading ? (
+          <div className="flex justify-center items-center h-64">
+            <p className="text-xl text-gray-600">Loading notes...</p>
+          </div>
+        ) : allNotes.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 mt-4 transition-all">
             {allNotes.map((item) => (
               <NoteCard
