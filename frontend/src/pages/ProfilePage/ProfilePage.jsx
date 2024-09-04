@@ -366,7 +366,7 @@ const ProfilePage = () => {
                       </div>
                     )}
 
-                    <p className="w-full  border-t border-gray-100 text-gray-600 py-4 pl-6 pr-3 w-full block hover:bg-gray-100 transition duration-150">
+                    {/* <p className="w-full  border-t border-gray-100 text-gray-600 py-4 pl-6 pr-3 w-full block hover:bg-gray-100 transition duration-150">
                       Connect with:
                       <div className="flex pt-3 justify-between items-center gap-6 px-2 ">
                         <a className="text-gray-800  bg-gray-300  border border-gray-300 hover:text-gray-900 hover:bg-gray-100 rounded-md cursor-pointer transition duration-150 ease-in font-medium text-xs text-center w-full py-3">
@@ -379,11 +379,11 @@ const ProfilePage = () => {
                           Email
                         </a>
                       </div>
-                    </p>
+                    </p> */}
                   </div>
 
                   {/* My Settings  */}
-                  <h3 className="font-medium text-xl  mt-12 pb-3 text-gray-900 text-center px-2">
+                  <h3 className="font-medium text-xl  mt-8 pb-3 text-gray-900 text-center px-2">
                     My Settings
                   </h3>
                   <div className="w-full flex flex-col items-center overflow-hidden text-sm">
