@@ -27,9 +27,9 @@ const customStyles = {
 const About = () => {
   const user = JSON.parse(localStorage.getItem("user"));
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [feedback, setFeedback] = useState('');
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [feedback, setFeedback] = useState("");
   const [loading, setLoading] = useState(false);
 
   const openModal = () => setModalIsOpen(true);
@@ -46,7 +46,7 @@ const About = () => {
     };
 
     try {
-      await axiosInstance.post('/submit', feedbackData);
+      await axiosInstance.post("/submit", feedbackData);
       toast.success("Feedback submitted successfully", {
         style: {
           fontSize: "13px",
@@ -59,7 +59,7 @@ const About = () => {
       });
       closeModal();
     } catch (error) {
-      console.error('Error submitting feedback:', error);
+      console.error("Error submitting feedback:", error);
       toast.error("Error submitting feedback", {
         style: {
           fontSize: "13px",
@@ -73,9 +73,9 @@ const About = () => {
     } finally {
       setLoading(false);
     }
-    setName('');
-    setEmail('');
-    setFeedback('');
+    setName("");
+    setEmail("");
+    setFeedback("");
   };
 
   return (
@@ -170,9 +170,11 @@ const About = () => {
         <button
           className="fixed top-1/2 right-1 transform -translate-y-1/2 bg-gray-800 text-white py-3 px-2 p-4 rounded-lg flex flex-col items-center"
           onClick={openModal}
-          style={{ writingMode: 'vertical-rl', textOrientation: 'mixed' }}
+          style={{ writingMode: "vertical-rl", textOrientation: "mixed" }}
         >
-          <span className="transform rotate-90">{/* Empty span to rotate */}</span>
+          <span className="transform rotate-90">
+            {/* Empty span to rotate */}
+          </span>
           Feedback
         </button>
         <Modal
@@ -188,7 +190,9 @@ const About = () => {
             ) : (
               <form onSubmit={handleSubmit}>
                 <div className="mb-4">
-                  <label className="block text-sm font-medium text-gray-700">Name</label>
+                  <label className="block text-sm font-medium text-gray-700">
+                    Name
+                  </label>
                   <input
                     type="text"
                     value={name}
@@ -197,7 +201,9 @@ const About = () => {
                   />
                 </div>
                 <div className="mb-4">
-                  <label className="block text-sm font-medium text-gray-700">Email</label>
+                  <label className="block text-sm font-medium text-gray-700">
+                    Email
+                  </label>
                   <input
                     type="email"
                     value={email}
@@ -206,7 +212,9 @@ const About = () => {
                   />
                 </div>
                 <div className="mb-4">
-                  <label className="block text-sm font-medium text-gray-700">Feedback</label>
+                  <label className="block text-sm font-medium text-gray-700">
+                    Feedback
+                  </label>
                   <textarea
                     value={feedback}
                     onChange={(e) => setFeedback(e.target.value)}
