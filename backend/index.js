@@ -1,22 +1,22 @@
-const dotenv = require("dotenv");
-const path = require("path");
-const mongoose = require("mongoose");
-const express = require("express");
-const cors = require("cors");
-const jwt = require("jsonwebtoken");
+const dotenv = require('dotenv');
+const path = require('path');
+const mongoose = require('mongoose');
+const express = require('express');
+const cors = require('cors');
+const jwt = require('jsonwebtoken');
 const app = express();
-const fs = require("fs");
-const { authenticationToken } = require("./utilities");
-const User = require("./models/userModel");
-const Note = require("./models/noteModel");
-const Feedback = require("./models/feedbackModel");
-const { OAuth2Client } = require("google-auth-library");
-const multer = require("multer");
+const fs = require('fs');
+const { authenticationToken } = require('./utilities');
+const User = require('./models/userModel');
+const Note = require('./models/noteModel');
+const Feedback = require('./models/feedbackModel');
+const { OAuth2Client } = require('google-auth-library');
+const multer = require('multer');
 
 const envPath =
-  process.env.NODE_ENV === "production"
-    ? ".env.production"
-    : ".env.development";
+  process.env.NODE_ENV === 'production'
+    ? '.env.production'
+    : '.env.development';
 dotenv.config({ path: path.resolve(__dirname, envPath) });
 
 const { ACCESS_TOKEN_SECRET, MONGO_URI, GOOGLE_API_TOKEN } = process.env;
@@ -24,15 +24,15 @@ const client = new OAuth2Client(GOOGLE_API_TOKEN);
 
 // Use cors middleware before defining any routes
 const allowedOrigins =
-  process.env.NODE_ENV === "production"
-    ? ["https://scribbie-notes.vercel.app"]
-    : ["http://localhost:5173"];
+  process.env.NODE_ENV === 'production'
+    ? ['https://scribbie-notes.vercel.app']
+    : ['http://localhost:5173'];
 
 app.use(
   cors({
     origin: allowedOrigins,
     credentials: true, // access-control-allow-credentials:true
-    methods: "GET,PUT,POST,DELETE",
+    methods: 'GET,PUT,POST,DELETE',
     optionSuccessStatus: 200,
   })
 );
@@ -41,104 +41,120 @@ app.use(express.json());
 
 mongoose
   .connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => console.log("MongoDB connected"))
+  .then(() => console.log('MongoDB connected'))
   .catch((err) => console.log(err));
 
 // Routes
-app.get("/", (req, res) => {
-  res.json({ data: "hello" });
+app.get('/', (req, res) => {
+  res.json({ data: 'hello' });
 });
 
 // Create Account
-app.post("/create-account", async (req, res) => {
+app.post('/create-account', async (req, res) => {
   const { fullName, email, password } = req.body;
 
   // fullname validations
-  if(!fullName || fullName.trim()===''){
-    return res.status(400).json({ error: true, message: "Name is required" });
+  if (!fullName || fullName.trim() === '') {
+    return res.status(400).json({ error: true, message: 'Name is required' });
   }
-  const nameRegex = /^[A-Za-z]+(?: [A-Za-z]+)*$/
-  if(!(nameRegex.test(fullName))){
-      return res.status(400).json({ error: true, message: "Invalid Name format" });
+  const nameRegex = /^[A-Za-z]+(?: [A-Za-z]+)*$/;
+  if (!nameRegex.test(fullName)) {
+    return res
+      .status(400)
+      .json({ error: true, message: 'Invalid Name format' });
   }
 
   // email validations
-  if(!email || email.trim()===''){
-    return res.status(400).json({ error: true, message: "Email is required" });
+  if (!email || email.trim() === '') {
+    return res.status(400).json({ error: true, message: 'Email is required' });
   }
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if(!emailRegex.test(email)){
-      return res.status(400).json({ error: true, message: "Invalid Email format" });
+  if (!emailRegex.test(email)) {
+    return res
+      .status(400)
+      .json({ error: true, message: 'Invalid Email format' });
   }
 
   // password validaitons
-  if(!password || password.trim()===''){
-    return res.status(400).json({ error: true, message: "Password is required" });
-  } 
-  if(!/[A-Z]/.test(password)){
-      return res.status(400).json({ error: true, message: "Password must include atleast one Uppercase letter" });
+  if (!password || password.trim() === '') {
+    return res
+      .status(400)
+      .json({ error: true, message: 'Password is required' });
   }
-  if(!/[a-z]/.test(password)){
-      return res.status(400).json({ error: true, message: "Password must include atleast one Lower letter" });
+  if (!/[A-Z]/.test(password)) {
+    return res.status(400).json({
+      error: true,
+      message: 'Password must include atleast one Uppercase letter',
+    });
   }
-  if(!/[!"#$%&'()*+,-.:;<=>?@[\]^_`{|}~]/.test(password)){
-      return res.status(400).json({ error: true, message: "Password must include atleast one special character" });
+  if (!/[a-z]/.test(password)) {
+    return res.status(400).json({
+      error: true,
+      message: 'Password must include atleast one Lower letter',
+    });
   }
-  if(!(password.length >= 8)){
-      return res.status(400).json({ error: true, message: "Min password length should be 8" });
+  if (!/[!"#$%&'()*+,-.:;<=>?@[\]^_`{|}~]/.test(password)) {
+    return res.status(400).json({
+      error: true,
+      message: 'Password must include atleast one special character',
+    });
   }
-
+  if (!(password.length >= 8)) {
+    return res
+      .status(400)
+      .json({ error: true, message: 'Min password length should be 8' });
+  }
 
   const isUser = await User.findOne({ email });
 
   if (isUser) {
-    return res.json({ error: true, message: "User already exists" });
+    return res.json({ error: true, message: 'User already exists' });
   }
 
   const user = new User({ fullName, email, password });
   await user.save();
 
   const accessToken = jwt.sign({ user }, process.env.ACCESS_TOKEN_SECRET, {
-    expiresIn: "36000m",
+    expiresIn: '36000m',
   });
 
   return res.json({
     error: false,
     user,
     accessToken,
-    message: "Registration Successful",
+    message: 'Registration Successful',
   });
 });
 
 // Login
-app.post("/login", async (req, res) => {
+app.post('/login', async (req, res) => {
   const { email, password } = req.body;
 
   if (!email || !password) {
-    return res.status(400).json({ message: "Email and Password are required" });
+    return res.status(400).json({ message: 'Email and Password are required' });
   }
 
   const userInfo = await User.findOne({ email });
 
   if (!userInfo || userInfo.password !== password) {
-    return res.status(400).json({ message: "Invalid Credentials" });
+    return res.status(400).json({ message: 'Invalid Credentials' });
   }
 
   const user = { user: userInfo };
   const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
-    expiresIn: "36000m",
+    expiresIn: '36000m',
   });
 
   return res.json({
     error: false,
-    message: "Login Successful",
+    message: 'Login Successful',
     user: userInfo,
     accessToken,
   });
 });
 
 // Protected Routes
-app.get("/get-user", authenticationToken, async (req, res) => {
+app.get('/get-user', authenticationToken, async (req, res) => {
   try {
     const { user } = req.user;
     if (!user) return res.sendStatus(401);
@@ -151,25 +167,25 @@ app.get("/get-user", authenticationToken, async (req, res) => {
         _id: isUser._id,
         createdOn: isUser.createdOn,
       },
-      message: "",
+      message: '',
     });
   } catch (error) {
-    console.error("Error fetching user: ", error);
+    console.error('Error fetching user: ', error);
     return res
       .status(500)
-      .json({ error: true, message: "Internal server error" });
+      .json({ error: true, message: 'Internal server error' });
   }
 });
 
 // Add note
-app.post("/add-note", authenticationToken, async (req, res) => {
+app.post('/add-note', authenticationToken, async (req, res) => {
   const { title, content, tags } = req.body;
   const { user } = req.user;
 
   if (!title || !content) {
     return res
       .status(400)
-      .json({ error: true, message: "Title and Content are required" });
+      .json({ error: true, message: 'Title and Content are required' });
   }
 
   try {
@@ -181,17 +197,17 @@ app.post("/add-note", authenticationToken, async (req, res) => {
     });
     await note.save();
 
-    return res.json({ error: false, note, message: "Note added successfully" });
+    return res.json({ error: false, note, message: 'Note added successfully' });
   } catch (error) {
-    console.error("Error adding note: ", error);
+    console.error('Error adding note: ', error);
     return res
       .status(500)
-      .json({ error: true, message: "Something went wrong" });
+      .json({ error: true, message: 'Something went wrong' });
   }
 });
 
 // Edit note
-app.put("/edit-note/:noteId", authenticationToken, async (req, res) => {
+app.put('/edit-note/:noteId', authenticationToken, async (req, res) => {
   const { noteId } = req.params;
   const { title, content, tags, isPinned } = req.body;
   const { user } = req.user;
@@ -199,7 +215,7 @@ app.put("/edit-note/:noteId", authenticationToken, async (req, res) => {
   if (!title && !content && !tags) {
     return res.status(400).json({
       error: true,
-      message: "Please provide at least one field to update",
+      message: 'Please provide at least one field to update',
     });
   }
 
@@ -207,7 +223,7 @@ app.put("/edit-note/:noteId", authenticationToken, async (req, res) => {
     const note = await Note.findOne({ _id: noteId, userId: user._id });
 
     if (!note) {
-      return res.status(404).json({ error: true, message: "Note not found" });
+      return res.status(404).json({ error: true, message: 'Note not found' });
     }
 
     if (title) note.title = title;
@@ -220,18 +236,18 @@ app.put("/edit-note/:noteId", authenticationToken, async (req, res) => {
     return res.json({
       error: false,
       note,
-      message: "Note updated successfully",
+      message: 'Note updated successfully',
     });
   } catch (error) {
-    console.error("Error editing note: ", error);
+    console.error('Error editing note: ', error);
     return res
       .status(500)
-      .json({ error: true, message: "Something went wrong" });
+      .json({ error: true, message: 'Something went wrong' });
   }
 });
 
 // Get all notes
-app.get("/get-all-notes", authenticationToken, async (req, res) => {
+app.get('/get-all-notes', authenticationToken, async (req, res) => {
   const { user } = req.user;
 
   try {
@@ -239,18 +255,18 @@ app.get("/get-all-notes", authenticationToken, async (req, res) => {
     return res.json({
       error: false,
       notes,
-      message: "Notes fetched successfully",
+      message: 'Notes fetched successfully',
     });
   } catch (error) {
-    console.error("Error fetching notes: ", error);
+    console.error('Error fetching notes: ', error);
     return res
       .status(500)
-      .json({ error: true, message: "Something went wrong" });
+      .json({ error: true, message: 'Something went wrong' });
   }
 });
 
 // Delete note
-app.delete("/delete-note/:noteId", authenticationToken, async (req, res) => {
+app.delete('/delete-note/:noteId', authenticationToken, async (req, res) => {
   const { noteId } = req.params;
   const { user } = req.user;
 
@@ -258,22 +274,22 @@ app.delete("/delete-note/:noteId", authenticationToken, async (req, res) => {
     const note = await Note.findOne({ _id: noteId, userId: user._id });
 
     if (!note) {
-      return res.status(404).json({ error: true, message: "Note not found" });
+      return res.status(404).json({ error: true, message: 'Note not found' });
     }
 
     await Note.deleteOne({ _id: noteId, userId: user._id });
-    return res.json({ error: false, message: "Note deleted successfully" });
+    return res.json({ error: false, message: 'Note deleted successfully' });
   } catch (error) {
-    console.error("Error deleting note: ", error);
+    console.error('Error deleting note: ', error);
     return res
       .status(500)
-      .json({ error: true, message: "Something went wrong" });
+      .json({ error: true, message: 'Something went wrong' });
   }
 });
 
 // Update isPinned
 app.put(
-  "/update-note-pinned/:noteId",
+  '/update-note-pinned/:noteId',
   authenticationToken,
   async (req, res) => {
     const { noteId } = req.params;
@@ -283,14 +299,14 @@ app.put(
     if (isPinned === undefined) {
       return res
         .status(400)
-        .json({ error: true, message: "Please provide isPinned field" });
+        .json({ error: true, message: 'Please provide isPinned field' });
     }
 
     try {
       const note = await Note.findOne({ _id: noteId, userId: user._id });
 
       if (!note) {
-        return res.status(404).json({ error: true, message: "Note not found" });
+        return res.status(404).json({ error: true, message: 'Note not found' });
       }
 
       note.isPinned = isPinned;
@@ -299,26 +315,26 @@ app.put(
       return res.json({
         error: false,
         note,
-        message: "Note updated successfully",
+        message: 'Note updated successfully',
       });
     } catch (error) {
-      console.error("Error updating note pinned: ", error);
+      console.error('Error updating note pinned: ', error);
       return res
         .status(500)
-        .json({ error: true, message: "Something went wrong" });
+        .json({ error: true, message: 'Something went wrong' });
     }
   }
 );
 
 // Search notes
-app.get("/search-notes/", authenticationToken, async (req, res) => {
+app.get('/search-notes/', authenticationToken, async (req, res) => {
   const { user } = req.user;
   const { query } = req.query;
 
   if (!query) {
     return res.status(400).json({
       error: true,
-      message: "Please provide at least one field to search",
+      message: 'Please provide at least one field to search',
     });
   }
 
@@ -326,36 +342,36 @@ app.get("/search-notes/", authenticationToken, async (req, res) => {
     const matchingNotes = await Note.find({
       userId: user._id,
       $or: [
-        { title: { $regex: new RegExp(query, "i") } },
-        { content: { $regex: new RegExp(query, "i") } },
+        { title: { $regex: new RegExp(query, 'i') } },
+        { content: { $regex: new RegExp(query, 'i') } },
       ],
     });
 
     return res.json({
       error: false,
       notes: matchingNotes,
-      message: "Notes fetched successfully",
+      message: 'Notes fetched successfully',
     });
   } catch (error) {
-    console.error("Error searching notes: ", error);
+    console.error('Error searching notes: ', error);
     return res
       .status(500)
-      .json({ error: true, message: "Internal server error" });
+      .json({ error: true, message: 'Internal server error' });
   }
 });
 
 // Update email
-app.put("/update-email", authenticationToken, async (req, res) => {
+app.put('/update-email', authenticationToken, async (req, res) => {
   const { user } = req.user;
   const { newEmail } = req.body;
 
   if (!user) {
-    console.error("User not authenticated");
-    return res.status(401).json({ error: "User not authenticated" });
+    console.error('User not authenticated');
+    return res.status(401).json({ error: 'User not authenticated' });
   }
 
-  console.log("User ID:", user._id);
-  console.log("New Email:", newEmail);
+  console.log('User ID:', user._id);
+  console.log('New Email:', newEmail);
 
   try {
     const updatedUser = await User.findByIdAndUpdate(
@@ -365,22 +381,22 @@ app.put("/update-email", authenticationToken, async (req, res) => {
     );
 
     if (!updatedUser) {
-      console.error("User not found");
-      return res.status(404).json({ error: "User not found" });
+      console.error('User not found');
+      return res.status(404).json({ error: 'User not found' });
     }
 
-    console.log("Email updated successfully", updatedUser);
+    console.log('Email updated successfully', updatedUser);
     return res
       .status(200)
-      .json({ message: "Email updated successfully", user: updatedUser });
+      .json({ message: 'Email updated successfully', user: updatedUser });
   } catch (error) {
-    console.error("Error updating email: ", error);
-    return res.status(500).json({ error: "Internal server error" });
+    console.error('Error updating email: ', error);
+    return res.status(500).json({ error: 'Internal server error' });
   }
 });
 
 // Update phone
-app.put("/update-phone", async (req, res) => {
+app.put('/update-phone', async (req, res) => {
   const { newPhone } = req.body;
   const userId = req.body.userId;
 
@@ -389,29 +405,29 @@ app.put("/update-phone", async (req, res) => {
     if (user) {
       user.phone = newPhone;
       await user.save();
-      res.status(200).json({ message: "Phone number updated successfully" });
+      res.status(200).json({ message: 'Phone number updated successfully' });
     } else {
-      res.status(404).json({ message: "User not found" });
+      res.status(404).json({ message: 'User not found' });
     }
   } catch (error) {
-    res.status(500).json({ message: "Server error", error });
+    res.status(500).json({ message: 'Server error', error });
   }
 });
 
 // configure multer for file uploads
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    const uploadPath = path.join(__dirname, "uploads");
+    const uploadPath = path.join(__dirname, 'uploads');
     if (!fs.existsSync(uploadPath)) {
       fs.mkdirSync(uploadPath);
     }
     cb(null, uploadPath);
   },
   filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
     cb(
       null,
-      file.fieldname + "-" + uniqueSuffix + path.extname(file.originalname)
+      file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname)
     );
   },
 });
@@ -419,12 +435,12 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 // Serve static files from the 'uploads' directory
-app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Update profile photo
 app.put(
-  "/update-profile-photo",
-  upload.single("profilePhoto"),
+  '/update-profile-photo',
+  upload.single('profilePhoto'),
   async (req, res) => {
     try {
       const userId = req.body.userId;
@@ -434,18 +450,18 @@ app.put(
       await User.findByIdAndUpdate(userId, { profilePhoto: profilePhotoPath });
 
       res.status(200).json({
-        message: "Profile photo updated successfully",
+        message: 'Profile photo updated successfully',
         profilePhoto: `http://localhost:8000${profilePhotoPath}`, // Send the updated URL to the frontend
       });
     } catch (error) {
-      console.error("Error updating profile photo:", error);
-      res.status(500).json({ message: "Failed to update profile photo" });
+      console.error('Error updating profile photo:', error);
+      res.status(500).json({ message: 'Failed to update profile photo' });
     }
   }
 );
 
 //google oauth
-app.post("/google-auth", async (req, res) => {
+app.post('/google-auth', async (req, res) => {
   const { token } = req.body;
 
   try {
@@ -455,38 +471,38 @@ app.post("/google-auth", async (req, res) => {
     });
 
     const payload = ticket.getPayload();
-    const userid = payload["sub"];
-    const email = payload["email"];
+    const userid = payload['sub'];
+    const email = payload['email'];
 
     let user = await User.findOne({ email });
 
     if (!user) {
       user = new User({
-        fullName: payload["name"],
+        fullName: payload['name'],
         email: email,
-        password: "", // You might want to generate a random password or handle this differently
+        password: '', // You might want to generate a random password or handle this differently
       });
       await user.save();
     }
 
     const accessToken = jwt.sign({ user }, process.env.ACCESS_TOKEN_SECRET, {
-      expiresIn: "36000m",
+      expiresIn: '36000m',
     });
 
     res.json({
       error: false,
       user,
       accessToken,
-      message: "Google authentication successful",
+      message: 'Google authentication successful',
     });
   } catch (error) {
     console.error(error);
-    res.status(400).json({ error: true, message: "Invalid Google token" });
+    res.status(400).json({ error: true, message: 'Invalid Google token' });
   }
 });
 
 // feedback submit
-app.post("/submit", async (req, res) => {
+app.post('/submit', async (req, res) => {
   const { name, email, feedback } = req.body;
 
   try {
@@ -497,14 +513,41 @@ app.post("/submit", async (req, res) => {
     });
 
     await newFeedback.save();
-    res.status(201).json({ message: "Feedback submitted successfully" });
+    res.status(201).json({ message: 'Feedback submitted successfully' });
   } catch (error) {
-    res.status(500).json({ message: "Failed to submit feedback", error });
+    res.status(500).json({ message: 'Failed to submit feedback', error });
+  }
+});
+//Delete Account
+app.delete('/delete-account', authenticationToken, async (req, res) => {
+  const { user } = req.user;
+
+  if (!user) {
+    return res.json({
+      error: true,
+      message: 'User not found',
+    });
+  }
+
+  try {
+    await Note.deleteMany({ userId: user._id });
+
+    await User.findByIdAndDelete(user._id);
+
+    return res.json({
+      error: false,
+      message: 'User account deleted successfully',
+    });
+  } catch (error) {
+    console.error('Error deleting account: ', error);
+    return res
+      .status(500)
+      .json({ error: true, message: 'Something went wrong' });
   }
 });
 
 app.listen(8000, () => {
-  console.log("Server is running on port 8000");
+  console.log('Server is running on port 8000');
 });
 
 module.exports = app;
