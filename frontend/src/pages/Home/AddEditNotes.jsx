@@ -3,6 +3,8 @@ import TagInput from '../../components/Input/TagInput';
 import { MdClose } from 'react-icons/md';
 import axiosInstance from '../../utils/axiosInstance';
 import toast from 'react-hot-toast';
+import AttachmentInput from '../../components/Input/AttachmentInput';
+
 
 const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
     const [title, setTitle] = useState('');
@@ -155,6 +157,11 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
             <div className='flex flex-col gap-2 mt-4'>
                 <label className='font-medium md:text-base'>Tags</label>
                 <TagInput tags={tags} setTags={setTags} />
+            </div>
+
+            <div className='flex flex-col gap-2 mt-4'>
+                <label className='font-medium md:text-base'>Attach File</label>
+                <AttachmentInput/>
             </div>
 
             {error && <p className='text-red-500 mt-2'>{error}</p>}
