@@ -12,6 +12,7 @@ const Note = require("./models/noteModel");
 const Feedback = require("./models/feedbackModel");
 const { OAuth2Client } = require("google-auth-library");
 const multer = require("multer");
+const { HTTP_STATUS, MESSAGES, ERROR_MESSAGES } = require("./utils/const");
 
 const envPath =
   process.env.NODE_ENV === "production"
@@ -55,44 +56,43 @@ app.post("/create-account", async (req, res) => {
 
   // fullname validations
   if(!fullName || fullName.trim()===''){
-    return res.status(400).json({ error: true, message: "Name is required" });
+    return res.status(HTTP_STATUS.BAD_REQUEST).json({ error: true, message: ERROR_MESSAGES.NAME_REQUIRED });
   }
   const nameRegex = /^[A-Za-z]+(?: [A-Za-z]+)*$/
   if(!(nameRegex.test(fullName))){
-      return res.status(400).json({ error: true, message: "Invalid Name format" });
+      return res.status(HTTP_STATUS.BAD_REQUEST).json({ error: true, message: ERROR_MESSAGES.INVALID_NAME_FORMAT });
   }
 
   // email validations
   if(!email || email.trim()===''){
-    return res.status(400).json({ error: true, message: "Email is required" });
+    return res.status(HTTP_STATUS.BAD_REQUEST).json({ error: true, message: ERROR_MESSAGES.EMAIL_REQUIRED });
   }
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if(!emailRegex.test(email)){
-      return res.status(400).json({ error: true, message: "Invalid Email format" });
+      return res.status(HTTP_STATUS.BAD_REQUEST).json({ error: true, message: ERROR_MESSAGES.INVALID_EMAIL_FORMAT });
   }
 
   // password validaitons
   if(!password || password.trim()===''){
-    return res.status(400).json({ error: true, message: "Password is required" });
+    return res.status(HTTP_STATUS.BAD_REQUEST).json({ error: true, message: ERROR_MESSAGES.PASSWORD_REQUIRED });
   } 
   if(!/[A-Z]/.test(password)){
-      return res.status(400).json({ error: true, message: "Password must include atleast one Uppercase letter" });
+      return res.status(HTTP_STATUS.BAD_REQUEST).json({ error: true, message: ERROR_MESSAGES.PASSWORD_UPPERCASE_REQUIRED });
   }
   if(!/[a-z]/.test(password)){
-      return res.status(400).json({ error: true, message: "Password must include atleast one Lower letter" });
+      return res.status(HTTP_STATUS.BAD_REQUEST).json({ error: true, message: ERROR_MESSAGES.PASSWORD_LOWERCASE_REQUIRED });
   }
   if(!/[!"#$%&'()*+,-.:;<=>?@[\]^_`{|}~]/.test(password)){
-      return res.status(400).json({ error: true, message: "Password must include atleast one special character" });
+      return res.status(HTTP_STATUS.BAD_REQUEST).json({ error: true, message: ERROR_MESSAGES.PASSWORD_SPECIAL_CHAR_REQUIRED });
   }
   if(!(password.length >= 8)){
-      return res.status(400).json({ error: true, message: "Min password length should be 8" });
+      return res.status(HTTP_STATUS.BAD_REQUEST).json({ error: true, message: ERROR_MESSAGES.PASSWORD_MIN_LENGTH });
   }
-
 
   const isUser = await User.findOne({ email });
 
   if (isUser) {
-    return res.json({ error: true, message: "User already exists" });
+    return res.json({ error: true, message: ERROR_MESSAGES.USER_ALREADY_EXISTS });
   }
 
   const user = new User({ fullName, email, password });
@@ -106,7 +106,7 @@ app.post("/create-account", async (req, res) => {
     error: false,
     user,
     accessToken,
-    message: "Registration Successful",
+    message: MESSAGES.USER_REGISTERED_SUCCESSFULLY,
   });
 });
 
@@ -115,13 +115,13 @@ app.post("/login", async (req, res) => {
   const { email, password } = req.body;
 
   if (!email || !password) {
-    return res.status(400).json({ message: "Email and Password are required" });
+    return res.status(HTTP_STATUS.BAD_REQUEST).json({ message: ERROR_MESSAGES.EMAIL_PASSWORD_REQUIRED });
   }
 
   const userInfo = await User.findOne({ email });
 
   if (!userInfo || userInfo.password !== password) {
-    return res.status(400).json({ message: "Invalid Credentials" });
+    return res.status(HTTP_STATUS.BAD_REQUEST).json({ message: ERROR_MESSAGES.INVALID_CREDENTIALS });
   }
 
   const user = { user: userInfo };
@@ -131,7 +131,7 @@ app.post("/login", async (req, res) => {
 
   return res.json({
     error: false,
-    message: "Login Successful",
+    message: MESSAGES.LOGIN_SUCCESSFUL,
     user: userInfo,
     accessToken,
   });
@@ -141,7 +141,7 @@ app.post("/login", async (req, res) => {
 app.get("/get-user", authenticationToken, async (req, res) => {
   try {
     const { user } = req.user;
-    if (!user) return res.sendStatus(401);
+    if (!user) return res.sendStatus(HTTP_STATUS.UNAUTHORIZED);
 
     const isUser = await User.findOne({ _id: user._id });
     return res.json({
@@ -156,8 +156,8 @@ app.get("/get-user", authenticationToken, async (req, res) => {
   } catch (error) {
     console.error("Error fetching user: ", error);
     return res
-      .status(500)
-      .json({ error: true, message: "Internal server error" });
+      .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
+      .json({ error: true, message: ERROR_MESSAGES.INTERNAL_SERVER_ERROR });
   }
 });
 
@@ -168,8 +168,8 @@ app.post("/add-note", authenticationToken, async (req, res) => {
 
   if (!title || !content) {
     return res
-      .status(400)
-      .json({ error: true, message: "Title and Content are required" });
+      .status(HTTP_STATUS.BAD_REQUEST)
+      .json({ error: true, message: ERROR_MESSAGES.TITLE_CONTENT_REQUIRED });
   }
 
   try {
@@ -181,12 +181,12 @@ app.post("/add-note", authenticationToken, async (req, res) => {
     });
     await note.save();
 
-    return res.json({ error: false, note, message: "Note added successfully" });
+    return res.json({ error: false, note, message: MESSAGES.NOTE_ADDED_SUCCESSFULLY });
   } catch (error) {
     console.error("Error adding note: ", error);
     return res
-      .status(500)
-      .json({ error: true, message: "Something went wrong" });
+      .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
+      .json({ error: true, message: ERROR_MESSAGES.INTERNAL_SERVER_ERROR });
   }
 });
 
@@ -197,9 +197,9 @@ app.put("/edit-note/:noteId", authenticationToken, async (req, res) => {
   const { user } = req.user;
 
   if (!title && !content && !tags) {
-    return res.status(400).json({
+    return res.status(HTTP_STATUS.BAD_REQUEST).json({
       error: true,
-      message: "Please provide at least one field to update",
+      message: ERROR_MESSAGES.PROVIDE_FIELD_TO_UPDATE,
     });
   }
 
@@ -207,7 +207,7 @@ app.put("/edit-note/:noteId", authenticationToken, async (req, res) => {
     const note = await Note.findOne({ _id: noteId, userId: user._id });
 
     if (!note) {
-      return res.status(404).json({ error: true, message: "Note not found" });
+      return res.status(HTTP_STATUS.NOT_FOUND).json({ error: true, message: ERROR_MESSAGES.NOTE_NOT_FOUND });
     }
 
     if (title) note.title = title;
@@ -220,13 +220,13 @@ app.put("/edit-note/:noteId", authenticationToken, async (req, res) => {
     return res.json({
       error: false,
       note,
-      message: "Note updated successfully",
+      message: MESSAGES.NOTE_UPDATED_SUCCESSFULLY,
     });
   } catch (error) {
     console.error("Error editing note: ", error);
     return res
-      .status(500)
-      .json({ error: true, message: "Something went wrong" });
+      .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
+      .json({ error: true, message: ERROR_MESSAGES.INTERNAL_SERVER_ERROR });
   }
 });
 
@@ -239,13 +239,13 @@ app.get("/get-all-notes", authenticationToken, async (req, res) => {
     return res.json({
       error: false,
       notes,
-      message: "Notes fetched successfully",
+      message: MESSAGES.NOTES_FETCHED_SUCCESSFULLY,
     });
   } catch (error) {
     console.error("Error fetching notes: ", error);
     return res
-      .status(500)
-      .json({ error: true, message: "Something went wrong" });
+      .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
+      .json({ error: true, message: ERROR_MESSAGES.INTERNAL_SERVER_ERROR });
   }
 });
 
@@ -258,16 +258,16 @@ app.delete("/delete-note/:noteId", authenticationToken, async (req, res) => {
     const note = await Note.findOne({ _id: noteId, userId: user._id });
 
     if (!note) {
-      return res.status(404).json({ error: true, message: "Note not found" });
+      return res.status(HTTP_STATUS.NOT_FOUND).json({ error: true, message: ERROR_MESSAGES.NOTE_NOT_FOUND });
     }
 
     await Note.deleteOne({ _id: noteId, userId: user._id });
-    return res.json({ error: false, message: "Note deleted successfully" });
+    return res.json({ error: false, message: MESSAGES.NOTE_DELETED_SUCCESSFULLY });
   } catch (error) {
     console.error("Error deleting note: ", error);
     return res
-      .status(500)
-      .json({ error: true, message: "Something went wrong" });
+      .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
+      .json({ error: true, message: ERROR_MESSAGES.INTERNAL_SERVER_ERROR });
   }
 });
 
@@ -282,15 +282,15 @@ app.put(
 
     if (isPinned === undefined) {
       return res
-        .status(400)
-        .json({ error: true, message: "Please provide isPinned field" });
+        .status(HTTP_STATUS.BAD_REQUEST)
+        .json({ error: true, message: ERROR_MESSAGES.PROVIDE_IS_PINNED_FIELD });
     }
 
     try {
       const note = await Note.findOne({ _id: noteId, userId: user._id });
 
       if (!note) {
-        return res.status(404).json({ error: true, message: "Note not found" });
+        return res.status(HTTP_STATUS.NOT_FOUND).json({ error: true, message: ERROR_MESSAGES.NOTE_NOT_FOUND });
       }
 
       note.isPinned = isPinned;
@@ -299,13 +299,13 @@ app.put(
       return res.json({
         error: false,
         note,
-        message: "Note updated successfully",
+        message: MESSAGES.NOTE_UPDATED_SUCCESSFULLY,
       });
     } catch (error) {
       console.error("Error updating note pinned: ", error);
       return res
-        .status(500)
-        .json({ error: true, message: "Something went wrong" });
+        .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
+        .json({ error: true, message: ERROR_MESSAGES.INTERNAL_SERVER_ERROR });
     }
   }
 );
@@ -316,9 +316,9 @@ app.get("/search-notes/", authenticationToken, async (req, res) => {
   const { query } = req.query;
 
   if (!query) {
-    return res.status(400).json({
+    return res.status(HTTP_STATUS.BAD_REQUEST).json({
       error: true,
-      message: "Please provide at least one field to search",
+      message: ERROR_MESSAGES.PROVIDE_SEARCH_QUERY,
     });
   }
 
@@ -334,13 +334,13 @@ app.get("/search-notes/", authenticationToken, async (req, res) => {
     return res.json({
       error: false,
       notes: matchingNotes,
-      message: "Notes fetched successfully",
+      message: MESSAGES.NOTES_FETCHED_SUCCESSFULLY,
     });
   } catch (error) {
     console.error("Error searching notes: ", error);
     return res
-      .status(500)
-      .json({ error: true, message: "Internal server error" });
+      .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
+      .json({ error: true, message: ERROR_MESSAGES.INTERNAL_SERVER_ERROR });
   }
 });
 
@@ -351,7 +351,7 @@ app.put("/update-email", authenticationToken, async (req, res) => {
 
   if (!user) {
     console.error("User not authenticated");
-    return res.status(401).json({ error: "User not authenticated" });
+    return res.status(HTTP_STATUS.UNAUTHORIZED).json({ error: ERROR_MESSAGES.USER_NOT_AUTHENTICATED });
   }
 
   console.log("User ID:", user._id);
@@ -366,16 +366,16 @@ app.put("/update-email", authenticationToken, async (req, res) => {
 
     if (!updatedUser) {
       console.error("User not found");
-      return res.status(404).json({ error: "User not found" });
+      return res.status(HTTP_STATUS.NOT_FOUND).json({ error: ERROR_MESSAGES.USER_NOT_FOUND });
     }
 
     console.log("Email updated successfully", updatedUser);
     return res
-      .status(200)
-      .json({ message: "Email updated successfully", user: updatedUser });
+      .status(HTTP_STATUS.OK)
+      .json({ message: MESSAGES.EMAIL_UPDATED_SUCCESSFULLY, user: updatedUser });
   } catch (error) {
     console.error("Error updating email: ", error);
-    return res.status(500).json({ error: "Internal server error" });
+    return res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({ error: ERROR_MESSAGES.INTERNAL_SERVER_ERROR });
   }
 });
 
@@ -389,12 +389,12 @@ app.put("/update-phone", async (req, res) => {
     if (user) {
       user.phone = newPhone;
       await user.save();
-      res.status(200).json({ message: "Phone number updated successfully" });
+      res.status(HTTP_STATUS.OK).json({ message: MESSAGES.PHONE_UPDATED_SUCCESSFULLY });
     } else {
-      res.status(404).json({ message: "User not found" });
+      res.status(HTTP_STATUS.NOT_FOUND).json({ message: ERROR_MESSAGES.USER_NOT_FOUND });
     }
   } catch (error) {
-    res.status(500).json({ message: "Server error", error });
+    res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({ message: ERROR_MESSAGES.INTERNAL_SERVER_ERROR, error });
   }
 });
 
@@ -433,13 +433,13 @@ app.put(
       // Update user's profile photo in the database
       await User.findByIdAndUpdate(userId, { profilePhoto: profilePhotoPath });
 
-      res.status(200).json({
-        message: "Profile photo updated successfully",
+      res.status(HTTP_STATUS.OK).json({
+        message: MESSAGES.PROFILE_PHOTO_UPDATED_SUCCESSFULLY,
         profilePhoto: `http://localhost:8000${profilePhotoPath}`, // Send the updated URL to the frontend
       });
     } catch (error) {
       console.error("Error updating profile photo:", error);
-      res.status(500).json({ message: "Failed to update profile photo" });
+      res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({ message: ERROR_MESSAGES.INTERNAL_SERVER_ERROR });
     }
   }
 );
@@ -477,11 +477,11 @@ app.post("/google-auth", async (req, res) => {
       error: false,
       user,
       accessToken,
-      message: "Google authentication successful",
+      message: MESSAGES.GOOGLE_AUTH_SUCCESSFUL,
     });
   } catch (error) {
     console.error(error);
-    res.status(400).json({ error: true, message: "Invalid Google token" });
+    res.status(HTTP_STATUS.BAD_REQUEST).json({ error: true, message: ERROR_MESSAGES.INVALID_GOOGLE_TOKEN });
   }
 });
 
@@ -497,9 +497,9 @@ app.post("/submit", async (req, res) => {
     });
 
     await newFeedback.save();
-    res.status(201).json({ message: "Feedback submitted successfully" });
+    res.status(HTTP_STATUS.CREATED).json({ message: MESSAGES.FEEDBACK_SUBMITTED_SUCCESSFULLY });
   } catch (error) {
-    res.status(500).json({ message: "Failed to submit feedback", error });
+    res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({ message: ERROR_MESSAGES.FAILED_TO_SUBMIT_FEEDBACK, error });
   }
 });
 
