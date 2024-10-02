@@ -1,20 +1,20 @@
-import React, { useState, useEffect } from "react";
-import Navbar from "../../components/Navbar";
-import NoteCard from "../../components/Cards/NoteCard";
-import { MdAdd, MdClose } from "react-icons/md";
-import AddEditNotes from "./AddEditNotes";
-import { useNavigate } from "react-router-dom";
-import axiosInstance from "../../utils/axiosInstance";
-import moment from "moment";
-import EmptyCard from "../../components/EmptyCard/EmptyCard";
-import AddNotesImg from "../../assets/images/add-notes.svg";
-import NoDataImg from "../../assets/images/no-data.svg";
-import toast from "react-hot-toast";
+import React, { useState, useEffect } from 'react';
+import Navbar from '../../components/Navbar';
+import NoteCard from '../../components/Cards/NoteCard';
+import { MdAdd, MdClose } from 'react-icons/md';
+import AddEditNotes from './AddEditNotes';
+import { useNavigate } from 'react-router-dom';
+import axiosInstance from '../../utils/axiosInstance';
+import moment from 'moment';
+import EmptyCard from '../../components/EmptyCard/EmptyCard';
+import AddNotesImg from '../../assets/images/add-notes.svg';
+import NoDataImg from '../../assets/images/no-data.svg';
+import toast from 'react-hot-toast';
 
 const Home = () => {
   const [openAddEditModal, setOpenAddEditModal] = useState({
     isShown: false,
-    type: "add",
+    type: 'add',
     data: null,
   });
 
@@ -44,7 +44,7 @@ const Home = () => {
   const navigate = useNavigate();
 
   const handleEdit = (noteDetails) => {
-    setOpenAddEditModal({ isShown: true, type: "edit", data: noteDetails });
+    setOpenAddEditModal({ isShown: true, type: 'edit', data: noteDetails });
   };
 
   const handleViewNote = (noteDetails) => {
@@ -54,14 +54,14 @@ const Home = () => {
   // get user info
   const getUserInfo = async () => {
     try {
-      const response = await axiosInstance.get("/get-user");
+      const response = await axiosInstance.get('/get-user');
       if (response.data && response.data.user) {
         setUserInfo(response.data.user);
       }
     } catch (error) {
       if (error.response.status === 401) {
         localStorage.clear();
-        navigate("/login");
+        navigate('/login');
       }
     }
   };
@@ -75,17 +75,17 @@ const Home = () => {
   const getAllNotes = async () => {
     setIsLoading(true);
     try {
-      const response = await axiosInstance.get("/get-all-notes");
+      const response = await axiosInstance.get('/get-all-notes');
       if (response.data && response.data.notes) {
         const notes = response.data.notes.map((note) => ({
           ...note,
           tags: Array.isArray(note.tags) ? note.tags : [], // Ensure tags is always an array
         }));
-        console.log("Fetched Notes:", notes);
+        console.log('Fetched Notes:', notes);
         setAllNotes(notes);
       }
     } catch (error) {
-      console.log("Error while fetching notes");
+      console.log('Error while fetching notes');
     } finally {
       setIsLoading(false);
     }
@@ -99,28 +99,28 @@ const Home = () => {
       );
       if (response.data && !response.data.error) {
         getAllNotes();
-        toast.success("Note deleted successfully", {
+        toast.success('Note deleted successfully', {
           style: {
-            fontSize: "13px",
-            maxWidth: "400px",
-            boxShadow: "px 4px 8px rgba(0, 1, 4, 0.1)",
-            borderRadius: "8px",
-            borderColor: "rgba(0, 0, 0, 0.8)",
-            marginRight: "10px",
+            fontSize: '13px',
+            maxWidth: '400px',
+            boxShadow: 'px 4px 8px rgba(0, 1, 4, 0.1)',
+            borderRadius: '8px',
+            borderColor: 'rgba(0, 0, 0, 0.8)',
+            marginRight: '10px',
           },
         });
       }
     } catch (error) {
-      console.error("Error deleting note:", error);
-      toast.error("Failed to delete note", {
+      console.error('Error deleting note:', error);
+      toast.error('Failed to delete note', {
         style: {
-          fontSize: "13px",
-          maxWidth: "400px",
-          boxShadow: "px 4px 8px rgba(0, 1, 4, 0.1)",
-          borderRadius: "8px",
-          borderColor: "rgba(0, 0, 0, 0.8)",
-          marginTop: "60px",
-          marginRight: "10px",
+          fontSize: '13px',
+          maxWidth: '400px',
+          boxShadow: 'px 4px 8px rgba(0, 1, 4, 0.1)',
+          borderRadius: '8px',
+          borderColor: 'rgba(0, 0, 0, 0.8)',
+          marginTop: '60px',
+          marginRight: '10px',
         },
       });
     } finally {
@@ -131,7 +131,7 @@ const Home = () => {
   // search note
   const onSearchNote = async (query) => {
     try {
-      const response = await axiosInstance.get("/search-notes", {
+      const response = await axiosInstance.get('/search-notes', {
         params: {
           query,
         },
@@ -142,7 +142,7 @@ const Home = () => {
         setAllNotes(response.data.notes);
       }
     } catch (error) {
-      console.log("Error while fetching notes");
+      console.log('Error while fetching notes');
     }
   };
 
@@ -159,21 +159,21 @@ const Home = () => {
       );
 
       if (response.data && response.data.note) {
-        const message = newIsPinnedStatus ? "Note Pinned" : "Note Unpinned";
+        const message = newIsPinnedStatus ? 'Note Pinned' : 'Note Unpinned';
         toast.success(message, {
           style: {
-            fontSize: "13px",
-            maxWidth: "400px",
-            boxShadow: "0px 4px 8px rgba(0, 1, 4, 0.1)",
-            borderRadius: "8px",
-            borderColor: "rgba(0, 0, 0, 0.8)",
-            marginRight: "10px",
+            fontSize: '13px',
+            maxWidth: '400px',
+            boxShadow: '0px 4px 8px rgba(0, 1, 4, 0.1)',
+            borderRadius: '8px',
+            borderColor: 'rgba(0, 0, 0, 0.8)',
+            marginRight: '10px',
           },
         });
         getAllNotes();
       }
     } catch (error) {
-      console.log("Error while updating note pinned status:", error);
+      console.log('Error while updating note pinned status:', error);
     }
   };
 
@@ -195,7 +195,7 @@ const Home = () => {
         handleClearSearch={handleClearSearch}
         setUserInfo={setUserInfo}
       />
-      <div className="container h-auto p-6 pb-12">
+      <div className="container h-auto p-6 pb-12 min-w-full">
         {isLoading ? (
           <div className="flex justify-center items-center h-64">
             <p className="text-xl text-gray-600">Loading notes...</p>
@@ -224,7 +224,7 @@ const Home = () => {
             imgSrc={isSearch ? NoDataImg : AddNotesImg}
             message={
               isSearch
-                ? "Oops! No notes found matching"
+                ? 'Oops! No notes found matching'
                 : `Start adding notes by clicking on the "+" button. Lets get started!`
             }
           />
@@ -232,9 +232,9 @@ const Home = () => {
       </div>
 
       <button
-        className="w-16 h-16 flex items-center justify-center rounded-2xl items-center text-white bg-gray-800 hover:bg-gray-900 transition-all focus:outline-none fixed right-10 bottom-10 z-50"
+        className="w-16 h-16 flex justify-center rounded-2xl items-center text-white bg-gray-800 hover:bg-gray-900 transition-all focus:outline-none fixed right-10 bottom-10 z-50"
         onClick={() => {
-          setOpenAddEditModal({ isShown: true, type: "add", data: null });
+          setOpenAddEditModal({ isShown: true, type: 'add', data: null });
         }}
       >
         <MdAdd className="text-[32px] text-white transition-all" />
@@ -248,7 +248,7 @@ const Home = () => {
               type={openAddEditModal.type}
               noteData={openAddEditModal.data}
               onClose={() =>
-                setOpenAddEditModal({ isShown: false, type: "add", data: null })
+                setOpenAddEditModal({ isShown: false, type: 'add', data: null })
               }
               getAllNotes={getAllNotes}
             />
@@ -271,7 +271,7 @@ const Home = () => {
                 {viewNoteModal.data.title}
               </h2>
               <span className="text-xs text-slate-500">
-                {moment(viewNoteModal.data.date).format("Do MMM YYYY")}
+                {moment(viewNoteModal.data.date).format('Do MMM YYYY')}
               </span>
               <p className="text-gray-700 mt-4">{viewNoteModal.data.content}</p>
               <div className="mt-4">
