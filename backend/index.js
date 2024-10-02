@@ -113,6 +113,7 @@ app.post("/create-account", async (req, res) => {
 // Login
 app.post("/login", async (req, res) => {
   const { email, password } = req.body;
+  console.log({email,password})
 
   if (!email || !password) {
     return res.status(400).json({ message: "Email and Password are required" });
@@ -270,6 +271,34 @@ app.delete("/delete-note/:noteId", authenticationToken, async (req, res) => {
       .json({ error: true, message: "Something went wrong" });
   }
 });
+
+// delete user and its notes
+app.delete('/delete-user',authenticationToken,async(req,res)=>{
+  try{
+    // destructuring to get userID
+    const {user:{_id:userId}} = req.user
+    if(!userId){
+      return res.status(400).json({error:true,message:"User Id required"})
+    }
+
+    // deleting notes
+    const deleteNotesResult = await Note.deleteMany({ userId });
+
+    // deleting user
+    const deleteUserResult = await User.findByIdAndDelete(userId)
+
+    // checking if user doesn't exist
+    if(!deleteUserResult){
+      return res.status(404).json({ error: true, message: "User not found " });
+    }
+    return res.json({ error: false, message: "User deleted successfully" });
+  }catch(error){
+    console.log("Error while deleting user",{error})
+    return res
+      .status(500)
+      .json({ error: true, message: "Something went wrong" });
+  }
+})
 
 // Update isPinned
 app.put(
