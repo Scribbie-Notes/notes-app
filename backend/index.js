@@ -53,11 +53,41 @@ app.get("/", (req, res) => {
 app.post("/create-account", async (req, res) => {
   const { fullName, email, password } = req.body;
 
-  if (!fullName || !email || !password) {
-    return res
-      .status(400)
-      .json({ error: true, message: "All fields are required" });
+  // fullname validations
+  if(!fullName || fullName.trim()===''){
+    return res.status(400).json({ error: true, message: "Name is required" });
   }
+  const nameRegex = /^[A-Za-z]+(?: [A-Za-z]+)*$/
+  if(!(nameRegex.test(fullName))){
+      return res.status(400).json({ error: true, message: "Invalid Name format" });
+  }
+
+  // email validations
+  if(!email || email.trim()===''){
+    return res.status(400).json({ error: true, message: "Email is required" });
+  }
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if(!emailRegex.test(email)){
+      return res.status(400).json({ error: true, message: "Invalid Email format" });
+  }
+
+  // password validaitons
+  if(!password || password.trim()===''){
+    return res.status(400).json({ error: true, message: "Password is required" });
+  } 
+  if(!/[A-Z]/.test(password)){
+      return res.status(400).json({ error: true, message: "Password must include atleast one Uppercase letter" });
+  }
+  if(!/[a-z]/.test(password)){
+      return res.status(400).json({ error: true, message: "Password must include atleast one Lower letter" });
+  }
+  if(!/[!"#$%&'()*+,-.:;<=>?@[\]^_`{|}~]/.test(password)){
+      return res.status(400).json({ error: true, message: "Password must include atleast one special character" });
+  }
+  if(!(password.length >= 8)){
+      return res.status(400).json({ error: true, message: "Min password length should be 8" });
+  }
+
 
   const isUser = await User.findOne({ email });
 

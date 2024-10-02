@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../../components/Navbar";
 import { Link, useNavigate } from "react-router-dom";
-import { validateEmail } from "../../utils/helper";
+import { validateEmail , validateName ,validatePassword } from "../../utils/helper";
 import axiosInstance from "../../utils/axiosInstance";
 import toast from "react-hot-toast";
 import { FaRegEye } from "react-icons/fa";
@@ -74,9 +74,11 @@ const Signup = () => {
 
   const handleSignup = async (e) => {
     e.preventDefault();
-
-    if (!name) {
-      toast.error("Please enter your name", {
+    
+    // validation for name
+    const nameValidation = validateName(name)
+    if (!nameValidation.valid) {
+      toast.error(`${nameValidation.error}`, {
         style: {
           fontSize: "13px",
           maxWidth: "400px",
@@ -90,8 +92,10 @@ const Signup = () => {
       return;
     }
 
-    if (!validateEmail(email)) {
-      toast.error("Please enter valid credentials", {
+    // validations for email
+    const emailValidation = validateEmail(email)
+    if (!emailValidation.valid) {
+      toast.error(`${emailValidation.error}`, {
         style: {
           fontSize: "13px",
           maxWidth: "400px",
@@ -105,8 +109,10 @@ const Signup = () => {
       return;
     }
 
-    if (!password) {
-      toast.error("Please enter a password", {
+    // valiations for password 
+    const passwordValidation = validatePassword(password)
+    if (!passwordValidation.valid) {
+      toast.error(`${passwordValidation.error}`, {
         style: {
           fontSize: "13px",
           maxWidth: "400px",
