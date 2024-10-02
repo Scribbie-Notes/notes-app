@@ -1,28 +1,28 @@
-import React, { useState, useEffect } from "react";
-import { getInitials } from "../../utils/helper";
-import Navbar from "../../components/Navbar";
-import Footer from "../../components/Footer";
-import { Link } from "react-router-dom";
-import { IoMdArrowRoundBack } from "react-icons/io";
-import { toast } from "react-hot-toast";
-import axiosInstance from "../../utils/axiosInstance";
+import React, { useState, useEffect } from 'react';
+import { getInitials } from '../../utils/helper';
+import Navbar from '../../components/Navbar';
+import Footer from '../../components/Footer';
+import { Link, useNavigate } from 'react-router-dom';
+import { IoMdArrowRoundBack } from 'react-icons/io';
+import { toast } from 'react-hot-toast';
+import axiosInstance from '../../utils/axiosInstance';
 
 const ProfilePage = () => {
   let initialUser = null;
-  const storedUser = localStorage.getItem("user");
+  const storedUser = localStorage.getItem('user');
   if (storedUser) {
     try {
       initialUser = JSON.parse(storedUser);
     } catch (e) {
-      console.error("Error parsing stored user", e);
+      console.error('Error parsing stored user', e);
     }
   }
 
   const [user, setUser] = useState(initialUser);
-  const [phone, setPhone] = useState(user?.phone || "");
-  const [email, setEmail] = useState(user?.email || "");
-  const [newEmail, setNewEmail] = useState("");
-  const [newPhone, setNewPhone] = useState("");
+  const [phone, setPhone] = useState(user?.phone || '');
+  const [email, setEmail] = useState(user?.email || '');
+  const [newEmail, setNewEmail] = useState('');
+  const [newPhone, setNewPhone] = useState('');
   const [isEmailModalOpen, setIsEmailModalOpen] = useState(false);
   const [isPhoneModalOpen, setIsPhoneModalOpen] = useState(false);
   const [profilePhoto, setProfilePhoto] = useState(user.profilePhoto || null);
@@ -30,54 +30,56 @@ const ProfilePage = () => {
   const [isAccountDeleteModalOpen, setIsAccountDeleteModalOpen] =
     useState(false);
 
+  const navigate = useNavigate();
+
   const handlePhotoUpload = async (e) => {
     const file = e.target.files[0];
     if (file) {
       const formData = new FormData();
-      formData.append("profilePhoto", file);
-      formData.append("userId", user._id);
+      formData.append('profilePhoto', file);
+      formData.append('userId', user._id);
 
       try {
         const response = await axiosInstance.put(
-          "/update-profile-photo",
+          '/update-profile-photo',
           formData,
           {
             headers: {
-              "Content-Type": "multipart/form-data",
+              'Content-Type': 'multipart/form-data',
             },
           }
         );
         const newProfilePhotoUrl = response.data.profilePhoto;
         setProfilePhoto(newProfilePhotoUrl);
-        toast.success("Profile photo updated", {
+        toast.success('Profile photo updated', {
           style: {
-            fontSize: "13px",
-            maxWidth: "400px",
-            boxShadow: "4px 4px 8px rgba(0, 1, 4, 0.1)",
-            borderRadius: "8px",
-            borderColor: "rgba(0, 0, 0, 0.8)",
-            marginRight: "10px",
+            fontSize: '13px',
+            maxWidth: '400px',
+            boxShadow: '4px 4px 8px rgba(0, 1, 4, 0.1)',
+            borderRadius: '8px',
+            borderColor: 'rgba(0, 0, 0, 0.8)',
+            marginRight: '10px',
           },
         });
       } catch (error) {
-        toast.error("Failed to upload profile photo", {
+        toast.error('Failed to upload profile photo', {
           style: {
-            fontSize: "13px",
-            maxWidth: "400px",
-            boxShadow: "4px 4px 8px rgba(0, 1, 4, 0.1)",
-            borderRadius: "8px",
-            borderColor: "rgba(0, 0, 0, 0.8)",
-            marginRight: "10px",
+            fontSize: '13px',
+            maxWidth: '400px',
+            boxShadow: '4px 4px 8px rgba(0, 1, 4, 0.1)',
+            borderRadius: '8px',
+            borderColor: 'rgba(0, 0, 0, 0.8)',
+            marginRight: '10px',
           },
         });
-        console.error("Error uploading profile photo:", error);
+        console.error('Error uploading profile photo:', error);
       }
     }
   };
 
   useEffect(() => {
-    setEmail(user?.email || "");
-    setPhone(user?.phone || "");
+    setEmail(user?.email || '');
+    setPhone(user?.phone || '');
   }, [user]);
 
   const handleEmailChangeClick = () => {
@@ -90,51 +92,51 @@ const ProfilePage = () => {
 
   const handleEmailModalSave = async () => {
     try {
-      console.log("New email to update:", newEmail);
+      console.log('New email to update:', newEmail);
       const response = await axiosInstance.put(`/update-email`, { newEmail });
-      console.log("Response from API:", response);
+      console.log('Response from API:', response);
 
       if (response.data) {
         // Update email in state and local storage
         const updatedUser = { ...user, email: newEmail };
         setUser(updatedUser);
-        localStorage.setItem("user", JSON.stringify(updatedUser));
+        localStorage.setItem('user', JSON.stringify(updatedUser));
 
-        toast.success("Email updated", {
+        toast.success('Email updated', {
           style: {
-            fontSize: "13px",
-            maxWidth: "400px",
-            boxShadow: "4px 4px 8px rgba(0, 1, 4, 0.1)",
-            borderRadius: "8px",
-            borderColor: "rgba(0, 0, 0, 0.8)",
-            marginRight: "10px",
+            fontSize: '13px',
+            maxWidth: '400px',
+            boxShadow: '4px 4px 8px rgba(0, 1, 4, 0.1)',
+            borderRadius: '8px',
+            borderColor: 'rgba(0, 0, 0, 0.8)',
+            marginRight: '10px',
           },
         });
         setIsEmailModalOpen(false);
       } else {
-        toast.error("Failed to update email", {
+        toast.error('Failed to update email', {
           style: {
-            fontSize: "13px",
-            maxWidth: "400px",
-            boxShadow: "4px 4px 8px rgba(0, 1, 4, 0.1)",
-            borderRadius: "8px",
-            borderColor: "rgba(0, 0, 0, 0.8)",
-            marginRight: "10px",
+            fontSize: '13px',
+            maxWidth: '400px',
+            boxShadow: '4px 4px 8px rgba(0, 1, 4, 0.1)',
+            borderRadius: '8px',
+            borderColor: 'rgba(0, 0, 0, 0.8)',
+            marginRight: '10px',
           },
         });
       }
     } catch (error) {
-      toast.error("Failed to update email", {
+      toast.error('Failed to update email', {
         style: {
-          fontSize: "13px",
-          maxWidth: "400px",
-          boxShadow: "4px 4px 8px rgba(0, 1, 4, 0.1)",
-          borderRadius: "8px",
-          borderColor: "rgba(0, 0, 0, 0.8)",
-          marginRight: "10px",
+          fontSize: '13px',
+          maxWidth: '400px',
+          boxShadow: '4px 4px 8px rgba(0, 1, 4, 0.1)',
+          borderRadius: '8px',
+          borderColor: 'rgba(0, 0, 0, 0.8)',
+          marginRight: '10px',
         },
       });
-      console.error("Error updating email:", error);
+      console.error('Error updating email:', error);
     }
   };
 
@@ -148,59 +150,92 @@ const ProfilePage = () => {
 
   const handlePhoneModalSave = async () => {
     try {
-      console.log("New phone to update:", newPhone);
+      console.log('New phone to update:', newPhone);
       const response = await axiosInstance.put(`/update-phone`, {
         newPhone,
         userId: user._id,
       });
-      console.log("Response from API:", response);
+      console.log('Response from API:', response);
 
       if (response.data) {
         // Update phone in state and local storage
         const updatedUser = { ...user, phone: newPhone };
         setUser(updatedUser);
-        localStorage.setItem("user", JSON.stringify(updatedUser));
+        localStorage.setItem('user', JSON.stringify(updatedUser));
 
-        toast.success("Phone number updated", {
+        toast.success('Phone number updated', {
           style: {
-            fontSize: "13px",
-            maxWidth: "400px",
-            boxShadow: "4px 4px 8px rgba(0, 1, 4, 0.1)",
-            borderRadius: "8px",
-            borderColor: "rgba(0, 0, 0, 0.8)",
-            marginRight: "10px",
+            fontSize: '13px',
+            maxWidth: '400px',
+            boxShadow: '4px 4px 8px rgba(0, 1, 4, 0.1)',
+            borderRadius: '8px',
+            borderColor: 'rgba(0, 0, 0, 0.8)',
+            marginRight: '10px',
           },
         });
         setIsPhoneModalOpen(false);
       } else {
-        toast.error("Failed to update phone number", {
+        toast.error('Failed to update phone number', {
           style: {
-            fontSize: "13px",
-            maxWidth: "400px",
-            boxShadow: "4px 4px 8px rgba(0, 1, 4, 0.1)",
-            borderRadius: "8px",
-            borderColor: "rgba(0, 0, 0, 0.8)",
-            marginRight: "10px",
+            fontSize: '13px',
+            maxWidth: '400px',
+            boxShadow: '4px 4px 8px rgba(0, 1, 4, 0.1)',
+            borderRadius: '8px',
+            borderColor: 'rgba(0, 0, 0, 0.8)',
+            marginRight: '10px',
           },
         });
       }
     } catch (error) {
-      toast.error("Failed to update phone number", {
+      toast.error('Failed to update phone number', {
         style: {
-          fontSize: "13px",
-          maxWidth: "400px",
-          boxShadow: "4px 4px 8px rgba(0, 1, 4, 0.1)",
-          borderRadius: "8px",
-          borderColor: "rgba(0, 0, 0, 0.8)",
-          marginRight: "10px",
+          fontSize: '13px',
+          maxWidth: '400px',
+          boxShadow: '4px 4px 8px rgba(0, 1, 4, 0.1)',
+          borderRadius: '8px',
+          borderColor: 'rgba(0, 0, 0, 0.8)',
+          marginRight: '10px',
         },
       });
-      console.error("Error updating phone number:", error);
+      console.error('Error updating phone number:', error);
     }
   };
 
-  const handleAccountDelete = () => {
-    console.log("Account deleted");
+  const handleAccountDelete = async () => {
+    console.log('Account deleted');
+    try {
+      const response = await axiosInstance.delete('/delete-account');
+      console.log(response.data);
+
+      if (response.data.error) {
+        toast.error('Failed to delete account', {
+          style: {
+            fontSize: '13px',
+            maxWidth: '400px',
+            boxShadow: '4px 4px 8px rgba(0, 1, 4, 0.1)',
+            borderRadius: '8px',
+            borderColor: 'rgba(0, 0, 0, 0.8)',
+            marginRight: '10px',
+          },
+        });
+      } else {
+        toast.success('Account deleted', {
+          style: {
+            fontSize: '13px',
+            maxWidth: '400px',
+            boxShadow: '4px 4px 8px rgba(0, 1, 4, 0.1)',
+            borderRadius: '8px',
+            borderColor: 'rgba(0, 0, 0, 0.8)',
+            marginRight: '10px',
+          },
+        });
+
+        localStorage.clear();
+        navigate('/');
+      }
+    } catch (error) {
+      console.log('Failed account deletion', error);
+    }
     setIsAccountDeleteModalOpen(false);
   };
 
@@ -227,7 +262,7 @@ const ProfilePage = () => {
                   className="flex items-center justify-center p-3 rounded-full text-slate-950 font-medium bg-gray-50 cursor-pointer mx-auto absolute -top-16 md:-top-20 w-24 md:w-32 h-24 md:h-32 shadow-md border-4 border-white transition duration-200 transform hover:scale-110 text-3xl md:text-4xl"
                   onMouseEnter={() => setIsHovered(true)}
                   onMouseLeave={() => setIsHovered(false)}
-                  onClick={() => document.getElementById("fileInput").click()}
+                  onClick={() => document.getElementById('fileInput').click()}
                 >
                   {profilePhoto ? (
                     <img
@@ -235,7 +270,7 @@ const ProfilePage = () => {
                       className="w-full h-full rounded-full object-cover"
                     />
                   ) : (
-                    getInitials(user?.fullName || "")
+                    getInitials(user?.fullName || '')
                   )}
                   {isHovered && (
                     <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-30 text-white text-[10px] rounded-full">
@@ -247,7 +282,7 @@ const ProfilePage = () => {
                   id="fileInput"
                   type="file"
                   accept="image/*"
-                  style={{ display: "none" }}
+                  style={{ display: 'none' }}
                   onChange={handlePhotoUpload}
                 />
                 {/* {profilePhoto && (
@@ -277,11 +312,11 @@ const ProfilePage = () => {
                   </h3>
                   <div className="w-full flex flex-col items-center overflow-hidden text-sm">
                     <p className="w-full border-t border-gray-100 text-gray-600 py-4 pl-6 pr-3 w-full block hover:bg-gray-100 transition duration-150">
-                      {user?.fullName || "User Name"}
+                      {user?.fullName || 'User Name'}
                     </p>
 
                     <div className="flex justify-between items-center w-full border-t border-gray-100 text-gray-600 py-1 pl-6 pr-3 hover:bg-gray-100 transition duration-150">
-                      <p>{email || "User Email"}</p>
+                      <p>{email || 'User Email'}</p>
                       <button
                         onClick={handleEmailChangeClick}
                         className="inline-flex items-center text-white bg-gray-800 hover:bg-gray-900 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 mt-2 mb-2 text-xs dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-700"
@@ -324,7 +359,7 @@ const ProfilePage = () => {
                     )}
 
                     <p className="flex justify-between items-center w-full border-t border-gray-100 text-gray-600 py-1 pl-6 pr-3 hover:bg-gray-100 transition duration-150">
-                      {user?.phone || "User Phone"}
+                      {user?.phone || 'User Phone'}
                       <button
                         onClick={handlePhoneChangeClick}
                         className="inline-flex items-center text-white bg-gray-800 hover:bg-gray-900 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 mt-2 mb-2 text-xs dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-700"
