@@ -6,20 +6,17 @@ import axiosInstance from "../../utils/axiosInstance";
 import toast from "react-hot-toast";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { GoogleLogin } from "@react-oauth/google";
-import CircularLoader from "../../components/CircularLoader";
 
 const Login = ({ setUser }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   const navigate = useNavigate();
 
   const responseMsg = async (response) => {
     try {
-      setLoading(true);
       const token = response.credential;
       const res = await axiosInstance.post("/google-auth", { token });
 
@@ -64,8 +61,6 @@ const Login = ({ setUser }) => {
           marginRight: "10px",
         },
       });
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -277,13 +272,7 @@ const Login = ({ setUser }) => {
                     className="inline-flex items-center text-white bg-gray-800 hover:bg-gray-900 focus:outline-none  font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700  dark:border-gray-700 transition-all"
                     type="submit"
                   >
-                    {loading ? (
-                      <span className="gap-x-2 flex justify-center items-center">
-                        <CircularLoader /> logging in
-                      </span>
-                    ) : (
-                      "Login"
-                    )}
+                    Login
                   </button>
 
                   <div className="mb-3">
