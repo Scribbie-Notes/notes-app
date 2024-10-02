@@ -79,7 +79,7 @@ We welcome contributions from the community! To ensure a smooth process for ever
 5. Write tests: If applicable, write tests to cover your changes.
 6. Commit your changes: Write clear, concise commit messages.
 7. Push your changes: Push your changes to your forked repository.
-8. Submit a pull request: Open a pull request to merge your changes into the main repository.
+8. Submit a pull request(Only after issue assigned to you): Open a pull request to merge your changes into the main repository.
 
 ### 🍰 Steps to contribute 
 1. Fork the Repository: Click the "Fork" button on the top right of this page to fork this repository to your GitHub account.
