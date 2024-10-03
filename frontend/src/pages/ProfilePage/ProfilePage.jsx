@@ -6,13 +6,26 @@ import { Link } from "react-router-dom";
 import { IoMdArrowRoundBack } from "react-icons/io";
 import { toast } from "react-hot-toast";
 import axiosInstance from "../../utils/axiosInstance";
+import { parsePhoneNumberFromString } from 'libphonenumber-js';
+
+
+
+const  validatePhoneNumber= (phoneNumber) => {
+  const regex = /^[6-9]\d{9}$/;
+  return regex.test(phoneNumber);
+ 
+}
 
 const ProfilePage = () => {
   let initialUser = null;
   const storedUser = localStorage.getItem("user");
   if (storedUser) {
     try {
-      initialUser = JSON.parse(storedUser);
+      initialUser = JSO
+      function validatePhoneNumber(phoneNumber) {
+          const phone = parsePhoneNumberFromString(phoneNumber, 'IN'); // 'IN' for India
+          return phone?.isValid();
+      }N.parse(storedUser);
     } catch (e) {
       console.error("Error parsing stored user", e);
     }
@@ -148,6 +161,18 @@ const ProfilePage = () => {
 
   const handlePhoneModalSave = async () => {
     try {
+      if(!validatePhoneNumber(newPhone)){
+        return toast.error("Invalid phone number", {
+          style: {
+            fontSize: "13px",
+            maxWidth: "400px",
+            boxShadow: "4px 4px 8px rgba(0, 1, 4, 0.1)",
+            borderRadius: "8px",
+            borderColor: "rgba(0, 0, 0, 0.8)",
+            marginRight: "10px",
+          },
+        });
+      }
       console.log("New phone to update:", newPhone);
       const response = await axiosInstance.put(`/update-phone`, {
         newPhone,

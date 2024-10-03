@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../../components/Navbar";
 import { Link, useNavigate } from "react-router-dom";
-import { validateEmail , validateName ,validatePassword } from "../../utils/helper";
+import {
+  validateEmail,
+  validateName,
+  validatePassword,
+} from "../../utils/helper";
 import axiosInstance from "../../utils/axiosInstance";
 import toast from "react-hot-toast";
 import { FaRegEye } from "react-icons/fa";
@@ -21,9 +25,11 @@ const Signup = () => {
 
   const responseMsg = async (response) => {
     try {
+      
       const token = response.credential;
+      
       const res = await axiosInstance.post("/google-auth", { token });
-
+      console.log(res)
       if (res.data && res.data.accessToken) {
         localStorage.setItem("token", res.data.accessToken);
         localStorage.setItem("user", JSON.stringify(res.data.user));
@@ -74,9 +80,9 @@ const Signup = () => {
 
   const handleSignup = async (e) => {
     e.preventDefault();
-    
+
     // validation for name
-    const nameValidation = validateName(name)
+    const nameValidation = validateName(name);
     if (!nameValidation.valid) {
       toast.error(`${nameValidation.error}`, {
         style: {
@@ -93,7 +99,7 @@ const Signup = () => {
     }
 
     // validations for email
-    const emailValidation = validateEmail(email)
+    const emailValidation = validateEmail(email);
     if (!emailValidation.valid) {
       toast.error(`${emailValidation.error}`, {
         style: {
@@ -109,8 +115,8 @@ const Signup = () => {
       return;
     }
 
-    // valiations for password 
-    const passwordValidation = validatePassword(password)
+    // valiations for password
+    const passwordValidation = validatePassword(password);
     if (!passwordValidation.valid) {
       toast.error(`${passwordValidation.error}`, {
         style: {
@@ -150,7 +156,7 @@ const Signup = () => {
         email: email,
         password: password,
       });
-
+console.log(response)
       // handle successful registration response
       if (response.data && response.data.error) {
         setError(response.data.message);
@@ -194,7 +200,7 @@ const Signup = () => {
           },
         });
       } else {
-        console.log(error);
+        console.log(error.message);
         setError("Something went wrong. Please try again later.");
       }
     }
@@ -205,7 +211,7 @@ const Signup = () => {
   };
 
   const toggleConfirmPasswordVisibility = () => {
-    setConfirmPasswordVisible(!confirmPasswordVisible);
+    setConfirmPasswordVisible(!confirmPasswordVisiblpreflighte);
   };
 
   return (
