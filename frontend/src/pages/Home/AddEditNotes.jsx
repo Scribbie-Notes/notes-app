@@ -9,6 +9,7 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
     const [content, setContent] = useState('');
     const [tags, setTags] = useState([]);
     const [error, setError] = useState(null);
+    const [isListening, setIsListening] = useState(false);
 
     useEffect(() => {
         if (type === 'edit' && noteData) {
@@ -31,28 +32,14 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
                 getAllNotes();
                 onClose();
                 toast.success('Note added successfully', {
-                    style: {
-                        fontSize: '13px',
-                        maxWidth: '400px',
-                        boxShadow: 'px 4px 8px rgba(0, 1, 4, 0.1)',
-                        borderRadius: '8px',
-                        borderColor: 'rgba(0, 0, 0, 0.8)',
-                        marginRight: '10px',
-                    }
+                    style: { fontSize: '13px', maxWidth: '400px', boxShadow: 'px 4px 8px rgba(0, 1, 4, 0.1)', borderRadius: '8px', borderColor: 'rgba(0, 0, 0, 0.8)', marginRight: '10px' }
                 });
             }
         } catch (error) {
             console.error("Error adding note:", error);
             setError("An error occurred while adding the note.");
             toast.error('Failed to add a note', {
-                style: {
-                    fontSize: '13px',
-                    maxWidth: '400px',
-                    boxShadow: 'px 4px 8px rgba(0, 1, 4, 0.1)',
-                    borderRadius: '8px',
-                    borderColor: 'rgba(0, 0, 0, 0.8)',
-                    marginRight: '10px',
-                }
+                style: { fontSize: '13px', maxWidth: '400px', boxShadow: 'px 4px 8px rgba(0, 1, 4, 0.1)', borderRadius: '8px', borderColor: 'rgba(0, 0, 0, 0.8)', marginRight: '10px' }
             });
         }
     };
@@ -64,8 +51,6 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
                 return;
             }
 
-            console.log(`Updating note with ID: ${noteData._id}`);
-
             const response = await axiosInstance.put(`/edit-note/${noteData._id}`, {
                 title,
                 content,
@@ -76,28 +61,14 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
                 getAllNotes();
                 onClose();
                 toast.success('Note updated successfully', {
-                    style: {
-                        fontSize: '13px',
-                        maxWidth: '400px',
-                        boxShadow: 'px 4px 8px rgba(0, 1, 4, 0.1)',
-                        borderRadius: '8px',
-                        borderColor: 'rgba(0, 0, 0, 0.8)',
-                        marginRight: '10px',
-                    }
+                    style: { fontSize: '13px', maxWidth: '400px', boxShadow: 'px 4px 8px rgba(0, 1, 4, 0.1)', borderRadius: '8px', borderColor: 'rgba(0, 0, 0, 0.8)', marginRight: '10px' }
                 });
             }
         } catch (error) {
             console.error("Error updating note:", error);
             setError("An error occurred while updating the note.");
             toast.error('Failed to update a note', {
-                style: {
-                    fontSize: '13px',
-                    maxWidth: '400px',
-                    boxShadow: 'px 4px 8px rgba(0, 1, 4, 0.1)',
-                    borderRadius: '8px',
-                    borderColor: 'rgba(0, 0, 0, 0.8)',
-                    marginRight: '10px',
-                }
+                style: { fontSize: '13px', maxWidth: '400px', boxShadow: 'px 4px 8px rgba(0, 1, 4, 0.1)', borderRadius: '8px', borderColor: 'rgba(0, 0, 0, 0.8)', marginRight: '10px' }
             });
         }
     };
@@ -120,6 +91,36 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
         } else {
             addNewNote();
         }
+    };
+
+    // Voice recognition logic
+    const handleVoiceInput = () => {
+        const recognition = new window.webkitSpeechRecognition(); // Or use SpeechRecognition without webkit if compatible
+        recognition.lang = 'en-US'; 
+        recognition.continuous = false; 
+
+        recognition.onstart = () => {
+            setIsListening(true);
+            console.log("Voice recognition started");
+        };
+
+        recognition.onresult = (event) => {
+            const speechToText = event.results[0][0].transcript;
+            setContent(prevContent => prevContent + ' ' + speechToText);
+            setIsListening(false);
+        };
+
+        recognition.onerror = (event) => {
+            console.error("Voice recognition error:", event);
+            setIsListening(false);
+        };
+
+        recognition.onend = () => {
+            setIsListening(false);
+            console.log("Voice recognition ended");
+        };
+
+        recognition.start();
     };
 
     return (
@@ -157,10 +158,20 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
                 <TagInput tags={tags} setTags={setTags} />
             </div>
 
+            {/* Error message */}
             {error && <p className='text-red-500 mt-2'>{error}</p>}
 
+            {/* Voice input button */}
             <button
-                className='w-full items-center text-white bg-gray-800 hover:bg-gray-900 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 transition-all  dark:border-gray-700 mt-4'
+                className={`w-full items-center text-white bg-blue-500 hover:bg-blue-600 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 mb-4 mt-4 transition-all ${isListening ? 'opacity-50' : ''}`}
+                onClick={handleVoiceInput}
+                disabled={isListening}
+            >
+                {isListening ? 'Listening...' : 'Start Listening'}
+            </button>
+
+            <button
+                className='w-full items-center text-white bg-gray-800 hover:bg-gray-900 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 transition-all dark:border-gray-700 mt-4'
                 onClick={handleSaveNote}
             >
                 {type === 'edit' ? 'Update Note' : 'Add Note'}
