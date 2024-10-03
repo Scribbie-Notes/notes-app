@@ -13,6 +13,8 @@ const Feedback = require("./models/feedbackModel");
 const { OAuth2Client } = require("google-auth-library");
 const multer = require("multer");
 const { HTTP_STATUS, MESSAGES, ERROR_MESSAGES } = require("./utils/const");
+const bcrypt = require('bcrypt');
+
 
 
 const envPath =
@@ -54,6 +56,7 @@ app.get("/", (req, res) => {
 
 // Create Account
 app.post("/create-account", async (req, res) => {
+ try{
   const { fullName, email, password } = req.body;
 
   // fullname validations
@@ -96,8 +99,11 @@ app.post("/create-account", async (req, res) => {
   if (isUser) {
     return res.json({ error: true, message: ERROR_MESSAGES.USER_ALREADY_EXISTS });
   }
-
-  const user = new User({ fullName, email, password });
+  
+  // hashing password
+  const hashedPassword = await bcrypt.hash(password,10)
+  
+  const user = new User({ fullName, email, password:hashedPassword });
   await user.save();
 
   const accessToken = jwt.sign({ user }, process.env.ACCESS_TOKEN_SECRET, {
@@ -109,34 +115,55 @@ app.post("/create-account", async (req, res) => {
     user,
     accessToken,
     message: MESSAGES.USER_REGISTERED_SUCCESSFULLY,
-  });
-});
+  })
+}catch(err){
+  console.log({err})
+  return res.status(500).json({
+    error: true,
+    message: err,
+  }) 
+}
+}
+);
 
 // Login
 app.post("/login", async (req, res) => {
-  const { email, password } = req.body;
-  
-  if (!email || !password) {
-    return res.status(HTTP_STATUS.BAD_REQUEST).json({ message: ERROR_MESSAGES.EMAIL_PASSWORD_REQUIRED });
-  }
+  try{
+    const { email, password } = req.body;
+    
+    if (!email || !password) {
+      return res.status(HTTP_STATUS.BAD_REQUEST).json({ message: ERROR_MESSAGES.EMAIL_PASSWORD_REQUIRED });
+    }
 
-  const userInfo = await User.findOne({ email });
+    const userInfo = await User.findOne({ email });
 
-  if (!userInfo || userInfo.password !== password) {
-    return res.status(HTTP_STATUS.BAD_REQUEST).json({ message: ERROR_MESSAGES.INVALID_CREDENTIALS });
-  }
+    // checking if email is valid
+    if(!userInfo){
+      return res.status(HTTP_STATUS.BAD_REQUEST).json({ message: ERROR_MESSAGES.INVALID_CREDENTIALS });
+    }
 
-  const user = { user: userInfo };
-  const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
-    expiresIn: "36000m",
-  });
+    // checking if password is correct
+    const isPasswordCorrect = await bcrypt.compare(password,userInfo.password)
+    if(!isPasswordCorrect){
+      return res.status(HTTP_STATUS.BAD_REQUEST).json({ message: ERROR_MESSAGES.INVALID_CREDENTIALS });
+    }
 
-  return res.json({
-    error: false,
-    message: MESSAGES.LOGIN_SUCCESSFUL,
-    user: userInfo,
-    accessToken,
-  });
+    const user = { user: userInfo };
+    const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
+      expiresIn: "36000m",
+    });
+    
+    return res.json({
+      error: false,
+      message: MESSAGES.LOGIN_SUCCESSFUL,
+      user: userInfo,
+      accessToken,
+  })
+  }catch(err){
+    console.log({err})
+    return res.status(500).json({ error: true,message: err})
+}
+
 });
 
 // Protected Routes
