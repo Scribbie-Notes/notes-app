@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../../components/Navbar";
 import { Link, useNavigate } from "react-router-dom";
-import { validateEmail , validateName ,validatePassword } from "../../utils/helper";
+import {
+  validateEmail,
+  validateName,
+  validatePassword,
+} from "../../utils/helper";
 import axiosInstance from "../../utils/axiosInstance";
 import toast from "react-hot-toast";
 import { FaRegEye } from "react-icons/fa";
@@ -16,14 +20,14 @@ const Signup = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
-  const [loading,setLoading]= useState(false)
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   const navigate = useNavigate();
 
   const responseMsg = async (response) => {
     try {
-      setLoading(true)
+      setLoading(true);
       const token = response.credential;
       const res = await axiosInstance.post("/google-auth", { token });
 
@@ -69,7 +73,7 @@ const Signup = () => {
         },
       });
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
   };
 
@@ -79,9 +83,9 @@ const Signup = () => {
 
   const handleSignup = async (e) => {
     e.preventDefault();
-    
+
     // validation for name
-    const nameValidation = validateName(name)
+    const nameValidation = validateName(name);
     if (!nameValidation.valid) {
       toast.error(`${nameValidation.error}`, {
         style: {
@@ -98,7 +102,7 @@ const Signup = () => {
     }
 
     // validations for email
-    const emailValidation = validateEmail(email)
+    const emailValidation = validateEmail(email);
     if (!emailValidation.valid) {
       toast.error(`${emailValidation.error}`, {
         style: {
@@ -114,8 +118,8 @@ const Signup = () => {
       return;
     }
 
-    // valiations for password 
-    const passwordValidation = validatePassword(password)
+    // valiations for password
+    const passwordValidation = validatePassword(password);
     if (!passwordValidation.valid) {
       toast.error(`${passwordValidation.error}`, {
         style: {
@@ -400,12 +404,12 @@ const Signup = () => {
                       type="submit"
                     >
                       {loading ? (
-                      <span className="gap-x-2 flex justify-center items-center">
-                        <CircularLoader /> Creating
-                      </span>
-                    ) : (
-                      "Create an account"
-                    )}
+                        <span className="gap-x-2 flex justify-center items-center">
+                          <CircularLoader /> Creating
+                        </span>
+                      ) : (
+                        "Create an account"
+                      )}
                     </button>
 
                     {/* <div className="mb-2 sm:text-sm text-gray-500 sm:mt-0">

@@ -1,8 +1,10 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import Footer from "./sticky_footer/Footer";
+import MainFooter from "./MainFooter";
 
-const Footer = () => {
+const StickyFooter = () => {
   return (
+<<<<<<< HEAD
     <div className="bg-gradient-to-b from-white to-gray-100 dark:from-gray-800 dark:to-gray-900 border-t border-gray-300 dark:border-gray-600">
         <footer>
             <div className="mx-auto max-w-5xl px-4 py-16 sm:px-6 lg:px-8">
@@ -75,9 +77,13 @@ const Footer = () => {
                 </ul>
             </div>
         </footer>
+=======
+    <div>
+      <Footer />
+>>>>>>> main
     </div>
 );
 
 };
 
-export default Footer;
+export default StickyFooter;
