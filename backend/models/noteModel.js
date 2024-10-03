@@ -8,6 +8,7 @@ const noteSchema = new Schema({
     tags: { type: [String], default: [] }, // Ensure this is an array
     isPinned: { type: Boolean, required: false },
     userId: { type: String, required: true },
+    attachments: { type: [String], default: [] },
     createdOn: { type: Date, default: Date.now }
 });
 
