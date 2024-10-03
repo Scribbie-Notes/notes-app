@@ -1,5 +1,3 @@
-export default EmptyCard
-
 import React from "react";
 
 const EmptyCard = ({ imgSrc, message }) => {
