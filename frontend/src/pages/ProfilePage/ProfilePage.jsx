@@ -8,6 +8,12 @@ import { toast } from "react-hot-toast";
 import axiosInstance from "../../utils/axiosInstance";
 import { useNavigate } from "react-router-dom";
 
+const validatePhoneNumber = (phoneNumber) => {
+  const regex = /^[6-9]\d{9}$/;
+  return regex.test(phoneNumber);
+}
+
+
 const ProfilePage = () => {
   let initialUser = null;
   const storedUser = localStorage.getItem("user");
@@ -162,6 +168,18 @@ const ProfilePage = () => {
 
   const handlePhoneModalSave = async () => {
     try {
+      if(!validatePhoneNumber(newPhone)){
+        return  toast.error("Invalid phone number", {
+          style: {
+            fontSize: "13px",
+            maxWidth: "400px",
+            boxShadow: "4px 4px 8px rgba(0, 1, 4, 0.1)",
+            borderRadius: "8px",
+            borderColor: "rgba(0, 0, 0, 0.8)",
+            marginRight: "10px",
+          },
+        });
+      }
       console.log("New phone to update:", newPhone);
       const response = await axiosInstance.put(`/update-phone`, {
         newPhone,
