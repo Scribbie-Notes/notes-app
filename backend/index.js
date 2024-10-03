@@ -8,8 +8,8 @@ const envPath =
   process.env.NODE_ENV === "production" ? ".env.production" : ".env";
 dotenv.config({ path: path.resolve(__dirname, envPath) });
 
-const { ACCESS_TOKEN_SECRET, MONGO_URI } = process.env;
-// const client = new OAuth2Client(GOOGLE_API_TOKEN);
+const { ACCESS_TOKEN_SECRET, MONGO_URI, GOOGLE_API_TOKEN } = process.env;
+const client = new OAuth2Client(GOOGLE_API_TOKEN);
 
 // Use cors middleware before defining any routes
 const allowedOrigins =
@@ -575,47 +575,47 @@ app.put(
 );
 
 //google oauth
-// app.post("/google-auth", async (req, res) => {
-//   const { token } = req.body;
+app.post("/google-auth", async (req, res) => {
+  const { token } = req.body;
 
-//   try {
-//     const ticket = await client.verifyIdToken({
-//       idToken: token,
-//       audience: process.env.GOOGLE_API_TOKEN,
-//     });
+  try {
+    const ticket = await client.verifyIdToken({
+      idToken: token,
+      audience: process.env.GOOGLE_API_TOKEN,
+    });
 
-//     const payload = ticket.getPayload();
-//     const userid = payload["sub"];
-//     const email = payload["email"];
+    const payload = ticket.getPayload();
+    const userid = payload["sub"];
+    const email = payload["email"];
 
-//     let user = await User.findOne({ email });
+    let user = await User.findOne({ email });
 
-//     if (!user) {
-//       user = new User({
-//         fullName: payload["name"],
-//         email: email,
-//         password: "", // You might want to generate a random password or handle this differently
-//       });
-//       await user.save();
-//     }
+    if (!user) {
+      user = new User({
+        fullName: payload["name"],
+        email: email,
+        password: "", // You might want to generate a random password or handle this differently
+      });
+      await user.save();
+    }
 
-//     const accessToken = jwt.sign({ user }, process.env.ACCESS_TOKEN_SECRET, {
-//       expiresIn: "36000m",
-//     });
+    const accessToken = jwt.sign({ user }, process.env.ACCESS_TOKEN_SECRET, {
+      expiresIn: "36000m",
+    });
 
-//     res.json({
-//       error: false,
-//       user,
-//       accessToken,
-//       message: MESSAGES.GOOGLE_AUTH_SUCCESSFUL,
-//     });
-//   } catch (error) {
-//     console.error(error);
-//     res
-//       .status(HTTP_STATUS.BAD_REQUEST)
-//       .json({ error: true, message: ERROR_MESSAGES.INVALID_GOOGLE_TOKEN });
-//   }
-// });
+    res.json({
+      error: false,
+      user,
+      accessToken,
+      message: MESSAGES.GOOGLE_AUTH_SUCCESSFUL,
+    });
+  } catch (error) {
+    console.error(error);
+    res
+      .status(HTTP_STATUS.BAD_REQUEST)
+      .json({ error: true, message: ERROR_MESSAGES.INVALID_GOOGLE_TOKEN });
+  }
+});
 
 // feedback submit
 app.post("/submit", async (req, res) => {
