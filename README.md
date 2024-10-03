@@ -85,65 +85,16 @@ Follow these steps to get Scribbie running on your local machine:
 
 ---
 
-## 📚 Contribution Guidelines
+# 📚 Contribution Guidelines
+We welcome contributions from the community! Please see the [CONTRIBUTING.md](CONTRIBUTING.md) file for detailed guidelines.
 
-We welcome contributions from the community to enhance **Scribbie**! If you're a GSSoC contributor, follow these guidelines to ensure a smooth contribution process:
+---
 
-### 👨‍💻 **For GSSoC Contributors**
+# 🤝 Code of Conduct
+All contributors must adhere to our [CODE_OF_CONDUCT](CODE_OF_CONDUCT.md) to ensure a positive collaboration environment.
 
-1. **Get Assigned to an Issue**:  
-   Ensure that you are assigned to a GitHub issue before working on it. This prevents duplication of effort.
+---
 
-2. **Fork the Repository**:  
-   Click the "Fork" button at the top right of the repository page to create a copy of the repository under your GitHub account.
+🎉 Happy Contributing!
+Let’s work together to make Scribbie an even better tool!
 
-3. **Clone Your Fork**:  
-   Clone your forked repository to your local machine using the following command:
-   ```bash
-   git clone https://github.com/<your-username>/notes-app.git
-   ```
-   
-4. **Create a New Branch**:  
-   Create a new branch for your feature or bug fix using a descriptive name:
-   ```bash
-   git checkout -b feature-name
-   ```
-5. **Make Your Changes**:  
-   Implement your feature or fix the bug. Please follow the coding standards and add comments where necessary.
-
-6. **Write Tests**:  
-   If applicable, write tests for the new feature or bug fix to ensure everything works as expected.
-
-7. **Commit Your Changes**:  
-   Write clear and concise commit messages:
-   ```bash
-   git commit -m "Add feature or fix bug"
-   ```
-
-8. **Push Your Changes**:  
-   Push your changes to your forked repository:
-   ```bash
-   git push origin feature-name
-   ```
-
-9. **Submit a Pull Request***:
-Open a pull request (PR) to merge your changes into the main repository. Be sure to provide a detailed description of the changes you made and why they are necessary. If applicable, link the GitHub issue that your PR resolves.
-
-
-### 🍰 **General Contribution Steps**
-For non-GSSoC contributors, the process is mostly the same, except you don’t need to be assigned an issue before starting:
-
-1. Fork the Repository.
-2. Clone Your Fork.
-3. Create a New Branch.
-4. Make Your Changes.
-5. Write Tests (if applicable).
-6. Commit and Push Your Changes.
-7. Submit a Pull Request.
-   
-Please ensure that your pull request follows our contribution guidelines and that the feature or fix you’re submitting aligns with the project's goals.
-
-## 🎉 **Happy Contributing!** 🚀
-Whether you're contributing through GirlScript Summer of Code (GSSoC) or as an independent contributor, we welcome your help in making Scribbie a better tool for professionals everywhere. 
-
-#### Let’s build something great together! 🌟
