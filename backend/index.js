@@ -17,8 +17,9 @@ const { HTTP_STATUS, MESSAGES, ERROR_MESSAGES } = require("./utils/const");
 const envPath =
   process.env.NODE_ENV === "production"
     ? ".env.production"
-    : ".env.development";
+    : ".env";
 dotenv.config({ path: path.resolve(__dirname, envPath) });
+
 
 const { ACCESS_TOKEN_SECRET, MONGO_URI, GOOGLE_API_TOKEN } = process.env;
 const client = new OAuth2Client(GOOGLE_API_TOKEN);
@@ -531,8 +532,9 @@ app.post("/submit", async (req, res) => {
   }
 });
 
-app.listen(8000, () => {
-  console.log("Server is running on port 8000");
+const PORT = process.env.PORT || 5000
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
 });
 
 module.exports = app;
