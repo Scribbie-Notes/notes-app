@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
+import { FaArrowUp } from "react-icons/fa";
 
 const navLinks = [
   { link: "/about", name: "About Us" },
@@ -40,6 +42,22 @@ const NavLink = ({ link, name, external }) => (
 
 const Footer = () => {
   const [isWide, setIsWide] = useState(window.innerWidth > 640);
+  const location = useLocation();
+  const [showButton, setshowButton] = useState(false);
+
+  //check if the current page is the landing page
+  useEffect(() => {
+    if (location.pathname === "/") {
+      setshowButton(true);
+    } else {
+      setshowButton(false);
+    }
+  }, [location.pathname]);
+
+  // Scroll to top function
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
   useEffect(() => {
     const handleResize = () => setIsWide(window.innerWidth > 640);
@@ -71,6 +89,14 @@ const Footer = () => {
           Scribbie {!isWide && <br />}
         </h1>
         <p className={isWide ? "" : "mt-8"}>©2024 by Scribbie</p>
+        {showButton && (
+          <button
+            onClick={scrollToTop}
+            className="fixed bottom-[3.7rem] right-9 px-3 py-2 bg-white text-[#111828] rounded-lg border border-transparent hover:text-white hover:bg-[#111828] hover:border-white transition-colors"
+          >
+            <FaArrowUp size={25} />
+          </button>
+        )}
       </div>
     </section>
   );
