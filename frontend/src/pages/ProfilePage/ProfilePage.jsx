@@ -18,7 +18,7 @@ const ProfilePage = () => {
       console.error("Error parsing stored user", e);
     }
   }
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [user, setUser] = useState(initialUser);
   const [phone, setPhone] = useState(user?.phone || "");
   const [email, setEmail] = useState(user?.email || "");
@@ -91,15 +91,15 @@ const ProfilePage = () => {
   const AccountDeleted = () => {
     localStorage.clear();
     navigate("/signup");
-    toast.success('Account deleted successfully', {
-        style: {
-            fontSize: '13px',
-            maxWidth: '400px',
-            boxShadow: 'px 4px 8px rgba(0, 1, 4, 0.1)',
-            borderRadius: '8px',
-            borderColor: 'rgba(0, 0, 0, 0.8)',
-            marginRight: '10px',
-        }
+    toast.success("Account deleted successfully", {
+      style: {
+        fontSize: "13px",
+        maxWidth: "400px",
+        boxShadow: "px 4px 8px rgba(0, 1, 4, 0.1)",
+        borderRadius: "8px",
+        borderColor: "rgba(0, 0, 0, 0.8)",
+        marginRight: "10px",
+      },
     });
   };
   const handleEmailModalSave = async () => {
@@ -213,14 +213,14 @@ const ProfilePage = () => {
     }
   };
 
-  const handleAccountDelete = async() => {
+  const handleAccountDelete = async () => {
     // making API call
     const response = await axiosInstance.delete(`/delete-user`, {
       userId: user._id,
     });
-    if(!response.error){
-      console.log("Account deleted")
-      AccountDeleted()
+    if (!response.error) {
+      console.log("Account deleted");
+      AccountDeleted();
     }
     setIsAccountDeleteModalOpen(false);
   };
@@ -228,6 +228,8 @@ const ProfilePage = () => {
   const handleAccountDeleteModalClose = () => {
     setIsAccountDeleteModalOpen(false);
   };
+
+  console.log(user);
 
   return (
     <div className="bg-gray-50 relative">

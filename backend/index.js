@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const express = require("express");
 const cors = require("cors");
 const jwt = require("jsonwebtoken");
+const crypto = require("crypto"); // For generating secret dynamically
 const app = express();
 const fs = require("fs");
 const { authenticationToken } = require("./utilities");
@@ -20,7 +21,10 @@ const envPath =
     : ".env.development";
 dotenv.config({ path: path.resolve(__dirname, envPath) });
 
-const { ACCESS_TOKEN_SECRET, MONGO_URI, GOOGLE_API_TOKEN } = process.env;
+const ACCESS_TOKEN_SECRET = crypto.randomBytes(64).toString("hex");
+
+const { MONGO_URI, GOOGLE_API_TOKEN } = process.env;
+
 const client = new OAuth2Client(GOOGLE_API_TOKEN);
 
 // Use cors middleware before defining any routes
@@ -55,50 +59,74 @@ app.post("/create-account", async (req, res) => {
   const { fullName, email, password } = req.body;
 
   // fullname validations
-  if(!fullName || fullName.trim()===''){
-    return res.status(HTTP_STATUS.BAD_REQUEST).json({ error: true, message: ERROR_MESSAGES.NAME_REQUIRED });
+  if (!fullName || fullName.trim() === "") {
+    return res
+      .status(HTTP_STATUS.BAD_REQUEST)
+      .json({ error: true, message: ERROR_MESSAGES.NAME_REQUIRED });
   }
-  const nameRegex = /^[A-Za-z]+(?: [A-Za-z]+)*$/
-  if(!(nameRegex.test(fullName))){
-      return res.status(HTTP_STATUS.BAD_REQUEST).json({ error: true, message: ERROR_MESSAGES.INVALID_NAME_FORMAT });
+  const nameRegex = /^[A-Za-z]+(?: [A-Za-z]+)*$/;
+  if (!nameRegex.test(fullName)) {
+    return res
+      .status(HTTP_STATUS.BAD_REQUEST)
+      .json({ error: true, message: ERROR_MESSAGES.INVALID_NAME_FORMAT });
   }
 
   // email validations
-  if(!email || email.trim()===''){
-    return res.status(HTTP_STATUS.BAD_REQUEST).json({ error: true, message: ERROR_MESSAGES.EMAIL_REQUIRED });
+  if (!email || email.trim() === "") {
+    return res
+      .status(HTTP_STATUS.BAD_REQUEST)
+      .json({ error: true, message: ERROR_MESSAGES.EMAIL_REQUIRED });
   }
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if(!emailRegex.test(email)){
-      return res.status(HTTP_STATUS.BAD_REQUEST).json({ error: true, message: ERROR_MESSAGES.INVALID_EMAIL_FORMAT });
+  if (!emailRegex.test(email)) {
+    return res
+      .status(HTTP_STATUS.BAD_REQUEST)
+      .json({ error: true, message: ERROR_MESSAGES.INVALID_EMAIL_FORMAT });
   }
 
   // password validaitons
-  if(!password || password.trim()===''){
-    return res.status(HTTP_STATUS.BAD_REQUEST).json({ error: true, message: ERROR_MESSAGES.PASSWORD_REQUIRED });
-  } 
-  if(!/[A-Z]/.test(password)){
-      return res.status(HTTP_STATUS.BAD_REQUEST).json({ error: true, message: ERROR_MESSAGES.PASSWORD_UPPERCASE_REQUIRED });
+  if (!password || password.trim() === "") {
+    return res
+      .status(HTTP_STATUS.BAD_REQUEST)
+      .json({ error: true, message: ERROR_MESSAGES.PASSWORD_REQUIRED });
   }
-  if(!/[a-z]/.test(password)){
-      return res.status(HTTP_STATUS.BAD_REQUEST).json({ error: true, message: ERROR_MESSAGES.PASSWORD_LOWERCASE_REQUIRED });
+  if (!/[A-Z]/.test(password)) {
+    return res.status(HTTP_STATUS.BAD_REQUEST).json({
+      error: true,
+      message: ERROR_MESSAGES.PASSWORD_UPPERCASE_REQUIRED,
+    });
   }
-  if(!/[!"#$%&'()*+,-.:;<=>?@[\]^_`{|}~]/.test(password)){
-      return res.status(HTTP_STATUS.BAD_REQUEST).json({ error: true, message: ERROR_MESSAGES.PASSWORD_SPECIAL_CHAR_REQUIRED });
+  if (!/[a-z]/.test(password)) {
+    return res.status(HTTP_STATUS.BAD_REQUEST).json({
+      error: true,
+      message: ERROR_MESSAGES.PASSWORD_LOWERCASE_REQUIRED,
+    });
   }
-  if(!(password.length >= 8)){
-      return res.status(HTTP_STATUS.BAD_REQUEST).json({ error: true, message: ERROR_MESSAGES.PASSWORD_MIN_LENGTH });
+  if (!/[!"#$%&'()*+,-.:;<=>?@[\]^_`{|}~]/.test(password)) {
+    return res.status(HTTP_STATUS.BAD_REQUEST).json({
+      error: true,
+      message: ERROR_MESSAGES.PASSWORD_SPECIAL_CHAR_REQUIRED,
+    });
+  }
+  if (!(password.length >= 8)) {
+    return res
+      .status(HTTP_STATUS.BAD_REQUEST)
+      .json({ error: true, message: ERROR_MESSAGES.PASSWORD_MIN_LENGTH });
   }
 
   const isUser = await User.findOne({ email });
 
   if (isUser) {
-    return res.json({ error: true, message: ERROR_MESSAGES.USER_ALREADY_EXISTS });
+    return res.json({
+      error: true,
+      message: ERROR_MESSAGES.USER_ALREADY_EXISTS,
+    });
   }
 
   const user = new User({ fullName, email, password });
   await user.save();
 
-  const accessToken = jwt.sign({ user }, process.env.ACCESS_TOKEN_SECRET, {
+  const accessToken = jwt.sign({ user }, ACCESS_TOKEN_SECRET, {
     expiresIn: "36000m",
   });
 
@@ -113,19 +141,23 @@ app.post("/create-account", async (req, res) => {
 // Login
 app.post("/login", async (req, res) => {
   const { email, password } = req.body;
-  
+
   if (!email || !password) {
-    return res.status(HTTP_STATUS.BAD_REQUEST).json({ message: ERROR_MESSAGES.EMAIL_PASSWORD_REQUIRED });
+    return res
+      .status(HTTP_STATUS.BAD_REQUEST)
+      .json({ message: ERROR_MESSAGES.EMAIL_PASSWORD_REQUIRED });
   }
 
   const userInfo = await User.findOne({ email });
 
   if (!userInfo || userInfo.password !== password) {
-    return res.status(HTTP_STATUS.BAD_REQUEST).json({ message: ERROR_MESSAGES.INVALID_CREDENTIALS });
+    return res
+      .status(HTTP_STATUS.BAD_REQUEST)
+      .json({ message: ERROR_MESSAGES.INVALID_CREDENTIALS });
   }
 
   const user = { user: userInfo };
-  const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
+  const accessToken = jwt.sign(user, ACCESS_TOKEN_SECRET, {
     expiresIn: "36000m",
   });
 
@@ -181,7 +213,11 @@ app.post("/add-note", authenticationToken, async (req, res) => {
     });
     await note.save();
 
-    return res.json({ error: false, note, message: MESSAGES.NOTE_ADDED_SUCCESSFULLY });
+    return res.json({
+      error: false,
+      note,
+      message: MESSAGES.NOTE_ADDED_SUCCESSFULLY,
+    });
   } catch (error) {
     console.error("Error adding note: ", error);
     return res
@@ -207,7 +243,9 @@ app.put("/edit-note/:noteId", authenticationToken, async (req, res) => {
     const note = await Note.findOne({ _id: noteId, userId: user._id });
 
     if (!note) {
-      return res.status(HTTP_STATUS.NOT_FOUND).json({ error: true, message: ERROR_MESSAGES.NOTE_NOT_FOUND });
+      return res
+        .status(HTTP_STATUS.NOT_FOUND)
+        .json({ error: true, message: ERROR_MESSAGES.NOTE_NOT_FOUND });
     }
 
     if (title) note.title = title;
@@ -258,11 +296,16 @@ app.delete("/delete-note/:noteId", authenticationToken, async (req, res) => {
     const note = await Note.findOne({ _id: noteId, userId: user._id });
 
     if (!note) {
-      return res.status(HTTP_STATUS.NOT_FOUND).json({ error: true, message: ERROR_MESSAGES.NOTE_NOT_FOUND });
+      return res
+        .status(HTTP_STATUS.NOT_FOUND)
+        .json({ error: true, message: ERROR_MESSAGES.NOTE_NOT_FOUND });
     }
 
     await Note.deleteOne({ _id: noteId, userId: user._id });
-    return res.json({ error: false, message: MESSAGES.NOTE_DELETED_SUCCESSFULLY });
+    return res.json({
+      error: false,
+      message: MESSAGES.NOTE_DELETED_SUCCESSFULLY,
+    });
   } catch (error) {
     console.error("Error deleting note: ", error);
     return res
@@ -272,32 +315,34 @@ app.delete("/delete-note/:noteId", authenticationToken, async (req, res) => {
 });
 
 // delete user and its notes
-app.delete('/delete-user',authenticationToken,async(req,res)=>{
-  try{
+app.delete("/delete-user", authenticationToken, async (req, res) => {
+  try {
     // destructuring to get userID
-    const {user:{_id:userId}} = req.user
-    if(!userId){
-      return res.status(400).json({error:true,message:"User Id required"})
+    const {
+      user: { _id: userId },
+    } = req.user;
+    if (!userId) {
+      return res.status(400).json({ error: true, message: "User Id required" });
     }
 
     // deleting notes
     const deleteNotesResult = await Note.deleteMany({ userId });
 
     // deleting user
-    const deleteUserResult = await User.findByIdAndDelete(userId)
+    const deleteUserResult = await User.findByIdAndDelete(userId);
 
     // checking if user doesn't exist
-    if(!deleteUserResult){
+    if (!deleteUserResult) {
       return res.status(404).json({ error: true, message: "User not found " });
     }
     return res.json({ error: false, message: "User deleted successfully" });
-  }catch(error){
-    console.log("Error while deleting user",{error})
+  } catch (error) {
+    console.log("Error while deleting user", { error });
     return res
       .status(500)
       .json({ error: true, message: "Something went wrong" });
   }
-})
+});
 
 // Update isPinned
 app.put(
@@ -318,7 +363,9 @@ app.put(
       const note = await Note.findOne({ _id: noteId, userId: user._id });
 
       if (!note) {
-        return res.status(HTTP_STATUS.NOT_FOUND).json({ error: true, message: ERROR_MESSAGES.NOTE_NOT_FOUND });
+        return res
+          .status(HTTP_STATUS.NOT_FOUND)
+          .json({ error: true, message: ERROR_MESSAGES.NOTE_NOT_FOUND });
       }
 
       note.isPinned = isPinned;
@@ -379,7 +426,9 @@ app.put("/update-email", authenticationToken, async (req, res) => {
 
   if (!user) {
     console.error("User not authenticated");
-    return res.status(HTTP_STATUS.UNAUTHORIZED).json({ error: ERROR_MESSAGES.USER_NOT_AUTHENTICATED });
+    return res
+      .status(HTTP_STATUS.UNAUTHORIZED)
+      .json({ error: ERROR_MESSAGES.USER_NOT_AUTHENTICATED });
   }
 
   console.log("User ID:", user._id);
@@ -394,16 +443,21 @@ app.put("/update-email", authenticationToken, async (req, res) => {
 
     if (!updatedUser) {
       console.error("User not found");
-      return res.status(HTTP_STATUS.NOT_FOUND).json({ error: ERROR_MESSAGES.USER_NOT_FOUND });
+      return res
+        .status(HTTP_STATUS.NOT_FOUND)
+        .json({ error: ERROR_MESSAGES.USER_NOT_FOUND });
     }
 
     console.log("Email updated successfully", updatedUser);
-    return res
-      .status(HTTP_STATUS.OK)
-      .json({ message: MESSAGES.EMAIL_UPDATED_SUCCESSFULLY, user: updatedUser });
+    return res.status(HTTP_STATUS.OK).json({
+      message: MESSAGES.EMAIL_UPDATED_SUCCESSFULLY,
+      user: updatedUser,
+    });
   } catch (error) {
     console.error("Error updating email: ", error);
-    return res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({ error: ERROR_MESSAGES.INTERNAL_SERVER_ERROR });
+    return res
+      .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
+      .json({ error: ERROR_MESSAGES.INTERNAL_SERVER_ERROR });
   }
 });
 
@@ -417,12 +471,18 @@ app.put("/update-phone", async (req, res) => {
     if (user) {
       user.phone = newPhone;
       await user.save();
-      res.status(HTTP_STATUS.OK).json({ message: MESSAGES.PHONE_UPDATED_SUCCESSFULLY });
+      res
+        .status(HTTP_STATUS.OK)
+        .json({ message: MESSAGES.PHONE_UPDATED_SUCCESSFULLY });
     } else {
-      res.status(HTTP_STATUS.NOT_FOUND).json({ message: ERROR_MESSAGES.USER_NOT_FOUND });
+      res
+        .status(HTTP_STATUS.NOT_FOUND)
+        .json({ message: ERROR_MESSAGES.USER_NOT_FOUND });
     }
   } catch (error) {
-    res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({ message: ERROR_MESSAGES.INTERNAL_SERVER_ERROR, error });
+    res
+      .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
+      .json({ message: ERROR_MESSAGES.INTERNAL_SERVER_ERROR, error });
   }
 });
 
@@ -467,7 +527,9 @@ app.put(
       });
     } catch (error) {
       console.error("Error updating profile photo:", error);
-      res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({ message: ERROR_MESSAGES.INTERNAL_SERVER_ERROR });
+      res
+        .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
+        .json({ message: ERROR_MESSAGES.INTERNAL_SERVER_ERROR });
     }
   }
 );
@@ -497,7 +559,7 @@ app.post("/google-auth", async (req, res) => {
       await user.save();
     }
 
-    const accessToken = jwt.sign({ user }, process.env.ACCESS_TOKEN_SECRET, {
+    const accessToken = jwt.sign(user, ACCESS_TOKEN_SECRET, {
       expiresIn: "36000m",
     });
 
@@ -509,7 +571,9 @@ app.post("/google-auth", async (req, res) => {
     });
   } catch (error) {
     console.error(error);
-    res.status(HTTP_STATUS.BAD_REQUEST).json({ error: true, message: ERROR_MESSAGES.INVALID_GOOGLE_TOKEN });
+    res
+      .status(HTTP_STATUS.BAD_REQUEST)
+      .json({ error: true, message: ERROR_MESSAGES.INVALID_GOOGLE_TOKEN });
   }
 });
 
@@ -525,9 +589,13 @@ app.post("/submit", async (req, res) => {
     });
 
     await newFeedback.save();
-    res.status(HTTP_STATUS.CREATED).json({ message: MESSAGES.FEEDBACK_SUBMITTED_SUCCESSFULLY });
+    res
+      .status(HTTP_STATUS.CREATED)
+      .json({ message: MESSAGES.FEEDBACK_SUBMITTED_SUCCESSFULLY });
   } catch (error) {
-    res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({ message: ERROR_MESSAGES.FAILED_TO_SUBMIT_FEEDBACK, error });
+    res
+      .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
+      .json({ message: ERROR_MESSAGES.FAILED_TO_SUBMIT_FEEDBACK, error });
   }
 });
 
