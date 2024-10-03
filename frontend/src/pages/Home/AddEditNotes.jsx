@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import TagInput from '../../components/Input/TagInput';
+import AddAttachmentsnput from '../../components/Input/AddAttachmentsInput';
+
 import { MdClose } from 'react-icons/md';
 import axiosInstance from '../../utils/axiosInstance';
 import toast from 'react-hot-toast';
@@ -156,6 +158,9 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
                 <label className='font-medium md:text-base'>Tags</label>
                 <TagInput tags={tags} setTags={setTags} />
             </div>
+	    <div className='flex flex-col gap-2 mt-4'>                     <label className='font-medium md:text-base'>Add Attachments</label>          
+<AddAttachmentsnput/>
+	    </div>
 
             {error && <p className='text-red-500 mt-2'>{error}</p>}
 
