@@ -28,40 +28,44 @@ const TagInput = ({ tags, setTags }) => {
 
     return (
         <div>
-
             {tags?.length > 0 && (
-                <div className='flex items-center gap-2 flex-wrap mt- mb-2'>
+                <div className='flex items-center gap-2 flex-wrap mb-2'>
                     {tags.map((tag, index) => (
-                        <span key={index} className='flex items-center gap-2 text-sm text-slate-900 bg-slate-100 px-3 py-1 rounded'>
+                        <span 
+                            key={index} 
+                            className='flex items-center gap-2 text-sm text-slate-900 bg-slate-100 dark:text-slate-300 dark:bg-slate-700 px-3 py-1 rounded'
+                        >
                             # {tag}
                             <button onClick={() => { handleRemoveTag(tag) }}>
-                                <MdClose />
+                                <MdClose className='text-slate-500 dark:text-slate-400' />
                             </button>
                         </span>
                     ))}
                 </div>
             )}
-
+    
             <div className='flex items-center gap-4'>
                 <input
                     type="text"
                     value={inputValue}
-                    className='p-2 border rounded-md text-xs'
+                    className='p-2 border rounded-md text-xs text-slate-900 bg-white border-slate-300 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-600'
                     placeholder='Add Tags'
                     onChange={handleInputChange}
                     onKeyDown={handleKeyDown}
                 />
-
-                <button className='w-9 h-9 flex items-center transition-all rounded-xl border  text-white bg-gray-800 hover:bg-gray-900' 
-                     onClick={() => {
+    
+                <button 
+                    className='flex items-center justify-center w-9 h-9 transition-all rounded-xl border text-white bg-gray-800 hover:bg-gray-900'
+                    onClick={() => {
                         addNewTag();
                     }}
                 >
-                    <MdAdd className='text-xl text-white-700 hover:text-white ml-[8px]'/>
+                    <MdAdd className='text-xl' />
                 </button>
             </div>
         </div>
-    )
+    );
+    
 }
 
 export default TagInput

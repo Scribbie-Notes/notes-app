@@ -183,7 +183,7 @@ const Home = () => {
     }, []);
 
     return (
-        <div>
+        <div className="bg-white h-screen dark:bg-gray-900 transition-all">
             <Navbar
                 userInfo={userInfo}
                 onSearchNote={onSearchNote}
@@ -197,7 +197,7 @@ const Home = () => {
                             return (
                                 <div
                                     key={i}
-                                    className=" animate-pulse group min-h-[170px] bg-gray-200 transition-all duration-300 w-full border rounded-sm"
+                                    className="animate-pulse group min-h-[170px] bg-gray-200 dark:bg-gray-700 transition-all duration-300 w-full border rounded-sm"
                                 ></div>
                             );
                         })}
@@ -227,25 +227,25 @@ const Home = () => {
                         message={
                             isSearch
                                 ? "Oops! No notes found matching"
-                                : `Start adding notes by clicking on the "+" button. Lets get started!`
+                                : `Start adding notes by clicking on the "+" button. Let's get started!`
                         }
                     />
                 )}
             </div>
-
+    
             <button
-                className="w-16 h-16 flex items-center justify-center rounded-2xl items-center text-white bg-gray-800 hover:bg-gray-900 transition-all focus:outline-none fixed right-10 bottom-10 z-50"
+                className="w-16 h-16 flex items-center justify-center rounded-2xl items-center text-white bg-gray-800 hover:bg-gray-600 transition-all focus:outline-none fixed right-10 bottom-10 z-50"
                 onClick={() => {
                     setOpenAddEditModal({ isShown: true, type: "add", data: null });
                 }}
             >
                 <MdAdd className="text-[32px] text-white transition-all" />
             </button>
-
+    
             {openAddEditModal.isShown && (
                 <div className="fixed inset-0 flex items-center justify-center z-50">
                     <div className="absolute inset-0 bg-black opacity-50"></div>
-                    <div className="bg-white p-5 rounded-lg shadow-lg z-10 w-[90%] sm:w-[80%] md:w-[60%] lg:w-[40%] max-h-3/4 overflow-hidden">
+                    <div className="bg-white dark:bg-gray-800 p-5 rounded-lg shadow-lg z-10 w-[90%] sm:w-[80%] md:w-[60%] lg:w-[40%] max-h-3/4 overflow-hidden">
                         <AddEditNotes
                             type={openAddEditModal.type}
                             noteData={openAddEditModal.data}
@@ -255,28 +255,28 @@ const Home = () => {
                     </div>
                 </div>
             )}
-
+    
             {viewNoteModal.isShown && (
                 <div className="fixed inset-0 flex items-center justify-center z-50">
                     <div className="absolute inset-0 bg-black opacity-50"></div>
-                    <div className="relative bg-white p-5 rounded-lg shadow-lg z-10 w-[90%] sm:w-[80%] md:w-[60%] lg:w-[40%] max-h-3/4 overflow-hidden">
+                    <div className="relative bg-white dark:bg-gray-800 p-5 rounded-lg shadow-lg z-10 w-[90%] sm:w-[80%] md:w-[60%] lg:w-[40%] max-h-3/4 overflow-hidden">
                         <button
-                            className="absolute top-3 right-3 text-gray-900 transition-all bg-gray-50 hover:bg-red-100 hover:text-gray-500 focus:outline-none font-medium rounded-full text-sm px-2.5 py-2.5 text-xs"
+                            className="absolute top-3 right-3 text-gray-900 dark:text-gray-300 transition-all bg-gray-50 dark:bg-gray-700 hover:bg-red-100 hover:text-gray-500 focus:outline-none font-medium rounded-full text-sm px-2.5 py-2.5 text-xs"
                             onClick={() => setViewNoteModal({ isShown: false, data: null })}
                         >
-                            <MdClose className="text-xl text-slate-400" />
+                            <MdClose className="text-xl" />
                         </button>
                         <div className="overflow-auto">
-                            <h2 className="text-2xl font-semibold">{viewNoteModal.data.title}</h2>
-                            <span className="text-xs text-slate-500">
+                            <h2 className="text-2xl font-semibold text-gray-900 dark:text-gray-100">{viewNoteModal.data.title}</h2>
+                            <span className="text-xs text-slate-500 dark:text-gray-400">
                                 {moment(viewNoteModal.data.date).format("Do MMM YYYY")}
                             </span>
-                            <p className="text-gray-700 mt-4">{viewNoteModal.data.content}</p>
+                            <p className="text-gray-700 dark:text-gray-300 mt-4">{viewNoteModal.data.content}</p>
                             <div className="mt-4">
                                 {viewNoteModal.data.tags.map((tag, index) => (
                                     <span
                                         key={index}
-                                        className="inline-block bg-gray-100 mr-2 text-gray-800 text-xs font-medium px-1.5 py-0.5 rounded dark:bg-blue-100 dark:text-gray-800"
+                                        className="inline-block bg-gray-100 dark:bg-gray-700 mr-2 text-gray-800 dark:text-gray-200 text-xs font-medium px-1.5 py-0.5 rounded"
                                     >
                                         #{tag}
                                     </span>
@@ -286,23 +286,23 @@ const Home = () => {
                     </div>
                 </div>
             )}
-
+    
             {isDeleteModalOpen && (
                 <div className="fixed inset-0 flex items-center justify-center z-50">
                     <div className="absolute inset-0 bg-black opacity-50"></div>
-                    <div className="bg-white p-5 rounded-lg shadow-lg z-10 w-[90%] max-w-md">
-                        <h2 className="text-lg font-bold mb-4">Confirm Delete</h2>
-                        <p>Are you sure you want to delete this note?</p>
+                    <div className="bg-white dark:bg-gray-800 p-5 rounded-lg shadow-lg z-10 w-[90%] max-w-md">
+                        <h2 className="text-lg font-bold mb-4 text-gray-900 dark:text-gray-100">Confirm Delete</h2>
+                        <p className="text-gray-700 dark:text-gray-300">Are you sure you want to delete this note?</p>
                         <div className="flex justify-end gap-2 mt-4">
                             <button
                                 onClick={handleDeleteModalClose}
-                                className="inline-flex items-center text-gray-900 bg-gray-200 hover:bg-red-200 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-xs dark:bg-gray-300  border-gray-800 transition-all"
+                                className="inline-flex items-center text-gray-900 dark:text-gray-100 bg-gray-200 dark:bg-gray-700 hover:bg-red-200 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-xs transition-all"
                             >
                                 Cancel
                             </button>
                             <button
                                 onClick={deleteNote}
-                                className="inline-flex items-center text-white bg-gray-800 hover:bg-gray-900 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-xs dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-700 transition-all"
+                                className="inline-flex items-center text-white bg-gray-800 dark:bg-gray-600 hover:bg-gray-900 dark:hover:bg-gray-500 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-xs transition-all"
                             >
                                 Delete
                             </button>
@@ -312,6 +312,7 @@ const Home = () => {
             )}
         </div>
     );
+    
 };
 
 export default Home;

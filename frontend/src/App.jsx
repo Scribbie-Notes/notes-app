@@ -40,7 +40,7 @@ const App = () => {
     }, []);
 
     return (
-        <div>
+        <div className="dark:bg-gray-900">
             {loading && <Loading />}
             {user && location.pathname === "/" ? (
                 <Navigate to="/dashboard" replace />

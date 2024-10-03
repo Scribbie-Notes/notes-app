@@ -5,15 +5,15 @@ import { MdCreate, MdDelete, MdOutlinePushPin } from "react-icons/md";
 const NoteCard = ({ title, date, content, tags, isPinned, onEdit, onDelete, onPinNote, onClick }) => {
     return (
         <div
-            className="border rounded p-5 bg-white hover:bg-slate-100 cursor-pointer transition duration-300 ease-in-out"
+            className="border rounded p-5 bg-white dark:bg-gray-800 hover:bg-slate-100 dark:hover:bg-gray-700 cursor-pointer transition duration-300 ease-in-out"
             onClick={onClick}
         >
             <div className="flex items-center justify-between" title={`pin`}>
                 <div>
-                    <h6 className="text-sm font-medium">{title}</h6>
-                    <span className="text-xs text-slate-500">{moment(date).format("Do MMM YYYY")}</span>
+                    <h6 className="text-sm font-medium text-gray-900 dark:text-gray-100">{title}</h6>
+                    <span className="text-xs text-slate-500 dark:text-gray-400">{moment(date).format("Do MMM YYYY")}</span>
                 </div>
-
+    
                 <div className="relative group">
                     <MdOutlinePushPin
                         className={`icon-btn ${isPinned ? "text-primary" : "text-slate-300"}`}
@@ -35,24 +35,24 @@ const NoteCard = ({ title, date, content, tags, isPinned, onEdit, onDelete, onPi
                     overflow: "hidden",
                     textOverflow: "ellipsis",
                 }}
-                className="text-xs text-slate-600 mt-2"
+                className="text-xs text-slate-600 dark:text-gray-300 mt-2"
             >
                 {content}
             </p>
-
+    
             <div className="flex items-center justify-between mt-3 mb-[-8px]">
                 <div className="flex flex-wrap gap-1">
                     {tags.length > 0 &&
                         tags.map((tag, index) => (
                             <span
                                 key={index}
-                                className="bg-gray-100 text-gray-800 text-xs font-medium px-1.5 py-0.5 rounded dark:bg-blue-100 dark:text-gray-800"
+                                className="bg-gray-100 text-gray-800 text-xs font-medium px-1.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-200"
                             >
                                 #{tag}
                             </span>
                         ))}
                 </div>
-
+    
                 <div className="flex items-center gap-2">
                     <div className="relative group">
                         <MdCreate
@@ -62,12 +62,12 @@ const NoteCard = ({ title, date, content, tags, isPinned, onEdit, onDelete, onPi
                                 onEdit();
                             }}
                         />
-
+    
                         <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 hidden group-hover:flex items-center justify-center bg-black text-white text-xs rounded px-2 py-1">
                             {"Edit Note"}
                         </div>
                     </div>
-
+    
                     <div className="relative group">
                         <MdDelete
                             className="icon-btn hover:text-red-400 cursor-pointer transition-all"
@@ -76,7 +76,7 @@ const NoteCard = ({ title, date, content, tags, isPinned, onEdit, onDelete, onPi
                                 onDelete();
                             }}
                         />
-
+    
                         <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 hidden group-hover:flex items-center justify-center bg-black text-white text-xs rounded px-2 py-1">
                             {"Delete Note"}
                         </div>
@@ -85,6 +85,7 @@ const NoteCard = ({ title, date, content, tags, isPinned, onEdit, onDelete, onPi
             </div>
         </div>
     );
+    
 };
 
 NoteCard.propTypes = {

@@ -7,6 +7,7 @@ import { IoMdArrowRoundBack } from "react-icons/io";
 import { toast } from "react-hot-toast";
 import axiosInstance from "../../utils/axiosInstance";
 import { useNavigate } from "react-router-dom";
+import { useTheme } from "../../contexts/ThemeContext";
 
 const ProfilePage = () => {
   let initialUser = null;
@@ -30,6 +31,13 @@ const ProfilePage = () => {
   const [isHovered, setIsHovered] = useState(false);
   const [isAccountDeleteModalOpen, setIsAccountDeleteModalOpen] =
     useState(false);
+
+  const {theme,setTheme}=  useTheme()
+  console.log({theme})
+
+  function toggleTheme(){
+    setTheme(theme =>  theme==='light'?'dark':"light")
+  }
 
   const handlePhotoUpload = async (e) => {
     const file = e.target.files[0];
@@ -230,275 +238,260 @@ const ProfilePage = () => {
   };
 
   return (
-    <div className="bg-gray-50 relative">
-      <Navbar userInfo={user} />
-      <Link to="/dashboard">
-        <div className="p-5">
-          <button className="inline-flex items-center text-white bg-gray-800 hover:bg-gray-900 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-700">
-            <IoMdArrowRoundBack />
-          </button>
-        </div>
-      </Link>
-      <div className="flex">
-        <div className="container items-center justify-center px-4 pb-28">
-          <div>
-            <div className="bg-white relative shadow rounded-lg w-full md:w-5/6 lg:w-4/6 xl:w-3/6 mx-auto mt-12">
-              <div className="flex justify-center">
-                <div
-                  className="flex items-center justify-center p-3 rounded-full text-slate-950 font-medium bg-gray-50 cursor-pointer mx-auto absolute -top-16 md:-top-20 w-24 md:w-32 h-24 md:h-32 shadow-md border-4 border-white transition duration-200 transform hover:scale-110 text-3xl md:text-4xl"
-                  onMouseEnter={() => setIsHovered(true)}
-                  onMouseLeave={() => setIsHovered(false)}
-                  onClick={() => document.getElementById("fileInput").click()}
-                >
-                  {profilePhoto ? (
-                    <img
-                      src={`http://localhost:8000${profilePhoto}`}
-                      className="w-full h-full rounded-full object-cover"
-                    />
-                  ) : (
-                    getInitials(user?.fullName || "")
-                  )}
-                  {isHovered && (
-                    <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-30 text-white text-[10px] rounded-full">
-                      Add Profile Image
-                    </div>
-                  )}
-                </div>
-                <input
-                  id="fileInput"
-                  type="file"
-                  accept="image/*"
-                  style={{ display: "none" }}
-                  onChange={handlePhotoUpload}
+    <div className="bg-gray-50 dark:bg-gray-900 relative">
+  <Navbar userInfo={user} />
+  <Link to="/dashboard">
+    <div className="p-5">
+      <button className="inline-flex items-center text-white bg-gray-800 hover:bg-gray-900 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-700 dark:hover:bg-gray-600">
+        <IoMdArrowRoundBack />
+      </button>
+    </div>
+  </Link>
+  <div className="flex">
+    <div className="container items-center justify-center px-4 pb-28">
+      <div>
+        <div className="bg-white dark:bg-gray-800 relative shadow rounded-lg w-full md:w-5/6 lg:w-4/6 xl:w-3/6 mx-auto mt-12">
+          <div className="flex justify-center">
+            <div
+              className="flex items-center justify-center p-3 rounded-full text-slate-950 dark:text-slate-200 font-medium bg-gray-50 dark:bg-gray-700 cursor-pointer mx-auto absolute -top-16 md:-top-20 w-24 md:w-32 h-24 md:h-32 shadow-md border-4 border-white transition duration-200 transform hover:scale-110 text-3xl md:text-4xl"
+              onMouseEnter={() => setIsHovered(true)}
+              onMouseLeave={() => setIsHovered(false)}
+              onClick={() => document.getElementById("fileInput").click()}
+            >
+              {profilePhoto ? (
+                <img
+                  src={`http://localhost:8000${profilePhoto}`}
+                  className="w-full h-full rounded-full object-cover"
                 />
-                {/* {profilePhoto && (
-                  <img src={`http://localhost:8000${profilePhoto}`} />
-                )} */}
-              </div>
+              ) : (
+                getInitials(user?.fullName || "")
+              )}
+              {isHovered && (
+                <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-30 text-white text-[10px] rounded-full">
+                  Add Profile Image
+                </div>
+              )}
+            </div>
+            <input
+              id="fileInput"
+              type="file"
+              accept="image/*"
+              style={{ display: "none" }}
+              onChange={handlePhotoUpload}
+            />
+          </div>
 
-              <div className="mt-16">
-                {user && (
-                  <>
-                    <h1 className="font-bold text-center text-3xl text-gray-900">
-                      {user.fullName}
-                    </h1>
-                    <p className="text-center text-sm mt-2 text-gray-400 font-medium">
-                      {email}
-                    </p>
-                  </>
-                )}
-                <p>
-                  <span></span>
+          <div className="mt-16">
+            {user && (
+              <>
+                <h1 className="font-bold text-center text-3xl text-gray-900 dark:text-gray-100">
+                  {user.fullName}
+                </h1>
+                <p className="text-center text-sm mt-2 text-gray-400 dark:text-gray-300 font-medium">
+                  {email}
+                </p>
+              </>
+            )}
+            <p>
+              <span></span>
+            </p>
+
+            {/* My Account */}
+            <div className="w-full">
+              <h3 className="font-medium text-xl mt-8 pb-3 text-gray-900 dark:text-gray-100 text-center px-2">
+                My Account
+              </h3>
+              <div className="w-full flex flex-col items-center overflow-hidden text-sm">
+                <p className="w-full border-t border-gray-100 dark:border-gray-700 text-gray-600 dark:text-gray-300 py-4 pl-6 pr-3 w-full block hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-150">
+                  {user?.fullName || "User Name"}
                 </p>
 
-                {/* My Account */}
-                <div className="w-full">
-                  <h3 className="font-medium text-xl mt-8 pb-3 text-gray-900 text-center px-2">
-                    My Account
-                  </h3>
-                  <div className="w-full flex flex-col items-center overflow-hidden text-sm">
-                    <p className="w-full border-t border-gray-100 text-gray-600 py-4 pl-6 pr-3 w-full block hover:bg-gray-100 transition duration-150">
-                      {user?.fullName || "User Name"}
-                    </p>
+                <div className="flex justify-between items-center w-full border-t border-gray-100 dark:border-gray-700 text-gray-600 dark:text-gray-300 py-1 pl-6 pr-3 hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-150">
+                  <p>{email || "User Email"}</p>
+                  <button
+                    onClick={handleEmailChangeClick}
+                    className="inline-flex items-center text-white bg-gray-800 hover:bg-gray-900 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 mt-2 mb-2 text-xs dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600"
+                  >
+                    Change Email
+                  </button>
+                </div>
 
-                    <div className="flex justify-between items-center w-full border-t border-gray-100 text-gray-600 py-1 pl-6 pr-3 hover:bg-gray-100 transition duration-150">
-                      <p>{email || "User Email"}</p>
-                      <button
-                        onClick={handleEmailChangeClick}
-                        className="inline-flex items-center text-white bg-gray-800 hover:bg-gray-900 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 mt-2 mb-2 text-xs dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-700"
-                      >
-                        Change Email
-                      </button>
+                {/* Modal for email  */}
+                {isEmailModalOpen && (
+                  <div className="fixed inset-0 flex items-center justify-center z-50">
+                    <div className="absolute inset-0 bg-black opacity-50"></div>
+                    <div className="bg-white dark:bg-gray-800 p-5 rounded-lg shadow-lg z-10 w-[90%] max-w-md">
+                      <h2 className="text-xl font-bold mb-4 dark:text-gray-100">
+                        Enter Email
+                      </h2>
+                      <input
+                        type="text"
+                        value={newEmail}
+                        onChange={(e) => setNewEmail(e.target.value)}
+                        className="w-full p-2 mb-4 border rounded dark:bg-gray-700 dark:text-gray-200"
+                        placeholder="Email"
+                      />
+                      <div className="flex justify-end space-x-2">
+                        <button
+                          onClick={handleEmailModalClose}
+                          className="inline-flex items-center text-gray-900 bg-gray-200 hover:bg-red-200 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-xs dark:bg-gray-300 dark:text-gray-900 dark:hover:bg-red-400 transition-all"
+                        >
+                          Cancel
+                        </button>
+                        <button
+                          onClick={handleEmailModalSave}
+                          className="inline-flex items-center text-white bg-gray-800 hover:bg-gray-900 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-xs dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 transition-all"
+                        >
+                          Save
+                        </button>
+                      </div>
                     </div>
+                  </div>
+                )}
 
-                    {/* Modal for email  */}
-                    {isEmailModalOpen && (
-                      <div className="fixed inset-0 flex items-center justify-center z-50">
-                        <div className="absolute inset-0 bg-black opacity-50"></div>
-                        <div className="bg-white p-5 rounded-lg shadow-lg z-10 w-[90%] max-w-md">
-                          <h2 className="text-xl font-bold mb-4">
-                            Enter Email
-                          </h2>
-                          <input
-                            type="text"
-                            value={newEmail}
-                            onChange={(e) => setNewEmail(e.target.value)}
-                            className="w-full p-2 mb-4 border rounded"
-                            placeholder="Email"
-                          />
-                          <div className="flex justify-end space-x-2">
-                            <button
-                              onClick={handleEmailModalClose}
-                              className="inline-flex items-center text-gray-900 bg-gray-200 hover:bg-red-200 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-xs dark:bg-gray-300  border-gray-800 transition-all"
-                            >
-                              Cancel
-                            </button>
-                            <button
-                              onClick={handleEmailModalSave}
-                              className="inline-flex items-center text-white bg-gray-800 hover:bg-gray-900 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-xs dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-700 transition-all"
-                            >
-                              Save
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    )}
+                <p className="flex justify-between items-center w-full border-t border-gray-100 dark:border-gray-700 text-gray-600 dark:text-gray-300 py-1 pl-6 pr-3 hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-150">
+                  {user?.phone || "User Phone"}
+                  <button
+                    onClick={handlePhoneChangeClick}
+                    className="inline-flex items-center text-white bg-gray-800 hover:bg-gray-900 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 mt-2 mb-2 text-xs dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600"
+                  >
+                    Change Phone
+                  </button>
+                </p>
 
-                    <p className="flex justify-between items-center w-full border-t border-gray-100 text-gray-600 py-1 pl-6 pr-3 hover:bg-gray-100 transition duration-150">
-                      {user?.phone || "User Phone"}
-                      <button
-                        onClick={handlePhoneChangeClick}
-                        className="inline-flex items-center text-white bg-gray-800 hover:bg-gray-900 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 mt-2 mb-2 text-xs dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-700"
-                      >
+                {/* Modal for phone number  */}
+                {isPhoneModalOpen && (
+                  <div className="fixed inset-0 flex items-center justify-center z-50">
+                    <div className="absolute inset-0 bg-black opacity-50"></div>
+                    <div className="bg-white dark:bg-gray-800 p-5 rounded-lg shadow-lg z-10 w-[90%] max-w-md">
+                      <h3 className="text-lg font-semibold mb-4 dark:text-gray-100">
                         Change Phone
-                      </button>
-                    </p>
+                      </h3>
+                      <input
+                        type="tel"
+                        value={newPhone}
+                        onChange={(e) => setNewPhone(e.target.value)}
+                        placeholder="Enter new phone number"
+                        className="w-full px-3 py-2 mb-4 border rounded-lg dark:bg-gray-700 dark:text-gray-200"
+                      />
+                      <div className="flex justify-end space-x-2">
+                        <button
+                          className="inline-flex items-center text-gray-900 bg-gray-200 hover:bg-red-200 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-xs dark:bg-gray-300 dark:text-gray-900 dark:hover:bg-red-400 transition-all"
+                          onClick={handlePhoneModalClose}
+                        >
+                          Cancel
+                        </button>
+                        <button
+                          className="inline-flex items-center text-white bg-gray-800 hover:bg-gray-900 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-xs dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 transition-all"
+                          onClick={handlePhoneModalSave}
+                        >
+                          Save
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
 
-                    {/* Modal for phone number  */}
-                    {isPhoneModalOpen && (
-                      <div className="fixed inset-0 flex items-center justify-center z-50">
-                        <div className="absolute inset-0 bg-black opacity-50"></div>
-                        <div className="bg-white p-5 rounded-lg shadow-lg z-10 w-[90%] max-w-md">
-                          <h3 className="text-lg font-semibold mb-4">
-                            Change Phone
-                          </h3>
-                          <input
-                            type="tel"
-                            value={newPhone}
-                            onChange={(e) => setNewPhone(e.target.value)}
-                            placeholder="Enter new phone number"
-                            className="w-full px-3 py-2 mb-4 border rounded-lg"
-                          />
-                          <div className="flex justify-end space-x-2">
-                            <button
-                              className="inline-flex items-center text-gray-900 bg-gray-200 hover:bg-red-200 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-xs dark:bg-gray-300  border-gray-800 transition-all"
-                              onClick={handlePhoneModalClose}
-                            >
-                              Cancel
-                            </button>
-                            <button
-                              className="inline-flex items-center text-white bg-gray-800 hover:bg-gray-900 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-xs dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-700 transition-all"
-                              onClick={handlePhoneModalSave}
-                            >
-                              Save
-                            </button>
-                          </div>
+                <h3 className="font-medium text-xl mt-8 pb-3 text-gray-900 dark:text-gray-100 text-center px-2">
+                  My Settings
+                </h3>
+                <div className="w-full flex flex-col items-center overflow-hidden text-sm">
+                  <p className="flex justify-between items-center w-full border-t border-gray-100 dark:border-gray-700 text-gray-600 dark:text-gray-300 py-1 pl-6 pr-3 hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-150">
+                    Allow Notifications
+                    <label className="inline-flex p-3 items-center cursor-pointer">
+                      <input
+                        type="checkbox"
+                        value=""
+                        className="sr-only peer"
+                      />
+                      <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                    </label>
+                  </p>
+
+                  <p className="flex justify-between items-center w-full border-t border-gray-100 dark:border-gray-700 text-gray-600 dark:text-gray-300 py-1 pl-6 pr-3 hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-150">
+                    Dark Mode
+                    <label className="inline-flex p-3 items-center cursor-pointer">
+                      <input
+                        type="checkbox"
+                        value=""
+                        defaultChecked={theme === 'dark'}
+                        className="sr-only peer"
+                        onClick={toggleTheme}
+                      />
+                      <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                    </label>
+                  </p>
+
+                  <p className="flex justify-between items-center w-full border-t border-gray-100 dark:border-gray-700 text-gray-600 dark:text-gray-300 py-1 pl-6 pr-3 hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-150">
+                    2-step verification
+                    <label className="inline-flex p-3 items-center cursor-pointer">
+                      <input
+                        type="checkbox"
+                        value=""
+                        className="sr-only peer"
+                      />
+                      <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                    </label>
+                  </p>
+
+                  <p className="flex justify-between items-center w-full border-t border-gray-100 dark:border-gray-700 text-gray-600 dark:text-gray-300 py-1 pl-6 pr-3 hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-150">
+                    Set timezone automatically using your location
+                    <label className="inline-flex p-3 items-center cursor-pointer">
+                      <input
+                        type="checkbox"
+                        value=""
+                        className="sr-only peer"
+                      />
+                      <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                    </label>
+                  </p>
+
+                  <p
+                    className="w-full border-t text-red-500 border cursor-pointer border-gray-100 dark:border-gray-700 text-gray-600 dark:text-gray-300 py-4 pl-6 pr-3 w-full block hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-150"
+                    onClick={() => setIsAccountDeleteModalOpen(true)}
+                  >
+                    Delete my account
+                  </p>
+
+                  {/* Delete Account Confirmation Modal */}
+                  {isAccountDeleteModalOpen && (
+                    <div className="fixed inset-0 flex items-center justify-center z-50">
+                      <div className="absolute inset-0 bg-black opacity-50"></div>
+                      <div className="bg-white dark:bg-gray-800 p-5 rounded-lg shadow-lg z-10 w-[90%] max-w-md">
+                        <h2 className="text-lg font-semibold mb-4 dark:text-gray-100">
+                          Confirm Delete
+                        </h2>
+                        <p className="mb-4 dark:text-gray-300">
+                          Are you sure you want to delete your account?
+                        </p>
+                        <div className="flex justify-end gap-2 mt-4">
+                          <button
+                            onClick={handleAccountDeleteModalClose}
+                            className="inline-flex items-center text-gray-900 bg-gray-200 hover:bg-red-200 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-xs dark:bg-gray-300 dark:text-gray-900 dark:hover:bg-red-400 transition-all"
+                          >
+                            Cancel
+                          </button>
+                          <button
+                            onClick={handleAccountDelete}
+                            className="inline-flex items-center text-white bg-gray-800 hover:bg-gray-900 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-xs dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 transition-all"
+                          >
+                            Delete
+                          </button>
                         </div>
                       </div>
-                    )}
-
-                    {/* <p className="w-full  border-t border-gray-100 text-gray-600 py-4 pl-6 pr-3 w-full block hover:bg-gray-100 transition duration-150">
-                      Connect with:
-                      <div className="flex pt-3 justify-between items-center gap-6 px-2 ">
-                        <a className="text-gray-800  bg-gray-300  border border-gray-300 hover:text-gray-900 hover:bg-gray-100 rounded-md cursor-pointer transition duration-150 ease-in font-medium text-xs text-center w-full py-3">
-                          Instagram
-                        </a>
-                        <a className="text-gray-800  bg-gray-300  border border-gray-300 hover:text-gray-900 hover:bg-gray-100 rounded-md cursor-pointer transition duration-150 ease-in font-medium text-xs text-center w-full py-3">
-                          Twitter
-                        </a>
-                        <a className="text-gray-800  bg-gray-300  border border-gray-300 hover:text-gray-900 hover:bg-gray-100    rounded-md cursor-pointer transition duration-150 ease-in font-medium text-xs text-center w-full py-3">
-                          Email
-                        </a>
-                      </div>
-                    </p> */}
-                  </div>
-
-                  {/* My Settings  */}
-                  <h3 className="font-medium text-xl  mt-8 pb-3 text-gray-900 text-center px-2">
-                    My Settings
-                  </h3>
-                  <div className="w-full flex flex-col items-center overflow-hidden text-sm">
-                    <p className="flex justify-between items-center w-full border-t border-gray-100 text-gray-600 py-1 pl-6 pr-3 hover:bg-gray-100 transition duration-150">
-                      Allow Notifications
-                      <label className="inline-flex p-3 items-center cursor-pointer">
-                        <input
-                          type="checkbox"
-                          value=""
-                          className="sr-only peer"
-                        />
-                        <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
-                      </label>
-                    </p>
-
-                    <p className="flex justify-between items-center w-full border-t border-gray-100 text-gray-600 py-1 pl-6 pr-3 hover:bg-gray-100 transition duration-150">
-                      Dark Mode
-                      <label className="inline-flex p-3 items-center cursor-pointer">
-                        <input
-                          type="checkbox"
-                          value=""
-                          className="sr-only peer"
-                        />
-                        <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
-                      </label>
-                    </p>
-
-                    <p className="flex justify-between items-center w-full border-t border-gray-100 text-gray-600 py-1 pl-6 pr-3 hover:bg-gray-100 transition duration-150">
-                      2-step verification
-                      <label className="inline-flex p-3 items-center cursor-pointer">
-                        <input
-                          type="checkbox"
-                          value=""
-                          className="sr-only peer"
-                        />
-                        <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
-                      </label>
-                    </p>
-                    <p className="flex justify-between items-center w-full border-t border-gray-100 text-gray-600 py-1 pl-6 pr-3 hover:bg-gray-100 transition duration-150">
-                      Set timezone automatically using your location
-                      <label className="inline-flex p-3 items-center cursor-pointer">
-                        <input
-                          type="checkbox"
-                          value=""
-                          className="sr-only peer"
-                        />
-                        <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
-                      </label>
-                    </p>
-
-                    <p
-                      className="w-full border-t text-red-500 border cursor-pointer border-gray-100 text-gray-600 py-4 pl-6 pr-3 w-full block hover:bg-gray-100 transition duration-150"
-                      onClick={() => setIsAccountDeleteModalOpen(true)}
-                    >
-                      Delete my account
-                    </p>
-
-                    {/* Delete Account Confirmation Modal */}
-                    {isAccountDeleteModalOpen && (
-                      <div className="fixed inset-0 flex items-center justify-center z-50">
-                        <div className="absolute inset-0 bg-black opacity-50"></div>
-                        <div className="bg-white p-5 rounded-lg shadow-lg z-10 w-[90%] max-w-md">
-                          <h2 className="text-lg font-semibold mb-4">
-                            Confirm Delete
-                          </h2>
-                          <p className="mb-4">
-                            Are you sure you want to delete your account?
-                          </p>
-                          <div className="flex justify-end gap-2 mt-4">
-                            <button
-                              onClick={handleAccountDeleteModalClose}
-                              className="inline-flex items-center text-gray-900 bg-gray-200 hover:bg-red-200 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-xs dark:bg-gray-300  border-gray-800 transition-all"
-                            >
-                              Cancel
-                            </button>
-                            <button
-                              onClick={handleAccountDelete}
-                              className="inline-flex items-center text-white bg-gray-800 hover:bg-gray-900 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-xs dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-700 transition-all"
-                            >
-                              Delete
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                  </div>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <Footer className="mt-10" />
     </div>
+  </div>
+  <Footer className="mt-10" />
+</div>
+
   );
 };
 
