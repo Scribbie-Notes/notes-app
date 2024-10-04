@@ -160,9 +160,33 @@ app.get("/get-user", authenticationToken, async (req, res) => {
       .json({ error: true, message: ERROR_MESSAGES.INTERNAL_SERVER_ERROR });
   }
 });
+// configure multer for file uploads
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    const uploadPath = path.join(__dirname, "uploads");
+    if (!fs.existsSync(uploadPath)) {
+      fs.mkdirSync(uploadPath);
+    }
+    cb(null, uploadPath);
+  },
+  filename: (req, file, cb) => {
+    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+    cb(
+      null,
+      file.fieldname + "-" + uniqueSuffix + path.extname(file.originalname)
+    );
+  },
+});
 
-// Add note
-app.post("/add-note", authenticationToken, async (req, res) => {
+const upload = multer({ storage: storage });
+
+// Serve static files from the 'uploads' directory
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+
+const uploadMultiple = multer({ storage: storage }).array('attachments', 10); 
+
+// Add note with multiple file uploads
+app.post("/add-note", authenticationToken, uploadMultiple, async (req, res) => {
   const { title, content, tags } = req.body;
   const { user } = req.user;
 
@@ -173,11 +197,14 @@ app.post("/add-note", authenticationToken, async (req, res) => {
   }
 
   try {
+    const attachmentPaths = req.files.map(file => `/uploads/${file.filename}`);
+
     const note = new Note({
       title,
       content,
       tags: tags || [],
       userId: user._id,
+      attachments: attachmentPaths, // Save paths of uploaded files
     });
     await note.save();
 
@@ -398,28 +425,6 @@ app.put("/update-phone", async (req, res) => {
   }
 });
 
-// configure multer for file uploads
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    const uploadPath = path.join(__dirname, "uploads");
-    if (!fs.existsSync(uploadPath)) {
-      fs.mkdirSync(uploadPath);
-    }
-    cb(null, uploadPath);
-  },
-  filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-    cb(
-      null,
-      file.fieldname + "-" + uniqueSuffix + path.extname(file.originalname)
-    );
-  },
-});
-
-const upload = multer({ storage: storage });
-
-// Serve static files from the 'uploads' directory
-app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // Update profile photo
 app.put(
