@@ -39,6 +39,7 @@ const Home = () => {
   };
 
   const [allNotes, setAllNotes] = useState([]);
+
   const [userInfo, setUserInfo] = useState(null);
   const [isSearch, setIsSearch] = useState(false);
 
@@ -82,7 +83,7 @@ const Home = () => {
           ...note,
           tags: Array.isArray(note.tags) ? note.tags : [], // Ensure tags is always an array
         }));
-        console.log("Fetched Notes:", notes);
+        // console.log("Fetched Notes:", notes);
         setAllNotes(notes);
       }
     } catch (error) {
@@ -188,6 +189,10 @@ const Home = () => {
     getUserInfo();
   }, []);
 
+  const pinnedNotes = allNotes.filter((note) => note.isPinned === true);
+  const otherNotes = allNotes.filter((note) => note.isPinned !== true);
+  // console.log('pinnedNotes',pinnedNotes)
+  // console.log('otherNotes',otherNotes)
   return (
     <div>
       <Navbar
@@ -209,24 +214,52 @@ const Home = () => {
             })}
           </div>
         ) : allNotes.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 mt-4 transition-all">
-            {allNotes.map((item) => (
-              <NoteCard
-                key={item._id}
-                title={item.title}
-                date={item.createdOn}
-                content={item.content}
-                tags={item.tags}
-                isPinned={item.isPinned}
-                onEdit={() => handleEdit(item)}
-                onDelete={() => handleDeleteModalOpen(item._id)}
-                onPinNote={() => {
-                  updateIsPinned(item);
-                }}
-                onClick={() => handleViewNote(item)}
-              />
-            ))}
-          </div>
+          <>
+            {pinnedNotes.length > 0 && (
+              <div>
+                <h1 className="font-bold pl-2">PINNED</h1>
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 mt-2 transition-all mb-3">
+                  {pinnedNotes.map((item) => (
+                    <NoteCard
+                      key={item._id}
+                      title={item.title}
+                      date={item.createdOn}
+                      content={item.content}
+                      tags={item.tags}
+                      isPinned={item.isPinned}
+                      onEdit={() => handleEdit(item)}
+                      onDelete={() => handleDeleteModalOpen(item._id)}
+                      onPinNote={() => {
+                        updateIsPinned(item);
+                      }}
+                      onClick={() => handleViewNote(item)}
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
+            {
+              pinnedNotes.length > 0 && <h1 className="font-bold pl-2">OTHERS</h1>
+            }
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 mt-2 transition-all">
+              {otherNotes.map((item) => (
+                <NoteCard
+                  key={item._id}
+                  title={item.title}
+                  date={item.createdOn}
+                  content={item.content}
+                  tags={item.tags}
+                  isPinned={item.isPinned}
+                  onEdit={() => handleEdit(item)}
+                  onDelete={() => handleDeleteModalOpen(item._id)}
+                  onPinNote={() => {
+                    updateIsPinned(item);
+                  }}
+                  onClick={() => handleViewNote(item)}
+                />
+              ))}
+            </div>
+          </>
         ) : (
           <EmptyCard
             imgSrc={isSearch ? noFound : addPost}
