@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Navbar from "../../components/Navbar";
 import NoteCard from "../../components/Cards/NoteCard";
 import { MdAdd, MdClose } from "react-icons/md";
@@ -10,7 +10,8 @@ import EmptyCard from "../../components/EmptyCard/EmptyCard";
 import AddNotesImg from "../../assets/images/add-notes.svg";
 import NoDataImg from "../../assets/images/no-data.svg";
 import toast from "react-hot-toast";
-
+import noFound from "../../assets/images/noFound.svg";
+import addPost from "../../assets/images/addPost.svg";
 const Home = () => {
   const [openAddEditModal, setOpenAddEditModal] = useState({
     isShown: false,
@@ -38,6 +39,7 @@ const Home = () => {
   };
 
   const [allNotes, setAllNotes] = useState([]);
+
   const [userInfo, setUserInfo] = useState(null);
   const [isSearch, setIsSearch] = useState(false);
 
@@ -81,7 +83,7 @@ const Home = () => {
           ...note,
           tags: Array.isArray(note.tags) ? note.tags : [], // Ensure tags is always an array
         }));
-        console.log("Fetched Notes:", notes);
+        // console.log("Fetched Notes:", notes);
         setAllNotes(notes);
       }
     } catch (error) {
@@ -187,6 +189,10 @@ const Home = () => {
     getUserInfo();
   }, []);
 
+  const pinnedNotes = allNotes.filter((note) => note.isPinned === true);
+  const otherNotes = allNotes.filter((note) => note.isPinned !== true);
+  // console.log('pinnedNotes',pinnedNotes)
+  // console.log('otherNotes',otherNotes)
   return (
     <div>
       <Navbar
@@ -197,42 +203,82 @@ const Home = () => {
       />
       <div className="container h-auto p-6 pb-12">
         {isLoading ? (
-          <div className="flex justify-center items-center h-64">
-            <p className="text-xl text-gray-600">Loading notes...</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 mt-4 transition-all">
+            {Array.from({ length: 9 }).map((item, i) => {
+              return (
+                <div
+                  key={i}
+                  className=" animate-pulse group min-h-[170px] bg-gray-200 transition-all duration-300 w-full border rounded-sm"
+                ></div>
+              );
+            })}
           </div>
         ) : allNotes.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 mt-4 transition-all">
-            {allNotes.map((item) => (
-              <NoteCard
-                key={item._id}
-                title={item.title}
-                date={item.createdOn}
-                content={item.content}
-                tags={item.tags}
-                isPinned={item.isPinned}
-                onEdit={() => handleEdit(item)}
-                onDelete={() => handleDeleteModalOpen(item._id)}
-                onPinNote={() => {
-                  updateIsPinned(item);
-                }}
-                onClick={() => handleViewNote(item)}
-              />
-            ))}
-          </div>
+          <>
+            {pinnedNotes.length > 0 && (
+              <div>
+                <h1 className="font-bold pl-2">PINNED</h1>
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 mt-2 transition-all mb-3">
+                  {pinnedNotes.map((item) => (
+                    <NoteCard
+                      key={item._id}
+                      title={item.title}
+                      date={item.createdOn}
+                      content={item.content}
+                      tags={item.tags}
+                      isPinned={item.isPinned}
+                      onEdit={() => handleEdit(item)}
+                      onDelete={() => handleDeleteModalOpen(item._id)}
+                      onPinNote={() => {
+                        updateIsPinned(item);
+                      }}
+                      onClick={() => handleViewNote(item)}
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
+            {
+              pinnedNotes.length > 0 && <h1 className="font-bold pl-2">OTHERS</h1>
+            }
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 mt-2 transition-all">
+              {otherNotes.map((item) => (
+                <NoteCard
+                  key={item._id}
+                  title={item.title}
+                  date={item.createdOn}
+                  content={item.content}
+                  tags={item.tags}
+                  isPinned={item.isPinned}
+                  onEdit={() => handleEdit(item)}
+                  onDelete={() => handleDeleteModalOpen(item._id)}
+                  onPinNote={() => {
+                    updateIsPinned(item);
+                  }}
+                  onClick={() => handleViewNote(item)}
+                />
+              ))}
+            </div>
+          </>
         ) : (
           <EmptyCard
-            imgSrc={isSearch ? NoDataImg : AddNotesImg}
+            imgSrc={isSearch ? noFound : addPost}
             message={
-              isSearch
-                ? "Oops! No notes found matching"
-                : `Start adding notes by clicking on the "+" button. Lets get started!`
+              isSearch ? (
+                <p className="text-xl">Oops! No notes found matching</p>
+              ) : (
+                <p className="text-xl">
+                  Start adding notes by clicking on the "+" button. Lets get
+                  started!
+                </p>
+              )
             }
           />
         )}
       </div>
 
       <button
-        className="w-16 h-16 flex items-center justify-center rounded-2xl items-center text-white bg-gray-800 hover:bg-gray-900 transition-all focus:outline-none fixed right-10 bottom-10 z-50"
+        className="w-16 h-16 flex justify-center rounded-2xl items-center text-white bg-gray-800 hover:bg-gray-900 transition-all focus:outline-none fixed right-10 bottom-10 z-50"
         onClick={() => {
           setOpenAddEditModal({ isShown: true, type: "add", data: null });
         }}

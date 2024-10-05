@@ -1,12 +1,17 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../../components/Navbar";
 import { Link, useNavigate } from "react-router-dom";
-import { validateEmail , validateName ,validatePassword } from "../../utils/helper";
+import {
+  validateEmail,
+  validateName,
+  validatePassword,
+} from "../../utils/helper";
 import axiosInstance from "../../utils/axiosInstance";
 import toast from "react-hot-toast";
 import { FaRegEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa";
 import { GoogleLogin } from "@react-oauth/google";
+import CircularLoader from "../../components/CircularLoader";
 
 const Signup = () => {
   const [name, setName] = useState("");
@@ -15,12 +20,14 @@ const Signup = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   const navigate = useNavigate();
 
   const responseMsg = async (response) => {
     try {
+      setLoading(true);
       const token = response.credential;
       const res = await axiosInstance.post("/google-auth", { token });
 
@@ -65,6 +72,8 @@ const Signup = () => {
           marginRight: "10px",
         },
       });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -74,9 +83,9 @@ const Signup = () => {
 
   const handleSignup = async (e) => {
     e.preventDefault();
-    
+
     // validation for name
-    const nameValidation = validateName(name)
+    const nameValidation = validateName(name);
     if (!nameValidation.valid) {
       toast.error(`${nameValidation.error}`, {
         style: {
@@ -93,7 +102,7 @@ const Signup = () => {
     }
 
     // validations for email
-    const emailValidation = validateEmail(email)
+    const emailValidation = validateEmail(email);
     if (!emailValidation.valid) {
       toast.error(`${emailValidation.error}`, {
         style: {
@@ -109,8 +118,8 @@ const Signup = () => {
       return;
     }
 
-    // valiations for password 
-    const passwordValidation = validatePassword(password)
+    // valiations for password
+    const passwordValidation = validatePassword(password);
     if (!passwordValidation.valid) {
       toast.error(`${passwordValidation.error}`, {
         style: {
@@ -394,7 +403,13 @@ const Signup = () => {
                       className="inline-flex items-center text-white bg-gray-800 hover:bg-gray-900 focus:outline-none font-medium rounded-lg text-sm px-8 py-2.5 mb-2 whitespace-nowrap dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-700"
                       type="submit"
                     >
-                      Create an account
+                      {loading ? (
+                        <span className="gap-x-2 flex justify-center items-center">
+                          <CircularLoader /> Creating
+                        </span>
+                      ) : (
+                        "Create an account"
+                      )}
                     </button>
 
                     {/* <div className="mb-2 sm:text-sm text-gray-500 sm:mt-0">

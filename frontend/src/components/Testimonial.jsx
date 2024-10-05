@@ -5,12 +5,13 @@ const Testimonial = () => {
         <div>
             <section className="bg-gradient-to-b from-gray-50 to-white">
                 <div className="container px-6 py-12 mx-auto">
-                    <div className="grid items-center gap-4 xl:grid-cols-5">
+                    <div className="grid items-start gap-4 xl:grid-cols-5">
                         <div className="max-w-2xl mx-auto my-8 space-y-4 text-center xl:col-span-2 xl:text-left">
                             <h2 className="text-4xl font-extrabold">Hear from Our Happy Customers</h2>
                             <p className="dark:text-gray-600">Genuine Feedback from Those Who Know Us Best.</p>
+                            <img src="/testimonial-section.png" alt="testimonial review" height={0} width={550}/>
                         </div>
-                        <div className="p-6 xl:col-span-3">
+                        <div className="p-6 xl:col-span-3 xl:ml-8">
                             <div className="grid gap-4 md:grid-cols-2">
                                 <div className="grid content-center gap-4">
                                     <div className="p-6 rounded-lg shadow-md hover:shadow-xl cursor-default transition duration-300 ease-in-out border border-gray-200 dark:bg-gray-50">

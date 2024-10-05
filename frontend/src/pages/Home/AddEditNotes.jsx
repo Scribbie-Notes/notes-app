@@ -9,6 +9,8 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
     const [content, setContent] = useState('');
     const [tags, setTags] = useState([]);
     const [error, setError] = useState(null);
+    const MAX_TITLE_LENGTH = 60;
+    const MAX_CONTENT_LENGTH = 2500;
 
     useEffect(() => {
         if (type === 'edit' && noteData) {
@@ -17,6 +19,20 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
             setTags(noteData.tags);
         }
     }, [type, noteData]);
+
+    const handleTitleChange = (e) => {
+        const newTitle = e.target.value;
+        if (newTitle.length <= MAX_TITLE_LENGTH) {
+            setTitle(newTitle);
+        }
+    };
+
+    const handleContentChange = (e) => {
+        const newContent = e.target.value;
+        if (newContent.length <= MAX_CONTENT_LENGTH) {
+            setContent(newContent);
+        }
+    };
 
     const addNewNote = async () => {
         try {
@@ -63,7 +79,7 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
                 setError("Invalid note data.");
                 return;
             }
-
+            
             console.log(`Updating note with ID: ${noteData._id}`);
 
             const response = await axiosInstance.put(`/edit-note/${noteData._id}`, {
@@ -133,23 +149,33 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
 
             <div className='flex flex-col gap-2'>
                 <label className='font-medium'>Title</label>
-                <input
-                    type="text"
-                    className='p-2 border rounded-md text-sm'
-                    value={title}
-                    placeholder='Enter note title'
-                    onChange={(e) => setTitle(e.target.value)}
-                />
+                <div className='relative'>
+                    <input
+                        type="text"
+                        className='p-2 border rounded-md text-sm w-full pr-12' // Extra padding to the right
+                        value={title}
+                        placeholder='Enter note title'
+                        onChange={handleTitleChange}
+                    />
+                    <span className='absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 text-xs'>
+                        {title.length}/{MAX_TITLE_LENGTH}
+                    </span>
+                </div>
             </div>
 
             <div className='flex flex-col gap-2 mt-4'>
                 <label className='font-medium'>Content</label>
-                <textarea
-                    className='p-2 border rounded-md h-40 text-sm'
-                    placeholder='Enter note content'
-                    value={content}
-                    onChange={(e) => setContent(e.target.value)}
-                ></textarea>
+                <div className='relative'>
+                    <textarea
+                        className='p-2 border rounded-md h-40 text-sm w-full pr-12'
+                        placeholder='Enter note content'
+                        value={content}
+                        onChange={handleContentChange}
+                    ></textarea>
+                    <span className='absolute right-2 bottom-2 text-gray-500 text-xs'>
+                        {content.length}/{MAX_CONTENT_LENGTH}
+                    </span>
+                </div>
             </div>
 
             <div className='flex flex-col gap-2 mt-4'>
