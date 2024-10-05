@@ -258,7 +258,7 @@ app.get("/get-user", authenticationToken, async (req, res) => {
 });
 
 // Add note
-app.post("/add-note", authenticationToken, async (req, res) => {
+app.post("/add-note", authenticationToken, uploadMultiple, async (req, res) => {
   const { title, content, tags } = req.body;
   const { user } = req.user;
 
