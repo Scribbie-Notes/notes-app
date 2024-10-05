@@ -90,6 +90,21 @@ We welcome contributions from the community! Please see the [CONTRIBUTING.md](CO
 
 ---
 
+
+# 👀 Our Contributors
+
+- We extend our heartfelt gratitude for your invaluable contribution to our project! Your efforts play a pivotal role in elevating Ratna-Supermarket to greater heights.
+- Make sure you show some love by giving ⭐ to our repository.
+
+<div align="center">
+
+  <a href="https://github.com/Scribbie-Notes/notes-app">
+    <img src="https://contrib.rocks/image?repo=Scribbie-Notes/notes-app&&max=1000" />
+  </a>
+</div>
+
+---
+
 # 🤝 Code of Conduct
 All contributors must adhere to our [CODE_OF_CONDUCT](CODE_OF_CONDUCT.md) to ensure a positive collaboration environment.
 
