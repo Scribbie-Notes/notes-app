@@ -6,6 +6,13 @@ import { Link } from "react-router-dom";
 import { IoMdArrowRoundBack } from "react-icons/io";
 import { toast } from "react-hot-toast";
 import axiosInstance from "../../utils/axiosInstance";
+import { useNavigate } from "react-router-dom";
+
+const validatePhoneNumber = (phoneNumber) => {
+  const regex = /^[6-9]\d{9}$/;
+  return regex.test(phoneNumber);
+}
+
 
 const ProfilePage = () => {
   let initialUser = null;
@@ -17,7 +24,7 @@ const ProfilePage = () => {
       console.error("Error parsing stored user", e);
     }
   }
-
+  const navigate = useNavigate()
   const [user, setUser] = useState(initialUser);
   const [phone, setPhone] = useState(user?.phone || "");
   const [email, setEmail] = useState(user?.email || "");
@@ -87,7 +94,20 @@ const ProfilePage = () => {
   const handleEmailModalClose = () => {
     setIsEmailModalOpen(false);
   };
-
+  const AccountDeleted = () => {
+    localStorage.clear();
+    navigate("/signup");
+    toast.success('Account deleted successfully', {
+        style: {
+            fontSize: '13px',
+            maxWidth: '400px',
+            boxShadow: 'px 4px 8px rgba(0, 1, 4, 0.1)',
+            borderRadius: '8px',
+            borderColor: 'rgba(0, 0, 0, 0.8)',
+            marginRight: '10px',
+        }
+    });
+  };
   const handleEmailModalSave = async () => {
     try {
       console.log("New email to update:", newEmail);
@@ -148,6 +168,18 @@ const ProfilePage = () => {
 
   const handlePhoneModalSave = async () => {
     try {
+      if(!validatePhoneNumber(newPhone)){
+        return  toast.error("Invalid phone number", {
+          style: {
+            fontSize: "13px",
+            maxWidth: "400px",
+            boxShadow: "4px 4px 8px rgba(0, 1, 4, 0.1)",
+            borderRadius: "8px",
+            borderColor: "rgba(0, 0, 0, 0.8)",
+            marginRight: "10px",
+          },
+        });
+      }
       console.log("New phone to update:", newPhone);
       const response = await axiosInstance.put(`/update-phone`, {
         newPhone,
@@ -199,8 +231,15 @@ const ProfilePage = () => {
     }
   };
 
-  const handleAccountDelete = () => {
-    console.log("Account deleted");
+  const handleAccountDelete = async() => {
+    // making API call
+    const response = await axiosInstance.delete(`/delete-user`, {
+      userId: user._id,
+    });
+    if(!response.error){
+      console.log("Account deleted")
+      AccountDeleted()
+    }
     setIsAccountDeleteModalOpen(false);
   };
 
