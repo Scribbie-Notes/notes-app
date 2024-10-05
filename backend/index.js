@@ -55,6 +55,9 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
+//upload multiple attachments files
+const uploadMultiple = multer({ storage: storage }).array('attachments', 10); 
+
 // Connect to MongoDB
 mongoose
   .connect(process.env.MONGO_URI)
