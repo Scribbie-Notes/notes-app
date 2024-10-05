@@ -458,6 +458,47 @@ app.get("/search-notes/", authenticationToken, async (req, res) => {
   }
 });
 
+app.put("/update-fullName", authenticationToken, async (req, res) => {
+  const { user } = req.user;
+  const { newFullName } = req.body;
+
+  if (!user) {
+    console.error("User not authenticated");
+    return res
+      .status(HTTP_STATUS.UNAUTHORIZED)
+      .json({ error: ERROR_MESSAGES.USER_NOT_AUTHENTICATED });
+  }
+
+  console.log("User ID:", user._id);
+  console.log("New Full Name:", newFullName);
+
+  try {
+    const updatedUser = await User.findByIdAndUpdate(
+      user._id,
+      { fullName: newFullName },
+      { new: true }
+    );
+
+    if (!updatedUser) {
+      console.error("User not found");
+      return res
+        .status(HTTP_STATUS.NOT_FOUND)
+        .json({ error: ERROR_MESSAGES.USER_NOT_FOUND });
+    }
+
+    console.log("Name updated successfully", updatedUser);
+    return res.status(HTTP_STATUS.OK).json({
+      message: MESSAGES.FULLNAME_UPDATED_SUCCESSFULLY,
+      user: updatedUser,
+    });
+  } catch (error) {
+    console.error("Error updating Name: ", error);
+    return res
+      .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
+      .json({ error: ERROR_MESSAGES.INTERNAL_SERVER_ERROR });
+  }
+});
+
 // Update email
 app.put("/update-email", authenticationToken, async (req, res) => {
   const { user } = req.user;
