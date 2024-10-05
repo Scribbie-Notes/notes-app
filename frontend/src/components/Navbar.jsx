@@ -58,6 +58,18 @@ const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
                 </div>
             )}
 
+            <button onClick={() => navigate('/about')} className='text-gray-700 pr-3 transition hover:text-gray-700/75'>
+                About 
+            </button>
+            
+            <button onClick={() => navigate('/about')} className='text-gray-700 pr-3 transition hover:text-gray-700/75'>
+                Contact Us 
+            </button>
+
+            <button onClick={() => navigate('/signup')} className='text-gray-700 pr-3 transition hover:text-gray-700/75'>
+                Signup 
+            </button>
+
             {userInfo ? (
                 <ProfileInfo userInfo={userInfo} onLogout={onLogout} />
             ) : (
