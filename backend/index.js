@@ -269,11 +269,14 @@ app.post("/add-note", authenticationToken, async (req, res) => {
   }
 
   try {
+    const attachmentPaths = req.files.map(file => `/uploads/${file.filename}`);
+
     const note = new Note({
       title,
       content,
       tags: tags || [],
       userId: user._id,
+      attachments: attachmentPaths, // Save paths of uploaded files
     });
     await note.save();
 
