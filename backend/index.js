@@ -5,6 +5,13 @@ const multer = require("multer");
 const bcrypt = require("bcrypt");
 const { HTTP_STATUS, MESSAGES, ERROR_MESSAGES } = require("./utils/const");
 const sendMail = require("./mail/sendMail");
+const dotenv = require("dotenv");
+const path = require("path");
+const { OAuth2Client } = require('google-auth-library');
+const cors = require('cors');
+
+const app = express();
+
 const envPath =
   process.env.NODE_ENV === "production" ? ".env.production" : ".env";
 dotenv.config({ path: path.resolve(__dirname, envPath) });
@@ -29,14 +36,32 @@ app.use(
 
 app.use(express.json());
 
+// configure multer for file uploads
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    const uploadPath = path.join(__dirname, "uploads");
+    if (!fs.existsSync(uploadPath)) {
+      fs.mkdirSync(uploadPath);
+    }
+    cb(null, uploadPath);
+  },
+  filename: (req, file, cb) => {
+    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+    cb(
+      null,
+      file.fieldname + "-" + uniqueSuffix + path.extname(file.originalname)
+    );
+  },
+});
+
 const upload = multer({ storage: storage });
+
+//upload multiple attachments files
+const uploadMultiple = multer({ storage: storage }).array('attachments', 10); 
 
 // Connect to MongoDB
 mongoose
-  .connect("mongodb://localhost:27017/your_database_name", {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
+  .connect(process.env.MONGO_URI)
   .then(() => console.log("MongoDB connected"))
   .catch((err) => console.error("MongoDB connection error:", err));
 
@@ -246,7 +271,7 @@ app.get("/get-user", authenticationToken, async (req, res) => {
 });
 
 // Add note
-app.post("/add-note", authenticationToken, async (req, res) => {
+app.post("/add-note", authenticationToken, uploadMultiple, async (req, res) => {
   const { title, content, tags } = req.body;
   const { user } = req.user;
 
@@ -257,11 +282,14 @@ app.post("/add-note", authenticationToken, async (req, res) => {
   }
 
   try {
+    const attachmentPaths = req.files.map(file => `/uploads/${file.filename}`);
+
     const note = new Note({
       title,
       content,
       tags: tags || [],
       userId: user._id,
+      attachments: attachmentPaths, // Save paths of uploaded files
     });
     await note.save();
 
@@ -580,24 +608,6 @@ app.put("/update-phone", async (req, res) => {
       .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
       .json({ message: ERROR_MESSAGES.INTERNAL_SERVER_ERROR, error });
   }
-});
-
-// configure multer for file uploads
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    const uploadPath = path.join(__dirname, "uploads");
-    if (!fs.existsSync(uploadPath)) {
-      fs.mkdirSync(uploadPath);
-    }
-    cb(null, uploadPath);
-  },
-  filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-    cb(
-      null,
-      file.fieldname + "-" + uniqueSuffix + path.extname(file.originalname)
-    );
-  },
 });
 
 // Update profile photo
