@@ -16,6 +16,7 @@ import Footer from '../Footer';
 import Brands from '../Brands';
 import './styles.css';
 import Pricing from '../Pricing';
+import ScrollOnTop from '../Scroll-on-top/ScrollOnTop';
 
 const Hero = () => {
     const user = JSON.parse(localStorage.getItem("user"))
@@ -146,6 +147,7 @@ const Hero = () => {
                 </div>
             </section>
             <Footer />
+            <ScrollOnTop />
         </div>
     )
 }
