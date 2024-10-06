@@ -198,7 +198,7 @@ app.post("/login", async (req, res) => {
 
   const userInfo = await User.findOne({ email });
 
-  if (!userInfo || await bcrypt.compare(password, userInfo.password)) {
+  if (!userInfo || !(await bcrypt.compare(password, userInfo.password))) {
     return res
       .status(HTTP_STATUS.BAD_REQUEST)
       .json({ message: ERROR_MESSAGES.INVALID_CREDENTIALS });
