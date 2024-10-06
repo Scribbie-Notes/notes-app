@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 const StickyFooter = () => {
   return (
     <div className="bg-gray-200 pb-3">
-      <div className="flex flex-col md:flex-row items-center justify-between">
+      <div className="flex flex-col items-center justify-center">
         {/* Logo and Title */}
         <div className="flex items-center">
           <img src={img} alt="logo" className="h-16 md:h-20 mb-3 mt-3" />
