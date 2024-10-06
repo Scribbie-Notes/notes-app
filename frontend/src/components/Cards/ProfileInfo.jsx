@@ -1,12 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
 import { getInitials } from "../../utils/helper";
 import { useNavigate } from "react-router-dom";
-import { CiUser } from "react-icons/ci";
-import { CiCircleInfo } from "react-icons/ci";
-import { CiLogout } from "react-icons/ci";
+import { CiUser, CiCircleInfo, CiLogout } from "react-icons/ci";
 
 const ProfileInfo = ({ userInfo, onLogout }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
   const dropdownRef = useRef(null);
 
@@ -25,8 +24,17 @@ const ProfileInfo = ({ userInfo, onLogout }) => {
   };
 
   const handleLogout = () => {
+    setIsModalOpen(true); // Open the confirmation modal
+  };
+
+  const confirmLogout = () => {
     onLogout();
+    setIsModalOpen(false);
     setIsDropdownOpen(false);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
   };
 
   const handleClickOutside = (event) => {
@@ -85,6 +93,30 @@ const ProfileInfo = ({ userInfo, onLogout }) => {
             </span>
             Logout
           </button>
+        </div>
+      )}
+
+      {/* Modal for logout confirmation */}
+      {isModalOpen && (
+        <div className="fixed inset-0 flex items-center justify-center z-20 bg-black bg-opacity-50 h-screen">
+          <div className="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full">
+            <h2 className="text-lg font-medium">Confirm Logout</h2>
+            <p className="mt-2">Are you sure you want to log out?</p>
+            <div className="mt-4 flex justify-end space-x-4">
+              <button
+                className="px-4 py-2 bg-gray-200 rounded-md hover:bg-gray-300"
+                onClick={closeModal}
+              >
+                Cancel
+              </button>
+              <button
+                className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
+                onClick={confirmLogout}
+              >
+                Logout
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>
