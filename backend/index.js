@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
 const multer = require("multer");
+const bcrypt = require("bcrypt");
 const { HTTP_STATUS, MESSAGES, ERROR_MESSAGES } = require("./utils/const");
 const sendMail = require("./mail/sendMail");
 const envPath =
@@ -118,8 +119,20 @@ app.post("/create-account", async (req, res) => {
       message: ERROR_MESSAGES.USER_ALREADY_EXISTS,
     });
   }
+  
+  let hashedPass;
+  try {
+    hashedPass = await bcrypt.hash(password, 10);  
+  }
+  catch(err) {
+    console.log(err.message);
+    return res.status(500).json({
+      error: true,
+      message: "Internal error",
+    })
+  }
 
-  const user = new User({ fullName, email, password });
+  const user = new User({ fullName, email, password:hashedPass });
   await user.save();
   const expiresIn = 60 * 20;
   const token = jwt.sign({ sub: user._id, expiresIn }, ACCESS_TOKEN_SECRET);
@@ -185,7 +198,7 @@ app.post("/login", async (req, res) => {
 
   const userInfo = await User.findOne({ email });
 
-  if (!userInfo || userInfo.password !== password) {
+  if (!userInfo || await bcrypt.compare(password, userInfo.password)) {
     return res
       .status(HTTP_STATUS.BAD_REQUEST)
       .json({ message: ERROR_MESSAGES.INVALID_CREDENTIALS });
