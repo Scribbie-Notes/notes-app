@@ -8,6 +8,7 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
     const [tags, setTags] = useState([]);
+    const [attachments, setAttachments] = useState([]); // Store multiple attachments
     const [error, setError] = useState(null);
     const MAX_TITLE_LENGTH = 60;
     const MAX_CONTENT_LENGTH = 2500;
@@ -17,8 +18,15 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
             setTitle(noteData.title);
             setContent(noteData.content);
             setTags(noteData.tags);
+            setAttachments(noteData.files || []); // Ensure files is an array
         }
     }, [type, noteData]);
+
+    //handle upload function added
+    const handleFileUpload = (files) => {
+        console.log('Uploaded files:', files); // Log the uploaded files
+        setAttachments((prevAttachments) => [...prevAttachments, ...files]); // Add multiple files
+    };
 
     const handleTitleChange = (e) => {
         const newTitle = e.target.value;
@@ -35,14 +43,22 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
     };
 
     const addNewNote = async () => {
-        try {
-            const response = await axiosInstance.post("/add-note", {
-                title,
-                content,
-                tags,
-                isPinned: false
-            });
+        const formData = new FormData();
+        formData.append('title', title);
+        formData.append('content', content);
+        formData.append('tags', tags); 
 
+        attachments.forEach((file) => {
+            formData.append('attachments', file); // Append each file to FormData
+        });
+
+        try {
+           const response = await axiosInstance.post("/add-note", formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+            
             if (response.data && response.data.note) {
                 getAllNotes();
                 onClose();
@@ -181,6 +197,11 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
             <div className='flex flex-col gap-2 mt-4'>
                 <label className='font-medium md:text-base'>Tags</label>
                 <TagInput tags={tags} setTags={setTags} />
+            </div>
+
+            <div className='flex flex-col gap-2 mt-4'>
+                <label className='font-medium md:text-base'>Add Attachments</label>
+               <AddAttachmentInput onFileUpload={handleFileUpload} />
             </div>
 
             {error && <p className='text-red-500 mt-2'>{error}</p>}
