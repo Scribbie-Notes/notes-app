@@ -40,6 +40,7 @@ const ERROR_MESSAGES = {
     "Password must include at least one special character",
   PASSWORD_MIN_LENGTH: "Min password length should be 8",
   USER_ALREADY_EXISTS: "User already exists",
+  EMAIL_NOT_VERIFIED: "Email not verified, Please verify your email.",
 
   // Authentication Errors
   EMAIL_PASSWORD_REQUIRED: "Email and Password are required",
