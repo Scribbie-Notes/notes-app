@@ -8,6 +8,17 @@ import { toast } from "react-hot-toast";
 import axiosInstance from "../../utils/axiosInstance";
 import { useNavigate } from "react-router-dom";
 
+const validatePhoneNumber = (phoneNumber) => {
+  const regex = /^[6-9]\d{9}$/;
+  return regex.test(phoneNumber);
+};
+
+
+const validateEmail = (email) => {
+  const emailregex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailregex.test(email);
+};
+
 const ProfilePage = () => {
   let initialUser = null;
   const storedUser = localStorage.getItem("user");
@@ -18,14 +29,17 @@ const ProfilePage = () => {
       console.error("Error parsing stored user", e);
     }
   }
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [user, setUser] = useState(initialUser);
   const [phone, setPhone] = useState(user?.phone || "");
   const [email, setEmail] = useState(user?.email || "");
+  const [name, setName] = useState(user?.name || "");
   const [newEmail, setNewEmail] = useState("");
+  const [newName, setNewName] = useState("");
   const [newPhone, setNewPhone] = useState("");
   const [isEmailModalOpen, setIsEmailModalOpen] = useState(false);
   const [isPhoneModalOpen, setIsPhoneModalOpen] = useState(false);
+  const [isNameModalOpen, setIsNameModalOpen] = useState(false);
   const [profilePhoto, setProfilePhoto] = useState(user.profilePhoto || null);
   const [isHovered, setIsHovered] = useState(false);
   const [isAccountDeleteModalOpen, setIsAccountDeleteModalOpen] =
@@ -79,6 +93,7 @@ const ProfilePage = () => {
   useEffect(() => {
     setEmail(user?.email || "");
     setPhone(user?.phone || "");
+    setName(user?.fullName || "");
   }, [user]);
 
   const handleEmailChangeClick = () => {
@@ -91,15 +106,15 @@ const ProfilePage = () => {
   const AccountDeleted = () => {
     localStorage.clear();
     navigate("/signup");
-    toast.success('Account deleted successfully', {
-        style: {
-            fontSize: '13px',
-            maxWidth: '400px',
-            boxShadow: 'px 4px 8px rgba(0, 1, 4, 0.1)',
-            borderRadius: '8px',
-            borderColor: 'rgba(0, 0, 0, 0.8)',
-            marginRight: '10px',
-        }
+    toast.success("Account deleted successfully", {
+      style: {
+        fontSize: "13px",
+        maxWidth: "400px",
+        boxShadow: "px 4px 8px rgba(0, 1, 4, 0.1)",
+        borderRadius: "8px",
+        borderColor: "rgba(0, 0, 0, 0.8)",
+        marginRight: "10px",
+      },
     });
   };
   const handleEmailModalSave = async () => {
@@ -108,7 +123,7 @@ const ProfilePage = () => {
       const response = await axiosInstance.put(`/update-email`, { newEmail });
       console.log("Response from API:", response);
 
-      if (response.data) {
+      if (response.data&&validateEmail(newEmail)) {
         // Update email in state and local storage
         const updatedUser = { ...user, email: newEmail };
         setUser(updatedUser);
@@ -162,6 +177,18 @@ const ProfilePage = () => {
 
   const handlePhoneModalSave = async () => {
     try {
+      if (!validatePhoneNumber(newPhone)) {
+        return toast.error("Invalid phone number", {
+          style: {
+            fontSize: "13px",
+            maxWidth: "400px",
+            boxShadow: "4px 4px 8px rgba(0, 1, 4, 0.1)",
+            borderRadius: "8px",
+            borderColor: "rgba(0, 0, 0, 0.8)",
+            marginRight: "10px",
+          },
+        });
+      }
       console.log("New phone to update:", newPhone);
       const response = await axiosInstance.put(`/update-phone`, {
         newPhone,
@@ -213,14 +240,14 @@ const ProfilePage = () => {
     }
   };
 
-  const handleAccountDelete = async() => {
+  const handleAccountDelete = async () => {
     // making API call
     const response = await axiosInstance.delete(`/delete-user`, {
       userId: user._id,
     });
-    if(!response.error){
-      console.log("Account deleted")
-      AccountDeleted()
+    if (!response.error) {
+      console.log("Account deleted");
+      AccountDeleted();
     }
     setIsAccountDeleteModalOpen(false);
   };
@@ -228,6 +255,69 @@ const ProfilePage = () => {
   const handleAccountDeleteModalClose = () => {
     setIsAccountDeleteModalOpen(false);
   };
+
+  //adding name change function
+
+  const handleNameChangeClick = () => {
+    setIsNameModalOpen(true);
+  };
+  const handleNameChangeClose = () => {
+    setIsNameModalOpen(false);
+  };
+
+  const handleNameModalSave = async () => {
+    try {
+      console.log("New name to update:", newName);
+      const response = await axiosInstance.put(`/update-fullName`, {
+        newName,
+      });
+      console.log("Response from API:", response);
+
+      if (response.data) {
+        // Update email in state and local storage
+        const updatedUser = { ...user, name: newName };
+        setUser(updatedUser);
+        localStorage.setItem("user", JSON.stringify(updatedUser));
+
+        toast.success("Name updated", {
+          style: {
+            fontSize: "13px",
+            maxWidth: "400px",
+            boxShadow: "4px 4px 8px rgba(0, 1, 4, 0.1)",
+            borderRadius: "8px",
+            borderColor: "rgba(0, 0, 0, 0.8)",
+            marginRight: "10px",
+          },
+        });
+        setIsNameModalOpen(false);
+      } else {
+        toast.error("Failed to update name", {
+          style: {
+            fontSize: "13px",
+            maxWidth: "400px",
+            boxShadow: "4px 4px 8px rgba(0, 1, 4, 0.1)",
+            borderRadius: "8px",
+            borderColor: "rgba(0, 0, 0, 0.8)",
+            marginRight: "10px",
+          },
+        });
+      }
+    } catch (error) {
+      toast.error("Failed to update email", {
+        style: {
+          fontSize: "13px",
+          maxWidth: "400px",
+          boxShadow: "4px 4px 8px rgba(0, 1, 4, 0.1)",
+          borderRadius: "8px",
+          borderColor: "rgba(0, 0, 0, 0.8)",
+          marginRight: "10px",
+        },
+      });
+      console.error("Error updating email:", error);
+    }
+  };
+
+  console.log(user);
 
   return (
     <div className="bg-gray-50 relative">
@@ -297,9 +387,45 @@ const ProfilePage = () => {
                     My Account
                   </h3>
                   <div className="w-full flex flex-col items-center overflow-hidden text-sm">
-                    <p className="w-full border-t border-gray-100 text-gray-600 py-4 pl-6 pr-3 w-full block hover:bg-gray-100 transition duration-150">
-                      {user?.fullName || "User Name"}
-                    </p>
+                    <div className="flex justify-between items-center w-full border-t border-gray-100 text-gray-600 py-1 pl-6 pr-3 hover:bg-gray-100 transition duration-150">
+                      <p> {user?.name || "User Name"}</p>
+                      <button
+                        onClick={handleNameChangeClick}
+                        className="inline-flex items-center text-white bg-gray-800 hover:bg-gray-900 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 mt-2 mb-2 text-xs dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-700"
+                      >
+                        Change Name
+                      </button>
+                    </div>
+
+                    {isNameModalOpen && (
+                      <div className="fixed inset-0 flex items-center justify-center z-50">
+                        <div className="absolute inset-0 bg-black opacity-50"></div>
+                        <div className="bg-white p-5 rounded-lg shadow-lg z-10 w-[90%] max-w-md">
+                          <h2 className="text-xl font-bold mb-4">Enter Name</h2>
+                          <input
+                            type="text"
+                            value={newName}
+                            onChange={(e) => setNewName(e.target.value)}
+                            className="w-full p-2 mb-4 border rounded"
+                            placeholder="Name"
+                          />
+                          <div className="flex justify-end space-x-2">
+                            <button
+                              onClick={handleNameChangeClose}
+                              className="inline-flex items-center text-gray-900 bg-gray-200 hover:bg-red-200 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-xs dark:bg-gray-300  border-gray-800 transition-all"
+                            >
+                              Cancel
+                            </button>
+                            <button
+                              onClick={handleNameModalSave}
+                              className="inline-flex items-center text-white bg-gray-800 hover:bg-gray-900 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-xs dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-700 transition-all"
+                            >
+                              Save
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    )}
 
                     <div className="flex justify-between items-center w-full border-t border-gray-100 text-gray-600 py-1 pl-6 pr-3 hover:bg-gray-100 transition duration-150">
                       <p>{email || "User Email"}</p>

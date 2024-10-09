@@ -61,9 +61,9 @@ git push origin your-branch-name
 Submit a pull request (PR) to the main repository from your branch. The PR should:
 
 - Include a descriptive title.
-- Reference the issue you are addressing (if applicable).
+- Mention the issue number you are addressing (if applicable).
 - Provide a clear and concise description of the changes you've made.
-
+- Attach screenshots / screen recording to show your work.
 Your PR will be reviewed, and you may be asked to make additional changes before it is merged.
 
 ## 📚 Contribution Guidelines

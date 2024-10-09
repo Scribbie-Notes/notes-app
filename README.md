@@ -2,8 +2,6 @@
 
 **Scribbie** is a powerful, intuitive note-taking website built specifically for working professionals who want to manage their notes seamlessly and effectively.
 
-📌 **Visit:** [Scribbie Notes](https://scribbie-notes.vercel.app)
-
 ---
 
 ## 🔥 Tech Stack
@@ -87,6 +85,21 @@ Follow these steps to get Scribbie running on your local machine:
 
 # 📚 Contribution Guidelines
 We welcome contributions from the community! Please see the [CONTRIBUTING.md](CONTRIBUTING.md) file for detailed guidelines.
+
+---
+
+
+# 👀 Our Contributors
+
+- We extend our heartfelt gratitude for your invaluable contribution to our project! Your efforts play a pivotal role in elevating Ratna-Supermarket to greater heights.
+- Make sure you show some love by giving ⭐ to our repository.
+
+<div align="center">
+
+  <a href="https://github.com/Scribbie-Notes/notes-app">
+    <img src="https://contrib.rocks/image?repo=Scribbie-Notes/notes-app&&max=1000" />
+  </a>
+</div>
 
 ---
 

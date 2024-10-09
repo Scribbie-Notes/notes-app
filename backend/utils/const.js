@@ -17,6 +17,7 @@ const MESSAGES = {
   NOTES_FETCHED_SUCCESSFULLY: "Notes fetched successfully",
   NOTE_DELETED_SUCCESSFULLY: "Note deleted successfully",
   EMAIL_UPDATED_SUCCESSFULLY: "Email updated successfully",
+  FULLNAME_UPDATED_SUCCESSFULLY: "Name updated successfully",
   PHONE_UPDATED_SUCCESSFULLY: "Phone number updated successfully",
   PROFILE_PHOTO_UPDATED_SUCCESSFULLY: "Profile photo updated successfully",
   GOOGLE_AUTH_SUCCESSFUL: "Google authentication successful",
@@ -31,9 +32,12 @@ const ERROR_MESSAGES = {
   EMAIL_REQUIRED: "Email is required",
   INVALID_EMAIL_FORMAT: "Invalid Email format",
   PASSWORD_REQUIRED: "Password is required",
-  PASSWORD_UPPERCASE_REQUIRED: "Password must include at least one Uppercase letter",
-  PASSWORD_LOWERCASE_REQUIRED: "Password must include at least one Lowercase letter",
-  PASSWORD_SPECIAL_CHAR_REQUIRED: "Password must include at least one special character",
+  PASSWORD_UPPERCASE_REQUIRED:
+    "Password must include at least one Uppercase letter",
+  PASSWORD_LOWERCASE_REQUIRED:
+    "Password must include at least one Lowercase letter",
+  PASSWORD_SPECIAL_CHAR_REQUIRED:
+    "Password must include at least one special character",
   PASSWORD_MIN_LENGTH: "Min password length should be 8",
   USER_ALREADY_EXISTS: "User already exists",
 

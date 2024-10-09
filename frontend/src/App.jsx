@@ -13,6 +13,8 @@ import Hero from "./components/Hero/Hero";
 import About from "./components/About/About";
 import Loading from "./components/Loading";
 import ProfilePage from "./pages/ProfilePage/ProfilePage";
+
+
 // currently this component is hide
 // import Navbar from './components/Navbar';
 // import ProtectedRoute from './utils/ProtectedRoute';
