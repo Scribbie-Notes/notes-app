@@ -43,7 +43,7 @@ const uploadMultiple = multer({ storage: storage }).array('attachments', 10);
 
 // Authentication middleware
 const authenticationToken = (req, res, next) => {
-    const token = req.headers["authorization"];
+    const token = req.headers["authorization"].split(" ")[1];
     console.log("Authorization header:", token); // Log the token for debugging
 
     if (!token) {
