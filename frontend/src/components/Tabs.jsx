@@ -24,13 +24,14 @@ const SlideTabs = () => {
           opacity: 0,
         }));
       }}
-      className="relative mx-auto flex w-fit rounded-full border-2 border-black bg-white p-1"
+      className="relative mx-auto flex w-fit   bg-white p-1"
     >
       <Tab setPosition={setPosition}>Home</Tab>
-      <Tab setPosition={setPosition}>Pricing</Tab>
+     
       <Tab setPosition={setPosition}>Features</Tab>
-      <Tab setPosition={setPosition}>Docs</Tab>
-      <Tab setPosition={setPosition}>Blog</Tab>
+      <Tab setPosition={setPosition}>Testimonial</Tab>
+      <Tab setPosition={setPosition}>Pricing</Tab>
+      <Tab setPosition={setPosition}>Contact Us</Tab>
 
       <Cursor position={position} />
     </ul>
@@ -67,7 +68,7 @@ const Cursor = ({ position }) => {
       animate={{
         ...position,
       }}
-      className="absolute z-0 h-7 rounded-full bg-black md:h-12"
+      className="absolute z-0 h-7 rounded-lg bg-black md:h-12"
     />
   );
 };
