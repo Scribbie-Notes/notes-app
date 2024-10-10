@@ -1,5 +1,6 @@
-import React, { useRef, useState } from "react";
+import  { useRef, useState } from "react";
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 
 export const SlideTabsExample = () => {
   return (
@@ -24,21 +25,20 @@ const SlideTabs = () => {
           opacity: 0,
         }));
       }}
-      className="relative mx-auto flex w-fit   bg-white p-1"
+      className="relative mx-auto flex w-fit bg-white p-1"
     >
-      <Tab setPosition={setPosition}>Home</Tab>
-     
-      <Tab setPosition={setPosition}>Features</Tab>
-      <Tab setPosition={setPosition}>Testimonial</Tab>
-      <Tab setPosition={setPosition}>Pricing</Tab>
-      <Tab setPosition={setPosition}>Contact Us</Tab>
+      <Tab setPosition={setPosition} to="/">Home</Tab>
+      <Tab setPosition={setPosition} to="/about">About</Tab>
+      <Tab setPosition={setPosition} to="/testimonial">Testimonial</Tab>
+      <Tab setPosition={setPosition} to="/pricing">Pricing</Tab>
+      <Tab setPosition={setPosition} to="/contact-us">Contact Us</Tab>
 
       <Cursor position={position} />
     </ul>
   );
 };
 
-const Tab = ({ children, setPosition }) => {
+const Tab = ({ children, setPosition, to }) => {
   const ref = useRef(null);
 
   return (
@@ -55,13 +55,17 @@ const Tab = ({ children, setPosition }) => {
           opacity: 1,
         });
       }}
-      className="relative  z-10 block cursor-pointer px-3 py-1.5 text-xs uppercase text-white mix-blend-difference md:px-5 md:py-3 md:text-base"
+      className="relative z-10 block cursor-pointer px-3 py-1.5 text-xs uppercase text-white mix-blend-difference md:px-5 md:py-3 md:text-base"
     >
-      {children}
+      
+      <Link to={to}>
+        {children}
+      </Link>
     </li>
   );
 };
 
+// Cursor animation component
 const Cursor = ({ position }) => {
   return (
     <motion.li
@@ -72,3 +76,5 @@ const Cursor = ({ position }) => {
     />
   );
 };
+
+export default SlideTabsExample;
