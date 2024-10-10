@@ -14,7 +14,7 @@ const StickyFooter = () => {
             <p className="text-xl md:text-2xl font-medium -ml-3 mt-4">cribbie</p>
           </div>
           <p className="text-sm mt-2">
-            Cribbie is a platform that connects people with the resources they need to stay organized and productive. Explore our features and join the community.
+            Scribbie is a platform that connects people with the resources they need to stay organized and productive. Explore our features and join the community.
           </p>
         </div>
 
