@@ -1,4 +1,6 @@
 
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 
 import PropTypes from "prop-types";
 import moment from "moment";
@@ -53,9 +55,9 @@ const NoteCard = ({ title, date, content, tags, isPinned, background, onEdit, on
                 }}
                 className="text-xs text-slate-600 mt-2"
             >
-                {content}
+                 <ReactQuill value={content} readOnly={true} theme="bubble" />
             </p>
-
+            
             <div className="flex items-center justify-between mt-3 mb-[-8px]">
                 <div className="flex flex-wrap gap-1">
                     {tags.length > 0 &&
