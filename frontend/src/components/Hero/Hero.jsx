@@ -10,6 +10,7 @@ import { FaSync } from "react-icons/fa";
 import Testimonial from '../Testimonial';
 import Footer from '../Footer';
 import Pricing from '../Pricing';
+import Faq from '../Faq';
 import ScrollOnTop from '../Scroll-on-top/ScrollOnTop';
 import './styles.css';
 
@@ -158,6 +159,7 @@ const Hero = () => {
 
             <Testimonial />
             <Pricing />
+            <Faq />
             <Footer />
             <ScrollOnTop />
         </div>
