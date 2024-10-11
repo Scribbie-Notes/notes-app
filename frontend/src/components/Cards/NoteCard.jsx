@@ -1,19 +1,34 @@
+
+
 import PropTypes from "prop-types";
 import moment from "moment";
 import { MdCreate, MdDelete, MdOutlinePushPin } from "react-icons/md";
 
-const NoteCard = ({ title, date, content, tags, isPinned, onEdit, onDelete, onPinNote, onClick }) => {
+const getContrastColor = (background) => {
+    const hex = background.replace("#", "");
+    const r = parseInt(hex.substr(0, 2), 16);
+    const g = parseInt(hex.substr(2, 2), 16);
+    const b = parseInt(hex.substr(4, 2), 16);
+    const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+
+    return luminance > 0.5 ? "black" : "white"; // Return black for light backgrounds, white for dark
+};
+
+
+const NoteCard = ({ title, date, content, tags, isPinned, background, onEdit, onDelete, onPinNote, onClick }) => {
+    const textColor = getContrastColor(background);
     return (
         <div
-            className="border rounded p-5 bg-white hover:bg-slate-100 cursor-pointer transition duration-300 ease-in-out"
+            className="border rounded p-5 hover:bg-slate-100 cursor-pointer transition duration-300 ease-in-out"
             onClick={onClick}
+            style={{ backgroundColor: background ,color: textColor}}
         >
             <div className="flex items-center justify-between" title={`pin`}>
                 <div>
                     <h6 className="text-sm font-medium">{title}</h6>
-                    <span className="text-xs text-slate-500">{moment(date).format("Do MMM YYYY")}</span>
+                    <span className="text-xs text-slate-500" style={{color:textColor}}>{moment(date).format("Do MMM YYYY")}</span>
                 </div>
-
+ {/* <h1>{background}</h1> */}
                 <div className="relative group">
                     <MdOutlinePushPin
                         className={`icon-btn ${isPinned ? "text-primary" : "text-slate-300"}`}
@@ -34,6 +49,7 @@ const NoteCard = ({ title, date, content, tags, isPinned, onEdit, onDelete, onPi
                     WebkitBoxOrient: "vertical",
                     overflow: "hidden",
                     textOverflow: "ellipsis",
+                    color:textColor
                 }}
                 className="text-xs text-slate-600 mt-2"
             >
@@ -93,6 +109,7 @@ NoteCard.propTypes = {
     content: PropTypes.string.isRequired,
     tags: PropTypes.arrayOf(PropTypes.string).isRequired,
     isPinned: PropTypes.bool,
+    background: PropTypes.string,
     onEdit: PropTypes.func,
     onDelete: PropTypes.func,
     onPinNote: PropTypes.func,
@@ -101,6 +118,7 @@ NoteCard.propTypes = {
 
 NoteCard.defaultProps = {
     isPinned: false,
+    background: "#ffffff",
     onEdit: () => {},
     onDelete: () => {},
     onPinNote: () => {},

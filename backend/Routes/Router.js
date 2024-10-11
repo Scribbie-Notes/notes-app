@@ -7,9 +7,10 @@ const { HTTP_STATUS, MESSAGES, ERROR_MESSAGES } = require("../utils/const");
 const sendMail = require("../mail/sendMail");
 const dotenv = require("dotenv");
 const path = require("path");
+const fs = require("fs")
 const { OAuth2Client } = require('google-auth-library');
 const User = require('../models/userModel')
-
+const Note = require('../models/noteModel')
 const { ACCESS_TOKEN_SECRET, GOOGLE_API_TOKEN } = process.env;
 
 const client = new OAuth2Client(GOOGLE_API_TOKEN);
@@ -253,9 +254,11 @@ router.get("/get-user", authenticationToken, async (req, res) => {
     }
 });
 
+
+
 // Add note
 router.post("/add-note", authenticationToken, uploadMultiple, async (req, res) => {
-    const { title, content, tags } = req.body;
+    const { title, content, tags, background } = req.body;
     const { user } = req.user;
 
     if (!title || !content) {
@@ -272,7 +275,8 @@ router.post("/add-note", authenticationToken, uploadMultiple, async (req, res) =
             content,
             tags: tags || [],
             userId: user._id,
-            attachments: attachmentPaths, // Save paths of uploaded files
+            attachments: attachmentPaths,
+            background: background || "#ffffff", // Default to white if not provided
         });
         await note.save();
 
@@ -292,10 +296,10 @@ router.post("/add-note", authenticationToken, uploadMultiple, async (req, res) =
 // Edit note
 router.put("/edit-note/:noteId", authenticationToken, async (req, res) => {
     const { noteId } = req.params;
-    const { title, content, tags, isPinned } = req.body;
+    const { title, content, tags, isPinned, background } = req.body;
     const { user } = req.user;
 
-    if (!title && !content && !tags) {
+    if (!title && !content && !tags && isPinned === undefined && !background) {
         return res.status(HTTP_STATUS.BAD_REQUEST).json({
             error: true,
             message: ERROR_MESSAGES.PROVIDE_FIELD_TO_UPDATE,
@@ -315,6 +319,7 @@ router.put("/edit-note/:noteId", authenticationToken, async (req, res) => {
         if (content) note.content = content;
         if (tags) note.tags = tags;
         if (isPinned !== undefined) note.isPinned = isPinned;
+        if (background) note.background = background;
 
         await note.save();
 
@@ -330,7 +335,6 @@ router.put("/edit-note/:noteId", authenticationToken, async (req, res) => {
             .json({ error: true, message: ERROR_MESSAGES.INTERNAL_SERVER_ERROR });
     }
 });
-
 // Get all notes
 router.get("/get-all-notes", authenticationToken, async (req, res) => {
     const { user } = req.user;
