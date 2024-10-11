@@ -13,6 +13,11 @@ import Hero from "./components/Hero/Hero";
 import About from "./components/About/About";
 import Loading from "./components/Loading";
 import ProfilePage from "./pages/ProfilePage/ProfilePage";
+import Testimonial from "./components/Testimonial";
+import Pricing from "./components/Pricing";
+import Footer from "./components/sticky_footer/Footer";
+
+
 // currently this component is hide
 // import Navbar from './components/Navbar';
 // import ProtectedRoute from './utils/ProtectedRoute';
@@ -55,7 +60,11 @@ const App = () => {
           <Route path="/landing" exact element={<Hero />} />
           <Route path="/dashboard" exact element={<Home />} />
           <Route path="/" exact element={<Hero />} />
+
           <Route path="/login" exact element={<Login setUser={setUser} />} />
+          <Route path="/testimonial" exact element={<Testimonial />} />
+          <Route path="/pricing" exact element={<Pricing />} />
+          <Route path='/footer' exact element ={<Footer />}/>
           <Route path="/signup" exact element={<Signup />} />
           <Route path="/about" exact element={<About />} />
           <Route path="/my-profile" exact element={<ProfilePage />} />

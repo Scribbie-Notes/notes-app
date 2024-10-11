@@ -2,8 +2,6 @@
 
 **Scribbie** is a powerful, intuitive note-taking website built specifically for working professionals who want to manage their notes seamlessly and effectively.
 
-📌 **Visit:** [Scribbie Notes](https://scribbie-notes.vercel.app)
-
 ---
 
 ## 🔥 Tech Stack

@@ -13,6 +13,12 @@ const validatePhoneNumber = (phoneNumber) => {
   return regex.test(phoneNumber);
 };
 
+
+const validateEmail = (email) => {
+  const emailregex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailregex.test(email);
+};
+
 const ProfilePage = () => {
   let initialUser = null;
   const storedUser = localStorage.getItem("user");
@@ -117,7 +123,7 @@ const ProfilePage = () => {
       const response = await axiosInstance.put(`/update-email`, { newEmail });
       console.log("Response from API:", response);
 
-      if (response.data) {
+      if (response.data&&validateEmail(newEmail)) {
         // Update email in state and local storage
         const updatedUser = { ...user, email: newEmail };
         setUser(updatedUser);
