@@ -9,7 +9,8 @@ const noteSchema = new Schema({
     attachments:{type:[String],default:[]},
     isPinned: { type: Boolean, required: false },
     userId: { type: String, required: true },
-    createdOn: { type: Date, default: Date.now }
+    createdOn: { type: Date, default: Date.now },
+    background: { type: String }
 });
 
 
