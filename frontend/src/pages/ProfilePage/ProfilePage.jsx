@@ -235,17 +235,35 @@ const ProfilePage = () => {
   };
 
   const handleAccountDelete = async () => {
-    // making API call
-    const response = await axiosInstance.delete(`/delete-user`, {
-      userId: user._id,
-    });
-    if (!response.error) {
-      console.log("Account deleted");
-      AccountDeleted();
+    try {
+      const response = await fetch('/api/delete-account', { // Adjust the API endpoint as needed
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          // Add authorization token if needed
+        }
+      });
+  
+      if (response.ok) {
+        alert('Your account has been deleted successfully.');
+        // Optionally, redirect to the login page or homepage
+        window.location.href = '/login';
+      } else {
+        // Handle the error from the server
+        const errorData = await response.json();
+        console.error('Error deleting account:', errorData.message);
+        alert('Failed to delete account: ' + errorData.message);
+      }
+    } catch (error) {
+      // Handle any network or unexpected errors
+      console.error('Error deleting account:', error);
+      alert('An error occurred while trying to delete the account.');
+    } finally {
+      // Close the modal after handling
+      setIsAccountDeleteModalOpen(false);
     }
-    setIsAccountDeleteModalOpen(false);
   };
-
+  
   const handleAccountDeleteModalClose = () => {
     setIsAccountDeleteModalOpen(false);
   };
