@@ -16,6 +16,7 @@
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "framer-motion": "^11.11.6",
+    "gsap": "^3.12.5",
     "http-proxy-middleware": "^3.0.0",
     "js-cookie": "^3.0.5",
     "moment": "^2.30.1",
@@ -24,7 +25,7 @@
     "react-hot-toast": "^2.4.1",
     "react-icons": "^5.3.0",
     "react-modal": "^3.16.1",
-    "react-router-dom": "^6.23.1",
+    "react-router-dom": "^6.26.2",
     "react-scroll": "^1.9.0"
   },
   "devDependencies": {

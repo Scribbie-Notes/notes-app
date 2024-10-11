@@ -78,6 +78,7 @@ const Home = () => {
     setIsLoading(true);
     try {
       const response = await axiosInstance.get("/get-all-notes");
+      console.log(response)
       if (response.data && response.data.notes) {
         const notes = response.data.notes.map((note) => ({
           ...note,
@@ -250,6 +251,7 @@ const Home = () => {
                   content={item.content}
                   tags={item.tags}
                   isPinned={item.isPinned}
+                  background={item.background}
                   onEdit={() => handleEdit(item)}
                   onDelete={() => handleDeleteModalOpen(item._id)}
                   onPinNote={() => {

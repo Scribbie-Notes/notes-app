@@ -7,6 +7,7 @@ import SearchBar from "./SearchBar/SearchBar";
 import { toast } from "react-hot-toast";
 import { Link } from "react-router-dom";
 import gsap from 'gsap/all';
+import { SlideTabsExample } from "./Tabs";
 
 const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -105,12 +106,13 @@ const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
           </h2>
         </div>
       </Link>
-
+      <SlideTabsExample />
       {userInfo && !hideSearchBarPaths.includes(location.pathname) && (
         <div
           ref={searchBarRef}
           className="hidden md:flex flex-grow justify-center mr-20"
         >
+       
           <SearchBar
             value={searchQuery}
             onChange={({ target }) => setSearchQuery(target.value)}
