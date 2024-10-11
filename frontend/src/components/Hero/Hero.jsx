@@ -91,7 +91,6 @@ const Hero = () => {
         <div className="h-full scroll-smooth">
             <Navbar userInfo={user} />
 
-            {/* Hero Section */}
             <section className="bg-white">
                 <div className="grid max-w-screen-xl px-4 py-8 mx-auto lg:gap-8 xl:gap-0 lg:py-16 lg:grid-cols-12">
                     <div className="mr-auto place-self-center lg:col-span-7">
@@ -119,14 +118,12 @@ const Hero = () => {
                 </div>
             </section>
 
-            {/* Feature Section */}
             <section ref={sectionRef} className="bg-gradient-to-b from-gray-50 to-white py-12 mt-8 mb-4">
                 <h1 className="section-title text-4xl font-bold text-center text-gray-900">Unlock Powerful Features to</h1>
                 <h1 className="section-title text-4xl font-bold mb-14 text-center text-gray-900">Enhance Your Note-Taking Experience</h1>
                 <div className="max-w-screen-xl mx-auto px-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
 
-                        {/* Feature Cards */}
                         <div ref={(el) => (featureCards.current[0] = el)} className="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition duration-300 ease-in-out border border-gray-200">
                             <div className="flex items-center mb-4 gap-3">
                                 <SiTicktick className='text-2xl text-gray-900' />
@@ -151,15 +148,14 @@ const Hero = () => {
                             <p className="text-gray-700">Access your notes anytime, anywhere with seamless cross-device synchronization.</p>
                         </div>
 
-                        {/* More Feature Cards here */}
                     </div>
                 </div>
             </section>
 
             <Testimonial />
             <Pricing />
+            <ScrollOnTop /> 
             <Footer />
-            <ScrollOnTop />
         </div>
     );
 }

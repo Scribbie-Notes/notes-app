@@ -73,7 +73,7 @@ const Card = ({id, title, description, price, period, features }) => {
           scale: 1.05,
         },
       }}
-      className="relative h-auto w-full max-w-sm shrink-0 overflow-hidden rounded-xl bg-gray-500 p-8 mb-[500px]"
+      className="relative h-auto w-full max-w-sm shrink-0 overflow-hidden rounded-xl bg-gray-500 p-8 mb-[10]"
     >
       <div className="relative z-10 text-white">
         <span className="mb-3 block w-fit rounded-full bg-white/30 px-3 py-0.5 text-sm font-light text-slate-800">
