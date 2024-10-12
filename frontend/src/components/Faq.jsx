@@ -39,24 +39,24 @@ const Faq = () => {
 
   const faqData = [
     {
-      question: "Q. Question1",
-      answer: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras erat magna, faucibus sed aliquam gravida, laoreet sed tortor. Suspendisse pellentesque feugiat dui, id dapibus nunc. Fusce tempus, lectus nec egestas pretium, ex nibh fringilla nibh, sit amet efficitur odio leo sit amet nibh. Proin eget magna neque. Vestibulum non dolor eget neque mattis porta efficitur a mauris. Donec posuere tellus ultricies eleifend finibus.",
+      question: "Q. What is Scribbie?",
+      answer: "Scribbie is a powerful, intuitive note-taking website designed specifically for working professionals. It helps you manage your notes seamlessly and effectively, making it easy to stay organized and focused.",
     },
     {
-      question: "Q. Question2",
-      answer: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras erat magna, faucibus sed aliquam gravida, laoreet sed tortor.",
+      question: "Q. How do I get started with Scribbie?",
+      answer: "Getting started with Scribbie is easy! Simply sign up for an account on our website, and you can start taking notes right away. Explore the features and customize your experience to fit your needs.",
     },
     {
-      question: "Q. Question3",
-      answer: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras erat magna, faucibus sed aliquam gravida, laoreet sed tortor. Suspendisse pellentesque feugiat dui, id dapibus nunc. Fusce tempus, lectus nec egestas pretium, ex nibh fringilla nibh, sit amet efficitur odio leo sit amet nibh.",
+      question: "Q. How does Scribbie help with note management?",
+      answer: "Scribbie allows you to categorize and tag your notes for quick retrieval, making it easy to find information when you need it. The intuitive interface ensures you can organize your notes in a way that suits your personal workflow.",
     },
     {
-      question: "Q. Question4",
-      answer: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+      question: "Q. Can I access Scribbie on multiple devices?",
+      answer: "Yes! Scribbie is a web-based application, so you can access your notes from any device with an internet connection. Your notes are automatically synced, ensuring you have access wherever you are.",
     },
     {
-      question: "Q. Question5",
-      answer: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras erat magna, faucibus sed aliquam gravida, laoreet sed tortor. Suspendisse pellentesque feugiat dui, id dapibus nunc. Fusce tempus, lectus nec egestas pretium, ex nibh fringilla nibh, sit amet efficitur odio leo sit amet nibh.",
+      question: "Q. Is my data secure on Scribbie?",
+      answer: "Yes, we take data security seriously. Scribbie uses encryption and other security measures to protect your notes and ensure that your information is safe and private.",
     }
   ];
 
