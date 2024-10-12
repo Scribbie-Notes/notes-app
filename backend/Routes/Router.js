@@ -335,6 +335,44 @@ router.put("/edit-note/:noteId", authenticationToken, async (req, res) => {
             .json({ error: true, message: ERROR_MESSAGES.INTERNAL_SERVER_ERROR });
     }
 });
+//update background-color
+router.put("/update-notes-background", authenticationToken, async (req, res) => {
+    const { noteIds, background } = req.body;
+    const { user } = req.user;
+  console.log(noteIds)
+    if (!noteIds || !Array.isArray(noteIds) || noteIds.length === 0 || !background) {
+      return res.status(HTTP_STATUS.BAD_REQUEST).json({
+        error: true,
+        message: ERROR_MESSAGES.PROVIDE_FIELD_TO_UPDATE,
+      });
+    }
+  
+    try {
+      const notes = await Note.updateMany(
+        { _id: { $in: noteIds }, userId: user._id }, // Find notes by IDs and user ID
+        { background: background } // Update the background color
+      );
+  
+      if (notes.modifiedCount === 0) {
+        return res.status(HTTP_STATUS.NOT_FOUND).json({
+          error: true,
+          message: ERROR_MESSAGES.NOTES_NOT_FOUND,
+        });
+      }
+  
+      return res.json({
+        error: false,
+        message: MESSAGES.NOTES_UPDATED_SUCCESSFULLY,
+        modifiedCount: notes.modifiedCount,
+      });
+    } catch (error) {
+      console.error("Error updating notes: ", error);
+      return res
+        .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
+        .json({ error: true, message: ERROR_MESSAGES.INTERNAL_SERVER_ERROR });
+    }
+  });
+  
 // Get all notes
 router.get("/get-all-notes", authenticationToken, async (req, res) => {
     const { user } = req.user;
