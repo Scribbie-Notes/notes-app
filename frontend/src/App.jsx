@@ -18,6 +18,8 @@ import Pricing from "./components/Pricing";
 import Footer from "./components/sticky_footer/Footer";
 
 
+
+
 // currently this component is hide
 // import Navbar from './components/Navbar';
 // import ProtectedRoute from './utils/ProtectedRoute';
@@ -78,6 +80,7 @@ const App = () => {
 const AppWithRouter = () => (
   <Router>
     <App />
+    
   </Router>
 );
 

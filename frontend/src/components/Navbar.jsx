@@ -1,16 +1,33 @@
-
-
-import React, { useState, useEffect, useRef } from "react";
-import ProfileInfo from "./Cards/ProfileInfo";
-import { useNavigate, useLocation } from "react-router-dom";
-import SearchBar from "./SearchBar/SearchBar";
-import { toast } from "react-hot-toast";
-import { Link } from "react-router-dom";
+import { useState, useEffect, useRef, createContext, useContext } from "react";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import gsap from 'gsap/all';
+import { toast } from "react-hot-toast";
+import { motion } from "framer-motion";
+import { FiMoon, FiSun } from "react-icons/fi";
 import { SlideTabsExample } from "./Tabs";
-import Example from "./Toggle";
+
+
+
+const ThemeContext = createContext();
+
+export const ThemeProvider = ({ children }) => {
+  const [theme, setTheme] = useState("light");
+
+  const toggleTheme = () => {
+    setTheme((prevTheme) => (prevTheme === "light" ? "dark" : "light"));
+  };
+
+  return (
+    <ThemeContext.Provider value={{ theme, toggleTheme }}>
+      {children}
+    </ThemeContext.Provider>
+  );
+};
+
+export const useTheme = () => useContext(ThemeContext);
 
 const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
+  const { theme, toggleTheme } = useTheme();
   const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
@@ -18,7 +35,8 @@ const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
   const logoRef = useRef(null);
   const searchBarRef = useRef(null);
   const profileRef = useRef(null);
-  const loginButtonRef = useRef(null); 
+  const loginButtonRef = useRef(null);
+
   useEffect(() => {
     gsap.fromTo(logoRef.current, {
       y: -20,
@@ -54,7 +72,6 @@ const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
       delay: 1,
     });
 
-   
     if (loginButtonRef.current) {
       gsap.fromTo(loginButtonRef.current, {
         opacity: 0,
@@ -64,7 +81,7 @@ const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
         opacity: 1,
         y: 0,
         ease: "bounce.out",
-        delay: 1.5, 
+        delay: 1.5,
       });
     }
   }, []);
@@ -98,49 +115,92 @@ const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
   const hideSearchBarPaths = ["/", "/my-profile", "/about"];
 
   return (
-    <div className="bg-white flex items-center justify-between px-4 py-2 drop-shadow-md">
+    <div className={`flex items-center justify-between px-4 py-2 drop-shadow-md ${theme === "dark" ? "bg-black text-white" : "bg-white text-black"}`}>
       <Link to={userInfo ? "/dashboard" : "/"}>
         <div ref={logoRef} className="flex items-center p-1">
           <img src="/logo.png" className="h-10" alt="logo" />
-          <h2 className="text-2xl font-medium ml-[-12px] text-[#2B2B2B] mt-2">
-            cribbie
-          </h2>
+          <h2 className="text-2xl font-medium ml-[-4px] mt-2 tracking-tight">cribbie</h2>
         </div>
       </Link>
-      <SlideTabsExample />
+      
       {userInfo && !hideSearchBarPaths.includes(location.pathname) && (
-        <div
-          ref={searchBarRef}
-          className="hidden md:flex flex-grow justify-center mr-20"
-        >
-       
-          <SearchBar
+        <div ref={searchBarRef} className="hidden md:flex flex-grow justify-center mr-20">
+          <input
+            type="text"
             value={searchQuery}
             onChange={({ target }) => setSearchQuery(target.value)}
-            handleSearch={handleSearch}
-            onClearSearch={onClearSearch}
+            placeholder="Search..."
+            className="border rounded-md px-4 py-2"
           />
+          <button onClick={handleSearch} className="ml-2 px-4 py-2 bg-blue-500 text-white rounded-md">Search</button>
+          <button onClick={onClearSearch} className="ml-2 px-4 py-2 bg-red-500 text-white rounded-md">Clear</button>
         </div>
       )}
-
+     <SlideTabsExample />
       {userInfo ? (
         <div ref={profileRef}>
-          <ProfileInfo userInfo={userInfo} onLogout={onLogout} />
+          <button onClick={onLogout} className="px-4 py-2 bg-red-500 text-white rounded-md">Logout</button>
         </div>
       ) : (
         location.pathname !== "/login" && (
           <button
-            ref={loginButtonRef} 
+            ref={loginButtonRef}
             onClick={() => navigate("/login")}
-            className="text-gray-700 pr-3 transition hover:text-gray-700/75"
+            className={`pr-3 transition ${theme === "dark" ? "text-white hover:text-gray-300" : "text-gray-700 hover:text-gray-700/75"}`}
           >
             Login
           </button>
         )
       )}
-      <Example />
+
+      <ThemeToggle />
     </div>
   );
 };
 
-export default Navbar;
+
+const ThemeToggle = () => {
+  const { theme, toggleTheme } = useTheme();
+  const selected = theme;
+
+  return (
+    <div className={`grid h-0 place-content-center transition-colors ${selected === "light" ? "bg-white" : "bg-gray-800"}`}>
+      <SliderToggle selected={selected} setSelected={toggleTheme} />
+    </div>
+  );
+};
+
+const SliderToggle = ({ selected, setSelected }) => {
+  return (
+    <div className="relative flex w-fit items-center rounded-full">
+      <button
+        className={`text-sm font-medium flex items-center gap-2 px-3 py-3 transition-colors relative z-10 ${selected === "light" ? "text-white" : "text-slate-300"}`}
+        onClick={() => setSelected("light")}
+      >
+        <FiMoon className="relative z-10 text-lg" />
+        <span className="relative z-10">Light</span>
+      </button>
+      <button
+        className={`text-sm font-medium flex items-center gap-2 px-3 py-3 transition-colors relative z-10 ${selected === "dark" ? "text-white" : "text-slate-800"}`}
+        onClick={() => setSelected("dark")}
+      >
+        <FiSun className="relative z-10 text-lg" />
+        <span className="relative z-10">Dark</span>
+      </button>
+      <div className={`absolute inset-0 z-0 flex ${selected === "dark" ? "justify-end" : "justify-start"}`}>
+        <motion.span
+          layout
+          transition={{ type: "spring", damping: 15, stiffness: 250 }}
+          className="h-full w-1/2 rounded-full bg-gradient-to-r from-violet-600 to-indigo-600"
+        />
+      </div>
+    </div>
+  );
+};
+
+
+export default () => (
+  <ThemeProvider>
+    <Navbar />
+  </ThemeProvider>
+);
