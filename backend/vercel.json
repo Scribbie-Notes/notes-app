@@ -8,7 +8,31 @@
     ],
     "routes": [
         {
-            "src": "/(.*)",
+            "src": "/",
+            "dest": "/"
+        },
+        {
+            "src": "/landing",
+            "dest": "/"
+        },
+        {
+            "src": "/dashboard",
+            "dest": "/"
+        },
+        {
+            "src": "/login",
+            "dest": "/"
+        },
+        {
+            "src": "/signup",
+            "dest": "/"
+        },
+        {
+            "src": "/about",
+            "dest": "/"
+        },
+        {
+            "src": "/my-profile",
             "dest": "/"
         }
     ]
