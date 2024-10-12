@@ -8,6 +8,7 @@ import { toast } from "react-hot-toast";
 import { Link } from "react-router-dom";
 import gsap from 'gsap/all';
 import { SlideTabsExample } from "./Tabs";
+import Example from "./Toggle";
 
 const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -137,6 +138,7 @@ const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
           </button>
         )
       )}
+      <Example />
     </div>
   );
 };
