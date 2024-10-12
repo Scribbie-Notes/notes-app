@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import Navbar from "../../components/Navbar";
 import NoteCard from "../../components/Cards/NoteCard";
-import { MdAdd, MdClose } from "react-icons/md";
+import { MdAdd, MdClose ,MdColorLens, MdOutlinePushPin, MdDelete} from "react-icons/md";
 import AddEditNotes from "./AddEditNotes";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../utils/axiosInstance";
@@ -12,6 +12,7 @@ import NoDataImg from "../../assets/images/no-data.svg";
 import toast from "react-hot-toast";
 import noFound from "../../assets/images/noFound.svg";
 import addPost from "../../assets/images/addPost.svg";
+
 const Home = () => {
   const [openAddEditModal, setOpenAddEditModal] = useState({
     isShown: false,
@@ -20,7 +21,9 @@ const Home = () => {
   });
 
   const [isLoading, setIsLoading] = useState(true);
-
+  const [selectedNotes, setSelectedNotes] = useState([]);
+  const [isColorPickerOpen, setIsColorPickerOpen] = useState(false);
+  const [background, setBackground] = useState("#ffffff");
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [noteToDelete, setNoteToDelete] = useState(null);
   const [viewNoteModal, setViewNoteModal] = useState({
@@ -190,18 +193,87 @@ const Home = () => {
     getUserInfo();
   }, []);
 
+  const handleNoteSelection = (noteId) => {
+    console.log(noteId)
+    setSelectedNotes(prevSelected => {
+      if (prevSelected.includes(noteId)) {
+        return prevSelected.filter(id => id !== noteId);
+      } else {
+        return [...prevSelected, noteId];
+      }
+    });
+  };
+
+ 
+  const handleBulkColor = async (color) => {
+    try {
+      // console.log(color);
+      // Send an array of selected note IDs and the new background color in one request
+      await axiosInstance.put('/update-notes-background', {
+        noteIds: selectedNotes,
+        background: color,
+      });
+  
+      getAllNotes();
+      setSelectedNotes([]);
+      toast.success("Color applied to selected notes");
+    } catch (error) {
+      console.error("Error applying color:", error);
+      toast.error("Failed to apply color to selected notes");
+    }
+  };
+  
+
+  const handleColorChange = (e) => {
+    setBackground(e.target.value);
+  };
   const pinnedNotes = allNotes.filter((note) => note.isPinned === true);
   const otherNotes = allNotes.filter((note) => note.isPinned !== true);
   // console.log('pinnedNotes',pinnedNotes)
   // console.log('otherNotes',otherNotes)
   return (
     <div>
-      <Navbar
-        userInfo={userInfo}
-        onSearchNote={onSearchNote}
-        handleClearSearch={handleClearSearch}
-        setUserInfo={setUserInfo}
-      />
+     
+      {selectedNotes.length > 0 ? (
+        <div className=" bg-white shadow-md z-50 p-4 flex justify-between items-center">
+          <span>{selectedNotes.length} notes selected</span>
+          <div className="flex items-center ">
+          <div className="relative  ">
+              <button 
+                onClick={() => setIsColorPickerOpen(!isColorPickerOpen)} 
+                className="mr-2"
+              >
+                <MdColorLens className="text-2xl" />
+              </button>
+              {isColorPickerOpen && (
+                <div className="absolute right-0 mt-2 p-2 bg-white  rounded shadow-lg">
+                  <input 
+                    type="color" 
+                    value={background}
+                    onChange={handleColorChange}
+                    className="w-8 h-8 border-none"
+                  />
+                  <button 
+                    onClick={()=>handleBulkColor(background)}
+                    className="ml-2 px-2 py-1 bg-blue-500 text-white rounded text-sm"
+                  >
+                    Apply
+                  </button>
+                </div>
+              )}
+            </div>
+            
+          </div>
+        </div>
+      ) : (
+        <Navbar
+          userInfo={userInfo}
+          onSearchNote={onSearchNote}
+          handleClearSearch={handleClearSearch}
+          setUserInfo={setUserInfo}
+        />
+      )}
+
       <div className="container h-auto p-6 pb-12">
         {isLoading ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 mt-4 transition-all">
@@ -223,16 +295,20 @@ const Home = () => {
                   {pinnedNotes.map((item) => (
                     <NoteCard
                       key={item._id}
+                      id={item._id}
                       title={item.title}
                       date={item.createdOn}
                       content={item.content}
                       tags={item.tags}
                       isPinned={item.isPinned}
+                      background={item.background}
                       onEdit={() => handleEdit(item)}
                       onDelete={() => handleDeleteModalOpen(item._id)}
                       onPinNote={() => {
                         updateIsPinned(item);
                       }}
+                      isSelected={selectedNotes.includes(item._id)}
+                      onSelect={handleNoteSelection}
                       onClick={() => handleViewNote(item)}
                     />
                   ))}
@@ -246,6 +322,7 @@ const Home = () => {
               {otherNotes.map((item) => (
                 <NoteCard
                   key={item._id}
+                  id={item._id}
                   title={item.title}
                   date={item.createdOn}
                   content={item.content}
@@ -258,6 +335,8 @@ const Home = () => {
                     updateIsPinned(item);
                   }}
                   onClick={() => handleViewNote(item)}
+                  onSelect={handleNoteSelection}
+                  isSelected={selectedNotes.includes(item._id)}
                 />
               ))}
             </div>
