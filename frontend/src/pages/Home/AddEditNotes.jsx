@@ -5,6 +5,8 @@ import { MdClose } from 'react-icons/md';
 import axiosInstance from '../../utils/axiosInstance';
 import toast from 'react-hot-toast';
 import AddAttachmentsInput from '../../components/Input/AddAttachmentInput';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 
 const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
     const [title, setTitle] = useState('');
@@ -150,22 +152,36 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
                 </div>
             </div>
 
-            <div className='flex flex-col gap-2 mt-4'>
-                <label className='font-medium'>Content</label>
+            <label className='font-medium'>Content</label>
+            <div className='flex flex-col gap-2  mt-4'>
+
                 <div className='relative'>
-                    <textarea
-                        className='p-2 border rounded-md h-40 text-sm w-full pr-12'
-                        placeholder='Enter note content'
+                    <ReactQuill
                         value={content}
-                        onChange={handleContentChange}
-                    ></textarea>
+                        onChange={setContent} // Update content state
+                        modules={{
+                            toolbar: [
+                                [{ 'header': [1, 2, false] }],
+                                ['bold', 'italic', 'underline'],
+                                [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+                                ['clean']   
+                            ],
+                            clipboard: {
+                                matchVisual: false,
+                            }
+                        }}
+                        placeholder='Enter note content'
+                        style={{
+                            height: '100px'
+                        }}
+                    />
                     <span className='absolute right-2 bottom-2 text-gray-500 text-xs'>
                         {content.length}/{MAX_CONTENT_LENGTH}
                     </span>
                 </div>
             </div>
 
-            <div className='flex flex-col gap-2 mt-4'>
+            <div className='flex flex-col gap-2 mt-12'>
                 <label className='font-medium'>Background Color</label>
                 <input
                     type="color"

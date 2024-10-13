@@ -1,3 +1,5 @@
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 import { useState, useEffect } from "react";
 import Navbar from "../../components/Navbar";
 import NoteCard from "../../components/Cards/NoteCard";
@@ -400,7 +402,7 @@ const Home = () => {
               <span className="text-xs text-slate-500">
                 {moment(viewNoteModal.data.date).format("Do MMM YYYY")}
               </span>
-              <p className="text-gray-700 mt-4">{viewNoteModal.data.content}</p>
+              <p className="text-gray-700 mt-4"><ReactQuill value={viewNoteModal.data.content} readOnly={true} theme="bubble" /></p>
               <div className="mt-4">
                 {viewNoteModal.data.tags.map((tag, index) => (
                   <span

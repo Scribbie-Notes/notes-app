@@ -1,3 +1,5 @@
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 import PropTypes from "prop-types";
 import moment from "moment";
 import {
@@ -75,7 +77,7 @@ const NoteCard = ({
         }}
         className="text-xs mt-2"
       >
-        {content}
+        <ReactQuill value={content} readOnly={true} theme="bubble" />
       </p>
 
       <div className="flex items-center justify-between mt-3 mb-[-8px]">
