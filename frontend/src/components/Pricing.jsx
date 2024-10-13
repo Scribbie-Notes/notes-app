@@ -1,7 +1,11 @@
 import { motion } from "framer-motion";
+import Navbar from "./Navbar";
 
 const Pricing = () => {
+  const user = JSON.parse(localStorage.getItem("user"));
   return (
+    <>
+     <Navbar userInfo={user}/>
     <section className="px-2 py-12 w-full h-auto  ">
       <div className="py-4 px-4 mx-auto  lg:py-4 lg:px-6 h-[700px] ">
         <div className="mx-auto  text-center mb-8 lg:mb-12">
@@ -57,6 +61,7 @@ const Pricing = () => {
         </div>
       </div>
     </section>
+    </>
   );
 };
 

@@ -16,6 +16,7 @@ import ProfilePage from "./pages/ProfilePage/ProfilePage";
 import Testimonial from "./components/Testimonial";
 import Pricing from "./components/Pricing";
 import Footer from "./components/sticky_footer/Footer";
+import Contact from "./components/Contact/Contact";
 
 
 // currently this component is hide
@@ -64,6 +65,7 @@ const App = () => {
           <Route path="/login" exact element={<Login setUser={setUser} />} />
           <Route path="/testimonial" exact element={<Testimonial />} />
           <Route path="/pricing" exact element={<Pricing />} />
+          <Route path="/contact-us" exact element={<Contact/>}/>
           <Route path='/footer' exact element ={<Footer />}/>
           <Route path="/signup" exact element={<Signup />} />
           <Route path="/about" exact element={<About />} />
