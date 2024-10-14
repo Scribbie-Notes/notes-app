@@ -196,7 +196,7 @@ const Home = () => {
   }, []);
 
   const handleNoteSelection = (noteId) => {
-    console.log(noteId)
+    // console.log(noteId)
     setSelectedNotes(prevSelected => {
       if (prevSelected.includes(noteId)) {
         return prevSelected.filter(id => id !== noteId);
@@ -206,7 +206,26 @@ const Home = () => {
     });
   };
 
- 
+  const handleBulkDelete = async () => {
+    try {
+      // Send selected note IDs via the data field, since Axios delete doesn't send req.body directly
+      await axiosInstance({
+        method: 'delete',
+        url: '/delete-multiple-notes',
+        data: { noteIds: selectedNotes }, // Pass the noteIds in the data field
+      });
+  
+      // After successful deletion, refresh the notes and reset selected notes
+      getAllNotes();
+      setSelectedNotes([]);
+      toast.success("Deleted Notes successfully");
+    } catch (error) {
+      console.error("Error deleting notes:", error);
+      toast.error("Failed to delete selected notes");
+    }
+  };
+  
+
   const handleBulkColor = async (color) => {
     try {
       // console.log(color);
@@ -239,16 +258,16 @@ const Home = () => {
       {selectedNotes.length > 0 ? (
         <div className=" bg-white shadow-md z-50 p-4 flex justify-between items-center">
           <span>{selectedNotes.length} notes selected</span>
-          <div className="flex items-center ">
-          <div className="relative  ">
+          <div className="flex items-center gap-x-5">
+          <div className="relative  flex ">
               <button 
                 onClick={() => setIsColorPickerOpen(!isColorPickerOpen)} 
-                className="mr-2"
+                
               >
                 <MdColorLens className="text-2xl" />
               </button>
               {isColorPickerOpen && (
-                <div className="absolute right-0 mt-2 p-2 bg-white  rounded shadow-lg">
+                <div className="absolute top-5 right-0 mt-2 p-2 bg-white  rounded shadow-lg">
                   <input 
                     type="color" 
                     value={background}
@@ -264,7 +283,9 @@ const Home = () => {
                 </div>
               )}
             </div>
-            
+            <button onClick={handleBulkDelete}>
+              <MdDelete className="text-2xl  text-black" />
+            </button>
           </div>
         </div>
       ) : (
