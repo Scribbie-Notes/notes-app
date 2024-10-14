@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import Navbar from './Navbar';
 
 const testimonialsData = [
   {
@@ -28,6 +29,7 @@ const testimonialsData = [
 ];
 
 const Testimonial = () => {
+  const user = JSON.parse(localStorage.getItem("user"));
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const testimonialDisplayDuration = 5000;
@@ -40,6 +42,8 @@ const Testimonial = () => {
   }, []);
 
   return (
+    <>
+    <Navbar userInfo={user}/>
     <div className="bg-neutral-100 h-[400px] py-20">
       <div className="container mx-auto px-6">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
@@ -85,6 +89,7 @@ const Testimonial = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 
