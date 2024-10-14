@@ -2,11 +2,8 @@ import { useState, useEffect, useRef, createContext, useContext } from "react";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 import gsap from 'gsap/all';
 import { toast } from "react-hot-toast";
-import { motion } from "framer-motion";
 import { FiMoon, FiSun } from "react-icons/fi";
 import { SlideTabsExample } from "./Tabs";
-
-
 
 const ThemeContext = createContext();
 
@@ -122,7 +119,7 @@ const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
           <h2 className="text-2xl font-medium ml-[-4px] mt-2 tracking-tight">cribbie</h2>
         </div>
       </Link>
-      
+
       {userInfo && !hideSearchBarPaths.includes(location.pathname) && (
         <div ref={searchBarRef} className="hidden md:flex flex-grow justify-center mr-20">
           <input
@@ -136,7 +133,7 @@ const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
           <button onClick={onClearSearch} className="ml-2 px-4 py-2 bg-red-500 text-white rounded-md">Clear</button>
         </div>
       )}
-     <SlideTabsExample />
+      <SlideTabsExample />
       {userInfo ? (
         <div ref={profileRef}>
           <button onClick={onLogout} className="px-4 py-2 bg-red-500 text-white rounded-md">Logout</button>
@@ -158,46 +155,32 @@ const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
   );
 };
 
-
 const ThemeToggle = () => {
   const { theme, toggleTheme } = useTheme();
-  const selected = theme;
+  const isDarkMode = theme === "dark";
 
   return (
-    <div className={`grid h-0 place-content-center transition-colors ${selected === "light" ? "bg-white" : "bg-gray-800"}`}>
-      <SliderToggle selected={selected} setSelected={toggleTheme} />
-    </div>
+    <button
+      onClick={toggleTheme}
+      className={`flex items-center gap-2 px-3 py-2 rounded-full transition-colors duration-300 ${
+        isDarkMode ? "bg-gray-800 text-white" : "bg-gray-200 text-gray-800"
+      }`}
+    >
+      {isDarkMode ? (
+        <>
+        <FiMoon className="text-lg" />
+        <span>Dark Mode</span>
+         
+        </>
+      ) : (
+        <>
+        <FiSun className="text-lg" />
+        <span>Light Mode</span>
+        </>
+      )}
+    </button>
   );
 };
-
-const SliderToggle = ({ selected, setSelected }) => {
-  return (
-    <div className="relative flex w-fit items-center rounded-full">
-      <button
-        className={`text-sm font-medium flex items-center gap-2 px-3 py-3 transition-colors relative z-10 ${selected === "light" ? "text-white" : "text-slate-300"}`}
-        onClick={() => setSelected("light")}
-      >
-        <FiMoon className="relative z-10 text-lg" />
-        <span className="relative z-10">Light</span>
-      </button>
-      <button
-        className={`text-sm font-medium flex items-center gap-2 px-3 py-3 transition-colors relative z-10 ${selected === "dark" ? "text-white" : "text-slate-800"}`}
-        onClick={() => setSelected("dark")}
-      >
-        <FiSun className="relative z-10 text-lg" />
-        <span className="relative z-10">Dark</span>
-      </button>
-      <div className={`absolute inset-0 z-0 flex ${selected === "dark" ? "justify-end" : "justify-start"}`}>
-        <motion.span
-          layout
-          transition={{ type: "spring", damping: 15, stiffness: 250 }}
-          className="h-full w-1/2 rounded-full bg-gradient-to-r from-violet-600 to-indigo-600"
-        />
-      </div>
-    </div>
-  );
-};
-
 
 export default () => (
   <ThemeProvider>
