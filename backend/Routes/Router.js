@@ -339,7 +339,7 @@ router.put("/edit-note/:noteId", authenticationToken, async (req, res) => {
 router.put("/update-notes-background", authenticationToken, async (req, res) => {
     const { noteIds, background } = req.body;
     const { user } = req.user;
-  console.log(noteIds)
+//   console.log(noteIds)
     if (!noteIds || !Array.isArray(noteIds) || noteIds.length === 0 || !background) {
       return res.status(HTTP_STATUS.BAD_REQUEST).json({
         error: true,
@@ -366,7 +366,7 @@ router.put("/update-notes-background", authenticationToken, async (req, res) => 
         modifiedCount: notes.modifiedCount,
       });
     } catch (error) {
-      console.error("Error updating notes: ", error);
+    //   console.error("Error updating notes: ", error);
       return res
         .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
         .json({ error: true, message: ERROR_MESSAGES.INTERNAL_SERVER_ERROR });
@@ -419,6 +419,49 @@ router.delete("/delete-note/:noteId", authenticationToken, async (req, res) => {
     }
 });
 
+// delete selected notes
+router.delete("/delete-multiple-notes", authenticationToken, async (req, res) => {
+    const { noteIds } = req.body; // Extract the noteIds from the body
+    const { user } = req.user;
+  
+    // Validate that noteIds is a non-empty array
+    if (!noteIds || !Array.isArray(noteIds) || noteIds.length === 0) {
+      return res.status(HTTP_STATUS.BAD_REQUEST).json({
+        error: true,
+        message: ERROR_MESSAGES.PROVIDE_FIELD_TO_UPDATE, // Custom error message
+      });
+    }
+  
+    try {
+      // Delete the notes that belong to the authenticated user and match the IDs
+      const result = await Note.deleteMany({
+        _id: { $in: noteIds }, 
+        userId: user._id, // Ensure notes belong to the authenticated user
+      });
+  
+      // Handle case when no notes were deleted
+      if (result.deletedCount === 0) {
+        return res.status(HTTP_STATUS.NOT_FOUND).json({
+          error: true,
+          message: ERROR_MESSAGES.NOTES_NOT_FOUND,
+        });
+      }
+  
+      // Return success response
+      return res.json({
+        error: false,
+        message: MESSAGES.NOTES_DELETED_SUCCESSFULLY,
+        deletedCount: result.deletedCount, // Return number of deleted notes
+      });
+    } catch (error) {
+      console.error("Error deleting notes:", error);
+      return res
+        .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
+        .json({ error: true, message: ERROR_MESSAGES.INTERNAL_SERVER_ERROR });
+    }
+  });
+  
+  
 // delete user and its notes
 router.delete("/delete-user", authenticationToken, async (req, res) => {
     try {
