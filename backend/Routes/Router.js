@@ -580,6 +580,24 @@ router.put(
     }
 );
 
+router.put('/bulk-update-notes-pinned', async (req, res) => {
+    const { noteIds, isPinned } = req.body;
+  
+    try {
+      // Update multiple notes at once
+      await Note.updateMany(
+        { _id: { $in: noteIds } }, // Match notes with the given noteIds
+        { $set: { isPinned: isPinned } } // Set isPinned value
+      );
+  
+      res.status(200).json({ message: `Notes successfully ${isPinned ? 'pinned' : 'unpinned'}` });
+    } catch (error) {
+      console.error('Error updating notes:', error);
+      res.status(500).json({ message: 'Failed to update notes' });
+    }
+  });
+  
+
 // Search notes
 router.get("/search-notes/", authenticationToken, async (req, res) => {
     const { user } = req.user;
