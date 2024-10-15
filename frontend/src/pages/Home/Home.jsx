@@ -102,21 +102,22 @@ const Home = () => {
   // delete note
   const deleteNote = async () => {
     try {
+      const deletedNotes = []
       const response = await axiosInstance.delete(
         `/delete-note/${noteToDelete}`
       );
+      if (response.status === 200) {
+        deletedNotes.push(noteToDelete); // Add noteToDelete to the deletedNotes array
+      }
       if (response.data && !response.data.error) {
         getAllNotes();
-        toast.success("Note deleted successfully", {
-          style: {
-            fontSize: "13px",
-            maxWidth: "400px",
-            boxShadow: "px 4px 8px rgba(0, 1, 4, 0.1)",
-            borderRadius: "8px",
-            borderColor: "rgba(0, 0, 0, 0.8)",
-            marginRight: "10px",
-          },
-        });
+        
+        toast.success(
+          <div>
+            Notes deleted. <button className='bg-green-500 p-2 text-white rounded' onClick={() => undoDelete(deletedNotes)}>Undo</button>
+          </div>,
+          { autoClose: 5000 } // Automatically close the toast after 5 seconds
+        );
       }
     } catch (error) {
       console.error("Error deleting note:", error);
@@ -208,6 +209,7 @@ const Home = () => {
 
   const handleBulkDelete = async () => {
     try {
+      const deletedNotes = selectedNotes;
       // Send selected note IDs via the data field, since Axios delete doesn't send req.body directly
       await axiosInstance({
         method: 'delete',
@@ -216,12 +218,35 @@ const Home = () => {
       });
   
       // After successful deletion, refresh the notes and reset selected notes
+      toast.success(
+        <div>
+          Notes deleted. <button className='bg-green-500 p-2 text-white rounded' onClick={() => undoDelete(deletedNotes)}>Undo</button>
+        </div>,
+        { autoClose: 5000 } // Automatically close the toast after 5 seconds
+      );
       getAllNotes();
       setSelectedNotes([]);
-      toast.success("Deleted Notes successfully");
+      // toast.success("Deleted Notes successfully");
     } catch (error) {
       console.error("Error deleting notes:", error);
       toast.error("Failed to delete selected notes");
+    }
+  };
+  
+  // undo delete
+  const undoDelete = async (deletedNotes) => {
+    try {
+      // Send a request to restore the deleted notes
+      await axiosInstance.post('/restore-multiple-notes', {
+        noteIds: deletedNotes
+      });
+  
+      // Refresh the notes list
+      getAllNotes();
+      toast.success("Undo successful. Notes restored.");
+    } catch (error) {
+      console.error("Error restoring notes:", error);
+      toast.error("Failed to undo delete");
     }
   };
   
