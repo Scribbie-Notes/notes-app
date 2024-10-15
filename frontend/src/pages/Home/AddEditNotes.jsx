@@ -1,13 +1,19 @@
+
 import React, { useState, useEffect } from 'react';
 import TagInput from '../../components/Input/TagInput';
 import { MdClose } from 'react-icons/md';
 import axiosInstance from '../../utils/axiosInstance';
 import toast from 'react-hot-toast';
+import AddAttachmentsInput from '../../components/Input/AddAttachmentInput';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 
 const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
     const [tags, setTags] = useState([]);
+    const [attachments, setAttachments] = useState([]);
+    const [background, setBackground] = useState('#ffffff'); // Default white background
     const [error, setError] = useState(null);
     const MAX_TITLE_LENGTH = 60;
     const MAX_CONTENT_LENGTH = 2500;
@@ -17,8 +23,14 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
             setTitle(noteData.title);
             setContent(noteData.content);
             setTags(noteData.tags);
+            setAttachments(noteData.files || []);
+            setBackground(noteData.background || '#ffffff');
         }
     }, [type, noteData]);
+
+    const handleFileUpload = (files) => {
+        setAttachments((prevAttachments) => [...prevAttachments, ...files]);
+    };
 
     const handleTitleChange = (e) => {
         const newTitle = e.target.value;
@@ -34,42 +46,38 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
         }
     };
 
-    const addNewNote = async () => {
-        try {
-            const response = await axiosInstance.post("/add-note", {
-                title,
-                content,
-                tags,
-                isPinned: false
-            });
+    const handleBackgroundChange = (e) => {
+        setBackground(e.target.value);
+    };
 
+    const addNewNote = async () => {
+        const formData = new FormData();
+        
+        formData.append('title', title);
+        formData.append('content', content);
+        formData.append('background', background);
+        formData.append('tags', tags);
+
+        attachments.forEach((file) => {
+            formData.append('attachments', file);
+        });
+
+        try {
+            const response = await axiosInstance.post("/add-note", formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+            console.log(response)
             if (response.data && response.data.note) {
                 getAllNotes();
                 onClose();
-                toast.success('Note added successfully', {
-                    style: {
-                        fontSize: '13px',
-                        maxWidth: '400px',
-                        boxShadow: 'px 4px 8px rgba(0, 1, 4, 0.1)',
-                        borderRadius: '8px',
-                        borderColor: 'rgba(0, 0, 0, 0.8)',
-                        marginRight: '10px',
-                    }
-                });
+                toast.success('Note added successfully');
             }
         } catch (error) {
             console.error("Error adding note:", error);
             setError("An error occurred while adding the note.");
-            toast.error('Failed to add a note', {
-                style: {
-                    fontSize: '13px',
-                    maxWidth: '400px',
-                    boxShadow: 'px 4px 8px rgba(0, 1, 4, 0.1)',
-                    borderRadius: '8px',
-                    borderColor: 'rgba(0, 0, 0, 0.8)',
-                    marginRight: '10px',
-                }
-            });
+            toast.error('Failed to add a note');
         }
     };
 
@@ -80,41 +88,22 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
                 return;
             }
             
-            console.log(`Updating note with ID: ${noteData._id}`);
-
             const response = await axiosInstance.put(`/edit-note/${noteData._id}`, {
                 title,
                 content,
-                tags
+                tags,
+                background
             });
 
             if (response.data && response.data.note) {
                 getAllNotes();
                 onClose();
-                toast.success('Note updated successfully', {
-                    style: {
-                        fontSize: '13px',
-                        maxWidth: '400px',
-                        boxShadow: 'px 4px 8px rgba(0, 1, 4, 0.1)',
-                        borderRadius: '8px',
-                        borderColor: 'rgba(0, 0, 0, 0.8)',
-                        marginRight: '10px',
-                    }
-                });
+                toast.success('Note updated successfully');
             }
         } catch (error) {
             console.error("Error updating note:", error);
             setError("An error occurred while updating the note.");
-            toast.error('Failed to update a note', {
-                style: {
-                    fontSize: '13px',
-                    maxWidth: '400px',
-                    boxShadow: 'px 4px 8px rgba(0, 1, 4, 0.1)',
-                    borderRadius: '8px',
-                    borderColor: 'rgba(0, 0, 0, 0.8)',
-                    marginRight: '10px',
-                }
-            });
+            toast.error('Failed to update a note');
         }
     };
 
@@ -152,7 +141,7 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
                 <div className='relative'>
                     <input
                         type="text"
-                        className='p-2 border rounded-md text-sm w-full pr-12' // Extra padding to the right
+                        className='p-2 border rounded-md text-sm w-full pr-12'
                         value={title}
                         placeholder='Enter note title'
                         onChange={handleTitleChange}
@@ -163,24 +152,53 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
                 </div>
             </div>
 
-            <div className='flex flex-col gap-2 mt-4'>
-                <label className='font-medium'>Content</label>
+            <label className='font-medium'>Content</label>
+            <div className='flex flex-col gap-2  mt-4'>
+
                 <div className='relative'>
-                    <textarea
-                        className='p-2 border rounded-md h-40 text-sm w-full pr-12'
-                        placeholder='Enter note content'
+                    <ReactQuill
                         value={content}
-                        onChange={handleContentChange}
-                    ></textarea>
+                        onChange={setContent} // Update content state
+                        modules={{
+                            toolbar: [
+                                [{ 'header': [1, 2, false] }],
+                                ['bold', 'italic', 'underline'],
+                                [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+                                ['clean']   
+                            ],
+                            clipboard: {
+                                matchVisual: false,
+                            }
+                        }}
+                        placeholder='Enter note content'
+                        style={{
+                            height: '100px'
+                        }}
+                    />
                     <span className='absolute right-2 bottom-2 text-gray-500 text-xs'>
                         {content.length}/{MAX_CONTENT_LENGTH}
                     </span>
                 </div>
             </div>
 
+            <div className='flex flex-col gap-2 mt-12'>
+                <label className='font-medium'>Background Color</label>
+                <input
+                    type="color"
+                    value={background}
+                    onChange={handleBackgroundChange}
+                    className='p-1 border rounded-md w-full'
+                />
+            </div>
+
             <div className='flex flex-col gap-2 mt-4'>
                 <label className='font-medium md:text-base'>Tags</label>
                 <TagInput tags={tags} setTags={setTags} />
+            </div>
+
+            <div className='flex flex-col gap-2 mt-4'>
+                <label className='font-medium md:text-base'>Add Attachments</label>
+                <AddAttachmentsInput onFileUpload={handleFileUpload} />
             </div>
 
             {error && <p className='text-red-500 mt-2'>{error}</p>}
