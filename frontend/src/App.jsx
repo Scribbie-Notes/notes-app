@@ -13,6 +13,7 @@ import Hero from "./components/Hero/Hero";
 import About from "./components/About/About";
 import Loading from "./components/Loading";
 import ProfilePage from "./pages/ProfilePage/ProfilePage";
+import ContactUs from "./pages/ContactUs"
 // currently this component is hide
 // import Navbar from './components/Navbar';
 // import ProtectedRoute from './utils/ProtectedRoute';
@@ -60,6 +61,7 @@ const App = () => {
           <Route path="/about" exact element={<About />} />
           <Route path="/my-profile" exact element={<ProfilePage />} />
           {/* <Route path="/404" exact element={<ErrorPage/>} /> */}
+          <Route path="/about"  element={<ContactUs />}></Route>  
         </Routes>
       )}
     </div>
