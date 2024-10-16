@@ -8,6 +8,7 @@ const noteSchema = new Schema({
     tags: { type: [String], default: [] }, // Ensure this is an array
     attachments:{type:[String],default:[]},
     isPinned: { type: Boolean, required: false },
+    isArchived:{type:Boolean , default:false},
     deleted: {
         type: Boolean,
         default: false,  // Default is false, meaning the note is not deleted

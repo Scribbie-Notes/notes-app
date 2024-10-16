@@ -10,6 +10,8 @@ import {
   MdOutlinePushPin,
   MdDelete,
   MdPushPin,
+  MdOutlineUnarchive,
+  MdOutlineArchive,
 } from "react-icons/md";
 import AddEditNotes from "./AddEditNotes";
 import { useNavigate } from "react-router-dom";
@@ -245,7 +247,22 @@ const Home = () => {
     }
   };
   
-
+  const handleBulkArchive = async () => {
+    try {
+      // Send an array of selected note IDs to archive them in one request
+      await axiosInstance.put("/archive-notes", {
+        noteIds: selectedNotes,
+      });
+  
+      getAllNotes();  // Refresh the notes after archiving
+      setSelectedNotes([]);  // Clear the selection
+      toast.success("Selected notes archived successfully");
+    } catch (error) {
+      console.error("Error archiving notes:", error);
+      toast.error("Failed to archive selected notes");
+    }
+  };
+  
   const handleBulkDelete = async () => {
     try {
       const deletedNotes = selectedNotes;
@@ -362,7 +379,9 @@ const Home = () => {
                 ) // Filled icon for pinned notes
               }
             </button>
-
+    <button onClick={handleBulkArchive}>
+          <MdOutlineArchive className="text-2xl  text-black"/>
+    </button>
             <button onClick={handleBulkDelete}>
               <MdDelete className="text-2xl  text-black" />
             </button>
@@ -377,7 +396,7 @@ const Home = () => {
         />
       )}
 
-      <div className="container h-auto p-6 pb-12">
+      <div className="container h-auto p-6 pb-12 mx-auto">
         {isLoading ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 mt-4 transition-all">
             {Array.from({ length: 9 }).map((item, i) => {
@@ -404,6 +423,7 @@ const Home = () => {
                       content={item.content}
                       tags={item.tags}
                       isPinned={item.isPinned}
+                    
                       background={item.background}
                       onEdit={() => handleEdit(item)}
                       onDelete={() => handleDeleteModalOpen(item._id)}
@@ -431,6 +451,7 @@ const Home = () => {
                   content={item.content}
                   tags={item.tags}
                   isPinned={item.isPinned}
+                
                   background={item.background}
                   onEdit={() => handleEdit(item)}
                   onDelete={() => handleDeleteModalOpen(item._id)}
