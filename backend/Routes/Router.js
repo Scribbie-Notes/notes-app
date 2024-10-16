@@ -381,7 +381,7 @@ router.get("/get-all-notes", authenticationToken, async (req, res) => {
 
     try {
         // Fetch notes that belong to the user and where deleted is false, sorting by isPinned
-        const notes = await Note.find({ userId: user._id, deleted: false }).sort({ isPinned: -1 });
+        const notes = await Note.find({ userId: user._id, deleted: false,isArchived: false}).sort({ isPinned: -1 });
         
         return res.json({
             error: false,
@@ -395,6 +395,30 @@ router.get("/get-all-notes", authenticationToken, async (req, res) => {
             .json({ error: true, message: ERROR_MESSAGES.INTERNAL_SERVER_ERROR });
     }
 });
+
+router.get("/get-archived-notes", authenticationToken, async (req, res) => {
+    try {
+        // Use req.user directly, as the user is authenticated via the authenticationToken middleware
+        const { user } = req.user;
+ 
+        // Fetch archived notes that belong to the user and where deleted is false
+        const notes = await Note.find({ userId: user._id, deleted: false,isArchived: true}).sort({ isPinned: -1 });
+
+        // console.log("Archived notes:", notes);
+
+        return res.json({
+            error: false,
+            notes,
+            message: "Archived notes fetched successfully", // Updated the message
+        });
+    } catch (error) {
+        console.error("Error fetching archived notes:", error);
+        return res
+            .status(500)
+            .json({ error: true, message: "Internal server error" });
+    }
+});
+
 
 // Delete note
 router.delete("/delete-note/:noteId", authenticationToken, async (req, res) => {
@@ -597,6 +621,28 @@ router.put('/bulk-update-notes-pinned', async (req, res) => {
     }
   });
   
+  // archive multiple notes
+  router.put('/archive-notes', async (req, res) => {
+    const { noteIds } = req.body;
+  
+    if (!Array.isArray(noteIds) || noteIds.length === 0) {
+      return res.status(400).json({ message: 'Invalid request, noteIds must be an array' });
+    }
+  
+    try {
+      // Update the selected notes to set isArchived to true
+      await Note.updateMany(
+        { _id: { $in: noteIds }, deleted: false },  // Ensure the notes are not deleted
+        { $set: { isArchived: true } }
+      );
+      
+      res.status(200).json({ message: 'Notes archived successfully' });
+    } catch (error) {
+      console.error('Error archiving notes:', error);
+      res.status(500).json({ message: 'Failed to archive notes' });
+    }
+  });
+
 
 // Search notes
 router.get("/search-notes/", authenticationToken, async (req, res) => {

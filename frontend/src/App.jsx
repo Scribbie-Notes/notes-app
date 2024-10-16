@@ -18,6 +18,7 @@ import Pricing from "./components/Pricing";
 import Footer from "./components/sticky_footer/Footer";
 import Contact from "./components/Contact/Contact";
 import Contributors from "./components/Contributors/Contributors";
+import ArchivedNotes from "./components/ArchivedNotes/ArchivedNotes";
 
 // currently this component is hide
 // import Navbar from './components/Navbar';
@@ -71,6 +72,7 @@ const App = () => {
           <Route path="/signup" exact element={<Signup />} />
           <Route path="/about" exact element={<About />} />
           <Route path="/my-profile" exact element={<ProfilePage />} />
+          <Route path="/archived-notes" exact element={<ArchivedNotes />} />
           {/* <Route path="/404" exact element={<ErrorPage/>} /> */}
         </Routes>
       )}
