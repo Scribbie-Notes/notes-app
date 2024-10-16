@@ -16,7 +16,6 @@ const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
   const searchBarRef = useRef(null);
   const profileRef = useRef(null);
   const loginButtonRef = useRef(null); 
-
   useEffect(() => {
     gsap.fromTo(logoRef.current, {
       y: -20,

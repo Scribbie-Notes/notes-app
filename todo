@@ -1,0 +1,15 @@
+pending: (v0.2.0)
+- fix profile pic uploading error
+- enable attachments (image, video, etc.) to notes
+
+completed: 
+- adding the loading spinner on every point [DONE]
+- complete backend of feedback form [DONE]
+- creating different branches for production and development on github [DONE]
+- add feedback popup for logged in users [DONE]
+- on clicking on a note, new page / modal should appear that display the notes content [DONE]
+- name initials bug fixed in profile page [DONE]
+- footer enhancement [DONE]
+- add a subscriptions section in Hero.jsx page [DONE]
+- work on landing page [DONE]
+- page responsiveness [DONE]

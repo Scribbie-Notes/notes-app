@@ -10,7 +10,16 @@ const noteSchema = new Schema({
     isPinned: { type: Boolean, required: false },
     userId: { type: String, required: true },
     createdOn: { type: Date, default: Date.now },
-    background: { type: String }
+    background: { type: String },
+    deleted: {
+        type: Boolean,
+        default: false,  // Default is false, meaning the note is not deleted
+      },
+    userId: { type: String, required: true },
+    createdOn: { type: Date, default: Date.now },
+    background: { type: String },
+    deletedAt: Date, 
+
 });
 
 
