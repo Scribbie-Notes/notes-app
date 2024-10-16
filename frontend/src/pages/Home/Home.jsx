@@ -3,7 +3,18 @@ import 'react-quill/dist/quill.snow.css';
 import { useState, useEffect } from "react";
 import Navbar from "../../components/Navbar";
 import NoteCard from "../../components/Cards/NoteCard";
-import { MdAdd, MdClose ,MdColorLens, MdOutlinePushPin, MdDelete} from "react-icons/md";
+
+import {
+  MdAdd,
+  MdClose,
+  MdColorLens,
+  MdOutlinePushPin,
+  MdDelete,
+  MdPushPin,
+  MdOutlineUnarchive,
+  MdOutlineArchive,
+} from "react-icons/md";
+
 import AddEditNotes from "./AddEditNotes";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../utils/axiosInstance";
@@ -230,6 +241,48 @@ const debouncedSearch = debounce(onSearchNote, 300);
     });
   };
 
+
+  const handleBulkPin = async () => {
+    const isAllPinnedSelected = selectedNotes.some((selectedNote) =>
+      otherNotes.some((note) => note._id === selectedNote && !note.isPinned)
+    );
+  
+    const updateData = {
+      noteIds: selectedNotes,
+      isPinned: isAllPinnedSelected // true to pin, false to unpin
+    };
+  
+    try {
+      // Send one API call to pin/unpin the selected notes
+      await axiosInstance.put('/bulk-update-notes-pinned', updateData);
+  
+      // Refresh notes and clear selection
+      getAllNotes();
+      setSelectedNotes([]);
+      toast.success(`Selected notes ${isAllPinnedSelected ? 'pinned' : 'unpinned'} successfully`);
+      setIsColorPickerOpen(false);
+    } catch (error) {
+      console.error("Error updating notes:", error);
+      toast.error(`Failed to ${isAllPinnedSelected ? 'pin' : 'unpin'} selected notes`);
+    }
+  };
+  
+  const handleBulkArchive = async () => {
+    try {
+      // Send an array of selected note IDs to archive them in one request
+      await axiosInstance.put("/archive-notes", {
+        noteIds: selectedNotes,
+      });
+  
+      getAllNotes();  // Refresh the notes after archiving
+      setSelectedNotes([]);  // Clear the selection
+      toast.success("Selected notes archived successfully");
+    } catch (error) {
+      console.error("Error archiving notes:", error);
+      toast.error("Failed to archive selected notes");
+    }
+  };
+
   const handleBulkDelete = async () => {
     try {
       // Send selected note IDs via the data field, since Axios delete doesn't send req.body directly
@@ -307,6 +360,25 @@ const debouncedSearch = debounce(onSearchNote, 300);
                 </div>
               )}
             </div>
+
+            <button onClick={handleBulkPin} className="mr-2">
+              {
+                // Check if any selectedNote is found in the otherNotes array and is unpinned
+                selectedNotes.some((selectedNote) =>
+                  otherNotes.some(
+                    (note) => note._id === selectedNote && !note.isPinned
+                  )
+                ) ? (
+                  <MdOutlinePushPin className="text-2xl" /> // Outlined icon for unpinned notes
+                ) : (
+                  <MdPushPin className="text-2xl" />
+                ) // Filled icon for pinned notes
+              }
+            </button>
+    <button onClick={handleBulkArchive}>
+          <MdOutlineArchive className="text-2xl  text-black"/>
+    </button>
+
             <button onClick={handleBulkDelete}>
               <MdDelete className="text-2xl  text-black" />
             </button>
@@ -321,7 +393,7 @@ const debouncedSearch = debounce(onSearchNote, 300);
         />
       )}
 
-      <div className="container h-auto p-6 pb-12">
+      <div className="container h-auto p-6 pb-12 mx-auto">
         {isLoading ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 mt-4 transition-all">
             {Array.from({ length: 9 }).map((item, i) => {
@@ -348,6 +420,7 @@ const debouncedSearch = debounce(onSearchNote, 300);
                       content={item.content}
                       tags={item.tags}
                       isPinned={item.isPinned}
+                    
                       background={item.background}
                       onEdit={() => handleEdit(item)}
                       onDelete={() => handleDeleteModalOpen(item._id)}
@@ -375,6 +448,7 @@ const debouncedSearch = debounce(onSearchNote, 300);
                   content={item.content}
                   tags={item.tags}
                   isPinned={item.isPinned}
+                
                   background={item.background}
                   onEdit={() => handleEdit(item)}
                   onDelete={() => handleDeleteModalOpen(item._id)}
