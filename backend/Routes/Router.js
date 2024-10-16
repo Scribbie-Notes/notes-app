@@ -335,8 +335,6 @@ router.put("/edit-note/:noteId", authenticationToken, async (req, res) => {
             .json({ error: true, message: ERROR_MESSAGES.INTERNAL_SERVER_ERROR });
     }
 });
-
-
 //update background-color
 router.put("/update-notes-background", authenticationToken, async (req, res) => {
     const { noteIds, background } = req.body;
@@ -380,9 +378,11 @@ router.get("/get-all-notes", authenticationToken, async (req, res) => {
     const { user } = req.user;
 
     try {
+
         // Fetch notes that belong to the user and where deleted is false, sorting by isPinned
         const notes = await Note.find({ userId: user._id, deleted: false,isArchived: false}).sort({ isPinned: -1 });
         
+
         return res.json({
             error: false,
             notes,
@@ -434,12 +434,7 @@ router.delete("/delete-note/:noteId", authenticationToken, async (req, res) => {
                 .json({ error: true, message: ERROR_MESSAGES.NOTE_NOT_FOUND });
         }
 
-        // Update the deleted key to true instead of deleting the note
-        await Note.updateOne(
-            { _id: noteId, userId: user._id },
-            { $set: { deleted: true } }
-        );
-
+        await Note.deleteOne({ _id: noteId, userId: user._id });
         return res.json({
             error: false,
             message: MESSAGES.NOTE_DELETED_SUCCESSFULLY,
@@ -452,80 +447,42 @@ router.delete("/delete-note/:noteId", authenticationToken, async (req, res) => {
     }
 });
 
-
-
+// delete selected notes
 router.delete("/delete-multiple-notes", authenticationToken, async (req, res) => {
-    const { noteIds } = req.body;
+    const { noteIds } = req.body; // Extract the noteIds from the body
     const { user } = req.user;
   
+    // Validate that noteIds is a non-empty array
     if (!noteIds || !Array.isArray(noteIds) || noteIds.length === 0) {
       return res.status(HTTP_STATUS.BAD_REQUEST).json({
         error: true,
-        message: ERROR_MESSAGES.PROVIDE_FIELD_TO_UPDATE,
+        message: ERROR_MESSAGES.PROVIDE_FIELD_TO_UPDATE, // Custom error message
       });
     }
   
     try {
-      // Soft delete: Set `deleted` to true and save the `deletedAt` time
-      const result = await Note.updateMany(
-        { _id: { $in: noteIds }, userId: user._id },
-        { $set: { deleted: true, deletedAt: new Date() } }
-      );
+      // Delete the notes that belong to the authenticated user and match the IDs
+      const result = await Note.deleteMany({
+        _id: { $in: noteIds }, 
+        userId: user._id, // Ensure notes belong to the authenticated user
+      });
   
-      if (result.modifiedCount === 0) {
+      // Handle case when no notes were deleted
+      if (result.deletedCount === 0) {
         return res.status(HTTP_STATUS.NOT_FOUND).json({
           error: true,
           message: ERROR_MESSAGES.NOTES_NOT_FOUND,
         });
       }
   
+      // Return success response
       return res.json({
         error: false,
         message: MESSAGES.NOTES_DELETED_SUCCESSFULLY,
-        modifiedCount: result.modifiedCount,
+        deletedCount: result.deletedCount, // Return number of deleted notes
       });
     } catch (error) {
-      console.error("Error soft deleting notes: ", error);
-      return res
-        .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
-        .json({ error: true, message: ERROR_MESSAGES.INTERNAL_SERVER_ERROR });
-    }
-  });
-  
-
-  // restore-multiple-notes
-  router.post("/restore-multiple-notes", authenticationToken, async (req, res) => {
-    const { noteIds } = req.body;
-    const { user } = req.user;
-  
-    if (!noteIds || !Array.isArray(noteIds) || noteIds.length === 0) {
-      return res.status(HTTP_STATUS.BAD_REQUEST).json({
-        error: true,
-        message: ERROR_MESSAGES.PROVIDE_FIELD_TO_UPDATE,
-      });
-    }
-  
-    try {
-      // Restore notes by setting `deleted` back to false
-      const result = await Note.updateMany(
-        { _id: { $in: noteIds }, userId: user._id },
-        { $set: { deleted: false, deletedAt: null } }
-      );
-  
-      if (result.modifiedCount === 0) {
-        return res.status(HTTP_STATUS.NOT_FOUND).json({
-          error: true,
-          message: ERROR_MESSAGES.NOTES_NOT_FOUND,
-        });
-      }
-  
-      return res.json({
-        error: false,
-        message: MESSAGES.NOTES_RESTORED_SUCCESSFULLY,
-        modifiedCount: result.modifiedCount,
-      });
-    } catch (error) {
-      console.error("Error restoring notes: ", error);
+      console.error("Error deleting notes:", error);
       return res
         .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
         .json({ error: true, message: ERROR_MESSAGES.INTERNAL_SERVER_ERROR });
@@ -604,6 +561,7 @@ router.put(
     }
 );
 
+
 router.put('/bulk-update-notes-pinned', async (req, res) => {
     const { noteIds, isPinned } = req.body;
   
@@ -642,6 +600,7 @@ router.put('/bulk-update-notes-pinned', async (req, res) => {
       res.status(500).json({ message: 'Failed to archive notes' });
     }
   });
+
 
 
 // Search notes
