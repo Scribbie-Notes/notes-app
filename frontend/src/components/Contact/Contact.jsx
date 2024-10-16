@@ -12,7 +12,7 @@ const Contact = () => {
     <div>
       <Navbar userInfo={user} />
       <div className="contact-section  flex px-16 gap-x-10 py-10 h-[580px]">
-        <div className="w-2/6 bg-gray-500  p-6 text-white flex  flex-col gap-y-5  shadow-[inset_0_-10px_15px_0_rgba(255,255,255,0.5)]">
+        <div className="w-2/6 bg-slate-800  p-6 text-white flex  flex-col gap-y-5  shadow-[inset_0_-10px_15px_0_rgba(255,255,255,0.5)]">
           <h1 className="text-xl">Get in touch</h1>
           <div>
             <h1>Visit us</h1>
@@ -104,7 +104,7 @@ const Contact = () => {
             <input
               type="submit"
               value="Send"
-              className="bg-gray-500 text-white rounded cursor-pointer h-8"
+              className="bg-slate-800 text-white rounded cursor-pointer h-8"
             />
           </form>
         </div>
