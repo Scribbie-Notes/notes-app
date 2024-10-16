@@ -111,21 +111,26 @@ const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
         </div>
       )}
 
-      {userInfo ? (
-        <div ref={profileRef}>
-          <ProfileInfo userInfo={userInfo} onLogout={onLogout} />
-        </div>
+      <div className=" flex gap-2 justify-center items-center mr-[20px]">
+        <button
+            onClick={() => navigate("/contact")}
+            className="text-gray-700 pr-3 transition hover:text-gray-700/75 font-normal hover:font-semibold text-lg"
+          >
+            Contact
+        </button>
+        {userInfo ? (
+        <ProfileInfo userInfo={userInfo} onLogout={onLogout} />
       ) : (
         location.pathname !== "/login" && (
           <button
-            ref={loginButtonRef}
             onClick={() => navigate("/login")}
-            className="text-gray-700 pr-3 transition hover:text-gray-700/75"
+            className="text-gray-700 pr-3 font-normal hover:font-semibold text-lg transition hover:text-gray-700/75"
           >
             Login
           </button>
         )
       )}
+      </div>
     </div>
   );
 };

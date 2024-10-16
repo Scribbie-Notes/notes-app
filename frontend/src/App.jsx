@@ -16,7 +16,7 @@ import ProfilePage from "./pages/ProfilePage/ProfilePage";
 import Testimonial from "./components/Testimonial";
 import Pricing from "./components/Pricing";
 import Footer from "./components/sticky_footer/Footer";
-import Contact from "./components/Contact/Contact";
+import ContactUs from "./pages/ContactUs/index.jsx";
 
 import Contributors from "./components/Contributors/Contributors";
 import ArchivedNotes from "./components/ArchivedNotes/ArchivedNotes";
@@ -75,6 +75,7 @@ const App = () => {
           <Route path="/my-profile" exact element={<ProfilePage />} />
           <Route path="/archived-notes" exact element={<ArchivedNotes />} />
           {/* <Route path="/404" exact element={<ErrorPage/>} /> */}
+          <Route path="/contact"  element={<ContactUs />}></Route>  
         </Routes>
       )}
     </div>
