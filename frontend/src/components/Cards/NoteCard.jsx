@@ -1,11 +1,12 @@
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
 import PropTypes from "prop-types";
 import moment from "moment";
 import {
   MdCreate,
   MdDelete,
   MdOutlinePushPin,
+  MdPushPin,
   MdCheckBox,
   MdCheckBoxOutlineBlank,
 } from "react-icons/md";
@@ -51,15 +52,26 @@ const NoteCard = ({
         </div>
 
         <div className="relative group">
-          <MdOutlinePushPin
-            className={`icon-btn ${
-              isPinned ? "text-primary" : "text-slate-300"
-            }`}
-            onClick={(e) => {
-              e.stopPropagation();
-              onPinNote();
-            }}
-          />
+          {isPinned ? (
+            <MdPushPin
+            style={{color:textColor}}
+              className="icon-btn"
+              onClick={(e) => {
+                e.stopPropagation();
+                onPinNote();
+              }}
+            />
+          ) : (
+            <MdOutlinePushPin
+            style={{color:textColor}}
+              className="icon-btn"
+              onClick={(e) => {
+                e.stopPropagation();
+                onPinNote();
+              }}
+            />
+          )}
+         
           <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 hidden group-hover:flex items-center justify-center bg-black text-white text-xs rounded px-2 py-1">
             {isPinned ? "Unpin Note" : "Pin Note"}
           </div>
@@ -75,9 +87,9 @@ const NoteCard = ({
           textOverflow: "ellipsis",
           color: textColor,
         }}
-        className="text-xs mt-2"
+        className="text-xs mt-2 "
       >
-        <ReactQuill value={content} readOnly={true} theme="bubble" />
+        <ReactQuill value={content} readOnly={true} theme="bubble"  />
       </p>
 
       <div className="flex items-center justify-between mt-3 mb-[-8px]">
@@ -101,7 +113,7 @@ const NoteCard = ({
                 e.stopPropagation();
                 onEdit();
               }}
-              style={{color:textColor}}
+              style={{ color: textColor }}
             />
             <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 hidden group-hover:flex items-center justify-center bg-black text-white text-xs rounded px-2 py-1">
               {"Edit Note"}
@@ -115,14 +127,14 @@ const NoteCard = ({
                 e.stopPropagation();
                 onDelete();
               }}
-              style={{color:textColor}}
+              style={{ color: textColor }}
             />
             <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 hidden group-hover:flex items-center justify-center bg-black text-white text-xs rounded px-2 py-1">
               {"Delete Note"}
             </div>
           </div>
 
-          <div >
+          <div>
             <div
               onClick={(e) => {
                 e.stopPropagation();
