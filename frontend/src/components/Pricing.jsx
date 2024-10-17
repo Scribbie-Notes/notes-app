@@ -1,66 +1,74 @@
+import { useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
+import Navbar from "./Navbar";
 
 const Pricing = () => {
+  const user = JSON.parse(localStorage.getItem("user"));
+  const location = useLocation();
+
   return (
-    <section className="px-2 py-12 w-full h-auto  ">
-      <div className="py-4 px-4 mx-auto  lg:py-4 lg:px-6 h-[700px] ">
-        <div className="mx-auto  text-center mb-8 lg:mb-12">
-          <h2 className="mb-4 text-4xl tracking-tight font-extrabold text-gray-900">
-            Designed for business teams like yours
-          </h2>
-          <p className="mb-5 text-slate-800 sm:text-xl">
-            Here at Scribie we focus on markets where technology, innovation,
-            and capital can unlock long-term value and drive economic growth.
-          </p>
+    <>
+      {location.pathname === "/pricing" && <Navbar userInfo={user} />}
+      <section className="px-2 py-12 w-full h-auto">
+        <div className="py-4 px-4 mx-auto lg:py-4 lg:px-6 h-[700px]">
+          <div className="mx-auto text-center mb-8 lg:mb-12">
+            <h2 className="mb-4 text-4xl tracking-tight font-extrabold text-gray-900">
+              Designed for business teams like yours
+            </h2>
+            <p className="mb-5 text-slate-800 sm:text-xl">
+              Here at Scribie we focus on markets where technology, innovation,
+              and capital can unlock long-term value and drive economic growth.
+            </p>
+          </div>
+          <div className="mx-auto grid grid-cols-1 gap-8 md:grid-cols-3">
+            <Card
+              id="#1"
+              title="Starter"
+              description="Best option for personal use & for your next project."
+              price="$29"
+              period="/month"
+              features={[
+                "Individual configuration",
+                "No setup, or hidden fees",
+                "Team size: 1 developer",
+                "Premium support: 6 months",
+                "Free updates: 6 months",
+              ]}
+            />
+            <Card
+              title="Company"
+              description="Relevant for multiple users, extended & premium support."
+              price="$99"
+              period="/month"
+              features={[
+                "Individual configuration",
+                "No setup, or hidden fees",
+                "Team size: 10 developers",
+                "Premium support: 24 months",
+                "Free updates: 24 months",
+              ]}
+            />
+            <Card
+              title="Enterprise"
+              description="Best for large scale uses and extended redistribution rights."
+              price="$499"
+              period="/month"
+              features={[
+                "Individual configuration",
+                "No setup, or hidden fees",
+                "Team size: 100+ developers",
+                "Premium support: 36 months",
+                "Free updates: 36 months",
+              ]}
+            />
+          </div>
         </div>
-        <div className="mx-auto grid grid-cols-1 gap-8 md:grid-cols-3">
-          <Card
-            id ='#1'
-            title="Starter"
-            description="Best option for personal use & for your next project."
-            price="$29"
-            period="/month"
-            features={[
-              "Individual configuration",
-              "No setup, or hidden fees",
-              "Team size: 1 developer",
-              "Premium support: 6 months",
-              "Free updates: 6 months",
-            ]}
-          />
-          <Card
-            title="Company"
-            description="Relevant for multiple users, extended & premium support."
-            price="$99"
-            period="/month"
-            features={[
-              "Individual configuration",
-              "No setup, or hidden fees",
-              "Team size: 10 developers",
-              "Premium support: 24 months",
-              "Free updates: 24 months",
-            ]}
-          />
-          <Card
-            title="Enterprise"
-            description="Best for large scale uses and extended redistribution rights."
-            price="$499"
-            period="/month"
-            features={[
-              "Individual configuration",
-              "No setup, or hidden fees",
-              "Team size: 100+ developers",
-              "Premium support: 36 months",
-              "Free updates: 36 months",
-            ]}
-          />
-        </div>
-      </div>
-    </section>
+      </section>
+    </>
   );
 };
 
-const Card = ({id, title, description, price, period, features }) => {
+const Card = ({ id, title, description, price, period, features }) => {
   return (
     <motion.div
       whileHover="hover"
@@ -101,7 +109,7 @@ const Card = ({id, title, description, price, period, features }) => {
         </div>
         <ul className="mt-2 space-y-2 text-sm">
           {features.map((feature, index) => (
-            <li key={index +1 } className="flex items-center">
+            <li key={index + 1} className="flex items-center">
               <svg
                 className="flex-shrink-0 w-5 h-5 text-green-500"
                 fill="currentColor"
@@ -186,4 +194,3 @@ const Background = () => {
 };
 
 export default Pricing;
-

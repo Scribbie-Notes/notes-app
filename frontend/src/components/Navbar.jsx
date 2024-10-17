@@ -1,5 +1,13 @@
+
 import { useState, useEffect, useRef, createContext, useContext } from "react";
 import { useNavigate, useLocation, Link } from "react-router-dom";
+import React, { useState, useEffect, useRef } from "react";
+import ProfileInfo from "./Cards/ProfileInfo";
+import { useNavigate, useLocation } from "react-router-dom";
+import SearchBar from "./SearchBar/SearchBar";
+import { toast } from "react-hot-toast";
+import { Link } from "react-router-dom";
+
 import gsap from 'gsap/all';
 import { toast } from "react-hot-toast";
 import { FiMoon, FiSun } from "react-icons/fi";
@@ -98,12 +106,6 @@ const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
     });
   };
 
-  const handleSearch = () => {
-    if (searchQuery) {
-      onSearchNote(searchQuery);
-    }
-  };
-
   const onClearSearch = () => {
     setSearchQuery("");
     handleClearSearch();
@@ -122,12 +124,21 @@ const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
 
       {userInfo && !hideSearchBarPaths.includes(location.pathname) && (
         <div ref={searchBarRef} className="hidden md:flex flex-grow justify-center mr-20">
+
           <input
             type="text"
             value={searchQuery}
             onChange={({ target }) => setSearchQuery(target.value)}
             placeholder="Search..."
             className="border rounded-md px-4 py-2"
+          <SearchBar
+            value={searchQuery}
+            onChange={({ target }) => {
+              setSearchQuery(target.value);
+              onSearchNote(target.value); 
+            }}
+            onClearSearch={onClearSearch}
+
           />
           <button onClick={handleSearch} className="ml-2 px-4 py-2 bg-blue-500 text-white rounded-md">Search</button>
           <button onClick={onClearSearch} className="ml-2 px-4 py-2 bg-red-500 text-white rounded-md">Clear</button>
@@ -154,6 +165,7 @@ const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
     </div>
   );
 };
+
 
 const ThemeToggle = () => {
   const { theme, toggleTheme } = useTheme();
@@ -187,3 +199,5 @@ export default () => (
     <Navbar />
   </ThemeProvider>
 );
+export default Navbar;
+

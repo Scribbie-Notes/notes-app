@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { getInitials } from "../../utils/helper";
 import { useNavigate } from "react-router-dom";
 import { CiUser, CiCircleInfo, CiLogout } from "react-icons/ci";
+import { MdOutlineArchive } from "react-icons/md";
 
 const ProfileInfo = ({ userInfo, onLogout }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -17,6 +18,11 @@ const ProfileInfo = ({ userInfo, onLogout }) => {
     navigate("/my-profile");
     setIsDropdownOpen(false);
   };
+
+const handleArchivedNotes = () => {
+    navigate("/archived-notes");
+    setIsDropdownOpen(false)
+}
 
   const handleAbout = () => {
     navigate("/about");
@@ -74,6 +80,15 @@ const ProfileInfo = ({ userInfo, onLogout }) => {
               <CiUser />
             </span>
             Profile & Settings
+          </button>
+          <button
+            className="flex items-center gap-2 w-full text-start px-4 py-2 text-gray-700 hover:bg-gray-100"
+            onClick={handleArchivedNotes}
+          >
+            <span className="scale-125">
+              <MdOutlineArchive />
+            </span>
+            Archived Notes
           </button>
           <button
             className="flex gap-2 items-center w-full text-start px-4 py-2  text-gray-700 hover:bg-gray-100"
