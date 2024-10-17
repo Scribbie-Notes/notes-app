@@ -22,6 +22,8 @@ import Contributors from "./components/Contributors/Contributors";
 import ArchivedNotes from "./components/ArchivedNotes/ArchivedNotes";
 
 
+
+
 // currently this component is hide
 // import Navbar from './components/Navbar';
 // import ProtectedRoute from './utils/ProtectedRoute';
@@ -84,6 +86,7 @@ const App = () => {
 const AppWithRouter = () => (
   <Router>
     <App />
+    
   </Router>
 );
 
