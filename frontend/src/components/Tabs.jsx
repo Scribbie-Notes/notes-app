@@ -1,16 +1,17 @@
-import  { useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 
-export const SlideTabsExample = () => {
+// Accept theme as a prop in SlideTabsExample
+export const SlideTabsExample = ({ theme }) => {
   return (
-    <div className="bg-white py-2">
-      <SlideTabs />
+    <div className={theme === "dark" ? "bg-gray-800" : "bg-white py-2"}>
+      <SlideTabs theme={theme} /> {/* Pass theme to SlideTabs */}
     </div>
   );
 };
 
-const SlideTabs = () => {
+const SlideTabs = ({ theme }) => {
   const [position, setPosition] = useState({
     left: 0,
     width: 0,
@@ -25,20 +26,22 @@ const SlideTabs = () => {
           opacity: 0,
         }));
       }}
-      className="relative mx-auto flex w-fit bg-white p-1"
+      className={`relative mx-auto flex w-fit p-1 ${
+        theme === "dark" ? "bg-gray-800" : "bg-white"
+      }`} // Set background color based on theme
     >
-      <Tab setPosition={setPosition} to="/">Home</Tab>
-      <Tab setPosition={setPosition} to="/about">About</Tab>
-      <Tab setPosition={setPosition} to="/testimonial">Testimonial</Tab>
-      <Tab setPosition={setPosition} to="/pricing">Pricing</Tab>
-      <Tab setPosition={setPosition} to="/contact-us">Contact Us</Tab>
+      <Tab theme={theme} setPosition={setPosition} to="/">Home</Tab>
+      <Tab theme={theme} setPosition={setPosition} to="/about">About</Tab>
+      <Tab theme={theme} setPosition={setPosition} to="/testimonial">Testimonial</Tab>
+      <Tab theme={theme} setPosition={setPosition} to="/pricing">Pricing</Tab>
+      <Tab theme={theme} setPosition={setPosition} to="/contact-us">Contact Us</Tab>
 
       <Cursor position={position} />
     </ul>
   );
 };
 
-const Tab = ({ children, setPosition, to }) => {
+const Tab = ({ children, setPosition, to, theme }) => {
   const ref = useRef(null);
 
   return (
@@ -55,9 +58,10 @@ const Tab = ({ children, setPosition, to }) => {
           opacity: 1,
         });
       }}
-      className="relative z-10 block cursor-pointer px-3 py-1.5 text-xs uppercase text-white mix-blend-difference md:px-5 md:py-3 md:text-base"
+      className={`relative z-10 block cursor-pointer px-3 py-1.5 text-xs uppercase ${
+        theme === "dark" ? "text-white mix-blend-difference" : "text-black"
+      } md:px-5 md:py-3 md:text-base`} // Set text color based on theme
     >
-      
       <Link to={to}>
         {children}
       </Link>

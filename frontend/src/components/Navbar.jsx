@@ -1,38 +1,14 @@
-
-import { useState, useEffect, useRef, createContext, useContext } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate, useLocation, Link } from "react-router-dom";
-import React, { useState, useEffect, useRef } from "react";
 import ProfileInfo from "./Cards/ProfileInfo";
-import { useNavigate, useLocation } from "react-router-dom";
 import SearchBar from "./SearchBar/SearchBar";
 import { toast } from "react-hot-toast";
-import { Link } from "react-router-dom";
-
 import gsap from 'gsap/all';
-import { toast } from "react-hot-toast";
 import { FiMoon, FiSun } from "react-icons/fi";
-import { SlideTabsExample } from "./Tabs";
-
-const ThemeContext = createContext();
-
-export const ThemeProvider = ({ children }) => {
-  const [theme, setTheme] = useState("light");
-
-  const toggleTheme = () => {
-    setTheme((prevTheme) => (prevTheme === "light" ? "dark" : "light"));
-  };
-
-  return (
-    <ThemeContext.Provider value={{ theme, toggleTheme }}>
-      {children}
-    </ThemeContext.Provider>
-  );
-};
-
-export const useTheme = () => useContext(ThemeContext);
+import { SlideTabsExample } from "./Tabs"; // Make sure you import it from the correct file
 
 const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
-  const { theme, toggleTheme } = useTheme();
+  const [theme, setTheme] = useState("light"); // Manage theme state
   const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
@@ -41,6 +17,11 @@ const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
   const searchBarRef = useRef(null);
   const profileRef = useRef(null);
   const loginButtonRef = useRef(null);
+
+  // Handle theme toggle
+  const toggleTheme = () => {
+    setTheme(prevTheme => (prevTheme === "light" ? "dark" : "light"));
+  };
 
   useEffect(() => {
     gsap.fromTo(logoRef.current, {
@@ -113,6 +94,10 @@ const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
 
   const hideSearchBarPaths = ["/", "/my-profile", "/about"];
 
+  const handleSearch = () => {
+    onSearchNote(searchQuery);
+  };
+
   return (
     <div className={`flex items-center justify-between px-4 py-2 drop-shadow-md ${theme === "dark" ? "bg-black text-white" : "bg-white text-black"}`}>
       <Link to={userInfo ? "/dashboard" : "/"}>
@@ -124,13 +109,6 @@ const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
 
       {userInfo && !hideSearchBarPaths.includes(location.pathname) && (
         <div ref={searchBarRef} className="hidden md:flex flex-grow justify-center mr-20">
-
-          <input
-            type="text"
-            value={searchQuery}
-            onChange={({ target }) => setSearchQuery(target.value)}
-            placeholder="Search..."
-            className="border rounded-md px-4 py-2"
           <SearchBar
             value={searchQuery}
             onChange={({ target }) => {
@@ -138,13 +116,15 @@ const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
               onSearchNote(target.value); 
             }}
             onClearSearch={onClearSearch}
-
           />
           <button onClick={handleSearch} className="ml-2 px-4 py-2 bg-blue-500 text-white rounded-md">Search</button>
           <button onClick={onClearSearch} className="ml-2 px-4 py-2 bg-red-500 text-white rounded-md">Clear</button>
         </div>
       )}
-      <SlideTabsExample />
+
+      {/* Pass theme to SlideTabsExample */}
+      <SlideTabsExample theme={theme} />
+      
       {userInfo ? (
         <div ref={profileRef}>
           <button onClick={onLogout} className="px-4 py-2 bg-red-500 text-white rounded-md">Logout</button>
@@ -161,43 +141,29 @@ const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
         )
       )}
 
-      <ThemeToggle />
+      {/* Theme toggle button */}
+      <button
+        onClick={toggleTheme}
+        className={`flex items-center gap-2 px-3 py-2 rounded-full transition-colors duration-300 ${theme === "dark" ? "bg-gray-800 text-white" : "bg-gray-200 text-gray-800"}`}
+      >
+        {theme === "dark" ? (
+          <>
+            <FiMoon className="text-lg" />
+            <span>Dark Mode</span>
+          </>
+        ) : (
+          <>
+            <FiSun className="text-lg" />
+            <span>Light Mode</span>
+          </>
+        )}
+      </button>
     </div>
   );
 };
 
-
-const ThemeToggle = () => {
-  const { theme, toggleTheme } = useTheme();
-  const isDarkMode = theme === "dark";
-
+export default function App() {
   return (
-    <button
-      onClick={toggleTheme}
-      className={`flex items-center gap-2 px-3 py-2 rounded-full transition-colors duration-300 ${
-        isDarkMode ? "bg-gray-800 text-white" : "bg-gray-200 text-gray-800"
-      }`}
-    >
-      {isDarkMode ? (
-        <>
-        <FiMoon className="text-lg" />
-        <span>Dark Mode</span>
-         
-        </>
-      ) : (
-        <>
-        <FiSun className="text-lg" />
-        <span>Light Mode</span>
-        </>
-      )}
-    </button>
-  );
-};
-
-export default () => (
-  <ThemeProvider>
     <Navbar />
-  </ThemeProvider>
-);
-export default Navbar;
-
+  );
+}
