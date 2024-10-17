@@ -24,29 +24,64 @@ const Hero = () => {
     const getStartedButton = useRef(); // Ref for the button
     const featureCards = useRef([]);
     const sectionRef = useRef();
+    const whiteSectionRef = useRef(); // Ref for the bg-white section
 
     useEffect(() => {
-        // Animate Hero text with stagger
+        // Animate Hero text with stagger, reset every time it scrolls into view
         gsap.fromTo(
             heroText.current,
             { opacity: 0, y: 50 },
-            { opacity: 1, y: 0, duration: 1.5, delay: 0.5, ease: "power3.out" }
+            {
+                opacity: 1,
+                y: 0,
+                duration: 1.5,
+                delay: 0.5,
+                ease: "power3.out",
+                scrollTrigger: {
+                    trigger: heroText.current,
+                    start: "top 80%",
+                    toggleActions: "play none none reset", // Reset on scroll up
+                },
+            }
         );
-
+    
         // Animate paragraph in Hero section
         gsap.fromTo(
             heroParagraph.current,
             { opacity: 0, y: 50 },
-            { opacity: 1, y: 0, duration: 1.5, delay: 1, ease: "power3.out" }
+            {
+                opacity: 1,
+                y: 0,
+                duration: 1.5,
+                delay: 1,
+                ease: "power3.out",
+                scrollTrigger: {
+                    trigger: heroParagraph.current,
+                    start: "top 80%",
+                    toggleActions: "play none none reset", // Reset on scroll up
+                },
+            }
         );
-
+    
         // Animate Get Started button
         gsap.fromTo(
             getStartedButton.current,
             { opacity: 0, scale: 0.8, rotation: 10 },
-            { opacity: 1, scale: 1, rotation: 0, duration: 1, delay: 1.5, ease: "power3.out" }
+            {
+                opacity: 1,
+                scale: 1,
+                rotation: 0,
+                duration: 1,
+                delay: 1.5,
+                ease: "power3.out",
+                scrollTrigger: {
+                    trigger: getStartedButton.current,
+                    start: "top 80%",
+                    toggleActions: "play none none reset", // Reset on scroll up
+                },
+            }
         );
-
+    
         // Animate feature cards with stagger and ScrollTrigger
         gsap.fromTo(
             featureCards.current,
@@ -59,18 +94,30 @@ const Hero = () => {
                 ease: "power3.out",
                 scrollTrigger: {
                     trigger: sectionRef.current,
-                    start: "top 80%", // Animation starts when the section enters the viewport (80% down)
+                    start: "top 80%",
+                    toggleActions: "play none none reset", // Reset on scroll up
                 },
             }
         );
-
+    
         // Fade in hero image with slight delay
         gsap.fromTo(
             ".hero-image",
             { opacity: 0, scale: 0.9 },
-            { opacity: 1, scale: 1, duration: 1.5, delay: 1, ease: "power2.out" }
+            {
+                opacity: 1,
+                scale: 1,
+                duration: 1.5,
+                delay: 1,
+                ease: "power2.out",
+                scrollTrigger: {
+                    trigger: ".hero-image",
+                    start: "top 80%",
+                    toggleActions: "play none none reset", // Reset on scroll up
+                },
+            }
         );
-
+    
         // Scroll-triggered animations for section titles
         gsap.fromTo(
             ".section-title",
@@ -83,16 +130,35 @@ const Hero = () => {
                 scrollTrigger: {
                     trigger: ".section-title",
                     start: "top 85%",
+                    toggleActions: "play none none reset", // Reset on scroll up
+                },
+            }
+        );
+
+        // Animation for bg-white section
+        gsap.fromTo(
+            whiteSectionRef.current,
+            { opacity: 0, y: 100 },
+            {
+                opacity: 1,
+                y: 0,
+                duration: 1,
+                ease: "power3.out",
+                scrollTrigger: {
+                    trigger: whiteSectionRef.current,
+                    start: "top 80%",
+                    toggleActions: "play none none reset", // Reset on scroll up
                 },
             }
         );
     }, []);
+    
 
     return (
         <div className="h-full scroll-smooth">
             <Navbar userInfo={user} />
 
-            <section className="bg-white">
+            <section className="bg-white" ref={whiteSectionRef}>
                 <div className="grid max-w-screen-xl px-4 py-8 mx-auto lg:gap-8 xl:gap-0 lg:py-16 lg:grid-cols-12">
                     <div className="mr-auto place-self-center lg:col-span-7">
                         <h1 ref={heroText} className="max-w-2xl mb-2 text-4xl font-extrabold tracking-tight leading-none md:text-5xl xl:text-6xl dark:text-gray-900">Capture Ideas,</h1>
@@ -135,29 +201,28 @@ const Hero = () => {
 
                         <div ref={(el) => (featureCards.current[1] = el)} className="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition duration-300 ease-in-out border border-gray-200">
                             <div className="flex items-center mb-4 gap-3">
-                                <TbEyeSearch className='text-3xl text-gray-900' />
+                                <TbEyeSearch className='text-2xl text-gray-900' />
                                 <h3 className="text-xl font-bold">Search with Ease</h3>
                             </div>
-                            <p className="text-gray-700">Instantly find what you're looking for with our powerful search functionality.</p>
+                            <p className="text-gray-700">Quickly find any note with a powerful, real-time search engine.</p>
                         </div>
 
                         <div ref={(el) => (featureCards.current[2] = el)} className="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition duration-300 ease-in-out border border-gray-200">
                             <div className="flex items-center mb-4 gap-3">
-                                <FaSync className='text-xl text-gray-900' />
+                                <FaSync className='text-2xl text-gray-900' />
                                 <h3 className="text-xl font-bold">Sync Across Devices</h3>
                             </div>
-                            <p className="text-gray-700">Access your notes anytime, anywhere with seamless cross-device synchronization.</p>
+                            <p className="text-gray-700">Seamlessly sync your notes between all your devices.</p>
                         </div>
 
                     </div>
                 </div>
             </section>
-
             <Testimonial />
             <Pricing />
             <Faq />
-            <ScrollOnTop /> 
             <Footer />
+            <ScrollOnTop />
         </div>
     );
 }
