@@ -36,7 +36,7 @@ const SlideTabs = ({ theme }) => {
       <Tab theme={theme} setPosition={setPosition} to="/pricing">Pricing</Tab>
       <Tab theme={theme} setPosition={setPosition} to="/contact-us">Contact Us</Tab>
 
-      <Cursor position={position} />
+      <Cursor position={position} theme={theme} />
     </ul>
   );
 };
@@ -58,9 +58,11 @@ const Tab = ({ children, setPosition, to, theme }) => {
           opacity: 1,
         });
       }}
-      className={`relative z-10 block cursor-pointer px-3 py-1.5 text-xs uppercase ${
-        theme === "dark" ? "text-white mix-blend-difference" : "text-black"
-      } md:px-5 md:py-3 md:text-base`} // Set text color based on theme
+      className={`relative z-10 block cursor-pointer px-3 py-1.5 text-xs uppercase md:px-5 md:py-3 md:text-base ${
+        theme === "dark"
+          ? "text-white hover:bg-gray-900 rounded-lg" 
+          : "text-black hover:bg-black hover:text-white rounded-lg" 
+      }`}
     >
       <Link to={to}>
         {children}
@@ -70,13 +72,15 @@ const Tab = ({ children, setPosition, to, theme }) => {
 };
 
 // Cursor animation component
-const Cursor = ({ position }) => {
+const Cursor = ({ position, theme }) => {
   return (
     <motion.li
       animate={{
         ...position,
       }}
-      className="absolute z-0 h-7 rounded-lg bg-black md:h-12"
+      className={`absolute z-0 h-7 rounded-lg md:h-12 ${
+        theme === "dark" ? "" : ""
+      }`} // Add background color based on theme
     />
   );
 };
