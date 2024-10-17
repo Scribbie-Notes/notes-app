@@ -17,11 +17,9 @@ import Testimonial from "./components/Testimonial";
 import Pricing from "./components/Pricing";
 import Footer from "./components/sticky_footer/Footer";
 import Contact from "./components/Contact/Contact";
-
 import Contributors from "./components/Contributors/Contributors";
 import ArchivedNotes from "./components/ArchivedNotes/ArchivedNotes";
-
-
+import Preloader from "./components/Preloader";
 // currently this component is hide
 // import Navbar from './components/Navbar';
 // import ProtectedRoute from './utils/ProtectedRoute';
@@ -56,6 +54,7 @@ const App = () => {
 
   return (
     <div>
+      <Preloader />
       {loading && <Loading />}
       {user && location.pathname === "/" ? (
         <Navigate to="/dashboard" replace />
@@ -68,8 +67,8 @@ const App = () => {
           <Route path="/login" exact element={<Login setUser={setUser} />} />
           <Route path="/testimonial" exact element={<Testimonial />} />
           <Route path="/pricing" exact element={<Pricing />} />
-          <Route path="/contact-us" exact element={<Contact/>}/>
-          <Route path='/footer' exact element ={<Footer />}/>
+          <Route path="/contact-us" exact element={<Contact />} />
+          <Route path="/footer" exact element={<Footer />} />
           <Route path="/signup" exact element={<Signup />} />
           <Route path="/about" exact element={<About />} />
           <Route path="/my-profile" exact element={<ProfilePage />} />
