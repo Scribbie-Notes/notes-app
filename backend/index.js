@@ -29,13 +29,15 @@ app.use(
   })
 );
 
+
+
 // Connect to MongoDB
 (async function () {
   try {
     await mongoose.connect(MONGO_URI)
     console.log("MongoDB connected")
   } catch (error) {
-    console.error("MongoDB connection error:", err)
+    console.error("MongoDB connection error:", error)
   }
 })();
 

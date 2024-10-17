@@ -1,7 +1,20 @@
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 import { useState, useEffect } from "react";
 import Navbar from "../../components/Navbar";
 import NoteCard from "../../components/Cards/NoteCard";
-import { MdAdd, MdClose } from "react-icons/md";
+
+import {
+  MdAdd,
+  MdClose,
+  MdColorLens,
+  MdOutlinePushPin,
+  MdDelete,
+  MdPushPin,
+  MdOutlineUnarchive,
+  MdOutlineArchive,
+} from "react-icons/md";
+
 import AddEditNotes from "./AddEditNotes";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../utils/axiosInstance";
@@ -12,6 +25,7 @@ import NoDataImg from "../../assets/images/no-data.svg";
 import toast from "react-hot-toast";
 import noFound from "../../assets/images/noFound.svg";
 import addPost from "../../assets/images/addPost.svg";
+
 const Home = () => {
   const [openAddEditModal, setOpenAddEditModal] = useState({
     isShown: false,
@@ -20,7 +34,9 @@ const Home = () => {
   });
 
   const [isLoading, setIsLoading] = useState(true);
-
+  const [selectedNotes, setSelectedNotes] = useState([]);
+  const [isColorPickerOpen, setIsColorPickerOpen] = useState(false);
+  const [background, setBackground] = useState("#ffffff");
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [noteToDelete, setNoteToDelete] = useState(null);
   const [viewNoteModal, setViewNoteModal] = useState({
@@ -42,6 +58,7 @@ const Home = () => {
 
   const [userInfo, setUserInfo] = useState(null);
   const [isSearch, setIsSearch] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const navigate = useNavigate();
 
@@ -130,24 +147,47 @@ const Home = () => {
       handleDeleteModalClose();
     }
   };
-
-  // search note
   const onSearchNote = async (query) => {
-    try {
-      const response = await axiosInstance.get("/search-notes", {
-        params: {
-          query,
-        },
-      });
+    setSearchQuery(query); 
+    if (query.trim() === "") {
+      setIsSearch(false);
+      getAllNotes(); 
+      return;
+    }
+    const filteredNotes = allNotes.filter(note =>
+      note.title.toLowerCase().includes(query.toLowerCase())
+    );
 
+    try {
+      const response = await axiosInstance.get("/search-notes", { params: { query } });
       if (response.data && response.data.notes) {
         setIsSearch(true);
-        setAllNotes(response.data.notes);
+        setAllNotes(filteredNotes); 
       }
     } catch (error) {
-      console.log("Error while fetching notes");
+      console.log("Error while searching notes");
     }
   };
+
+  // Debounce function to limit the rate of search
+  const debounce = (func, delay) => {
+    let timeout;
+    return function(...args) {
+      clearTimeout(timeout);
+      timeout = setTimeout(() => func.apply(this, args), delay);
+    };
+  };
+const debouncedSearch = debounce(onSearchNote, 300); 
+
+  useEffect(() => {
+    getAllNotes();
+    getUserInfo();
+  }, []);
+
+  
+  const handleSearchInputChange = (query) => {
+    debouncedSearch(query); 
+  };  
 
   const updateIsPinned = async (noteData) => {
     const noteId = noteData._id;
@@ -190,19 +230,170 @@ const Home = () => {
     getUserInfo();
   }, []);
 
+  const handleNoteSelection = (noteId) => {
+    // console.log(noteId)
+    setSelectedNotes(prevSelected => {
+      if (prevSelected.includes(noteId)) {
+        return prevSelected.filter(id => id !== noteId);
+      } else {
+        return [...prevSelected, noteId];
+      }
+    });
+  };
+
+
+  const handleBulkPin = async () => {
+    const isAllPinnedSelected = selectedNotes.some((selectedNote) =>
+      otherNotes.some((note) => note._id === selectedNote && !note.isPinned)
+    );
+  
+    const updateData = {
+      noteIds: selectedNotes,
+      isPinned: isAllPinnedSelected // true to pin, false to unpin
+    };
+  
+    try {
+      // Send one API call to pin/unpin the selected notes
+      await axiosInstance.put('/bulk-update-notes-pinned', updateData);
+  
+      // Refresh notes and clear selection
+      getAllNotes();
+      setSelectedNotes([]);
+      toast.success(`Selected notes ${isAllPinnedSelected ? 'pinned' : 'unpinned'} successfully`);
+      setIsColorPickerOpen(false);
+    } catch (error) {
+      console.error("Error updating notes:", error);
+      toast.error(`Failed to ${isAllPinnedSelected ? 'pin' : 'unpin'} selected notes`);
+    }
+  };
+  
+  const handleBulkArchive = async () => {
+    try {
+      // Send an array of selected note IDs to archive them in one request
+      await axiosInstance.put("/archive-notes", {
+        noteIds: selectedNotes,
+      });
+  
+      getAllNotes();  // Refresh the notes after archiving
+      setSelectedNotes([]);  // Clear the selection
+      toast.success("Selected notes archived successfully");
+    } catch (error) {
+      console.error("Error archiving notes:", error);
+      toast.error("Failed to archive selected notes");
+    }
+  };
+
+  const handleBulkDelete = async () => {
+    try {
+      // Send selected note IDs via the data field, since Axios delete doesn't send req.body directly
+      await axiosInstance({
+        method: 'delete',
+        url: '/delete-multiple-notes',
+        data: { noteIds: selectedNotes }, // Pass the noteIds in the data field
+      });
+  
+      // After successful deletion, refresh the notes and reset selected notes
+      getAllNotes();
+      setSelectedNotes([]);
+      toast.success("Deleted Notes successfully");
+    } catch (error) {
+      console.error("Error deleting notes:", error);
+      toast.error("Failed to delete selected notes");
+    }
+  };
+  
+
+  const handleBulkColor = async (color) => {
+    try {
+      // console.log(color);
+      // Send an array of selected note IDs and the new background color in one request
+      await axiosInstance.put('/update-notes-background', {
+        noteIds: selectedNotes,
+        background: color,
+      });
+  
+      getAllNotes();
+      setSelectedNotes([]);
+      toast.success("Color applied to selected notes");
+    } catch (error) {
+      console.error("Error applying color:", error);
+      toast.error("Failed to apply color to selected notes");
+    }
+  };
+  
+
+  const handleColorChange = (e) => {
+    setBackground(e.target.value);
+  };
   const pinnedNotes = allNotes.filter((note) => note.isPinned === true);
   const otherNotes = allNotes.filter((note) => note.isPinned !== true);
   // console.log('pinnedNotes',pinnedNotes)
   // console.log('otherNotes',otherNotes)
   return (
     <div>
-      <Navbar
-        userInfo={userInfo}
-        onSearchNote={onSearchNote}
-        handleClearSearch={handleClearSearch}
-        setUserInfo={setUserInfo}
-      />
-      <div className="container h-auto p-6 pb-12">
+     
+      {selectedNotes.length > 0 ? (
+        <div className=" bg-white shadow-md z-50 p-4 flex justify-between items-center">
+          <span>{selectedNotes.length} notes selected</span>
+          <div className="flex items-center gap-x-5">
+          <div className="relative  flex ">
+              <button 
+                onClick={() => setIsColorPickerOpen(!isColorPickerOpen)} 
+                
+              >
+                <MdColorLens className="text-2xl" />
+              </button>
+              {isColorPickerOpen && (
+                <div className="absolute top-5 right-0 mt-2 p-2 bg-white  rounded shadow-lg">
+                  <input 
+                    type="color" 
+                    value={background}
+                    onChange={handleColorChange}
+                    className="w-8 h-8 border-none"
+                  />
+                  <button 
+                    onClick={()=>handleBulkColor(background)}
+                    className="ml-2 px-2 py-1 bg-blue-500 text-white rounded text-sm"
+                  >
+                    Apply
+                  </button>
+                </div>
+              )}
+            </div>
+
+            <button onClick={handleBulkPin} className="mr-2">
+              {
+                // Check if any selectedNote is found in the otherNotes array and is unpinned
+                selectedNotes.some((selectedNote) =>
+                  otherNotes.some(
+                    (note) => note._id === selectedNote && !note.isPinned
+                  )
+                ) ? (
+                  <MdOutlinePushPin className="text-2xl" /> // Outlined icon for unpinned notes
+                ) : (
+                  <MdPushPin className="text-2xl" />
+                ) // Filled icon for pinned notes
+              }
+            </button>
+    <button onClick={handleBulkArchive}>
+          <MdOutlineArchive className="text-2xl  text-black"/>
+    </button>
+
+            <button onClick={handleBulkDelete}>
+              <MdDelete className="text-2xl  text-black" />
+            </button>
+          </div>
+        </div>
+      ) : (
+        <Navbar
+          userInfo={userInfo}
+          onSearchNote={handleSearchInputChange}
+          handleClearSearch={handleClearSearch}
+          setUserInfo={setUserInfo}
+        />
+      )}
+
+      <div className="container h-auto p-6 pb-12 mx-auto">
         {isLoading ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 mt-4 transition-all">
             {Array.from({ length: 9 }).map((item, i) => {
@@ -223,16 +414,21 @@ const Home = () => {
                   {pinnedNotes.map((item) => (
                     <NoteCard
                       key={item._id}
+                      id={item._id}
                       title={item.title}
                       date={item.createdOn}
                       content={item.content}
                       tags={item.tags}
                       isPinned={item.isPinned}
+                    
+                      background={item.background}
                       onEdit={() => handleEdit(item)}
                       onDelete={() => handleDeleteModalOpen(item._id)}
                       onPinNote={() => {
                         updateIsPinned(item);
                       }}
+                      isSelected={selectedNotes.includes(item._id)}
+                      onSelect={handleNoteSelection}
                       onClick={() => handleViewNote(item)}
                     />
                   ))}
@@ -246,11 +442,13 @@ const Home = () => {
               {otherNotes.map((item) => (
                 <NoteCard
                   key={item._id}
+                  id={item._id}
                   title={item.title}
                   date={item.createdOn}
                   content={item.content}
                   tags={item.tags}
                   isPinned={item.isPinned}
+                
                   background={item.background}
                   onEdit={() => handleEdit(item)}
                   onDelete={() => handleDeleteModalOpen(item._id)}
@@ -258,6 +456,8 @@ const Home = () => {
                     updateIsPinned(item);
                   }}
                   onClick={() => handleViewNote(item)}
+                  onSelect={handleNoteSelection}
+                  isSelected={selectedNotes.includes(item._id)}
                 />
               ))}
             </div>
@@ -321,7 +521,7 @@ const Home = () => {
               <span className="text-xs text-slate-500">
                 {moment(viewNoteModal.data.date).format("Do MMM YYYY")}
               </span>
-              <p className="text-gray-700 mt-4">{viewNoteModal.data.content}</p>
+              <p className="text-gray-700 mt-4"><ReactQuill value={viewNoteModal.data.content} readOnly={true} theme="bubble" /></p>
               <div className="mt-4">
                 {viewNoteModal.data.tags.map((tag, index) => (
                   <span

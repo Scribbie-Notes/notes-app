@@ -1,5 +1,3 @@
-
-
 import React, { useState, useEffect, useRef } from "react";
 import ProfileInfo from "./Cards/ProfileInfo";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -53,7 +51,6 @@ const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
       delay: 1,
     });
 
-   
     if (loginButtonRef.current) {
       gsap.fromTo(loginButtonRef.current, {
         opacity: 0,
@@ -83,12 +80,6 @@ const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
     });
   };
 
-  const handleSearch = () => {
-    if (searchQuery) {
-      onSearchNote(searchQuery);
-    }
-  };
-
   const onClearSearch = () => {
     setSearchQuery("");
     handleClearSearch();
@@ -108,15 +99,13 @@ const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
       </Link>
       <SlideTabsExample />
       {userInfo && !hideSearchBarPaths.includes(location.pathname) && (
-        <div
-          ref={searchBarRef}
-          className="hidden md:flex flex-grow justify-center mr-20"
-        >
-       
+        <div ref={searchBarRef} className="hidden md:flex flex-grow justify-center mr-20">
           <SearchBar
             value={searchQuery}
-            onChange={({ target }) => setSearchQuery(target.value)}
-            handleSearch={handleSearch}
+            onChange={({ target }) => {
+              setSearchQuery(target.value);
+              onSearchNote(target.value); 
+            }}
             onClearSearch={onClearSearch}
           />
         </div>
@@ -129,7 +118,7 @@ const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
       ) : (
         location.pathname !== "/login" && (
           <button
-            ref={loginButtonRef} 
+            ref={loginButtonRef}
             onClick={() => navigate("/login")}
             className="text-gray-700 pr-3 transition hover:text-gray-700/75"
           >
