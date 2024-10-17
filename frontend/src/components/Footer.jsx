@@ -21,9 +21,6 @@ const StickyFooter = () => {
             need to stay organized and productive. Explore our features and join
             the community.
           </p>
-          <div className="translate flex ml-4 my-auto">
-            <GoogleTranslate />
-          </div>
         </div>
 
         {/* Second part: Grid layout for links taking two-thirds of the space */}
@@ -91,6 +88,9 @@ const StickyFooter = () => {
             <a href="https://github.com/Scribbie-Notes/notes-app">
               <i className="fa-brands fa-github cursor-pointer hover:text-gray-700"></i>
             </a>
+          </div>
+          <div className="translate flex ml-4 my-auto">
+            <GoogleTranslate />
           </div>
         </div>
       </div>
