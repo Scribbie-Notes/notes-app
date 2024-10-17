@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useLocation } from "react-router-dom";
 import { FaArrowUp } from "react-icons/fa";
 
@@ -19,8 +19,8 @@ export default function Content() {
   return (
     <div className="bg-[#111827] pt-24 py-8 px-12 h-full w-full flex flex-col justify-between">
       <nav className="grid max-lg:grid-cols-2 mx-auto grid-cols-6 gap-4 text-gray-400">
-        {navLinks.map(({ link, name, external }, index) => (
-          <NavLink key={index} link={link} name={name} external={external} />
+        {navLinks.map(({ link, name, external }) => (
+          <NavLink key={link} link={link} name={name} external={external} />
         ))}
       </nav>
       <Nav />
@@ -34,24 +34,20 @@ const NavLink = ({ link, name, external }) => (
     className="hover:text-white duration-300 flex justify-center items-center w-48"
     href={link}
     target={external ? "_blank" : "_self"}
-    rel={external ? "noreferrer" : undefined}
+    rel={external ? "noreferrer noopener" : undefined}
   >
     {name}
   </a>
 );
 
 const Footer = () => {
-  const [isWide, setIsWide] = useState(window.innerWidth > 640);
+  const [isWide, setIsWide] = useState(false);
   const location = useLocation();
-  const [showButton, setshowButton] = useState(false);
+  const [showButton, setShowButton] = useState(false);
 
-  //check if the current page is the landing page
+  // Check if the current page is the landing page
   useEffect(() => {
-    if (location.pathname === "/") {
-      setshowButton(true);
-    } else {
-      setshowButton(false);
-    }
+    setShowButton(location.pathname === "/");
   }, [location.pathname]);
 
   // Scroll to top function
@@ -59,11 +55,18 @@ const Footer = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  useEffect(() => {
-    const handleResize = () => setIsWide(window.innerWidth > 640);
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
+  // Optimized resize handler using useCallback and debounce for performance
+  const handleResize = useCallback(() => {
+    setIsWide(window.innerWidth > 640);
   }, []);
+
+  useEffect(() => {
+    // Only access window in useEffect to avoid SSR issues
+    setIsWide(window.innerWidth > 640);
+    const debouncedResize = debounce(handleResize, 100); // Debouncing resize for better performance
+    window.addEventListener("resize", debouncedResize);
+    return () => window.removeEventListener("resize", debouncedResize);
+  }, [handleResize]);
 
   return (
     <section className="text-white">
@@ -73,6 +76,7 @@ const Footer = () => {
             className="w-20 bg-white p-2 rounded-3xl h-20"
             alt="logo"
             src="/logo.png"
+            onError={(e) => (e.target.style.display = "none")} // Handle image load failure
           />
         </div>
       )}
@@ -114,3 +118,12 @@ const Nav = () => {
     </div>
   );
 };
+
+// Debounce function to limit event firing frequency
+function debounce(func, wait) {
+  let timeout;
+  return function (...args) {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => func.apply(this, args), wait);
+  };
+}
