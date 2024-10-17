@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import Navbar from './Navbar';
 
 const testimonialsData = [
@@ -31,6 +32,7 @@ const testimonialsData = [
 const Testimonial = () => {
   const user = JSON.parse(localStorage.getItem("user"));
   const [currentIndex, setCurrentIndex] = useState(0);
+  const location = useLocation();
 
   const testimonialDisplayDuration = 5000;
 
@@ -43,52 +45,52 @@ const Testimonial = () => {
 
   return (
     <>
-    <Navbar userInfo={user}/>
-    <div className="bg-neutral-100 h-[400px] py-20">
-      <div className="container mx-auto px-6">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-          {/* Left Side - Title */}
-          <div className="max-w-lg">
-            <h2 className="text-4xl font-bold mb-4">What our customers think</h2>
-            <p className="text-gray-600 mb-8">
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minus commodi sint, similique cupiditate possimus suscipit delectus illum eos iure magnam!
-            </p>
-            {/* Progress Bar */}
-            <div className="relative w-full h-1 bg-gray-200 overflow-hidden">
-              <div
-                className="absolute h-full bg-black transition-all duration-[5000ms]"
-                style={{ width: `${(currentIndex + 1) * 25}%` }}
-              ></div>
+      {location.pathname === '/testimonial' && <Navbar userInfo={user} />}
+      <div className="bg-neutral-100 h-[400px] py-20">
+        <div className="container mx-auto px-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            {/* Left Side - Title */}
+            <div className="max-w-lg">
+              <h2 className="text-4xl font-bold mb-4">What our customers think</h2>
+              <p className="text-gray-600 mb-8">
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minus commodi sint, similique cupiditate possimus suscipit delectus illum eos iure magnam!
+              </p>
+              {/* Progress Bar */}
+              <div className="relative w-full h-1 bg-gray-200 overflow-hidden">
+                <div
+                  className="absolute h-full bg-black transition-all duration-[5000ms]"
+                  style={{ width: `${(currentIndex + 1) * 25}%` }}
+                ></div>
+              </div>
             </div>
-          </div>
 
-          {/* Right Side - Testimonials */}
-          <div className="relative">
-            {testimonialsData.map((testimonial, index) => (
-              <div
-                key={index}
-                className={`transition-opacity duration-500 ease-in-out absolute inset-0 ${index === currentIndex ? 'opacity-100' : 'opacity-0'}`}
-              >
-                <div className="p-6 bg-white shadow-md rounded-lg">
-                  <p className="text-lg text-gray-700">{testimonial.text}</p>
-                  <div className="flex items-center mt-4">
-                    <img
-                      src={testimonial.img}
-                      alt={testimonial.name}
-                      className="w-12 h-12 bg-center bg-cover rounded-full"
-                    />
-                    <div className="ml-4">
-                      <p className="font-semibold text-gray-900">{testimonial.name}</p>
-                      <p className="text-sm text-gray-600">{testimonial.position}</p>
+            {/* Right Side - Testimonials */}
+            <div className="relative">
+              {testimonialsData.map((testimonial, index) => (
+                <div
+                  key={index}
+                  className={`transition-opacity duration-500 ease-in-out absolute inset-0 ${index === currentIndex ? 'opacity-100' : 'opacity-0'}`}
+                >
+                  <div className="p-6 bg-white shadow-md rounded-lg">
+                    <p className="text-lg text-gray-700">{testimonial.text}</p>
+                    <div className="flex items-center mt-4">
+                      <img
+                        src={testimonial.img}
+                        alt={testimonial.name}
+                        className="w-12 h-12 bg-center bg-cover rounded-full"
+                      />
+                      <div className="ml-4">
+                        <p className="font-semibold text-gray-900">{testimonial.name}</p>
+                        <p className="text-sm text-gray-600">{testimonial.position}</p>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
       </div>
-    </div>
     </>
   );
 };
