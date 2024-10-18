@@ -20,8 +20,7 @@ import Contact from "./components/Contact/Contact";
 
 import Contributors from "./components/Contributors/Contributors";
 import ArchivedNotes from "./components/ArchivedNotes/ArchivedNotes";
-
-
+import { ThemeProvider } from './themeActions'; // Import the ThemeProvider
 // currently this component is hide
 // import Navbar from './components/Navbar';
 // import ProtectedRoute from './utils/ProtectedRoute';
@@ -55,7 +54,7 @@ const App = () => {
   }, []);
 
   return (
-    <div>
+    <div className="dark:bg-gray-600">
       {loading && <Loading />}
       {user && location.pathname === "/" ? (
         <Navigate to="/dashboard" replace />
@@ -82,9 +81,13 @@ const App = () => {
 };
 
 const AppWithRouter = () => (
+  <ThemeProvider>
   <Router>
     <App />
   </Router>
+  </ThemeProvider>
+
+  
 );
 
 export default AppWithRouter;
