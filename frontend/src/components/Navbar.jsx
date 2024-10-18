@@ -4,7 +4,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import SearchBar from "./SearchBar/SearchBar";
 import { toast } from "react-hot-toast";
 import { Link } from "react-router-dom";
-import gsap from 'gsap/all';
+import gsap from "gsap/all";
 import { SlideTabsExample } from "./Tabs";
 
 const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
@@ -15,53 +15,88 @@ const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
   const logoRef = useRef(null);
   const searchBarRef = useRef(null);
   const profileRef = useRef(null);
-  const loginButtonRef = useRef(null); 
+  const loginButtonRef = useRef(null);
+  const signupButtonRef = useRef(null);
+
   useEffect(() => {
-    gsap.fromTo(logoRef.current, {
-      y: -20,
-      opacity: 0,
-      scale: 0.8,
-    }, {
-      duration: 1,
-      y: 0,
-      opacity: 1,
-      scale: 1,
-      ease: "power3.out",
-    });
-
-    gsap.fromTo(searchBarRef.current, {
-      x: 50,
-      opacity: 0,
-    }, {
-      duration: 1,
-      x: 0,
-      opacity: 1,
-      ease: "power3.out",
-      delay: 0.5,
-    });
-
-    gsap.fromTo(profileRef.current, {
-      opacity: 0,
-      scale: 0.8,
-    }, {
-      duration: 1,
-      opacity: 1,
-      scale: 1,
-      ease: "power3.out",
-      delay: 1,
-    });
-
-    if (loginButtonRef.current) {
-      gsap.fromTo(loginButtonRef.current, {
+    gsap.fromTo(
+      logoRef.current,
+      {
+        y: -20,
         opacity: 0,
-        y: 20,
-      }, {
+        scale: 0.8,
+      },
+      {
+        duration: 1,
+        y: 0,
+        opacity: 1,
+        scale: 1,
+        ease: "power3.out",
+      }
+    );
+
+    gsap.fromTo(
+      searchBarRef.current,
+      {
+        x: 50,
+        opacity: 0,
+      },
+      {
+        duration: 1,
+        x: 0,
+        opacity: 1,
+        ease: "power3.out",
+        delay: 0.5,
+      }
+    );
+
+    gsap.fromTo(
+      profileRef.current,
+      {
+        opacity: 0,
+        scale: 0.8,
+      },
+      {
         duration: 1,
         opacity: 1,
-        y: 0,
-        ease: "bounce.out",
-        delay: 1.5, 
-      });
+        scale: 1,
+        ease: "power3.out",
+        delay: 1,
+      }
+    );
+
+    if (loginButtonRef.current) {
+      gsap.fromTo(
+        loginButtonRef.current,
+        {
+          opacity: 0,
+          y: 20,
+        },
+        {
+          duration: 1,
+          opacity: 1,
+          y: 0,
+          ease: "bounce.out",
+          delay: 1.7,
+        }
+      );
+    }
+
+    if (signupButtonRef.current) {
+      gsap.fromTo(
+        signupButtonRef.current,
+        {
+          opacity: 0,
+          y: 20,
+        },
+        {
+          duration: 1,
+          opacity: 1,
+          y: 0,
+          ease: "bounce.out",
+          delay: 1.5,
+        }
+      );
     }
   }, []);
 
@@ -99,12 +134,15 @@ const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
       </Link>
       <SlideTabsExample />
       {userInfo && !hideSearchBarPaths.includes(location.pathname) && (
-        <div ref={searchBarRef} className="hidden md:flex flex-grow justify-center mr-20">
+        <div
+          ref={searchBarRef}
+          className="hidden md:flex flex-grow justify-center mr-20"
+        >
           <SearchBar
             value={searchQuery}
             onChange={({ target }) => {
               setSearchQuery(target.value);
-              onSearchNote(target.value); 
+              onSearchNote(target.value);
             }}
             onClearSearch={onClearSearch}
           />
@@ -116,14 +154,24 @@ const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
           <ProfileInfo userInfo={userInfo} onLogout={onLogout} />
         </div>
       ) : (
-        location.pathname !== "/login" && (
-          <button
-            ref={loginButtonRef}
-            onClick={() => navigate("/login")}
-            className="text-gray-700 pr-3 transition hover:text-gray-700/75"
-          >
-            Login
-          </button>
+        location.pathname !== "/login" &&
+        location.pathname !== "/signup" && (
+          <>
+            <button
+              ref={signupButtonRef}
+              onClick={() => navigate("/signup")}
+              className="text-gray-700 pr-3 transition hover:text-gray-700/75"
+            >
+              Signup
+            </button>
+            <button
+              ref={loginButtonRef}
+              onClick={() => navigate("/login")}
+              className="text-gray-700 pr-3 transition hover:text-gray-700/75"
+            >
+              Login
+            </button>
+          </>
         )
       )}
     </div>
