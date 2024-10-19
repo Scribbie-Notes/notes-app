@@ -88,18 +88,18 @@ const About = () => {
           </button>
         </div>
       </Link>
-      <div className="flex">
-        <div className="container text-gray-800 mx-auto p-6 bg-white max-w-screen-lg">
-          <h1 className="text-3xl font-bold mb-4">About Scribbie</h1>
-          <section className="mb-12">
-            <p className="text-md mb-2">
+      <div className="flex p-2 ">
+        <div className="container text-gray-800 mx-auto rounded-lg p-6 flex flex-col justify-center items-center bg-zinc-100 max-w-screen-lg">
+          <h1 className="text-3xl bg-gradient-to-b from-black border-b-2 border-black to-white bg-clip-text text-transparent font-bold mb-6">About Scribbie</h1>
+          <section className="mb-12 flex flex-col items-center">
+            <p className="text-md w-[60%] mb-2">
               Scribbie was founded with the vision of creating a digital
               notebook that is both powerful and easy to use. Our goal is to
               help people capture their ideas and organize their thoughts in a
               way that enhances productivity and creativity. With Scribbie, you
               can take your notes to the next level and achieve more.
             </p>
-            <p className="text-md mb-6">
+            <p className="text-md w-[60%] mb-6">
               We believe that everyone has great ideas, and those ideas deserve
               to be captured and explored. Scribbie provides the perfect
               platform for turning your thoughts into reality. Whether you're
@@ -108,9 +108,9 @@ const About = () => {
             </p>
           </section>
 
-          <section className="mb-12">
-            <h2 className="text-3xl font-bold mb-4">Features</h2>
-            <ul className="list-disc pl-6 mb-6">
+          <section className="mb-12 flex flex-col items-center">
+            <h2 className="text-3xl bg-gradient-to-b from-black border-b-2 border-black to-white bg-clip-text text-transparent font-bold mb-4">Features</h2>
+            <ul className="list-disc pl-6 font-semibold w-[55%] mb-6">
               <li className="mb-1">
                 Create and edit notes with ease using our intuitive editor.
               </li>
@@ -136,12 +136,12 @@ const About = () => {
             </ul>
           </section>
 
-          <section className="mb-12">
-            <h2 className="text-3xl font-bold mb-4">Version and Source Code</h2>
-            <p className="text-md mb-2">
-              <p>Current Version: v0.1.0 (29 June 2024)</p>
+          <section className="mb-12 flex flex-col items-center">
+            <h2 className="text-3xl bg-gradient-to-b from-black border-b-2 border-black to-white bg-clip-text text-transparent font-bold mb-4">Version and Source Code</h2>
+            <p className="text-md w-[60%] text-center mb-2">
+              <p className="font-semibold">Current Version: v0.1.0 (29 June 2024)</p>
             </p>
-            <p className="text-md mb-6">
+            <p className="text-md w-[60%] mb-6">
               The Source Code is available on{" "}
               <span className="text-blue-500 underline">
                 <a
@@ -156,9 +156,9 @@ const About = () => {
             </p>
           </section>
 
-          <section className="mb-12">
-            <h2 className="text-3xl font-bold mb-4">Terms & Privacy</h2>
-            <p className="text-md mb-6">
+          <section className="mb-12 flex flex-col items-center">
+            <h2 className="text-3xl bg-gradient-to-b from-black border-b-2 border-black to-white bg-clip-text text-transparent font-bold mb-4">Terms & Privacy</h2>
+            <p className="text-md w-[60%] mb-6">
               Our terms of service and privacy policy outline how we collect,
               use, and protect your data. We believe in transparency and are
               dedicated to maintaining your trust. If you have any questions
