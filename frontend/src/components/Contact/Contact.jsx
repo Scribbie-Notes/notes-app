@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef,useEffect } from "react";
 import Navbar from "../Navbar";
 import { MdFacebook } from "react-icons/md";
 import { FaLinkedin } from "react-icons/fa";
@@ -6,6 +6,9 @@ import { IoLogoInstagram } from "react-icons/io5";
 import { FaXTwitter } from "react-icons/fa6";
 
 const Contact = () => {
+  useEffect(()=>{
+    window.scrollTo(0,0)
+  })
   const form = useRef();
   const user = JSON.parse(localStorage.getItem("user"));
   return (
