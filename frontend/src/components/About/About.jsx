@@ -7,7 +7,7 @@ import { IoMdArrowRoundBack } from "react-icons/io";
 import { Link } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import Loading from "../Loading";
-
+import { useEffect } from "react";
 const customStyles = {
   overlay: {
     backgroundColor: "rgba(0, 0, 0, 0.75)",
@@ -34,7 +34,9 @@ const About = () => {
 
   const openModal = () => setModalIsOpen(true);
   const closeModal = () => setModalIsOpen(false);
-
+  useEffect(()=>{
+   window.scrollTo(0,0)
+  },[])
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);

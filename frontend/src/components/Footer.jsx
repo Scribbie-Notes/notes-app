@@ -34,7 +34,7 @@ const StickyFooter = () => {
                   About
                 </li>
               </Link>
-              <Link to={"/contact"}>
+              <Link to={"/contact-us"}>
                 <li className="cursor-pointer hover:text-gray-700 hover:underline underline-offset-2">
                   Contact Us
                 </li>
