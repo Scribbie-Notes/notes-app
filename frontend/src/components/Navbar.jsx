@@ -123,7 +123,7 @@ const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
   const hideSearchBarPaths = ["/", "/my-profile", "/about"];
 
   return (
-    <div className="bg-white flex items-center justify-between px-4 py-2 drop-shadow-md">
+    <div className="bg-white border-b-2 border-black rounded-[1.2rem] flex items-center justify-between px-4 py-2 drop-shadow-md">
       <Link to={userInfo ? "/dashboard" : "/"}>
         <div ref={logoRef} className="flex items-center p-1">
           <img src="/logo.png" className="h-10" alt="logo" />
@@ -156,22 +156,22 @@ const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
       ) : (
         location.pathname !== "/login" &&
         location.pathname !== "/signup" && (
-          <>
+          <div className="flex justify-evenly items-center p-2 w-[20%]">
             <button
               ref={signupButtonRef}
               onClick={() => navigate("/signup")}
-              className="text-gray-700 pr-3 transition hover:text-gray-700/75"
+              className="text-zinc-200 bg-black rounded-md p-2 transition hover:text-black hover:bg-zinc-200"
             >
               Signup
             </button>
             <button
               ref={loginButtonRef}
               onClick={() => navigate("/login")}
-              className="text-gray-700 pr-3 transition hover:text-gray-700/75"
+              className="text-zinc-200 bg-black rounded-md py-2 px-3 transition hover:text-black hover:bg-zinc-200"
             >
               Login
             </button>
-          </>
+          </div>
         )
       )}
     </div>
