@@ -4,7 +4,7 @@ import { Link, useLocation } from "react-router-dom";
 
 export const SlideTabsExample = () => {
   return (
-    <div className="bg-white py-2">
+    <div className="bg-white  rounded-lg m-2 p-2">
       <SlideTabs />
     </div>
   );
@@ -29,8 +29,17 @@ const SlideTabs = () => {
         }));
         setHoveredTab(null);
       }}
-      className="relative mx-auto flex w-fit bg-white p-1"
+      className="relative mx-auto b flex w-fit bg-white p-1"
     >
+      <Tab
+        setPosition={setPosition}
+        currentPathName={currentPathName}
+        to="/"
+        hoveredTab={hoveredTab}
+        setHoveredTab={setHoveredTab}
+      >
+        Home
+      </Tab>
       <Tab
         setPosition={setPosition}
         currentPathName={currentPathName}
@@ -38,7 +47,7 @@ const SlideTabs = () => {
         hoveredTab={hoveredTab}
         setHoveredTab={setHoveredTab}
       >
-        Home
+        Dashboard
       </Tab>
       <Tab
         setPosition={setPosition}
