@@ -26,9 +26,6 @@ const TagInput = ({ tags, setTags }) => {
     setTags(tags.filter((tag) => tag !== tagToRemove));
   };
 
-
-//   console.log(tags)
-
   return (
     <div>
       {tags?.length > 0 && (
@@ -48,28 +45,26 @@ const TagInput = ({ tags, setTags }) => {
               </button>
             </span>
           ))}
+            <div className='flex items-center gap-1'>
+                <input
+                    type="text"
+                    value={inputValue}
+                    className='p-2 border rounded-md text-xs'
+                    placeholder='Add Tags'
+                    onChange={handleInputChange}
+                    onKeyDown={handleKeyDown}
+                />
+
+                <button className='w-9 h-9 flex items-center transition-all rounded-xl border  text-white bg-gray-800 hover:bg-gray-900'
+                     onClick={() => {
+                        addNewTag();
+                    }}
+                >
+                    <MdAdd className='text-xl text-white-700 hover:text-white ml-[8px]'/>
+                </button>
+            </div>
         </div>
       )}
-
-      <div className="flex items-center gap-4">
-        <input
-          type="text"
-          value={inputValue}
-          className="p-2 border rounded-md text-xs"
-          placeholder="Add Tags"
-          onChange={handleInputChange}
-          onKeyDown={handleKeyDown}
-        />
-
-        <button
-          className="w-9 h-9 flex items-center transition-all rounded-xl border  text-white bg-gray-800 hover:bg-gray-900"
-          onClick={() => {
-            addNewTag();
-          }}
-        >
-          <MdAdd className="text-xl text-white-700 hover:text-white ml-[8px]" />
-        </button>
-      </div>
     </div>
   );
 };
