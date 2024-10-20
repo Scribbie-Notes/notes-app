@@ -298,7 +298,7 @@ const upload_note = multer();
 // Edit note
 router.put("/edit-note/:noteId", authenticationToken, upload_note.none(), async (req, res) => {
     const { noteId } = req.params;
-    const { title, content, tags, isPinned, background } = req.body;
+    const { title, content, tags, isPinned, background, attachments } = req.body;
     const { user } = req.user;
 
     if (!title && !content && !tags && isPinned === undefined && !background) {
@@ -315,6 +315,7 @@ router.put("/edit-note/:noteId", authenticationToken, upload_note.none(), async 
         if (tags) updateFields.tags = tags;
         if (isPinned !== undefined) updateFields.isPinned = isPinned;
         if (background) updateFields.background = background;
+        if (attachments) updateFields.attachments = attachments;
 
         const note = await Note.findOneAndUpdate(
             { _id: noteId, userId: user._id },
