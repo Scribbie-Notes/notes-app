@@ -10,7 +10,8 @@ const path = require("path");
 const fs = require("fs")
 const { OAuth2Client } = require('google-auth-library');
 const User = require('../models/userModel')
-const Note = require('../models/noteModel')
+const Note = require('../models/noteModel');
+const Feedback = require("../models/feedbackModel");
 const { ACCESS_TOKEN_SECRET, GOOGLE_API_TOKEN } = process.env;
 
 const client = new OAuth2Client(GOOGLE_API_TOKEN);
@@ -821,13 +822,14 @@ router.post("/google-auth", async (req, res) => {
 
 // feedback submit
 router.post("/submit", async (req, res) => {
-    const { name, email, feedback } = req.body;
-
+    const { name, email, feedback,rating } = req.body;
+    
     try {
         const newFeedback = new Feedback({
             name,
             email,
             feedback,
+            rating
         });
 
         await newFeedback.save();
