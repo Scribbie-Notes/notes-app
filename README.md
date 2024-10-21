@@ -1,6 +1,28 @@
-# 🚀 Introduction
+# <p>**📚 Scribbie Notes App 📚**
+<img  src="https://readme-typing-svg.herokuapp.com?color=45ffaa&size=40&width=900&height=80&lines=Welcome-to-Scribbie-Notes-App"/>
+</p>
 
 **Scribbie** is a powerful, intuitive note-taking website built specifically for working professionals who want to manage their notes seamlessly and effectively.
+<table align="center">
+    <thead align="center">
+        <tr border: 2px;>
+            <td><b>🌟 Stars</b></td>
+            <td><b>🍴 Forks</b></td>
+            <td><b>🐛 Issues</b></td>
+            <td><b>🔔 Open PRs</b></td>
+            <td><b>🔕 Close PRs</b></td>
+        </tr>
+     </thead>
+    <tbody>
+      <tr>
+          <td><img alt="Stars" src="https://img.shields.io/github/stars/Scribbie-Notes/notes-app?style=flat&logo=github"/></td>
+          <td><img alt="Forks" src="https://img.shields.io/github/forks/Scribbie-Notes/notes-app?style=flat&logo=github"/></td>
+          <td><img alt="Issues" src="https://img.shields.io/github/issues/Scribbie-Notes/notes-app?style=flat&logo=github"/></td>
+          <td><img alt="Open Pull Requests" src="https://img.shields.io/github/issues-pr/Scribbie-Notes/notes-app?style=flat&logo=github"/></td>
+          <td><img alt="Closed Pull Requests" src="https://img.shields.io/github/issues-pr-closed/Scribbie-Notes/notes-app?style=flat&color=critical&logo=github"/></td>
+      </tr>
+    </tbody>
+</table>
 
 ---
 
