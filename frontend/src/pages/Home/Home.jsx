@@ -77,20 +77,22 @@ const Home = () => {
   const getUserInfo = async () => {
     try {
       const response = await axiosInstance.get("/get-user");
+      console.log(response);
       if (response.data && response.data.user) {
         setUserInfo(response.data.user);
       }
+      
     } catch (error) {
-      if (error.response.status === 401) {
-        localStorage.clear();
-        navigate("/login");
-      }
+      // if (error.response.status === 401) {
+      //   localStorage.clear();
+      //   navigate("/login");
+      // }
     }
   };
 
   useEffect(() => {
     getUserInfo();
-    return () => {};
+    
   }, []);
 
   // get all notes
@@ -338,6 +340,8 @@ const Home = () => {
   const otherNotes = allNotes.filter((note) => note.isPinned !== true);
   // console.log('pinnedNotes',pinnedNotes)
   // console.log('otherNotes',otherNotes)
+
+  console.log(import.meta.env.VITE_BACKEND_URL)
   return (
     <div>
       {selectedNotes.length > 0 ? (
