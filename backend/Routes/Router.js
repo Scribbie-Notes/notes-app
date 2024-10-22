@@ -261,6 +261,7 @@ router.get("/get-user", authenticationToken, async (req, res) => {
 router.post("/add-note", authenticationToken, uploadMultiple, async (req, res) => {
     const { title, content, tags, background } = req.body;
     const { user } = req.user;
+    const tagsArray = JSON.parse(tags); // Convert to array and trim whitespace
 
     if (!title || !content) {
         return res
@@ -274,7 +275,7 @@ router.post("/add-note", authenticationToken, uploadMultiple, async (req, res) =
         const note = new Note({
             title,
             content,
-            tags: tags || [],
+            tags: tagsArray,
             userId: user._id,
             attachments: attachmentPaths,
             background: background || "#ffffff", // Default to white if not provided
@@ -354,20 +355,20 @@ router.put("/update-notes-background", authenticationToken, async (req, res) => 
         message: ERROR_MESSAGES.PROVIDE_FIELD_TO_UPDATE,
       });
     }
-  
+
     try {
       const notes = await Note.updateMany(
         { _id: { $in: noteIds }, userId: user._id }, // Find notes by IDs and user ID
         { background: background } // Update the background color
       );
-  
+
       if (notes.modifiedCount === 0) {
         return res.status(HTTP_STATUS.NOT_FOUND).json({
           error: true,
           message: ERROR_MESSAGES.NOTES_NOT_FOUND,
         });
       }
-  
+
       return res.json({
         error: false,
         message: MESSAGES.NOTES_UPDATED_SUCCESSFULLY,
@@ -380,7 +381,7 @@ router.put("/update-notes-background", authenticationToken, async (req, res) => 
         .json({ error: true, message: ERROR_MESSAGES.INTERNAL_SERVER_ERROR });
     }
   });
-  
+
 // Get all notes
 router.get("/get-all-notes", authenticationToken, async (req, res) => {
     const { user } = req.user;
@@ -389,7 +390,7 @@ router.get("/get-all-notes", authenticationToken, async (req, res) => {
 
         // Fetch notes that belong to the user and where deleted is false, sorting by isPinned
         const notes = await Note.find({ userId: user._id, deleted: false,isArchived: false}).sort({ isPinned: -1 });
-        
+
 
         return res.json({
             error: false,
@@ -408,7 +409,7 @@ router.get("/get-archived-notes", authenticationToken, async (req, res) => {
     try {
         // Use req.user directly, as the user is authenticated via the authenticationToken middleware
         const { user } = req.user;
- 
+
         // Fetch archived notes that belong to the user and where deleted is false
         const notes = await Note.find({ userId: user._id, deleted: false,isArchived: true}).sort({ isPinned: -1 });
 
@@ -459,7 +460,7 @@ router.delete("/delete-note/:noteId", authenticationToken, async (req, res) => {
 router.delete("/delete-multiple-notes", authenticationToken, async (req, res) => {
     const { noteIds } = req.body; // Extract the noteIds from the body
     const { user } = req.user;
-  
+
     // Validate that noteIds is a non-empty array
     if (!noteIds || !Array.isArray(noteIds) || noteIds.length === 0) {
       return res.status(HTTP_STATUS.BAD_REQUEST).json({
@@ -467,14 +468,14 @@ router.delete("/delete-multiple-notes", authenticationToken, async (req, res) =>
         message: ERROR_MESSAGES.PROVIDE_FIELD_TO_UPDATE, // Custom error message
       });
     }
-  
+
     try {
       // Delete the notes that belong to the authenticated user and match the IDs
       const result = await Note.deleteMany({
-        _id: { $in: noteIds }, 
+        _id: { $in: noteIds },
         userId: user._id, // Ensure notes belong to the authenticated user
       });
-  
+
       // Handle case when no notes were deleted
       if (result.deletedCount === 0) {
         return res.status(HTTP_STATUS.NOT_FOUND).json({
@@ -482,7 +483,7 @@ router.delete("/delete-multiple-notes", authenticationToken, async (req, res) =>
           message: ERROR_MESSAGES.NOTES_NOT_FOUND,
         });
       }
-  
+
       // Return success response
       return res.json({
         error: false,
@@ -496,8 +497,8 @@ router.delete("/delete-multiple-notes", authenticationToken, async (req, res) =>
         .json({ error: true, message: ERROR_MESSAGES.INTERNAL_SERVER_ERROR });
     }
   });
-  
-  
+
+
 // delete user and its notes
 router.delete("/delete-user", authenticationToken, async (req, res) => {
     try {
@@ -572,36 +573,36 @@ router.put(
 
 router.put('/bulk-update-notes-pinned', async (req, res) => {
     const { noteIds, isPinned } = req.body;
-  
+
     try {
       // Update multiple notes at once
       await Note.updateMany(
         { _id: { $in: noteIds } }, // Match notes with the given noteIds
         { $set: { isPinned: isPinned } } // Set isPinned value
       );
-  
+
       res.status(200).json({ message: `Notes successfully ${isPinned ? 'pinned' : 'unpinned'}` });
     } catch (error) {
       console.error('Error updating notes:', error);
       res.status(500).json({ message: 'Failed to update notes' });
     }
   });
-  
+
   // archive multiple notes
   router.put('/archive-notes', async (req, res) => {
     const { noteIds } = req.body;
-  
+
     if (!Array.isArray(noteIds) || noteIds.length === 0) {
       return res.status(400).json({ message: 'Invalid request, noteIds must be an array' });
     }
-  
+
     try {
       // Update the selected notes to set isArchived to true
       await Note.updateMany(
         { _id: { $in: noteIds }, deleted: false },  // Ensure the notes are not deleted
         { $set: { isArchived: true } }
       );
-      
+
       res.status(200).json({ message: 'Notes archived successfully' });
     } catch (error) {
       console.error('Error archiving notes:', error);
