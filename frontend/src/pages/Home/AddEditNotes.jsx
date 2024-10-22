@@ -16,6 +16,7 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
     const [error, setError] = useState(null);
     const [photos, setPhotos] = useState([]);
     const [videos, setVideos] = useState([]);
+    const [isPinned, setIsPinned] = useState(false);
     const MAX_TITLE_LENGTH = 60;
     const MAX_CONTENT_LENGTH = 2500;
 
@@ -28,6 +29,7 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
             setBackground(noteData.background || '#ffffff');
             setPhotos(noteData.photos || []);
             setVideos(noteData.videos || []);
+            setIsPinned(noteData.isPinned);
         }
     }, [type, noteData]);
 
@@ -111,15 +113,15 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
             formData.append('tags', JSON.stringify(tags));
             formData.append('background', background);
 
-            attachments.forEach((file) => {
+            attachments?.forEach((file) => {
                 formData.append('attachments', file);
             });
 
-            photos.forEach((photo) => {
+            photos?.forEach((photo) => {
                 formData.append('photos', photo);
             });
 
-            videos.forEach((video) => {
+            videos?.forEach((video) => {
                 formData.append('videos', video);
             });
 
