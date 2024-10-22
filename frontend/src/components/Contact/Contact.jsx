@@ -28,8 +28,9 @@ const Contact = () => {
     console.log(data);
     if (!data.user_email || !data.first_name || !data.message) {
       toast.error("All Fields are required:)");
+      return;
     }
-    const id = toast.loading(true);
+    const id = toast.loading("Loading..");
     const response = await axiosInstance.post("/contact", {
      data
     });
