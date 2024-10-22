@@ -293,10 +293,12 @@ router.post("/add-note", authenticationToken, uploadMultiple, async (req, res) =
     }
 });
 
+const upload_note = multer();
+
 // Edit note
-router.put("/edit-note/:noteId", authenticationToken, async (req, res) => {
+router.put("/edit-note/:noteId", authenticationToken, upload_note.none(), async (req, res) => {
     const { noteId } = req.params;
-    const { title, content, tags, isPinned, background } = req.body;
+    const { title, content, tags, isPinned, background, attachments } = req.body;
     const { user } = req.user;
 
     if (!title && !content && !tags && isPinned === undefined && !background) {
@@ -307,21 +309,25 @@ router.put("/edit-note/:noteId", authenticationToken, async (req, res) => {
     }
 
     try {
-        const note = await Note.findOne({ _id: noteId, userId: user._id });
+        const updateFields = {};
+        if (title) updateFields.title = title;
+        if (content) updateFields.content = content;
+        if (tags) updateFields.tags = tags;
+        if (isPinned !== undefined) updateFields.isPinned = isPinned;
+        if (background) updateFields.background = background;
+        if (attachments) updateFields.attachments = attachments;
+
+        const note = await Note.findOneAndUpdate(
+            { _id: noteId, userId: user._id },
+            { $set: updateFields },
+            { new: true, runValidators: true } // Options: return the updated document and validate the update
+        );
 
         if (!note) {
             return res
                 .status(HTTP_STATUS.NOT_FOUND)
                 .json({ error: true, message: ERROR_MESSAGES.NOTE_NOT_FOUND });
         }
-
-        if (title) note.title = title;
-        if (content) note.content = content;
-        if (tags) note.tags = tags;
-        if (isPinned !== undefined) note.isPinned = isPinned;
-        if (background) note.background = background;
-
-        await note.save();
 
         return res.json({
             error: false,
@@ -335,6 +341,7 @@ router.put("/edit-note/:noteId", authenticationToken, async (req, res) => {
             .json({ error: true, message: ERROR_MESSAGES.INTERNAL_SERVER_ERROR });
     }
 });
+
 //update background-color
 router.put("/update-notes-background", authenticationToken, async (req, res) => {
     const { noteIds, background } = req.body;
