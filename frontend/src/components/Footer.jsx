@@ -3,19 +3,85 @@ import img from "./Footer/logo.png";
 import Modal from "react-modal";
 import GoogleTranslate from "./GoogleTranslate";
 import { Link } from "react-router-dom";
+import axiosInstance from "../utils/axiosInstance";
+import toast, { Toaster } from "react-hot-toast";
+import axios from "axios";
 
 const StickyFooter = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [rating, setRating] = useState(0);
   const [feedback, setFeedback] = useState("");
   const [loading, setLoading] = useState(false);
 
   const openModal = () => setModalIsOpen(true);
   const closeModal = () => setModalIsOpen(false);
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    if (!name || !email || !feedback || !rating){
+      setLoading(false);
+      return  toast.error("Fill all the fields", {
+        style: {
+          fontSize: "13px",
+          maxWidth: "400px",
+          boxShadow: "4px 4px 8px rgba(0, 1, 4, 0.1)",
+          borderRadius: "8px",
+          borderColor: "rgba(0, 0, 0, 0.8)",
+          marginRight: "10px",
+        },
+      });
+    }
+    
 
-  
+
+    const feedbackData = {
+      name,
+      email,
+      feedback,
+      rating,
+    };
+    // console.log(feedbackData)
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/submit",
+        feedbackData
+      );
+      // console.log(response);
+      toast.success("Feedback submitted successfully", {
+        style: {
+          fontSize: "13px",
+          maxWidth: "400px",
+          boxShadow: "4px 4px 8px rgba(0, 1, 4, 0.1)",
+          borderRadius: "8px",
+          borderColor: "rgba(0, 0, 0, 0.8)",
+          marginRight: "10px",
+        },
+      });
+      closeModal();
+    } catch (error) {
+      console.error("Error submitting feedback:", error.message);
+      toast.error("Error submitting feedback", {
+        style: {
+          fontSize: "13px",
+          maxWidth: "400px",
+          boxShadow: "4px 4px 8px rgba(0, 1, 4, 0.1)",
+          borderRadius: "8px",
+          borderColor: "rgba(0, 0, 0, 0.8)",
+          marginRight: "10px",
+        },
+      });
+    } finally {
+      setLoading(false);
+    }
+    setName("");
+    setEmail("");
+    setFeedback("");
+    setRating(0);
+  };
+
   return (
     <div className="bg-gradient-to-b from-white to-gray-300 border-t border-gray-200 pb-6">
       {/* Flex container for company description and grid layout */}
@@ -24,15 +90,15 @@ const StickyFooter = () => {
         isOpen={modalIsOpen}
         onRequestClose={closeModal}
         contentLabel="Feedback Modal"
-        style={{ overlay: { zIndex: 1000 }}}
-         // Ensure modal appears on top of other elements
+        style={{ overlay: { zIndex: 1000 } }}
+        // Ensure modal appears on top of other elements
       >
         <div className="bg-white p-4 rounded-lg ">
           <h2 className="text-2xl font-bold mb-8">Feedback</h2>
           {loading ? (
             <div>Loading...</div>
           ) : (
-            <form >
+            <form onSubmit={handleSubmit}>
               <div className="mb-4">
                 <label className="block text-sm font-medium text-gray-700">
                   Name
@@ -66,6 +132,32 @@ const StickyFooter = () => {
                   rows="4"
                 ></textarea>
               </div>
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Rating
+                </label>
+                <div className="flex space-x-1">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <svg
+                      key={star}
+                      onClick={() => setRating(star)} // Update rating on star click
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill={rating >= star ? "yellow" : "none"} // Fill stars based on rating
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      className="w-6 h-6 cursor-pointer"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l2.062 6.368a1 1 0 00.95.69h6.691c.969 0 1.371 1.24.588 1.81l-5.416 3.93a1 1 0 00-.364 1.118l2.063 6.368c.3.921-.755 1.688-1.539 1.118l-5.417-3.93a1 1 0 00-1.176 0l-5.417 3.93c-.783.57-1.838-.197-1.538-1.118l2.063-6.368a1 1 0 00-.364-1.118L2.316 11.795c-.783-.57-.381-1.81.588-1.81h6.691a1 1 0 00.95-.69l2.062-6.368z"
+                      />
+                    </svg>
+                  ))}
+                </div>
+              </div>
+
               <div className="flex justify-end space-x-2">
                 <button
                   type="button"
@@ -124,7 +216,7 @@ const StickyFooter = () => {
                   Feedback
                 </li>
               </Link>
-              
+
               <Link to={"/version"}>
                 <li className="cursor-pointer hover:text-gray-700 hover:underline underline-offset-2">
                   App Version
@@ -183,6 +275,7 @@ const StickyFooter = () => {
           &copy; {new Date().getFullYear()} Cribbie. All rights reserved.
         </p>
       </div>
+      <Toaster />
     </div>
   );
 };
