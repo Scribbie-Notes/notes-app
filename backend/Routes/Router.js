@@ -1,3 +1,7 @@
+
+
+// this file is of no use you can use this just for reference otherwise delete it 
+
 const express = require("express");
 const router = express.Router() // this will handle all requests
 const jwt = require("jsonwebtoken");
@@ -60,8 +64,6 @@ const authenticationToken = (req, res, next) => {
         next(); // Proceed to the next middleware/route handler
     });
 };
-
-
 
 router.post("/create-account", async (req, res) => {
     const { fullName, email, password } = req.body;
@@ -268,7 +270,8 @@ router.post("/add-note", authenticationToken, uploadMultiple, async (req, res) =
     }
 
     try {
-        const attachmentPaths = req.files.map(file => `/uploads/${file.filename}`);
+        //optional check file exist or not 
+        const attachmentPaths = req.files?.map(file => `/uploads/${file.filename}`);
 
         const note = new Note({
             title,
@@ -580,7 +583,7 @@ router.put('/bulk-update-notes-pinned', async (req, res) => {
   });
   
   // archive multiple notes
-  router.put('/archive-notes', async (req, res) => {
+router.put('/archive-notes', async (req, res) => {
     const { noteIds } = req.body;
   
     if (!Array.isArray(noteIds) || noteIds.length === 0) {
