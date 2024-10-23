@@ -5,6 +5,7 @@ const multer = require("multer");
 const bcrypt = require("bcrypt");
 const { HTTP_STATUS, MESSAGES, ERROR_MESSAGES } = require("../utils/const");
 const sendMail = require("../mail/sendMail");
+const contactSendMail = require("../mail/contactUsMailSender");
 const dotenv = require("dotenv");
 const path = require("path");
 const fs = require("fs")
@@ -62,7 +63,25 @@ const authenticationToken = (req, res, next) => {
     });
 };
 
-
+router.post("/contact", async (req, res) => {
+    const { first_name, last_name, user_email, message } = req.body;
+    try {
+        const html = `<p>${message}</p>`
+        const name = first_name + " " + last_name;
+        contactSendMail(user_email, name, html);
+        return res.status(200).json({
+            error: false,
+            message: "Mail send successfully",
+        });
+    }
+    catch (err) {
+        console.log(err.message);
+        return res.status(500).json({
+            error: true,
+            message: "Internal error",
+        });
+    }
+})
 
 router.post("/create-account", async (req, res) => {
     const { fullName, email, password } = req.body;
