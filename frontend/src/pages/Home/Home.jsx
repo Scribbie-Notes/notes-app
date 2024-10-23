@@ -1,5 +1,5 @@
-import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 import { useState, useEffect } from "react";
 import Navbar from "../../components/Navbar";
 import NoteCard from "../../components/Cards/NoteCard";
@@ -25,7 +25,6 @@ import NoDataImg from "../../assets/images/no-data.svg";
 import toast from "react-hot-toast";
 import noFound from "../../assets/images/noFound.svg";
 import addPost from "../../assets/images/addPost.svg";
-import FilterTags from "../../components/FilterTags";
 
 const Home = () => {
   const [openAddEditModal, setOpenAddEditModal] = useState({
@@ -56,8 +55,6 @@ const Home = () => {
   };
 
   const [allNotes, setAllNotes] = useState([]);
-  //this is for all notes regardless filter select stuff
-  const [getAllNotesGlobal, setAllNotesGlobal] = useState([]);
 
   const [userInfo, setUserInfo] = useState(null);
   const [isSearch, setIsSearch] = useState(false);
@@ -81,7 +78,7 @@ const Home = () => {
       if (response.data && response.data.user) {
         setUserInfo(response.data.user);
       }
-      
+
     } catch (error) {
       // if (error.response.status === 401) {
       //   localStorage.clear();
@@ -92,7 +89,7 @@ const Home = () => {
 
   useEffect(() => {
     getUserInfo();
-    
+
   }, []);
 
   // get all notes
@@ -100,8 +97,7 @@ const Home = () => {
     setIsLoading(true);
     try {
       const response = await axiosInstance.get("/get-all-notes");
-     
-      // console.log(response);
+      console.log(response)
       if (response.data && response.data.notes) {
         const notes = response.data.notes.map((note) => ({
           ...note,
@@ -109,7 +105,6 @@ const Home = () => {
         }));
         // console.log("Fetched Notes:", notes);
         setAllNotes(notes);
-        setAllNotesGlobal(notes);
       }
     } catch (error) {
       console.log("Error while fetching notes");
@@ -161,14 +156,12 @@ const Home = () => {
       getAllNotes();
       return;
     }
-    const filteredNotes = allNotes.filter((note) =>
+    const filteredNotes = allNotes.filter(note =>
       note.title.toLowerCase().includes(query.toLowerCase())
     );
 
     try {
-      const response = await axiosInstance.get("/search-notes", {
-        params: { query },
-      });
+      const response = await axiosInstance.get("/search-notes", { params: { query } });
       if (response.data && response.data.notes) {
         setIsSearch(true);
         setAllNotes(filteredNotes);
@@ -181,17 +174,18 @@ const Home = () => {
   // Debounce function to limit the rate of search
   const debounce = (func, delay) => {
     let timeout;
-    return function (...args) {
+    return function(...args) {
       clearTimeout(timeout);
       timeout = setTimeout(() => func.apply(this, args), delay);
     };
   };
-  const debouncedSearch = debounce(onSearchNote, 300);
+const debouncedSearch = debounce(onSearchNote, 300);
 
   useEffect(() => {
     getAllNotes();
     getUserInfo();
   }, []);
+
 
   const handleSearchInputChange = (query) => {
     debouncedSearch(query);
@@ -240,14 +234,15 @@ const Home = () => {
 
   const handleNoteSelection = (noteId) => {
     // console.log(noteId)
-    setSelectedNotes((prevSelected) => {
+    setSelectedNotes(prevSelected => {
       if (prevSelected.includes(noteId)) {
-        return prevSelected.filter((id) => id !== noteId);
+        return prevSelected.filter(id => id !== noteId);
       } else {
         return [...prevSelected, noteId];
       }
     });
   };
+
 
   const handleBulkPin = async () => {
     const isAllPinnedSelected = selectedNotes.some((selectedNote) =>
@@ -256,27 +251,21 @@ const Home = () => {
 
     const updateData = {
       noteIds: selectedNotes,
-      isPinned: isAllPinnedSelected, // true to pin, false to unpin
+      isPinned: isAllPinnedSelected // true to pin, false to unpin
     };
 
     try {
       // Send one API call to pin/unpin the selected notes
-      await axiosInstance.put("/bulk-update-notes-pinned", updateData);
+      await axiosInstance.put('/bulk-update-notes-pinned', updateData);
 
       // Refresh notes and clear selection
       getAllNotes();
       setSelectedNotes([]);
-      toast.success(
-        `Selected notes ${
-          isAllPinnedSelected ? "pinned" : "unpinned"
-        } successfully`
-      );
+      toast.success(`Selected notes ${isAllPinnedSelected ? 'pinned' : 'unpinned'} successfully`);
       setIsColorPickerOpen(false);
     } catch (error) {
       console.error("Error updating notes:", error);
-      toast.error(
-        `Failed to ${isAllPinnedSelected ? "pin" : "unpin"} selected notes`
-      );
+      toast.error(`Failed to ${isAllPinnedSelected ? 'pin' : 'unpin'} selected notes`);
     }
   };
 
@@ -287,8 +276,8 @@ const Home = () => {
         noteIds: selectedNotes,
       });
 
-      getAllNotes(); // Refresh the notes after archiving
-      setSelectedNotes([]); // Clear the selection
+      getAllNotes();  // Refresh the notes after archiving
+      setSelectedNotes([]);  // Clear the selection
       toast.success("Selected notes archived successfully");
     } catch (error) {
       console.error("Error archiving notes:", error);
@@ -300,8 +289,8 @@ const Home = () => {
     try {
       // Send selected note IDs via the data field, since Axios delete doesn't send req.body directly
       await axiosInstance({
-        method: "delete",
-        url: "/delete-multiple-notes",
+        method: 'delete',
+        url: '/delete-multiple-notes',
         data: { noteIds: selectedNotes }, // Pass the noteIds in the data field
       });
 
@@ -315,11 +304,12 @@ const Home = () => {
     }
   };
 
+
   const handleBulkColor = async (color) => {
     try {
       // console.log(color);
       // Send an array of selected note IDs and the new background color in one request
-      await axiosInstance.put("/update-notes-background", {
+      await axiosInstance.put('/update-notes-background', {
         noteIds: selectedNotes,
         background: color,
       });
@@ -333,6 +323,7 @@ const Home = () => {
     }
   };
 
+
   const handleColorChange = (e) => {
     setBackground(e.target.value);
   };
@@ -344,12 +335,16 @@ const Home = () => {
   console.log(import.meta.env.VITE_BACKEND_URL)
   return (
     <div>
+
       {selectedNotes.length > 0 ? (
         <div className=" bg-white shadow-md z-50 p-4 flex justify-between items-center">
           <span>{selectedNotes.length} notes selected</span>
           <div className="flex items-center gap-x-5">
-            <div className="relative  flex ">
-              <button onClick={() => setIsColorPickerOpen(!isColorPickerOpen)}>
+          <div className="relative  flex ">
+              <button
+                onClick={() => setIsColorPickerOpen(!isColorPickerOpen)}
+
+              >
                 <MdColorLens className="text-2xl" />
               </button>
               {isColorPickerOpen && (
@@ -361,7 +356,7 @@ const Home = () => {
                     className="w-8 h-8 border-none"
                   />
                   <button
-                    onClick={() => handleBulkColor(background)}
+                    onClick={()=>handleBulkColor(background)}
                     className="ml-2 px-2 py-1 bg-blue-500 text-white rounded text-sm"
                   >
                     Apply
@@ -385,7 +380,7 @@ const Home = () => {
               }
             </button>
             <button onClick={handleBulkArchive}>
-              <MdOutlineArchive className="text-2xl  text-black" />
+                <MdOutlineArchive className="text-2xl  text-black"/>
             </button>
 
             <button onClick={handleBulkDelete}>
@@ -401,9 +396,6 @@ const Home = () => {
           setUserInfo={setUserInfo}
         />
       )}
-
-      {/* filter functionality for filter via tags */}
-      <FilterTags allNotes={getAllNotesGlobal} filterSetNotes={setAllNotes} />
 
       <div className="container h-auto p-6 pb-12 mx-auto">
         {isLoading ? (
@@ -432,6 +424,7 @@ const Home = () => {
                       content={item.content}
                       tags={item.tags}
                       isPinned={item.isPinned}
+
                       background={item.background}
                       onEdit={() => handleEdit(item)}
                       onDelete={() => handleDeleteModalOpen(item._id)}
@@ -446,9 +439,9 @@ const Home = () => {
                 </div>
               </div>
             )}
-            {pinnedNotes.length > 0 && (
-              <h1 className="font-bold pl-2">OTHERS</h1>
-            )}
+            {
+              pinnedNotes.length > 0 && <h1 className="font-bold pl-2">OTHERS</h1>
+            }
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 mt-2 transition-all">
               {otherNotes.map((item) => (
                 <NoteCard
@@ -459,6 +452,7 @@ const Home = () => {
                   content={item.content}
                   tags={item.tags}
                   isPinned={item.isPinned}
+
                   background={item.background}
                   onEdit={() => handleEdit(item)}
                   onDelete={() => handleDeleteModalOpen(item._id)}
@@ -531,13 +525,7 @@ const Home = () => {
               <span className="text-xs text-slate-500">
                 {moment(viewNoteModal.data.date).format("Do MMM YYYY")}
               </span>
-              <p className="text-gray-700 mt-4">
-                <ReactQuill
-                  value={viewNoteModal.data.content}
-                  readOnly={true}
-                  theme="bubble"
-                />
-              </p>
+              <p className="text-gray-700 mt-4"><ReactQuill value={viewNoteModal.data.content} readOnly={true} theme="bubble" /></p>
               <div className="mt-4">
                 {viewNoteModal.data.tags.map((tag, index) => (
                   <span
