@@ -97,12 +97,21 @@ import React, { useEffect, useState } from 'react';
 import Navbar from '../Navbar';
 import axiosInstance from '../../utils/axiosInstance';
 import NoteCard from '../Cards/NoteCard';
+import {
+  MdColorLens,
+    MdOutlineUnarchive,
+} from "react-icons/md";
+import toast from "react-hot-toast";
 
 const ArchivedNotes = () => {
   const user = JSON.parse(localStorage.getItem("user"));
   const [isLoading, setIsLoading] = useState(true);
   const [archivedNotes, setArchivedNotes] = useState([]);
   const [selectedNotes, setSelectedNotes] = useState([]);
+  const [allNotes, setAllNotes] = useState([]);
+  const [refreshNotes, setRefreshNotes] = useState(false); // State to trigger refresh
+  const [background, setBackground] = useState("#ffffff");
+  const [isColorPickerOpen, setIsColorPickerOpen] = useState(false);
 
   const getArchivedNotes = async () => {
     setIsLoading(true);
@@ -124,7 +133,7 @@ const ArchivedNotes = () => {
 
   useEffect(() => {
     getArchivedNotes(); // Fixed: Actually calling the function
-  }, []);
+  }, [refreshNotes]);
 
   const handleEdit = (note) => {
     // Implement edit functionality
@@ -155,9 +164,86 @@ const ArchivedNotes = () => {
     });
   };
 
+  const handleBulkUnArchive = async () => {
+    try {
+      // Send an array of selected note IDs to archive them in one request
+      await axiosInstance.put("/un-archive-notes", {
+        noteIds: selectedNotes,
+      });
+
+      setSelectedNotes([]);  // Clear the selection
+      toast.success("Selected notes Un-archived successfully");
+      // Trigger the refresh by changing the state
+      setRefreshNotes(prev => !prev);
+    } catch (error) {
+      console.error("Error Un-archiving notes:", error);
+      toast.error("Failed to Un-archive selected notes");
+    }
+  };
+
+  const handleBulkColor = async (color) => {
+    try {
+      // console.log(color);
+      // Send an array of selected note IDs and the new background color in one request
+      await axiosInstance.put('/update-notes-background', {
+        noteIds: selectedNotes,
+        background: color,
+      });
+
+      getArchivedNotes();
+      setSelectedNotes([]);
+      toast.success("Color applied to selected notes");
+    } catch (error) {
+      console.error("Error applying color:", error);
+      toast.error("Failed to apply color to selected notes");
+    }
+  };
+
+  const handleColorChange = (e) => {
+    setBackground(e.target.value);
+  };
+
   return (
     <div>
-      <Navbar userInfo={user} />
+    {selectedNotes.length > 0 ? (
+        <div className=" bg-white shadow-md z-50 p-4 flex justify-between items-center">
+          <span>{selectedNotes.length} notes selected</span>
+          <div className="flex items-center gap-x-5">
+          <div className="relative  flex ">
+              <button
+                onClick={() => setIsColorPickerOpen(!isColorPickerOpen)}
+
+              >
+                <MdColorLens className="text-2xl" />
+              </button>
+              {isColorPickerOpen && (
+                <div className="absolute top-5 right-0 mt-2 p-2 bg-white  rounded shadow-lg">
+                  <input
+                    type="color"
+                    value={background}
+                    onChange={handleColorChange}
+                    className="w-8 h-8 border-none"
+                  />
+                  <button
+                    onClick={()=>handleBulkColor(background)}
+                    className="ml-2 px-2 py-1 bg-blue-500 text-white rounded text-sm"
+                  >
+                    Apply
+                  </button>
+                </div>
+              )}
+            </div>
+
+            <button onClick={handleBulkUnArchive}>
+                <MdOutlineUnarchive className="text-2xl text-black"/>
+            </button>
+          </div>
+        </div>
+      ) : (
+        <Navbar
+          userInfo={user}
+        />
+      )}
       <div className="container h-auto p-6 pb-12 mx-auto">
         {isLoading ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 mt-4 transition-all">

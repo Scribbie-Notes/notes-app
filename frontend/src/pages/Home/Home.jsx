@@ -74,20 +74,22 @@ const Home = () => {
   const getUserInfo = async () => {
     try {
       const response = await axiosInstance.get("/get-user");
+      console.log(response);
       if (response.data && response.data.user) {
         setUserInfo(response.data.user);
       }
+
     } catch (error) {
-      if (error.response.status === 401) {
-        localStorage.clear();
-        navigate("/login");
-      }
+      // if (error.response.status === 401) {
+      //   localStorage.clear();
+      //   navigate("/login");
+      // }
     }
   };
 
   useEffect(() => {
     getUserInfo();
-    return () => {};
+
   }, []);
 
   // get all notes
@@ -148,10 +150,10 @@ const Home = () => {
     }
   };
   const onSearchNote = async (query) => {
-    setSearchQuery(query); 
+    setSearchQuery(query);
     if (query.trim() === "") {
       setIsSearch(false);
-      getAllNotes(); 
+      getAllNotes();
       return;
     }
     const filteredNotes = allNotes.filter(note =>
@@ -162,7 +164,7 @@ const Home = () => {
       const response = await axiosInstance.get("/search-notes", { params: { query } });
       if (response.data && response.data.notes) {
         setIsSearch(true);
-        setAllNotes(filteredNotes); 
+        setAllNotes(filteredNotes);
       }
     } catch (error) {
       console.log("Error while searching notes");
@@ -177,17 +179,17 @@ const Home = () => {
       timeout = setTimeout(() => func.apply(this, args), delay);
     };
   };
-const debouncedSearch = debounce(onSearchNote, 300); 
+const debouncedSearch = debounce(onSearchNote, 300);
 
   useEffect(() => {
     getAllNotes();
     getUserInfo();
   }, []);
 
-  
+
   const handleSearchInputChange = (query) => {
-    debouncedSearch(query); 
-  };  
+    debouncedSearch(query);
+  };
 
   const updateIsPinned = async (noteData) => {
     const noteId = noteData._id;
@@ -246,16 +248,16 @@ const debouncedSearch = debounce(onSearchNote, 300);
     const isAllPinnedSelected = selectedNotes.some((selectedNote) =>
       otherNotes.some((note) => note._id === selectedNote && !note.isPinned)
     );
-  
+
     const updateData = {
       noteIds: selectedNotes,
       isPinned: isAllPinnedSelected // true to pin, false to unpin
     };
-  
+
     try {
       // Send one API call to pin/unpin the selected notes
       await axiosInstance.put('/bulk-update-notes-pinned', updateData);
-  
+
       // Refresh notes and clear selection
       getAllNotes();
       setSelectedNotes([]);
@@ -266,14 +268,14 @@ const debouncedSearch = debounce(onSearchNote, 300);
       toast.error(`Failed to ${isAllPinnedSelected ? 'pin' : 'unpin'} selected notes`);
     }
   };
-  
+
   const handleBulkArchive = async () => {
     try {
       // Send an array of selected note IDs to archive them in one request
       await axiosInstance.put("/archive-notes", {
         noteIds: selectedNotes,
       });
-  
+
       getAllNotes();  // Refresh the notes after archiving
       setSelectedNotes([]);  // Clear the selection
       toast.success("Selected notes archived successfully");
@@ -291,7 +293,7 @@ const debouncedSearch = debounce(onSearchNote, 300);
         url: '/delete-multiple-notes',
         data: { noteIds: selectedNotes }, // Pass the noteIds in the data field
       });
-  
+
       // After successful deletion, refresh the notes and reset selected notes
       getAllNotes();
       setSelectedNotes([]);
@@ -301,7 +303,7 @@ const debouncedSearch = debounce(onSearchNote, 300);
       toast.error("Failed to delete selected notes");
     }
   };
-  
+
 
   const handleBulkColor = async (color) => {
     try {
@@ -311,7 +313,7 @@ const debouncedSearch = debounce(onSearchNote, 300);
         noteIds: selectedNotes,
         background: color,
       });
-  
+
       getAllNotes();
       setSelectedNotes([]);
       toast.success("Color applied to selected notes");
@@ -320,7 +322,7 @@ const debouncedSearch = debounce(onSearchNote, 300);
       toast.error("Failed to apply color to selected notes");
     }
   };
-  
+
 
   const handleColorChange = (e) => {
     setBackground(e.target.value);
@@ -329,29 +331,31 @@ const debouncedSearch = debounce(onSearchNote, 300);
   const otherNotes = allNotes.filter((note) => note.isPinned !== true);
   // console.log('pinnedNotes',pinnedNotes)
   // console.log('otherNotes',otherNotes)
+
+  console.log(import.meta.env.VITE_BACKEND_URL)
   return (
     <div>
-     
+
       {selectedNotes.length > 0 ? (
         <div className=" bg-white shadow-md z-50 p-4 flex justify-between items-center">
           <span>{selectedNotes.length} notes selected</span>
           <div className="flex items-center gap-x-5">
           <div className="relative  flex ">
-              <button 
-                onClick={() => setIsColorPickerOpen(!isColorPickerOpen)} 
-                
+              <button
+                onClick={() => setIsColorPickerOpen(!isColorPickerOpen)}
+
               >
                 <MdColorLens className="text-2xl" />
               </button>
               {isColorPickerOpen && (
                 <div className="absolute top-5 right-0 mt-2 p-2 bg-white  rounded shadow-lg">
-                  <input 
-                    type="color" 
+                  <input
+                    type="color"
                     value={background}
                     onChange={handleColorChange}
                     className="w-8 h-8 border-none"
                   />
-                  <button 
+                  <button
                     onClick={()=>handleBulkColor(background)}
                     className="ml-2 px-2 py-1 bg-blue-500 text-white rounded text-sm"
                   >
@@ -375,9 +379,9 @@ const debouncedSearch = debounce(onSearchNote, 300);
                 ) // Filled icon for pinned notes
               }
             </button>
-    <button onClick={handleBulkArchive}>
-          <MdOutlineArchive className="text-2xl  text-black"/>
-    </button>
+            <button onClick={handleBulkArchive}>
+                <MdOutlineArchive className="text-2xl  text-black"/>
+            </button>
 
             <button onClick={handleBulkDelete}>
               <MdDelete className="text-2xl  text-black" />
@@ -420,7 +424,7 @@ const debouncedSearch = debounce(onSearchNote, 300);
                       content={item.content}
                       tags={item.tags}
                       isPinned={item.isPinned}
-                    
+
                       background={item.background}
                       onEdit={() => handleEdit(item)}
                       onDelete={() => handleDeleteModalOpen(item._id)}
@@ -448,7 +452,7 @@ const debouncedSearch = debounce(onSearchNote, 300);
                   content={item.content}
                   tags={item.tags}
                   isPinned={item.isPinned}
-                
+
                   background={item.background}
                   onEdit={() => handleEdit(item)}
                   onDelete={() => handleDeleteModalOpen(item._id)}
@@ -527,8 +531,7 @@ const debouncedSearch = debounce(onSearchNote, 300);
                   <span
                     key={index}
                     className="inline-block bg-gray-100 mr-2 text-gray-800 text-xs font-medium px-1.5 py-0.5 rounded dark:bg-blue-100 dark:text-gray-800"
-                  >
-                    #{tag}
+                  >#{tag}
                   </span>
                 ))}
               </div>
