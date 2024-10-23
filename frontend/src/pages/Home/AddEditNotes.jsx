@@ -125,6 +125,12 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
       setTitle(newTitle);
     }
   };
+  const handleTitleChange = (e) => {
+    const newTitle = e.target.value;
+    if (newTitle.length <= MAX_TITLE_LENGTH) {
+      setTitle(newTitle);
+    }
+  };
 
   const handleContentChange = (value) => {
     if (value.length <= MAX_CONTENT_LENGTH) {
@@ -132,6 +138,9 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
     }
   };
 
+  const handleBackgroundChange = (e) => {
+    setBackground(e.target.value);
+  };
   const handleBackgroundChange = (e) => {
     setBackground(e.target.value);
   };
@@ -178,6 +187,12 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
         setError("Invalid note data.");
         return;
       }
+  const editNote = async () => {
+    try {
+      if (!noteData || !noteData._id) {
+        setError("Invalid note data.");
+        return;
+      }
 
       const formData = new FormData();
       formData.append("title", title);
@@ -204,6 +219,17 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
         }
       );
 
+      if (response.data && response.data.note) {
+        getAllNotes();
+        onClose();
+        toast.success("Note updated successfully");
+      }
+    } catch (error) {
+      console.error("Error updating note:", error);
+      setError("An error occurred while updating the note.");
+      toast.error("Failed to update a note");
+    }
+  };
       if (response.data && response.data.note) {
         getAllNotes();
         onClose();
@@ -242,7 +268,30 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
       >
         <MdClose className="text-xl text-slate-400" />
       </button>
+  return (
+    <div className="relative">
+      <button
+        className="w-10 h-10 rounded-full flex items-center bg-gray-50 transition-all justify-center absolute -top-3 -right-3 hover:bg-red-100"
+        onClick={onClose}
+      >
+        <MdClose className="text-xl text-slate-400" />
+      </button>
 
+      <div className="flex flex-col gap-2">
+        <label className="font-medium">Title</label>
+        <div className="relative">
+          <input
+            type="text"
+            className="p-2 border rounded-md text-sm w-full pr-12"
+            value={title}
+            placeholder="Enter note title"
+            onChange={handleTitleChange}
+          />
+          <span className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 text-xs">
+            {title.length}/{MAX_TITLE_LENGTH}
+          </span>
+        </div>
+      </div>
       <div className="flex flex-col gap-2">
         <label className="font-medium">Title</label>
         <div className="relative">
@@ -308,12 +357,29 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
           className="p-1 border rounded-md w-full"
         />
       </div>
+      <div className="flex flex-col gap-2 mt-12">
+        <label className="font-medium">Background Color</label>
+        <input
+          type="color"
+          value={background}
+          onChange={handleBackgroundChange}
+          className="p-1 border rounded-md w-full"
+        />
+      </div>
 
       <div className="flex flex-col gap-2 mt-4">
         <label className="font-medium md:text-base">Tags</label>
         <TagInput tags={tags} setTags={setTags} />
       </div>
+      <div className="flex flex-col gap-2 mt-4">
+        <label className="font-medium md:text-base">Tags</label>
+        <TagInput tags={tags} setTags={setTags} />
+      </div>
 
+      <div className="flex flex-col gap-2 mt-4">
+        <label className="font-medium md:text-base">Add Attachments</label>
+        <AddAttachmentsInput onFileUpload={handleFileUpload} />
+      </div>
       <div className="flex flex-col gap-2 mt-4">
         <label className="font-medium md:text-base">Add Attachments</label>
         <AddAttachmentsInput onFileUpload={handleFileUpload} />
