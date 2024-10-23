@@ -19,6 +19,7 @@
     "express-async-handler": "^1.2.0",
     "fs": "^0.0.1-security",
     "google-auth-library": "^9.11.0",
+    "googleapis": "^144.0.0",
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.9.0",
     "mongoose": "^8.4.4",
