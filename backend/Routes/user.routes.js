@@ -3,6 +3,7 @@ import multer from "multer";
 import { storage } from "../utils/multer.js";
 
 import {
+  contactUsMailController,
   createAccountController,
   deleteUserController,
   feedbackSubmitController,
@@ -61,5 +62,7 @@ userRoutes.put(
 userRoutes.post("/google-auth", googleAuthController);
 
 userRoutes.post("/submit", feedbackSubmitController);
+
+userRoutes.post("/contact", contactUsMailController);
 
 export default userRoutes;

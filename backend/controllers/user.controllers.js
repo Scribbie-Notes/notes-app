@@ -6,6 +6,7 @@ import { OAuth2Client } from "google-auth-library";
 const { ACCESS_TOKEN_SECRET, GOOGLE_API_TOKEN } = process.env;
 
 import { HTTP_STATUS, MESSAGES, ERROR_MESSAGES } from "../utils/const.js";
+import contactSendMail from "../mail/contactUsMailSender.js";
 
 const client = new OAuth2Client(GOOGLE_API_TOKEN);
 
@@ -363,6 +364,25 @@ const feedbackSubmitController = async (req, res) => {
   }
 };
 
+const contactUsMailController = async (req, res) => {
+  const { first_name, last_name, user_email, message } = req.body;
+  try {
+    const html = `<p>${message}</p>`;
+    const name = first_name + " " + last_name;
+    contactSendMail(user_email, name, html);
+    return res.status(200).json({
+      error: false,
+      message: "Mail send successfully",
+    });
+  } catch (err) {
+    console.log(err.message);
+    return res.status(500).json({
+      error: true,
+      message: "Internal error",
+    });
+  }
+};
+
 export {
   createAccountController,
   verifyAccountController,
@@ -375,4 +395,5 @@ export {
   updatePofilePhotoController,
   googleAuthController,
   feedbackSubmitController,
+  contactUsMailController,
 };
