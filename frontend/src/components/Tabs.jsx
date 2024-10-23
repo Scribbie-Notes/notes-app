@@ -2,23 +2,29 @@ import { useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { Link, useLocation } from "react-router-dom";
 
-export const SlideTabsExample = () => {
+// Accept theme as a prop in SlideTabsExample
+export const SlideTabsExample = ({ theme }) => {
   return (
+
     <div className="bg-white  rounded-lg m-2 p-2">
       <SlideTabs />
+
+    <div className={theme === "dark" ? "bg-gray-800" : "bg-white py-2"}>
+      <SlideTabs theme={theme} />
+
     </div>
   );
 };
 
-const SlideTabs = () => {
+const SlideTabs = ({ theme }) => {
   const location = useLocation();
   const [position, setPosition] = useState({
     left: 0,
     width: 0,
     opacity: 0,
   });
-  const currentPathName = location.pathname;
   const [hoveredTab, setHoveredTab] = useState(null);
+  const currentPathName = location.pathname;
 
   return (
     <ul
@@ -29,6 +35,7 @@ const SlideTabs = () => {
         }));
         setHoveredTab(null);
       }}
+
       className="relative mx-auto b flex w-fit bg-white p-1"
     >
       <Tab
@@ -56,49 +63,33 @@ const SlideTabs = () => {
         hoveredTab={hoveredTab}
         setHoveredTab={setHoveredTab}
       >
+
+      className={`relative mx-auto flex w-fit p-1 ${
+        theme === "dark" ? "bg-black" : "bg-white"
+      }`}
+    >
+      <Tab theme={theme} setPosition={setPosition} to="/" currentPathName={currentPathName} hoveredTab={hoveredTab} setHoveredTab={setHoveredTab}>
+        Home
+      </Tab>
+      <Tab theme={theme} setPosition={setPosition} to="/about" currentPathName={currentPathName} hoveredTab={hoveredTab} setHoveredTab={setHoveredTab}>
+
         About
       </Tab>
-      <Tab
-        setPosition={setPosition}
-        currentPathName={currentPathName}
-        to="/testimonial"
-        hoveredTab={hoveredTab}
-        setHoveredTab={setHoveredTab}
-      >
+      <Tab theme={theme} setPosition={setPosition} to="/testimonial" currentPathName={currentPathName} hoveredTab={hoveredTab} setHoveredTab={setHoveredTab}>
         Testimonial
       </Tab>
-      <Tab
-        setPosition={setPosition}
-        currentPathName={currentPathName}
-        to="/pricing"
-        hoveredTab={hoveredTab}
-        setHoveredTab={setHoveredTab}
-      >
+      <Tab theme={theme} setPosition={setPosition} to="/pricing" currentPathName={currentPathName} hoveredTab={hoveredTab} setHoveredTab={setHoveredTab}>
         Pricing
       </Tab>
-      <Tab
-        setPosition={setPosition}
-        currentPathName={currentPathName}
-        to="/contact-us"
-        hoveredTab={hoveredTab}
-        setHoveredTab={setHoveredTab}
-      >
+      <Tab theme={theme} setPosition={setPosition} to="/contact-us" currentPathName={currentPathName} hoveredTab={hoveredTab} setHoveredTab={setHoveredTab}>
         Contact Us
       </Tab>
-
-      <Cursor position={position} />
+      <Cursor position={position} theme={theme} />
     </ul>
   );
 };
 
-const Tab = ({ 
-  children, 
-  setPosition, 
-  to, 
-  currentPathName,
-  hoveredTab,
-  setHoveredTab 
-}) => {
+const Tab = ({ children, setPosition, to, currentPathName, hoveredTab, setHoveredTab, theme }) => {
   const ref = useRef(null);
   const isActive = currentPathName === to;
   const isHovered = hoveredTab === to;
@@ -117,7 +108,7 @@ const Tab = ({
         setHoveredTab(to);
       }}
       className={`relative z-10 block cursor-pointer px-3 py-1.5 text-xs uppercase md:px-5 md:py-3 md:text-base transition-colors duration-200 ${
-        isActive ? 'bg-black text-white rounded-lg' : isHovered ? 'text-white' : 'text-black'
+        isActive ? 'bg-black text-white rounded-lg' : isHovered ? 'bg-gray-700 text-white rounded-lg' : theme === "dark" ? "text-white" : "text-black"
       }`}
     >
       <Link to={to} className="block w-full">
@@ -127,13 +118,14 @@ const Tab = ({
   );
 };
 
-const Cursor = ({ position }) => {
+// Cursor animation component
+const Cursor = ({ position, theme }) => {
   return (
     <motion.li
-      animate={{
-        ...position,
-      }}
-      className="absolute z-0 h-7 rounded-lg bg-black md:h-12"
+      animate={position}
+      className={`absolute z-0 h-7 rounded-lg md:h-12 ${
+        theme === "dark" ? "bg-gray-900" : "bg-gray-300"
+      }`}
     />
   );
 };

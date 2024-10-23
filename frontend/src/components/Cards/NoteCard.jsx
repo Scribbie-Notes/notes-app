@@ -1,5 +1,5 @@
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
 import PropTypes from "prop-types";
 import moment from "moment";
 import {
@@ -36,6 +36,8 @@ const NoteCard = ({
   onSelect,
 }) => {
   const textColor = getContrastColor(background);
+
+
 
   return (
     <div
@@ -88,10 +90,13 @@ const NoteCard = ({
                 key={index}
                 className="bg-gray-100 text-gray-800 text-xs font-medium px-1.5 py-0.5 rounded dark:bg-blue-100 dark:text-gray-800"
               >
-                #{tag}
+              {/* fix blank tag div  */}
+                {tag !== "" ? `#${tag}` : ""}
               </span>
             ))}
         </div>
+
+        
 
         <div className="flex items-center gap-2">
           <div className="relative group">
@@ -101,7 +106,7 @@ const NoteCard = ({
                 e.stopPropagation();
                 onEdit();
               }}
-              style={{color:textColor}}
+              style={{ color: textColor }}
             />
             <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 hidden group-hover:flex items-center justify-center bg-black text-white text-xs rounded px-2 py-1">
               {"Edit Note"}
@@ -115,14 +120,14 @@ const NoteCard = ({
                 e.stopPropagation();
                 onDelete();
               }}
-              style={{color:textColor}}
+              style={{ color: textColor }}
             />
             <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 hidden group-hover:flex items-center justify-center bg-black text-white text-xs rounded px-2 py-1">
               {"Delete Note"}
             </div>
           </div>
 
-          <div >
+          <div>
             <div
               onClick={(e) => {
                 e.stopPropagation();
