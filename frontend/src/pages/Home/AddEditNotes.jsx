@@ -87,7 +87,7 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
                 return;
             }
             
-            const response = await axiosInstance.put(/edit-note/${noteData._id}, {
+            const response = await axiosInstance.put(`/edit-note/${noteData._id}`, {
                 title,
                 content,
                 tags,
