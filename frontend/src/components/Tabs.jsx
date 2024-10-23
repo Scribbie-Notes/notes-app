@@ -5,8 +5,13 @@ import { Link, useLocation } from "react-router-dom";
 // Accept theme as a prop in SlideTabsExample
 export const SlideTabsExample = ({ theme }) => {
   return (
+
+    <div className="bg-white  rounded-lg m-2 p-2">
+      <SlideTabs />
+
     <div className={theme === "dark" ? "bg-gray-800" : "bg-white py-2"}>
       <SlideTabs theme={theme} />
+
     </div>
   );
 };
@@ -30,6 +35,35 @@ const SlideTabs = ({ theme }) => {
         }));
         setHoveredTab(null);
       }}
+
+      className="relative mx-auto b flex w-fit bg-white p-1"
+    >
+      <Tab
+        setPosition={setPosition}
+        currentPathName={currentPathName}
+        to="/"
+        hoveredTab={hoveredTab}
+        setHoveredTab={setHoveredTab}
+      >
+        Home
+      </Tab>
+      <Tab
+        setPosition={setPosition}
+        currentPathName={currentPathName}
+        to="/dashboard"
+        hoveredTab={hoveredTab}
+        setHoveredTab={setHoveredTab}
+      >
+        Dashboard
+      </Tab>
+      <Tab
+        setPosition={setPosition}
+        currentPathName={currentPathName}
+        to="/about"
+        hoveredTab={hoveredTab}
+        setHoveredTab={setHoveredTab}
+      >
+
       className={`relative mx-auto flex w-fit p-1 ${
         theme === "dark" ? "bg-black" : "bg-white"
       }`}
@@ -38,6 +72,7 @@ const SlideTabs = ({ theme }) => {
         Home
       </Tab>
       <Tab theme={theme} setPosition={setPosition} to="/about" currentPathName={currentPathName} hoveredTab={hoveredTab} setHoveredTab={setHoveredTab}>
+
         About
       </Tab>
       <Tab theme={theme} setPosition={setPosition} to="/testimonial" currentPathName={currentPathName} hoveredTab={hoveredTab} setHoveredTab={setHoveredTab}>
