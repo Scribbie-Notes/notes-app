@@ -1,18 +1,28 @@
-const express = require("express");
-const mongoose = require("mongoose");
-const dotenv = require("dotenv");
-const path = require("path");
-const cors = require('cors');
-const app = express();
-const Router = require('./Routes/Router')
+import express from "express";
+import mongoose from "mongoose";
+import dotenv from "dotenv";
+import path from "path";
+import { fileURLToPath } from "url";
+import cors from "cors";
+import userRoutes from "./Routes/user.routes.js";
+import noteRoutes from "./Routes/note.routes.js";
 
-app.use(express.json())
+// Defined __filename and __dirname
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// const Router = require("./Routes/Router");
+
+const app = express();
+
+app.use(express.json());
 
 const envPath =
   process.env.NODE_ENV === "production" ? ".env.production" : ".env";
 dotenv.config({ path: path.resolve(__dirname, envPath) });
 
 const { MONGO_URI } = process.env;
+console.log(MONGO_URI);
 
 // Use cors middleware before defining any routes
 const allowedOrigins =
@@ -29,29 +39,23 @@ app.use(
   })
 );
 
-
-
 // Connect to MongoDB
 (async function () {
   try {
-    await mongoose.connect(MONGO_URI)
-    console.log("MongoDB connected")
+    await mongoose.connect(MONGO_URI);
+    console.log("MongoDB connected");
   } catch (error) {
-    console.error("MongoDB connection error:", error)
+    console.error("MongoDB connection error:", error);
   }
 })();
 
-// All the routes are available here
-app.use('/', Router)
-
-
-
+//new better and structured routes 
+app.use(userRoutes);
+app.use(noteRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
 
-
-
-module.exports = app;
+export default app;
