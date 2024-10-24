@@ -223,11 +223,11 @@ router.post("/login", async (req, res) => {
       .status(HTTP_STATUS.BAD_REQUEST)
       .json({ message: ERROR_MESSAGES.INVALID_CREDENTIALS });
   }
-  // if (!userInfo.isEmailVerified) {
-  //   return res
-  //     .status(HTTP_STATUS.BAD_REQUEST)
-  //     .json({ message: ERROR_MESSAGES.EMAIL_NOT_VERIFIED });
-  // }
+  if (!userInfo.isEmailVerified) {
+    return res
+      .status(HTTP_STATUS.BAD_REQUEST)
+      .json({ message: ERROR_MESSAGES.EMAIL_NOT_VERIFIED });
+  }
 
   const accessToken = jwt.sign({ user: userInfo }, ACCESS_TOKEN_SECRET, {
     expiresIn: "36000m",
