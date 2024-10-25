@@ -334,7 +334,7 @@ const debouncedSearch = debounce(onSearchNote, 300);
 
   console.log(import.meta.env.VITE_BACKEND_URL)
   return (
-    <div className={`${theme === "dark" && "bg-black text-white"}`}>
+    <div className={`h-screen ${theme === "dark" && "bg-black text-white"}`}>
 
       {selectedNotes.length > 0 && (
         <div className=" bg-white shadow-md z-50 p-4 flex justify-between items-center">
