@@ -168,10 +168,6 @@ const Login = ({ setUser }) => {
 
   return (
     <div>
-      <div className="fixed top-0 left-0 right-0 z-50">
-        <Navbar />
-      </div>
-
       <section className="bg-white">
         <div className="lg:grid lg:min-h-screen lg:grid-cols-12">
           <section className="relative flex h-32 items-end bg-gray-900 lg:col-span-5 lg:h-full xl:col-span-6">

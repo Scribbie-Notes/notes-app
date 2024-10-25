@@ -221,9 +221,7 @@ const Signup = () => {
 
   return (
     <div>
-      <div className="fixed top-0 left-0 right-0 z-50">
-        <Navbar />
-      </div>
+      
 
       <section className="bg-white">
         <div className="lg:grid lg:min-h-screen lg:grid-cols-12">
