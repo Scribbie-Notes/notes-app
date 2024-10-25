@@ -9,7 +9,7 @@ import { SlideTabsExample } from "./Tabs"; // Ensure correct import
 
 const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
   console.log(userInfo);
-  const [theme, setTheme] = useState("light"); // Manage theme state
+  // const [theme, setTheme] = useState("light"); // Manage theme state
   const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
@@ -20,10 +20,22 @@ const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
   const loginButtonRef = useRef(null);
   const signupButtonRef = useRef(null);
 
-  // Handle theme toggle
+  const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light');
+
+  // Apply the theme to the document body
+  useEffect(() => {
+    document.body.className = theme; // set the class on body
+    localStorage.setItem('theme', theme); // store theme in localStorage
+  }, [theme]);
+
+  // Toggle theme between 'light' and 'dark'
   const toggleTheme = () => {
-    setTheme((prevTheme) => (prevTheme === "light" ? "dark" : "light"));
+    setTheme((prevTheme) => (prevTheme === 'light' ? 'dark' : 'light'));
   };
+  // Handle theme toggle
+  // const toggleTheme = () => {
+  //   setTheme((prevTheme) => (prevTheme === "light" ? "dark" : "light"));
+  // };
 
   useEffect(() => {
     // Animate logo
