@@ -156,15 +156,16 @@ const Home = () => {
       getAllNotes();
       return;
     }
-    const filteredNotes = allNotes.filter(note =>
-      note.title.toLowerCase().includes(query.toLowerCase())
-    );
+    // const filteredNotes = allNotes.filter(note =>
+    //   note.title.toLowerCase().includes(query.toLowerCase())
+    // );
 
     try {
       const response = await axiosInstance.get("/search-notes", { params: { query } });
+      // console.log(response)
       if (response.data && response.data.notes) {
         setIsSearch(true);
-        setAllNotes(filteredNotes);
+        setAllNotes(response.data.notes);
       }
     } catch (error) {
       console.log("Error while searching notes");

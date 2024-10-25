@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { FaMagnifyingGlass } from 'react-icons/fa6';
 import { IoMdClose } from 'react-icons/io';
 
-const SearchBar = ({ value, onChange, onClearSearch }) => {
+const SearchBar = ({ value, onChange, onClearSearch ,handleSearch }) => {
     const [isFocused, setIsFocused] = useState(false);
 
     return (
@@ -26,7 +26,7 @@ const SearchBar = ({ value, onChange, onClearSearch }) => {
                 />
             )}
 
-            <FaMagnifyingGlass className='text-slate-400 cursor-pointer hover:text-black' />
+            <FaMagnifyingGlass  className='text-slate-400 cursor-pointer hover:text-black' onClick={handleSearch} />
         </div>
     );
 };

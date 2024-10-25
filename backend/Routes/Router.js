@@ -46,13 +46,13 @@ const uploadMultiple = multer({ storage: storage }).array("attachments", 10);
 // Authentication middleware
 const authenticationToken = (req, res, next) => {
   const token = req.headers["authorization"].split(" ")[1];
-  console.log("Authorization header:", token); // Log the token for debugging
+  // console.log("Authorization header:", token); // Log the token for debugging
 
   if (!token) {
     return res.status(403).json({ message: "No token provided." });
   }
 
-  jwt.verify(token, ACCESS_TOKEN_SECRET, (err, user) => {
+  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
     if (err) {
       console.error("Token verification error:", err); // Log the error
       return res.status(403).json({ message: "Token verification failed." });
@@ -169,6 +169,7 @@ router.post("/create-account", async (req, res) => {
 
 router.get("/verify/:token", async (req, res) => {
   const { token } = req.params;
+  console.log(token)
   if (!token) {
     return res
       .status(HTTP_STATUS.BAD_REQUEST)
@@ -691,7 +692,8 @@ router.put("/archive-notes", async (req, res) => {
 });
 
 // Search notes
-router.get("/search-notes/", authenticationToken, async (req, res) => {
+// Assuming `Note` model with indexes set up on `title`, `content`, and `tags`
+router.get("/search-notes", authenticationToken, async (req, res) => {
   const { user } = req.user;
   const { query } = req.query;
 
@@ -703,14 +705,17 @@ router.get("/search-notes/", authenticationToken, async (req, res) => {
   }
 
   try {
+    const regexQuery = new RegExp(query, "i");
+
     const matchingNotes = await Note.find({
       userId: user._id,
       $or: [
-        { title: { $regex: new RegExp(query, "i") } },
-        { content: { $regex: new RegExp(query, "i") } },
+        { title: { $regex: regexQuery } },
+        { content: { $regex: regexQuery } },
+        { tags: { $elemMatch: { $regex: regexQuery } } }, // optimized for tags as array of strings
       ],
     });
-
+// console.log(matchingNotes)
     return res.json({
       error: false,
       notes: matchingNotes,
