@@ -428,8 +428,6 @@ router.put(
 // Get all notes
 router.get("/get-all-notes", authenticationToken, async (req, res) => {
 
-    try {
-
   const { user } = req.user;
   try {
     const notes = await Note.find({
@@ -915,7 +913,7 @@ router.post("/google-auth", async (req, res) => {
 
 // feedback submit
 router.post("/submit", async (req, res) => {
-  
+
     const { name, email, feedback,rating } = req.body;
 
     try {
