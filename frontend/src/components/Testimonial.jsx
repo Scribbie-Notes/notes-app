@@ -29,7 +29,7 @@ const testimonialsData = [
   }
 ];
 
-const Testimonial = () => {
+const Testimonial = ({theme}) => {
   const user = JSON.parse(localStorage.getItem("user"));
   const [currentIndex, setCurrentIndex] = useState(0);
   const location = useLocation();
@@ -44,14 +44,14 @@ const Testimonial = () => {
   }, []);
 
   return (
-    <>
-      {location.pathname === '/testimonial' && <Navbar userInfo={user} />}
+    <div className={` px-16 flex justify-center items-center h-screen ${theme === "dark" && "bg-black text-white"}`}>
+      {/* {location.pathname === '/testimonial' && <Navbar userInfo={user} />} */}
       <div className="bg-neutral-100 h-[400px] py-20">
         <div className="container mx-auto px-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             {/* Left Side - Title */}
             <div className="max-w-lg">
-              <h2 className="text-4xl font-bold mb-4">What our customers think</h2>
+              <h2 className="text-4xl font-bold mb-4 text-black">What our customers think</h2>
               <p className="text-gray-600 mb-8">
                 Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minus commodi sint, similique cupiditate possimus suscipit delectus illum eos iure magnam!
               </p>
@@ -91,7 +91,7 @@ const Testimonial = () => {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

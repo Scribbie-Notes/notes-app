@@ -8,7 +8,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { GoogleLogin } from "@react-oauth/google";
 import CircularLoader from "../../components/CircularLoader";
 
-const Login = ({ setUser }) => {
+const Login = ({ setUser ,theme}) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -167,11 +167,11 @@ const Login = ({ setUser }) => {
 
   return (
     <div>
-      <div className="fixed top-0 left-0 right-0 z-50">
+      <div className={`fixed top-0 left-0 right-0 z-50 ${theme === "dark" && "bg-black text-white"}`}>
         <Navbar />
       </div>
 
-      <section className="bg-white">
+      <section className={`${theme === "dark" && "bg-white text-white"}`}>
         <div className="lg:grid lg:min-h-screen lg:grid-cols-12">
           <section className="relative flex h-32 items-end bg-gray-900 lg:col-span-5 lg:h-full xl:col-span-6">
             <img
