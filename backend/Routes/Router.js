@@ -151,8 +151,7 @@ router.post("/create-account", async (req, res) => {
     });
   }
   //password is already hashed as we used pre and hashed it  before saving the User - info
-
-  const user = new User({ fullName, email, password: hashedPass });
+  const user = new User({ fullName, email, password });
   await user.save();
   const expiresIn = 60 * 20;
   const token = jwt.sign({ sub: user._id, expiresIn }, ACCESS_TOKEN_SECRET);

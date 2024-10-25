@@ -12,6 +12,7 @@ import { FaRegEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa";
 import { GoogleLogin } from "@react-oauth/google";
 import CircularLoader from "../../components/CircularLoader";
+import axios from "axios";
 
 const Signup = () => {
   const [name, setName] = useState("");
@@ -154,7 +155,8 @@ const Signup = () => {
 
     // signup api call
     try {
-      const response = await axiosInstance.post("http://localhost:3000/create-account", {
+      // console.log(process.env.VITE_BACKEND_URL)
+      const response = await axiosInstance.post("/create-account", {
         fullName: name,
         email: email,
         password: password,
