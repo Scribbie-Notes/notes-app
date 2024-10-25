@@ -7,6 +7,7 @@ import toast from "react-hot-toast";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { GoogleLogin } from "@react-oauth/google";
 import CircularLoader from "../../components/CircularLoader";
+import axios from "axios";
 
 const Login = ({ setUser }) => {
   const [email, setEmail] = useState("");
@@ -107,7 +108,7 @@ const Login = ({ setUser }) => {
     setError(null);
 
     try {
-      const response = await axiosInstance.post("http://localhost:3000/login", {
+      const response = await axiosInstance.post("/login", {
         email,
         password,
       });
