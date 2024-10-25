@@ -273,7 +273,6 @@ router.post(
     const { title, content, tags, background } = req.body;
     const { user } = req.user;
     // const tagsArray = JSON.parse(tags); // Convert to array and trim whitespace
-
     if (!title || !content) {
       return res
         .status(HTTP_STATUS.BAD_REQUEST)
@@ -281,20 +280,18 @@ router.post(
     }
 
     try {
-      const attachmentPaths = req.files.map(
-        (file) => `/uploads/${file.filename}`
-      );
-      const note = new Note({
-        title,
-        content,
-        tags: tagsArray,
-        userId: user._id,
-        attachments: attachmentPaths,
-        background: background || "#ffffff", // Default to white if not provided
-      });
-      await note.save();
+        const attachmentPaths = req.files.map(file => `/uploads/${file.filename}`);
 
-      console.log(note)
+        const note = new Note({
+            title,
+            content,
+            tags: tags || [],
+            userId: user._id,
+            attachments: attachmentPaths,
+            background: background || "#ffffff", // Default to white if not provided
+        });
+        await note.save();
+
       return res.json({
         error: false,
         note,
@@ -430,6 +427,7 @@ router.put(
 
 // Get all notes
 router.get("/get-all-notes", authenticationToken, async (req, res) => {
+
   const { user } = req.user;
   try {
     const notes = await Note.find({
@@ -453,28 +451,28 @@ router.get("/get-all-notes", authenticationToken, async (req, res) => {
 });
 
 router.get("/get-archived-notes", authenticationToken, async (req, res) => {
-  try {
-    // Use req.user directly, as the user is authenticated via the authenticationToken middleware
-    const { user } = req.user;
 
-    // Fetch archived notes that belong to the user and where deleted is false
-    const notes = await Note.find({ userId: user._id, deleted: false, isArchived: true }).sort({ isPinned: -1 });
+    try {
+        // Use req.user directly, as the user is authenticated via the authenticationToken middleware
+        const { user } = req.user;
 
-    // console.log("Archived notes:", notes);
+        // Fetch archived notes that belong to the user and where deleted is false
+        const notes = await Note.find({
+            userId: user._id,
+            deleted: false,
+            isArchived: true,
+        }).sort({ isPinned: -1 });
 
-    return res.json({
-      error: false,
-      notes,
-      message: "Archived notes fetched successfully", // Updated the message
-    });
-  } catch (error) {
-    console.error("Error fetching archived notes:", error);
-    return res
-      .status(500)
-      .json({ error: true, message: "Internal server error" });
-  }
+        return res.json({
+            error: false,
+            notes,
+            message: "Archived notes fetched successfully",
+        });
+    } catch (error) {
+        console.error("Error fetching archived notes:", error);
+        return res.status(500).json({ error: true, message: "Internal server error" });
+    }
 });
-
 
 // Delete note
 router.delete("/delete-note/:noteId", authenticationToken, async (req, res) => {
@@ -915,14 +913,16 @@ router.post("/google-auth", async (req, res) => {
 
 // feedback submit
 router.post("/submit", async (req, res) => {
-  const { name, email, feedback, rating } = req.body;
-  try {
-    const newFeedback = new Feedback({
-      name,
-      email,
-      feedback,
-      rating,
-    });
+
+    const { name, email, feedback,rating } = req.body;
+
+    try {
+        const newFeedback = new Feedback({
+            name,
+            email,
+            feedback,
+            rating
+        });
 
     await newFeedback.save();
     res
