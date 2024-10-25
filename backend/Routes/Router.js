@@ -74,6 +74,7 @@ router.post("/contact", async (req, res) => {
       error: false,
       message: "Mail send successfully",
     });
+
   } catch (err) {
     console.log(err.message);
     return res.status(500).json({
@@ -149,17 +150,7 @@ router.post("/create-account", async (req, res) => {
       message: ERROR_MESSAGES.USER_ALREADY_EXISTS,
     });
   }
-
-  let hashedPass;
-  try {
-    hashedPass = await bcrypt.hash(password, 10);
-  } catch (err) {
-    console.log(err.message);
-    return res.status(500).json({
-      error: true,
-      message: "Internal error",
-    });
-  }
+  //password is already hashed as we used pre and hashed it  before saving the User - info
 
   const user = new User({ fullName, email, password: hashedPass });
   await user.save();
@@ -226,7 +217,7 @@ router.post("/login", async (req, res) => {
 
   const userInfo = await User.findOne({ email });
 
-  if (!userInfo || !(await bcrypt.compare(password, userInfo.password))) {
+  if (!userInfo || !userInfo.checkPassword(password)) {
     return res
       .status(HTTP_STATUS.BAD_REQUEST)
       .json({ message: ERROR_MESSAGES.INVALID_CREDENTIALS });
@@ -293,11 +284,10 @@ router.post(
       const attachmentPaths = req.files.map(
         (file) => `/uploads/${file.filename}`
       );
-
       const note = new Note({
         title,
         content,
-        tags: tags || [],
+        tags: tagsArray,
         userId: user._id,
         attachments: attachmentPaths,
         background: background || "#ffffff", // Default to white if not provided
@@ -322,7 +312,6 @@ router.post(
 const upload_note = multer();
 
 // Edit note
-
 router.put(
   "/edit-note/:noteId",
   authenticationToken,
@@ -334,6 +323,7 @@ router.put(
     const { user } = req.user;
 
     try {
+
       const note = await Note.findOne({ _id: noteId, userId: user._id });
 
       try {
@@ -452,7 +442,8 @@ router.get("/get-all-notes", authenticationToken, async (req, res) => {
       error: false,
       notes,
       message: MESSAGES.NOTES_FETCHED_SUCCESSFULLY,
-    });
+    })
+
   } catch (error) {
     console.error("Error fetching notes: ", error);
     return res
@@ -467,11 +458,7 @@ router.get("/get-archived-notes", authenticationToken, async (req, res) => {
     const { user } = req.user;
 
     // Fetch archived notes that belong to the user and where deleted is false
-    const notes = await Note.find({
-      userId: user._id,
-      deleted: false,
-      isArchived: true,
-    }).sort({ isPinned: -1 });
+    const notes = await Note.find({ userId: user._id, deleted: false, isArchived: true }).sort({ isPinned: -1 });
 
     // console.log("Archived notes:", notes);
 
@@ -487,6 +474,7 @@ router.get("/get-archived-notes", authenticationToken, async (req, res) => {
       .json({ error: true, message: "Internal server error" });
   }
 });
+
 
 // Delete note
 router.delete("/delete-note/:noteId", authenticationToken, async (req, res) => {
@@ -602,14 +590,12 @@ router.put(
 
     router.put("/bulk-update-notes-pinned", async (req, res) => {
       const { noteIds, isPinned } = req.body;
-
       try {
         // Update multiple notes at once
         await Note.updateMany(
           { _id: { $in: noteIds } }, // Match notes with the given noteIds
           { $set: { isPinned: isPinned } } // Set isPinned value
         );
-
         res
           .status(200)
           .json({
@@ -634,6 +620,7 @@ router.put(
       try {
         // Update the selected notes to set isArchived to true
         await Note.updateMany(
+
           { _id: { $in: noteIds }, deleted: false }, // Ensure the notes are not deleted
           { $set: { isArchived: true } }
         );
@@ -650,13 +637,11 @@ router.put(
     // Un-archive multiple notes
     router.put("/un-archive-notes", async (req, res) => {
       const { noteIds } = req.body;
-
       if (!Array.isArray(noteIds) || noteIds.length === 0) {
         return res
           .status(400)
           .json({ message: "Invalid request, noteIds must be an array" });
       }
-
       try {
         // Update the selected notes to set isArchived to true
         await Note.updateMany(
@@ -677,10 +662,10 @@ router.put(
         { _id: { $in: noteIds } }, // Match notes with the given noteIds
         { $set: { isPinned: isPinned } } // Set isPinned value
       );
-
       res.status(200).json({
         message: `Notes successfully ${isPinned ? "pinned" : "unpinned"}`,
       });
+
     } catch (error) {
       console.error("Error updating notes:", error);
       res.status(500).json({ message: "Failed to update notes" });
@@ -931,7 +916,6 @@ router.post("/google-auth", async (req, res) => {
 // feedback submit
 router.post("/submit", async (req, res) => {
   const { name, email, feedback, rating } = req.body;
-
   try {
     const newFeedback = new Feedback({
       name,
