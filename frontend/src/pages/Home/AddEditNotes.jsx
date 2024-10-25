@@ -37,15 +37,20 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
     recognition.interimResults = true;
 
     recognition.onresult = (event) => {
+      let isFinal = event.results[event.results.length - 1].isFinal;
       let transcript = event.results[event.results.length - 1][0].transcript;
-      setContent((prevContent) => prevContent + " " + transcript);
+
+      if (isFinal) {
+        setContent((prevContent) =>
+          (prevContent.trim() + " " + transcript).trim()
+        );
+      }
     };
 
     recognition.onerror = (event) => {
       console.error("Speech recognition error", event.error);
       let errorMessage = "Speech recognition failed";
 
-      // Customize error messages based on the error type
       switch (event.error) {
         case "no-speech":
           errorMessage = "No speech was detected. Please try again.";
@@ -271,7 +276,7 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
             {content.length}/{MAX_CONTENT_LENGTH}
           </span>
           <button
-            className="absolute left-2 bottom-2 text-gray-500"
+            className="absolute right-2 top-2 text-gray-500"
             onClick={toggleListening}
             disabled={!isSpeechSupported}
           >
