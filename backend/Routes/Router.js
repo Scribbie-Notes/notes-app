@@ -4,8 +4,6 @@ const jwt = require("jsonwebtoken");
 const multer = require("multer");
 const bcrypt = require("bcrypt");
 const { HTTP_STATUS, MESSAGES, ERROR_MESSAGES } = require("../utils/const");
-const sendMail = require("../mail/sendMail");
-const contactSendMail = require("../mail/contactUsMailSender");
 const dotenv = require("dotenv");
 const path = require("path");
 
@@ -69,7 +67,6 @@ router.post("/contact", async (req, res) => {
   try {
     const html = `<p>${message}</p>`;
     const name = first_name + " " + last_name;
-    contactSendMail(user_email, name, html);
     return res.status(200).json({
       error: false,
       message: "Mail send successfully",
@@ -157,7 +154,6 @@ router.post("/create-account", async (req, res) => {
   const token = jwt.sign({ sub: user._id, expiresIn }, ACCESS_TOKEN_SECRET);
   const url = `http://localhost:${process.env.PORT}/verify/${token}`;
   const html = `<a href="${url}">Click here to verify your account</a>`;
-  sendMail(email, html);
 
   const accessToken = jwt.sign({ user }, ACCESS_TOKEN_SECRET, {
     expiresIn: "36000m",
