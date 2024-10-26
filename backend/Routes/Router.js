@@ -13,6 +13,7 @@ const User = require("../models/userModel");
 const Note = require("../models/noteModel");
 const Feedback = require("../models/feedbackModel");
 
+require('dotenv').config();
 const { ACCESS_TOKEN_SECRET, GOOGLE_API_TOKEN } = process.env;
 
 const client = new OAuth2Client(GOOGLE_API_TOKEN);
