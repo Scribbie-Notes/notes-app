@@ -7,6 +7,7 @@ import toast from "react-hot-toast";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { GoogleLogin } from "@react-oauth/google";
 import CircularLoader from "../../components/CircularLoader";
+import axios from "axios";
 
 const Login = ({ setUser }) => {
   const [email, setEmail] = useState("");

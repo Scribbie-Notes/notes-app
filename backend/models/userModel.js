@@ -11,6 +11,7 @@ const userSchema = new Schema({
   profilePhoto: { type: String },
   verificationCode: {type: String, default: ""},
   isEmailVerified: { type: Boolean, default: false },
+
 });
 // hashing the password before saving it to the database by using PRE
 userSchema.pre("save", async function (next) {
