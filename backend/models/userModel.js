@@ -9,7 +9,7 @@ const userSchema = new Schema({
   phone: { type: String },
   createdOn: { type: Date, default: new Date().getTime() },
   profilePhoto: { type: String },
-  isEmailVerified: { type: Boolean, default: false },
+  isEmailVerified: { type: Boolean, default: true },
 });
 // hashing the password before saving it to the database by using PRE
 userSchema.pre("save", async function (next) {
