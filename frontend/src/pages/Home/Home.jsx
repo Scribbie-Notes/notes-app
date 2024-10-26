@@ -71,7 +71,28 @@ const Home = ({theme,searchResults, isSearching, searchQuery}) => {
     setViewNoteModal({ isShown: true, data: noteDetails });
   };
 
-  
+  // get user info
+  const getUserInfo = async () => {
+    try {
+      const response = await axiosInstance.get("http://localhost:5000/get-user");
+      console.log(response);
+      if (response.data && response.data.user) {
+        setUserInfo(response.data.user);
+      }
+
+    } catch (error) {
+      // if (error.response.status === 401) {
+      //   localStorage.clear();
+      //   navigate("/login");
+      // }
+    }
+  };
+
+  useEffect(() => {
+    getUserInfo();
+
+  }, []);
+
   // get all notes
   const getAllNotes = async () => {
     setIsLoading(true);
