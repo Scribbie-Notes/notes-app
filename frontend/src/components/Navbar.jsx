@@ -41,11 +41,11 @@ const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
     );
 
     // Animate profile button
-    gsap.fromTo(
-      profileRef.current,
-      { opacity: 0, scale: 0.8 },
-      { duration: 1, opacity: 1, scale: 1, ease: "bounce.out", delay: 1 }
-    );
+    // gsap.fromTo(
+    //   profileRef.current,
+    //   { opacity: 0, scale: 0.8 },
+    //   { duration: 1, opacity: 1, scale: 1, ease: "bounce.out", delay: 1 }
+    // );
 
     // Animate login button
     if (loginButtonRef.current) {
@@ -95,7 +95,7 @@ const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
   console.log(location.pathname);
   return (
     <div
-      className={`flex items-center justify-between px-4 py-2 drop-shadow-md ${
+      className={` flex items-center justify-between px-4 py-2 drop-shadow-md ${
         theme === "dark" ? "bg-black text-white" : "bg-white text-black"
       }`}
     >

@@ -149,6 +149,7 @@ router.post("/create-account", async (req, res) => {
     });
   }
   //password is already hashed as we used pre and hashed it  before saving the User - info
+
   const user = new User({ fullName, email, password });
   await user.save();
   const expiresIn = 60 * 20;

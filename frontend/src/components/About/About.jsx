@@ -104,7 +104,7 @@ const About = () => {
   };
 
   return (
-    <div className="relative">
+    <>
       <Navbar userInfo={user} />
       <Link to="/dashboard">
         <div className="p-5">
@@ -208,7 +208,6 @@ const About = () => {
           style={{ writingMode: "vertical-rl", textOrientation: "mixed" }}
         >
           <span className="transform rotate-90">
-            {/* Empty span to rotate */}
           </span>
           Feedback
         </button>
@@ -304,7 +303,7 @@ const About = () => {
         </Modal>
       </div>
       <Footer />
-    </div>
+    </>
   );
 };
 

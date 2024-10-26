@@ -73,7 +73,7 @@ const Home = () => {
   // get user info
   const getUserInfo = async () => {
     try {
-      const response = await axiosInstance.get("/get-user");
+      const response = await axiosInstance.get("http://localhost:5000/get-user");
       console.log(response);
       if (response.data && response.data.user) {
         setUserInfo(response.data.user);
@@ -96,7 +96,7 @@ const Home = () => {
   const getAllNotes = async () => {
     setIsLoading(true);
     try {
-      const response = await axiosInstance.get("/get-all-notes");
+      const response = await axiosInstance.get("http://localhost:5000/get-all-notes");
       console.log(response)
       if (response.data && response.data.notes) {
         const notes = response.data.notes.map((note) => ({
