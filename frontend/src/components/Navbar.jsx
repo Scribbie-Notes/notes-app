@@ -8,7 +8,9 @@ import { FiMoon, FiSun, FiMenu } from "react-icons/fi";
 import { SlideTabsExample } from "./Tabs"; // Ensure correct import
 
 const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
-  const [theme, setTheme] = useState("light");
+  // console.log(userInfo);
+  const [theme, setTheme] = useState("light"); // Manage theme state
+
   const [searchQuery, setSearchQuery] = useState("");
   const [isMenuOpen, setIsMenuOpen] = useState(false); // State to toggle mobile menu
   const navigate = useNavigate();
@@ -86,6 +88,8 @@ const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
     onSearchNote(searchQuery);
   };
 
+<<<
+  // console.log(location.pathname);
   return (
     <div
       className={`flex items-center justify-between px-4 py-2 drop-shadow-md ${
