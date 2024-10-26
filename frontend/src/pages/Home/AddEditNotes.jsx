@@ -147,7 +147,7 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
     });
 
     try {
-      const response = await axiosInstance.post("/add-note", formData, {
+      const response = await axiosInstance.post("http://localhost:5000/add-note", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
