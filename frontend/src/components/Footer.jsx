@@ -8,7 +8,7 @@ import toast, { Toaster } from "react-hot-toast";
 import axios from "axios";
 const apiBaseUrl = import.meta.env.VITE_BACKEND_URL;
 
-const StickyFooter = () => {
+const StickyFooter = ({theme}) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -84,7 +84,7 @@ const StickyFooter = () => {
   };
 
   return (
-    <div className="bg-gradient-to-b from-white to-gray-300 border-t border-gray-200 pb-6">
+    <div className={` border-t border-gray-200 pb-6 ${theme ==="dark" ? "bg-black text-white" : "bg-gradient-to-b from-white to-gray-300"}`}>
       {/* Flex container for company description and grid layout */}
       {/* Feedback Model */}
       <Modal

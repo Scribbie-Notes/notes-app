@@ -26,7 +26,7 @@ import toast from "react-hot-toast";
 import noFound from "../../assets/images/noFound.svg";
 import addPost from "../../assets/images/addPost.svg";
 
-const Home = () => {
+const Home = ({theme}) => {
   const [openAddEditModal, setOpenAddEditModal] = useState({
     isShown: false,
     type: "add",
@@ -334,9 +334,9 @@ const debouncedSearch = debounce(onSearchNote, 300);
 
   console.log(import.meta.env.VITE_BACKEND_URL)
   return (
-    <div>
+    <div className={`h-screen ${theme === "dark" && "bg-black text-white"}`}>
 
-      {selectedNotes.length > 0 ? (
+      {selectedNotes.length > 0 && (
         <div className=" bg-white shadow-md z-50 p-4 flex justify-between items-center">
           <span>{selectedNotes.length} notes selected</span>
           <div className="flex items-center gap-x-5">
@@ -388,13 +388,6 @@ const debouncedSearch = debounce(onSearchNote, 300);
             </button>
           </div>
         </div>
-      ) : (
-        <Navbar
-          userInfo={userInfo}
-          onSearchNote={handleSearchInputChange}
-          handleClearSearch={handleClearSearch}
-          setUserInfo={setUserInfo}
-        />
       )}
 
       <div className="container h-auto p-6 pb-12 mx-auto">
@@ -473,7 +466,7 @@ const debouncedSearch = debounce(onSearchNote, 300);
               isSearch ? (
                 <p className="text-xl">Oops! No notes found matching</p>
               ) : (
-                <p className="text-xl">
+                <p className={`${theme === "dark" ? "text-xl text-white" : "text-xl"}`}>
                   Start adding notes by clicking on the "+" button. Lets get
                   started!
                 </p>

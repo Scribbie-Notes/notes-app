@@ -5,7 +5,7 @@ import { CiUser, CiCircleInfo, CiLogout } from "react-icons/ci";
 import { MdOutlineArchive } from "react-icons/md";
 import { FaRegTrashAlt } from "react-icons/fa";
 
-const ProfileInfo = ({ userInfo, onLogout }) => {
+const ProfileInfo = ({ userInfo, onLogout,theme }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();

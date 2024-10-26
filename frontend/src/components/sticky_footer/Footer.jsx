@@ -1,10 +1,10 @@
 import React from "react";
 import Content from "./Content";
 
-const Footer = () => {
+const Footer = ({theme}) => {
   return (
     <footer
-      className="relative h-[800px]"
+      className={` relative h-[800px] ${theme === "dark" && "bg-black text-white"}` }
       style={{ clipPath: "polygon(0% 0, 100% 0%, 100% 100%, 0 100%)" }}
     >
       <div className="relative h-[calc(100vh+800px)] -top-[100vh]">
