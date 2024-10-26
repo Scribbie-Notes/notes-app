@@ -7,6 +7,7 @@ import { IoMdArrowRoundBack } from "react-icons/io";
 import { toast } from "react-hot-toast";
 import axiosInstance from "../../utils/axiosInstance";
 import { useNavigate } from "react-router-dom";
+const apiBaseUrl = import.meta.env.VITE_BACKEND_URL;
 
 const validatePhoneNumber = (phoneNumber) => {
   const regex = /^[6-9]\d{9}$/;
@@ -53,7 +54,7 @@ const ProfilePage = () => {
 
       try {
         const response = await axiosInstance.put(
-          "http://localhost:3000/update-profile-photo",
+          `${apiBaseUrl}/update-profile-photo`,
           formData,
           {
             headers: {
@@ -341,7 +342,7 @@ const ProfilePage = () => {
                 >
                   {profilePhoto ? (
                     <img
-                      src={`http://localhost:8000${profilePhoto}`}
+                      src={`${apiBaseUrl}${profilePhoto}`}
                       className="w-full h-full rounded-full object-cover"
                     />
                   ) : (
