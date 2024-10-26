@@ -17,12 +17,22 @@ const app = express();
 
 app.use(express.json());
 
+// Determine which .env file to use based on the NODE_ENV
 const envPath =
   process.env.NODE_ENV === "production" ? ".env.production" : ".env";
 dotenv.config({ path: path.resolve(__dirname, envPath) });
 
 const { MONGO_URI } = process.env;
 console.log(MONGO_URI);
+
+// Log the MongoDB URI to verify it's loaded
+console.log("MongoDB URI:", MONGO_URI);
+
+// Check if MONGO_URI is defined
+if (!MONGO_URI) {
+  console.error("MONGO_URI is not defined in environment variables.");
+  process.exit(1); // Exit the application if MONGO_URI is not set
+}
 
 // Use cors middleware before defining any routes
 const allowedOrigins =
@@ -49,7 +59,7 @@ app.use(
   }
 })();
 
-//new better and structured routes 
+//new better and structured routes
 app.use(userRoutes);
 app.use(noteRoutes);
 

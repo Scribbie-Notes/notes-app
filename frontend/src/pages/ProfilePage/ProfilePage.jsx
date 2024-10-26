@@ -7,12 +7,12 @@ import { IoMdArrowRoundBack } from "react-icons/io";
 import { toast } from "react-hot-toast";
 import axiosInstance from "../../utils/axiosInstance";
 import { useNavigate } from "react-router-dom";
+const apiBaseUrl = import.meta.env.VITE_BACKEND_URL;
 
 const validatePhoneNumber = (phoneNumber) => {
   const regex = /^[6-9]\d{9}$/;
   return regex.test(phoneNumber);
 };
-
 
 const validateEmail = (email) => {
   const emailregex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -54,7 +54,7 @@ const ProfilePage = () => {
 
       try {
         const response = await axiosInstance.put(
-          "/update-profile-photo",
+          `${apiBaseUrl}/update-profile-photo`,
           formData,
           {
             headers: {
@@ -123,7 +123,7 @@ const ProfilePage = () => {
       const response = await axiosInstance.put(`/update-email`, { newEmail });
       console.log("Response from API:", response);
 
-      if (response.data&&validateEmail(newEmail)) {
+      if (response.data && validateEmail(newEmail)) {
         // Update email in state and local storage
         const updatedUser = { ...user, email: newEmail };
         setUser(updatedUser);
@@ -342,7 +342,7 @@ const ProfilePage = () => {
                 >
                   {profilePhoto ? (
                     <img
-                      src={`http://localhost:8000${profilePhoto}`}
+                      src={`${apiBaseUrl}${profilePhoto}`}
                       className="w-full h-full rounded-full object-cover"
                     />
                   ) : (

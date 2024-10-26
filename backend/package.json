@@ -24,7 +24,8 @@
     "mongodb": "^6.9.0",
     "mongoose": "^8.4.4",
     "multer": "^1.4.5-lts.1",
-    "nodemailer": "^6.9.15"
+    "nodemailer": "^6.9.15",
+    "notes-app-backend": "file:"
   },
   "devDependencies": {
     "nodemon": "^3.1.7"

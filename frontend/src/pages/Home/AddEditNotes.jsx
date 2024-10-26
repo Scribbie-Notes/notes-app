@@ -6,18 +6,72 @@ import toast from "react-hot-toast";
 import AddAttachmentsInput from "../../components/Input/AddAttachmentInput";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
+import { FaMicrophone, FaMicrophoneSlash } from "react-icons/fa";
 
 const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [tags, setTags] = useState([]);
   const [attachments, setAttachments] = useState([]);
-  const [background, setBackground] = useState("#ffffff"); // Default white background
+  const [background, setBackground] = useState("#ffffff");
   const [error, setError] = useState(null);
   const [photos, setPhotos] = useState([]);
   const [videos, setVideos] = useState([]);
+  const [isListening, setIsListening] = useState(false);
+  const [isSpeechSupported, setIsSpeechSupported] = useState(true);
   const MAX_TITLE_LENGTH = 60;
   const MAX_CONTENT_LENGTH = 2500;
+
+  const SpeechRecognition =
+    window.SpeechRecognition || window.webkitSpeechRecognition;
+  const recognition = SpeechRecognition ? new SpeechRecognition() : null;
+
+  useEffect(() => {
+    if (!SpeechRecognition) {
+      setIsSpeechSupported(false);
+    }
+  }, []);
+
+  if (recognition) {
+    recognition.continuous = true;
+    recognition.interimResults = true;
+
+    recognition.onresult = (event) => {
+      let isFinal = event.results[event.results.length - 1].isFinal;
+      let transcript = event.results[event.results.length - 1][0].transcript;
+
+      if (isFinal) {
+        setContent((prevContent) =>
+          (prevContent.trim() + " " + transcript).trim()
+        );
+      }
+    };
+
+    recognition.onerror = (event) => {
+      console.error("Speech recognition error", event.error);
+      let errorMessage = "Speech recognition failed";
+
+      switch (event.error) {
+        case "no-speech":
+          errorMessage = "No speech was detected. Please try again.";
+          break;
+        case "audio-capture":
+          errorMessage = "Audio capture failed. Please check your microphone.";
+          break;
+        case "not-allowed":
+          errorMessage = "Permission to use microphone was denied.";
+          break;
+        case "service-not-allowed":
+          errorMessage = "Speech service is not allowed.";
+          break;
+        default:
+          errorMessage = "An unknown error occurred.";
+      }
+
+      setError(errorMessage);
+      toast.error(errorMessage);
+    };
+  }
 
   useEffect(() => {
     if (type === "edit" && noteData) {
@@ -30,6 +84,20 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
       setVideos(noteData.videos || []);
     }
   }, [type, noteData]);
+
+  const toggleListening = () => {
+    if (!isSpeechSupported) {
+      toast.error("Speech recognition is not supported by your browser.");
+      return;
+    }
+    if (isListening) {
+      recognition.stop();
+      setIsListening(false);
+    } else {
+      recognition.start();
+      setIsListening(true);
+    }
+  };
 
   const handleFileUpload = (files) => {
     setAttachments((prevAttachments) => [...prevAttachments, ...files]);
@@ -62,29 +130,23 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
 
   const addNewNote = async () => {
     const formData = new FormData();
-
     formData.append("title", title);
     formData.append("content", content);
     formData.append("background", background);
-    //fixed the tag so it will show better tags rather than ['tag1']---> tag1
-    tags.forEach(tag => {
-        formData.append("tags[]", tag); // Using [] to indicate it's an array
+    tags.forEach((tag) => {
+      formData.append("tags[]", tag);
     });
-
     attachments.forEach((file) => {
       formData.append("attachments", file);
     });
-
     photos.forEach((photo) => {
       formData.append("photos", photo);
     });
-
     videos.forEach((video) => {
       formData.append("videos", video);
     });
 
     try {
-      // const response = await axiosInstance.post("/add-note", formData, {
       const response = await axiosInstance.post("/add-note", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -114,21 +176,18 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
       formData.append("content", content);
       formData.append("tags", JSON.stringify(tags));
       formData.append("background", background);
-
       attachments.forEach((file) => {
         formData.append("attachments", file);
       });
-
       photos.forEach((photo) => {
         formData.append("photos", photo);
       });
-
       videos.forEach((video) => {
         formData.append("videos", video);
       });
 
       const response = await axiosInstance.put(
-        `/edit-note/${noteData._id}`,
+        `/edit-note/${noteData._id}`, // Corrected this line
         formData,
         {
           headers: {
@@ -154,13 +213,10 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
       setError("Title is required");
       return;
     }
-
     if (!content) {
       setError("Content is required");
       return;
     }
-
-    setError("");
 
     if (type === "edit") {
       editNote();
@@ -170,7 +226,7 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
   };
 
   return (
-    <div className="relative">
+    <div className="relative h-[650px] overflow-auto">
       <button
         className="w-10 h-10 rounded-full flex items-center bg-gray-50 transition-all justify-center absolute -top-3 -right-3 hover:bg-red-100"
         onClick={onClose}
@@ -178,9 +234,9 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
         <MdClose className="text-xl text-slate-400" />
       </button>
 
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-1">
         <label className="font-medium">Title</label>
-        <div className="relative">
+        <div className="relative mr-2">
           <input
             type="text"
             className="p-2 border rounded-md text-sm w-full pr-12"
@@ -194,8 +250,9 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
         </div>
       </div>
 
+      <div className='mt-3'>
       <label className="font-medium">Content</label>
-      <div className="flex flex-col gap-2  mt-4">
+      <div className="flex flex-col gap-2 mt-1 mr-2">
         <div className="relative">
           <ReactQuill
             value={content}
@@ -219,10 +276,23 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
           <span className="absolute right-2 bottom-2 text-gray-500 text-xs">
             {content.length}/{MAX_CONTENT_LENGTH}
           </span>
+          <button
+            className="absolute right-2 top-2 text-gray-500"
+            onClick={toggleListening}
+            disabled={!isSpeechSupported}
+          >
+            {isListening ? <FaMicrophoneSlash /> : <FaMicrophone />}
+          </button>
+          {!isSpeechSupported && (
+            <p className="text-red-500 text-xs mt-1">
+              Speech recognition is not supported in this browser.
+            </p>
+          )}
         </div>
       </div>
+      </div>
 
-      <div className="flex flex-col gap-2 mt-12">
+      <div className="flex flex-col gap-1 mt-14">
         <label className="font-medium">Background Color</label>
         <input
           type="color"
@@ -232,17 +302,17 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
         />
       </div>
 
-      <div className="flex flex-col gap-2 mt-4">
+      <div className="flex flex-col gap-1 mt-4">
         <label className="font-medium md:text-base">Tags</label>
         <TagInput tags={tags} setTags={setTags} />
       </div>
 
-      <div className="flex flex-col gap-2 mt-4">
+      <div className="flex flex-col gap-1 mt-4">
         <label className="font-medium md:text-base">Add Attachments</label>
         <AddAttachmentsInput onFileUpload={handleFileUpload} />
       </div>
 
-      <div className="flex flex-col gap-2 mt-4">
+      <div className="flex flex-col gap-1 mt-4">
         <label className="font-medium md:text-base">Add Photos</label>
         <AddAttachmentsInput
           onFileUpload={handlePhotoUpload}
@@ -261,7 +331,7 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
       {error && <p className="text-red-500 mt-2">{error}</p>}
 
       <button
-        className="w-full items-center text-white bg-gray-800 hover:bg-gray-900 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 transition-all dark:border-gray-700 mt-4"
+        className="w-auto items-center text-white bg-gray-800 hover:bg-gray-900 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 transition-all dark:border-gray-700 mt-4"
         onClick={handleSaveNote}
       >
         {type === "edit" ? "Update Note" : "Add Note"}

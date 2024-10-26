@@ -7,6 +7,7 @@ import toast from "react-hot-toast";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { GoogleLogin } from "@react-oauth/google";
 import CircularLoader from "../../components/CircularLoader";
+import axios from "axios";
 
 const Login = ({ setUser }) => {
   const [email, setEmail] = useState("");
@@ -121,7 +122,7 @@ const Login = ({ setUser }) => {
           style: {
             fontSize: "13px",
             maxWidth: "400px",
-            boxShadow: "px 4px 8px rgba(0, 1, 4, 0.1)",
+            boxShadow: "px 4px 8px rgba(0, 1, 4, 0.1)", 
             borderRadius: "8px",
             borderColor: "rgba(0, 0, 0, 0.8)",
             marginRight: "10px",

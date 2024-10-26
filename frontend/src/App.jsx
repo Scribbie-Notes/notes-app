@@ -19,7 +19,13 @@ import Footer from "./components/sticky_footer/Footer";
 import Contact from "./components/Contact/Contact";
 import Contributors from "./components/Contributors/Contributors";
 import ArchivedNotes from "./components/ArchivedNotes/ArchivedNotes";
+
+
+
+
+
 import Preloader from "./components/Preloader";
+
 // currently this component is hide
 // import Navbar from './components/Navbar';
 // import ProtectedRoute from './utils/ProtectedRoute';
@@ -83,6 +89,7 @@ const App = () => {
 const AppWithRouter = () => (
   <Router>
     <App />
+    
   </Router>
 );
 
