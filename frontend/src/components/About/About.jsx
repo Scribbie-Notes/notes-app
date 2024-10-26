@@ -25,6 +25,8 @@ const customStyles = {
   },
 };
 
+const apiBaseUrl = import.meta.env.VITE_BACKEND_URL;
+
 const About = () => {
   const user = JSON.parse(localStorage.getItem("user"));
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -102,7 +104,7 @@ const About = () => {
   };
 
   return (
-    <div className="relative">
+    <>
       <Navbar userInfo={user} />
       <Link to="/dashboard">
         <div className="p-5">
@@ -302,7 +304,7 @@ const About = () => {
         </Modal>
       </div>
       <Footer />
-    </div>
+    </>
   );
 };
 

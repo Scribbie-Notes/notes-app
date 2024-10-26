@@ -5,7 +5,7 @@ import NoteCard from '../Cards/NoteCard';
 import { MdColorLens, MdOutlineUnarchive } from 'react-icons/md';
 import toast from 'react-hot-toast';
 
-const ArchivedNotes = () => {
+const ArchivedNotes = ({theme}) => {
   const user = JSON.parse(localStorage.getItem("user"));
   const [isLoading, setIsLoading] = useState(true);
   const [archivedNotes, setArchivedNotes] = useState([]);
@@ -94,8 +94,8 @@ const ArchivedNotes = () => {
   };
 
   return (
-    <div>
-      {selectedNotes.length > 0 ? (
+    <div className={`h-screen ${theme === "dark" && "bg-black text-white"}`}>
+      {selectedNotes.length > 0 &&  (
         <div className="bg-white shadow-md z-50 p-4 flex justify-between items-center">
           <span>{selectedNotes.length} notes selected</span>
           <div className="flex items-center gap-x-5">
@@ -125,9 +125,7 @@ const ArchivedNotes = () => {
             </button>
           </div>
         </div>
-      ) : (
-        <Navbar userInfo={user} />
-      )}
+      ) }
       <div className="container h-auto p-6 pb-12 mx-auto">
         {isLoading ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 mt-4 transition-all">

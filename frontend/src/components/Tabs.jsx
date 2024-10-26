@@ -72,9 +72,7 @@ const Tab = ({ children, setPosition, to, currentPathName, hoveredTab, setHovere
         });
         setHoveredTab(to);
       }}
-      className={`relative z-10 block cursor-pointer px-3 py-1.5 text-xs uppercase md:px-5 md:py-3 md:text-base transition-colors duration-200 ${
-        isActive ? 'bg-black text-white rounded-lg' : isHovered ? 'bg-gray-700 text-white rounded-lg' : theme === "dark" ? "text-white" : "text-black"
-      }`}
+      className={`relative z-10 block cursor-pointer px-3 py-1.5 text-xs uppercase md:px-5 md:py-3 md:text-base transition-colors duration-200 ${isActive ? (theme === "dark" ? 'bg-white text-black rounded-lg' : 'bg-gray-700 text-white rounded-lg') : (theme === "dark" ? 'text-white' : 'text-black')}`}
     >
       <Link to={to} className="block w-full">
         {children}

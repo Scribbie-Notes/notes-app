@@ -2,20 +2,20 @@ import { useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import Navbar from "./Navbar";
 
-const Pricing = () => {
+const Pricing = ({theme}) => {
   const user = JSON.parse(localStorage.getItem("user"));
   const location = useLocation();
 
   return (
-    <>
-      {location.pathname === "/pricing" && <Navbar userInfo={user} />}
+    <div className={`h-screen ${theme === "dark" && "bg-black text-white"}`}>
+      {/* {location.pathname === "/pricing" && <Navbar userInfo={user} />} */}
       <section className="px-2 py-12 w-full h-auto">
         <div className="py-4 px-4 mx-auto lg:py-4 lg:px-6 h-[700px]">
           <div className="mx-auto text-center mb-8 lg:mb-12">
-            <h2 className="mb-4 text-4xl tracking-tight font-extrabold text-gray-900">
+            <h2 className={`mb-4 text-4xl tracking-tight font-extrabold ${theme === "dark" ? " text-white" : "text-gray-900"} `}>
               Designed for business teams like yours
             </h2>
-            <p className="mb-5 text-slate-800 sm:text-xl">
+            <p className={`mb-5  sm:text-xl ${theme === "dark" ? "text-white" :"text-slate-800"}`}>
               Here at Scribie we focus on markets where technology, innovation,
               and capital can unlock long-term value and drive economic growth.
             </p>
@@ -64,7 +64,7 @@ const Pricing = () => {
           </div>
         </div>
       </section>
-    </>
+    </div>
   );
 };
 

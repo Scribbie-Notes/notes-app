@@ -17,7 +17,7 @@ import './styles.css';
 // Register ScrollTrigger plugin
 gsap.registerPlugin(ScrollTrigger);
 
-const Hero = () => {
+const Hero = ({theme}) => {
     const user = JSON.parse(localStorage.getItem("user"));
     const heroText = useRef();
     const heroParagraph = useRef();

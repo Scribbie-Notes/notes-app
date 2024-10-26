@@ -7,9 +7,9 @@ import gsap from "gsap/all";
 import { FiMoon, FiSun } from "react-icons/fi";
 import { SlideTabsExample } from "./Tabs"; // Ensure correct import
 
-const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
+const Navbar = ({ userInfo, onSearchNote, handleClearSearch ,toggleTheme, theme }) => {
   // console.log(userInfo);
-  const [theme, setTheme] = useState("light"); // Manage theme state
+  // const [theme, setTheme] = useState("light"); // Manage theme state
   const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
@@ -20,10 +20,11 @@ const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
   const loginButtonRef = useRef(null);
   const signupButtonRef = useRef(null);
 
+  
   // Handle theme toggle
-  const toggleTheme = () => {
-    setTheme((prevTheme) => (prevTheme === "light" ? "dark" : "light"));
-  };
+  // const toggleTheme = () => {
+  //   setTheme((prevTheme) => (prevTheme === "light" ? "dark" : "light"));
+  // };
 
   useEffect(() => {
     // Animate logo
@@ -133,7 +134,7 @@ const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
 
       <div className="flex gap-x-5 items-center">
         <button
-          onClick={toggleTheme}
+          onClick={toggleTheme} 
           className={`flex items-center gap-2 p-3 rounded-full transition-colors duration-300 ${
             theme === "dark"
               ? "bg-gray-800 text-white"
@@ -153,7 +154,7 @@ const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
 
         {userInfo ? (
           <div ref={profileRef}>
-            <ProfileInfo userInfo={userInfo} onLogout={onLogout} />
+            <ProfileInfo userInfo={userInfo}  theme={theme} onLogout={onLogout} />
           </div>
         ) : (
           <>

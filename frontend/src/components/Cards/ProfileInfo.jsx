@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { CiUser, CiCircleInfo, CiLogout } from "react-icons/ci";
 import { MdOutlineArchive } from "react-icons/md";
 
-const ProfileInfo = ({ userInfo, onLogout }) => {
+const ProfileInfo = ({ userInfo, onLogout,theme }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
@@ -71,7 +71,7 @@ const handleArchivedNotes = () => {
       </div>
 
       {isDropdownOpen && (
-        <div className="absolute right-0  w-48  bg-white rounded-md shadow-lg py-2 z-10 border border-1 mt-3">
+        <div className="absolute right-0  w-48  bg-white rounded-md shadow-lg py-2 z-30 border border-1 mt-3">
           <button
             className="flex items-center gap-2 w-full text-start px-4 py-2 text-gray-700 hover:bg-gray-100"
             onClick={handleMyProfile}
