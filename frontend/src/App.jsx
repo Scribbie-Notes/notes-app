@@ -5,6 +5,7 @@ import {
   Route,
   Navigate,
   useLocation,
+  useNavigate,
 } from "react-router-dom";
 import Home from "./pages/Home/Home";
 import Signup from "./pages/Signup/Signup";
@@ -20,44 +21,34 @@ import Contact from "./components/Contact/Contact";
 import Contributors from "./components/Contributors/Contributors";
 import ArchivedNotes from "./components/ArchivedNotes/ArchivedNotes";
 
-
-
-
-
 import Preloader from "./components/Preloader";
 import Navbar from "./components/Navbar";
 import axiosInstance from "./utils/axiosInstance";
-// import { localeData } from "moment";
 
-// currently this component is hide
-// import Navbar from './components/Navbar';
-// import ProtectedRoute from './utils/ProtectedRoute';
-// import ErrorPage from './components/ErrorPage';
-// import Footer from './components/Footer';
 
 const App = () => {
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState(null);
   const location = useLocation();
 
-   
+  const navigate = useNavigate();
   const [userInfo, setUserInfo] = useState(null);
-  const [isSearch, setIsSearch] = useState(false);
+  
   const [searchQuery, setSearchQuery] = useState("");
-
-  const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light');
+  const [searchResults, setSearchResults] = useState([]);
+  const [isSearching, setIsSearching] = useState(false);
+  const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
 
   // Apply the theme to the document body
   useEffect(() => {
     document.body.className = theme; // set the class on body
-    localStorage.setItem('theme', theme); // store theme in localStorage
+    localStorage.setItem("theme", theme); // store theme in localStorage
   }, [theme]);
 
   // Toggle theme between 'light' and 'dark'
   const toggleTheme = () => {
-    setTheme((prevTheme) => (prevTheme === 'light' ? 'dark' : 'light'));
+    setTheme((prevTheme) => (prevTheme === "light" ? "dark" : "light"));
   };
-
 
   const getUserInfo = async () => {
     try {
@@ -66,18 +57,16 @@ const App = () => {
       if (response.data && response.data.user) {
         setUserInfo(response.data.user);
       }
-
     } catch (error) {
-      // if (error.response.status === 401) {
-      //   localStorage.clear();
-      //   navigate("/login");
-      // }
+      if (error.response.status === 401) {
+        localStorage.clear();
+        navigate("/login");
+      }
     }
   };
 
   useEffect(() => {
     getUserInfo();
-
   }, []);
 
   useEffect(() => {
@@ -90,32 +79,31 @@ const App = () => {
     handleRouteChange();
   }, [location]);
 
-  const onSearchNote = async (query) => {
-    setSearchQuery(query);
-    if (query.trim() === "") {
-      setIsSearch(false);
-      getAllNotes();
-      return;
-    }
-    const filteredNotes = allNotes.filter(note =>
-      note.title.toLowerCase().includes(query.toLowerCase())
-    );
+  // const onSearchNote = async (query) => {
+  //   setSearchQuery(query);
+  //   if (query.trim() === "") {
+  //     setIsSearch(false);
+  //     getAllNotes();
+  //     return;
+  //   }
+  //   const filteredNotes = allNotes.filter(note =>
+  //     note.title.toLowerCase().includes(query.toLowerCase())
+  //   );
 
-    try {
-      const response = await axiosInstance.get("/search-notes", { params: { query } });
-      if (response.data && response.data.notes) {
-        setIsSearch(true);
-        setAllNotes(filteredNotes);
-      }
-    } catch (error) {
-      console.log("Error while searching notes");
-    }
-  };
-
+  //   try {
+  //     const response = await axiosInstance.get("/search-notes", { params: { query } });
+  //     if (response.data && response.data.notes) {
+  //       setIsSearch(true);
+  //       setAllNotes(filteredNotes);
+  //     }
+  //   } catch (error) {
+  //     console.log("Error while searching notes");
+  //   }
+  // };
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
-    
+
     if (storedUser) {
       try {
         setUser(JSON.parse(storedUser));
@@ -126,48 +114,103 @@ const App = () => {
   }, []);
 
   const debounce = (func, delay) => {
-    let timeout;
-    return function(...args) {
-      clearTimeout(timeout);
-      timeout = setTimeout(() => func.apply(this, args), delay);
+    let timeoutId;
+    return (...args) => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => func(...args), delay);
     };
   };
-const debouncedSearch = debounce(onSearchNote, 300);
-  
-const handleSearchInputChange = (query) => {
-  debouncedSearch(query);
-};
 
-const handleClearSearch = () => {
-  setIsSearch(false);
-  getAllNotes();
-};
- 
+  // Search handler
+  const handleSearch = async (query) => {
+    setSearchQuery(query);
+
+    if (!query.trim()) {
+      setSearchResults([]);
+      setIsSearching(false);
+      return;
+    }
+
+    setIsSearching(true);
+    try {
+      const response = await axiosInstance.get("/search-notes", {
+        params: { query },
+      });
+
+      if (response.data && response.data.notes) {
+        setSearchResults(response.data.notes);
+
+        // If user is not on dashboard, redirect them there
+        if (location.pathname !== "/dashboard") {
+          navigate("/dashboard");
+        }
+      }
+    } catch (error) {
+      console.error("Search error:", error);
+      setSearchResults([]);
+    }
+  };
+
+  // Create debounced version of search
+  const debouncedSearch = debounce(handleSearch, 300);
+
+  // Clear search
+  const clearSearch = () => {
+    setSearchQuery("");
+    setSearchResults([]);
+    setIsSearching(false);
+  };
+
+  console.log(searchQuery,searchResults , isSearching)
+
   return (
     <div>
       <Preloader />
-      <Navbar userInfo={userInfo}
-          onSearchNote={handleSearchInputChange}
-          handleClearSearch={handleClearSearch}
-          setUserInfo={setUserInfo} toggleTheme={toggleTheme} theme={theme} />
+      <Navbar
+        userInfo={userInfo}
+        searchQuery={searchQuery}
+        onSearchNote={handleSearch}
+        onSearchChange={(e) => debouncedSearch(e.target.value)}
+        
+        theme={theme}
+        toggleTheme={toggleTheme}
+      />
       {loading && <Loading />}
       {user && location.pathname === "/" ? (
         <Navigate to="/dashboard" replace />
       ) : (
         <Routes>
-          <Route path="/landing" exact element={<Hero  theme={theme}/>} />
-          <Route path="/dashboard" exact element={<Home  theme={theme}/>} />
-          <Route path="/" exact element={<Hero theme={theme}/>} />
+          <Route path="/landing" exact element={<Hero theme={theme} />} />
+          <Route path="/dashboard" exact element={<Home theme={theme} searchResults={searchResults}
+              isSearching={isSearching}
+              searchQuery={searchQuery} />} />
+          <Route path="/" exact element={<Hero theme={theme} />} />
 
-          <Route path="/login" exact element={<Login setUser={setUser}  theme={theme}/>} />
-          <Route path="/testimonial" exact element={<Testimonial theme={theme}/>} />
-          <Route path="/pricing" exact element={<Pricing theme={theme}/>}  />
-          <Route path="/contact-us" exact element={<Contact theme={theme}/>} />
-          <Route path="/footer" exact element={<Footer theme={theme}/>} />
-          <Route path="/signup" exact element={<Signup theme={theme}/>} />
-          <Route path="/about" exact element={<About theme={theme}/>} />
-          <Route path="/my-profile" exact element={<ProfilePage theme={theme}/>} />
-          <Route path="/archived-notes" exact element={<ArchivedNotes theme={theme}/>}  />
+          <Route
+            path="/login"
+            exact
+            element={<Login setUser={setUser} theme={theme} />}
+          />
+          <Route
+            path="/testimonial"
+            exact
+            element={<Testimonial theme={theme} />}
+          />
+          <Route path="/pricing" exact element={<Pricing theme={theme} />} />
+          <Route path="/contact-us" exact element={<Contact theme={theme} />} />
+          <Route path="/footer" exact element={<Footer theme={theme} />} />
+          <Route path="/signup" exact element={<Signup theme={theme} />} />
+          <Route path="/about" exact element={<About theme={theme} />} />
+          <Route
+            path="/my-profile"
+            exact
+            element={<ProfilePage theme={theme} />}
+          />
+          <Route
+            path="/archived-notes"
+            exact
+            element={<ArchivedNotes theme={theme} />}
+          />
           {/* <Route path="/404" exact element={<ErrorPage/>} /> */}
         </Routes>
       )}
@@ -178,7 +221,6 @@ const handleClearSearch = () => {
 const AppWithRouter = () => (
   <Router>
     <App />
-    
   </Router>
 );
 

@@ -7,7 +7,7 @@ import gsap from "gsap/all";
 import { FiMoon, FiSun } from "react-icons/fi";
 import { SlideTabsExample } from "./Tabs"; // Ensure correct import
 
-const Navbar = ({ userInfo, onSearchNote, handleClearSearch ,toggleTheme, theme }) => {
+const Navbar = ({ userInfo, onSearchNote ,toggleTheme, theme }) => {
   // console.log(userInfo);
   // const [theme, setTheme] = useState("light"); // Manage theme state
   const [searchQuery, setSearchQuery] = useState("");
@@ -84,14 +84,14 @@ const Navbar = ({ userInfo, onSearchNote, handleClearSearch ,toggleTheme, theme 
 
   const onClearSearch = () => {
     setSearchQuery("");
-    handleClearSearch();
+  
   };
 
   const hideSearchBarPaths = ["/", "/my-profile", "/about","/pricing","/testimonial","/contact-us","/signup"];
 
   const handleSearch = () => {
     onSearchNote(searchQuery);
-    console.log(searchQuery);
+    // console.log(searchQuery);
   };
 
   // console.log(location.pathname);
@@ -124,6 +124,7 @@ const Navbar = ({ userInfo, onSearchNote, handleClearSearch ,toggleTheme, theme 
           className="hidden md:flex flex-grow justify-center mr-20"
         >
           <SearchBar
+            theme={theme}
             value={searchQuery}
             onChange={({ target }) => setSearchQuery(target.value)}
             handleSearch={handleSearch}

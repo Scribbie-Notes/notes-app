@@ -26,19 +26,22 @@ import toast from "react-hot-toast";
 import noFound from "../../assets/images/noFound.svg";
 import addPost from "../../assets/images/addPost.svg";
 
-const Home = ({theme}) => {
+const Home = ({theme,searchResults, isSearching, searchQuery}) => {
   const [openAddEditModal, setOpenAddEditModal] = useState({
     isShown: false,
     type: "add",
     data: null,
   });
 
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [selectedNotes, setSelectedNotes] = useState([]);
   const [isColorPickerOpen, setIsColorPickerOpen] = useState(false);
   const [background, setBackground] = useState("#ffffff");
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [noteToDelete, setNoteToDelete] = useState(null);
+
+  
+
   const [viewNoteModal, setViewNoteModal] = useState({
     isShown: false,
     data: null,
@@ -55,12 +58,10 @@ const Home = ({theme}) => {
   };
 
   const [allNotes, setAllNotes] = useState([]);
-
-  const [userInfo, setUserInfo] = useState(null);
+  const displayedNotes = isSearching ? searchResults : allNotes;
+  
   const [isSearch, setIsSearch] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
 
-  const navigate = useNavigate();
 
   const handleEdit = (noteDetails) => {
     setOpenAddEditModal({ isShown: true, type: "edit", data: noteDetails });
@@ -70,28 +71,7 @@ const Home = ({theme}) => {
     setViewNoteModal({ isShown: true, data: noteDetails });
   };
 
-  // get user info
-  const getUserInfo = async () => {
-    try {
-      const response = await axiosInstance.get("/get-user");
-      console.log(response);
-      if (response.data && response.data.user) {
-        setUserInfo(response.data.user);
-      }
-
-    } catch (error) {
-      // if (error.response.status === 401) {
-      //   localStorage.clear();
-      //   navigate("/login");
-      // }
-    }
-  };
-
-  useEffect(() => {
-    getUserInfo();
-
-  }, []);
-
+  
   // get all notes
   const getAllNotes = async () => {
     setIsLoading(true);
@@ -149,49 +129,7 @@ const Home = ({theme}) => {
       handleDeleteModalClose();
     }
   };
-  const onSearchNote = async (query) => {
-    setSearchQuery(query);
-    if (query.trim() === "") {
-      setIsSearch(false);
-      getAllNotes();
-      return;
-    }
-    // const filteredNotes = allNotes.filter(note =>
-    //   note.title.toLowerCase().includes(query.toLowerCase())
-    // );
-
-    try {
-      const response = await axiosInstance.get("/search-notes", { params: { query } });
-      // console.log(response)
-      if (response.data && response.data.notes) {
-        setIsSearch(true);
-        setAllNotes(response.data.notes);
-      }
-    } catch (error) {
-      console.log("Error while searching notes");
-    }
-  };
-
-  // Debounce function to limit the rate of search
-  const debounce = (func, delay) => {
-    let timeout;
-    return function(...args) {
-      clearTimeout(timeout);
-      timeout = setTimeout(() => func.apply(this, args), delay);
-    };
-  };
-const debouncedSearch = debounce(onSearchNote, 300);
-
-  useEffect(() => {
-    getAllNotes();
-    getUserInfo();
-  }, []);
-
-
-  const handleSearchInputChange = (query) => {
-    debouncedSearch(query);
-  };
-
+  
   const updateIsPinned = async (noteData) => {
     const noteId = noteData._id;
     const newIsPinnedStatus = !noteData.isPinned;
@@ -223,14 +161,10 @@ const debouncedSearch = debounce(onSearchNote, 300);
     }
   };
 
-  const handleClearSearch = () => {
-    setIsSearch(false);
-    getAllNotes();
-  };
-
+  
   useEffect(() => {
     getAllNotes();
-    getUserInfo();
+   
   }, []);
 
   const handleNoteSelection = (noteId) => {
@@ -328,12 +262,12 @@ const debouncedSearch = debounce(onSearchNote, 300);
   const handleColorChange = (e) => {
     setBackground(e.target.value);
   };
-  const pinnedNotes = allNotes.filter((note) => note.isPinned === true);
-  const otherNotes = allNotes.filter((note) => note.isPinned !== true);
+  const pinnedNotes = displayedNotes.filter((note) => note.isPinned === true);
+  const otherNotes = displayedNotes.filter((note) => note.isPinned !== true);
   // console.log('pinnedNotes',pinnedNotes)
   // console.log('otherNotes',otherNotes)
 
-  console.log(import.meta.env.VITE_BACKEND_URL)
+  // console.log(import.meta.env.VITE_BACKEND_URL)
   return (
     <div className={`h-screen ${theme === "dark" && "bg-black text-white"}`}>
 
@@ -346,7 +280,7 @@ const debouncedSearch = debounce(onSearchNote, 300);
                 onClick={() => setIsColorPickerOpen(!isColorPickerOpen)}
 
               >
-                <MdColorLens className="text-2xl" />
+                <MdColorLens className={`text-2xl ${theme === "dark" && "text-black"}`} />
               </button>
               {isColorPickerOpen && (
                 <div className="absolute top-5 right-0 mt-2 p-2 bg-white  rounded shadow-lg">
@@ -374,9 +308,9 @@ const debouncedSearch = debounce(onSearchNote, 300);
                     (note) => note._id === selectedNote && !note.isPinned
                   )
                 ) ? (
-                  <MdOutlinePushPin className="text-2xl" /> // Outlined icon for unpinned notes
+                  <MdOutlinePushPin className={`text-2xl ${theme === "dark" && "text-black"}`}  /> // Outlined icon for unpinned notes
                 ) : (
-                  <MdPushPin className="text-2xl" />
+                  <MdPushPin className={`text-2xl ${theme === "dark" && "text-black"}`} />
                 ) // Filled icon for pinned notes
               }
             </button>
@@ -390,7 +324,15 @@ const debouncedSearch = debounce(onSearchNote, 300);
           </div>
         </div>
       )}
-
+{isSearching && searchQuery && (
+        <div className="container mx-auto p-4">
+          <p className="text-lg mb-4">
+            {searchResults.length === 0 
+              ? `No results found for "${searchQuery}"`
+              : `Found ${searchResults.length} results for "${searchQuery}"`}
+          </p>
+        </div>
+      )}
       <div className="container h-auto p-6 pb-12 mx-auto">
         {isLoading ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 mt-4 transition-all">

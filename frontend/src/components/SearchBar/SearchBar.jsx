@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { FaMagnifyingGlass } from 'react-icons/fa6';
 import { IoMdClose } from 'react-icons/io';
 
-const SearchBar = ({ value, onChange, onClearSearch ,handleSearch }) => {
+const SearchBar = ({ theme, value, onChange, onClearSearch ,handleSearch }) => {
     const [isFocused, setIsFocused] = useState(false);
-
+//  console.log(value)
     return (
         <div 
             className={`w-64 flex items-center px-4 bg-slate-100 rounded-md ${isFocused ? 'shadow-md border-2 border-gray-600' : ''}`} 
@@ -14,7 +14,7 @@ const SearchBar = ({ value, onChange, onClearSearch ,handleSearch }) => {
             <input
                 type="text"
                 placeholder='Search Notes'
-                className='w-full text-xs bg-transparent py-[11px] outline-none'
+                className={`w-full text-xs bg-transparent py-[11px] outline-none ${theme === "dark" && "text-black"}`}
                 value={value}
                 onChange={onChange}
             />
