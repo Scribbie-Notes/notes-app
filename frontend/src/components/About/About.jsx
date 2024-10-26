@@ -102,7 +102,7 @@ const About = ({theme}) => {
   };
 
   return (
-    <div className={`relative ${theme === "dark" && "bg-black text-white"}`}>
+    <>
      
       <Link to="/dashboard">
         <div className="p-5">
@@ -302,7 +302,7 @@ const About = ({theme}) => {
         </Modal>
       </div>
       <Footer />
-    </div>
+    </>
   );
 };
 
