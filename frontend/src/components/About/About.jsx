@@ -25,6 +25,8 @@ const customStyles = {
   },
 };
 
+const apiBaseUrl = import.meta.env.VITE_BACKEND_URL;
+
 const About = () => {
   const user = JSON.parse(localStorage.getItem("user"));
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -65,7 +67,7 @@ const About = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:5000/submit",
+        `${apiBaseUrl}/submit`,
         feedbackData
       );
       console.log(response);

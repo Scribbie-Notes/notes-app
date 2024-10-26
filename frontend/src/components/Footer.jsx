@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import axiosInstance from "../utils/axiosInstance";
 import toast, { Toaster } from "react-hot-toast";
 import axios from "axios";
+const apiBaseUrl = import.meta.env.VITE_BACKEND_URL;
 
 const StickyFooter = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -46,7 +47,7 @@ const StickyFooter = () => {
     // console.log(feedbackData)
     try {
       const response = await axios.post(
-        "http://localhost:5000/submit",
+        `${apiBaseUrl}/submit`,
         feedbackData
       );
       // console.log(response);
