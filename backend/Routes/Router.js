@@ -14,6 +14,7 @@ const { OAuth2Client } = require("google-auth-library");
 const User = require("../models/userModel");
 const Note = require("../models/noteModel");
 const Feedback = require("../models/feedbackModel");
+const { sendVerificationMail } = require("../mail/forgotPAsswordOtpMail");
 
 const { ACCESS_TOKEN_SECRET, GOOGLE_API_TOKEN } = process.env;
 
@@ -215,19 +216,21 @@ router.post("/login", async (req, res) => {
       .status(HTTP_STATUS.BAD_REQUEST)
       .json({ message: ERROR_MESSAGES.EMAIL_PASSWORD_REQUIRED });
   }
-
+  
+  
   const userInfo = await User.findOne({ email });
-
+  
   if (!userInfo || !userInfo.checkPassword(password)) {
     return res
       .status(HTTP_STATUS.BAD_REQUEST)
       .json({ message: ERROR_MESSAGES.INVALID_CREDENTIALS });
-  }
-  if (!userInfo.isEmailVerified) {
-    return res
-      .status(HTTP_STATUS.BAD_REQUEST)
-      .json({ message: ERROR_MESSAGES.EMAIL_NOT_VERIFIED });
-  }
+    }
+    console.log("hii");
+  // if (!userInfo.isEmailVerified) {
+  //   return res
+  //     .status(HTTP_STATUS.BAD_REQUEST)
+  //     .json({ message: ERROR_MESSAGES.EMAIL_NOT_VERIFIED });
+  // }
 
   const accessToken = jwt.sign({ user: userInfo }, ACCESS_TOKEN_SECRET, {
     expiresIn: "36000m",
@@ -911,6 +914,70 @@ router.post("/google-auth", async (req, res) => {
       .json({ error: true, message: ERROR_MESSAGES.INVALID_GOOGLE_TOKEN });
   }
 });
+
+//verify email
+router.post("/verify-email", async(req, res)=>{
+  const {email} = req.body;
+
+  const existingUser = await User.findOne({ email: email });
+  if (!existingUser) {
+    return res.status(404).json({ error: "Email is not registered" });
+  }
+
+  const verifyCode = Math.floor(100000 + Math.random() * 900000).toString();
+
+  existingUser.verificationCode = verifyCode;
+  await existingUser.save();
+
+  
+  try {
+    sendVerificationMail(email, verifyCode);
+    res.status(201).json({ id: existingUser._id, success: true });
+  } catch (error) {
+    res.status(500).json({ error: "Internal server error" });
+  }
+})
+
+// verify OTP
+router.post("/verify-otp", async(req, res)=>{
+  try {
+    const { id, otp } = req.body;
+
+    const existingUser = await User.findOne({ _id: id });
+
+    if (!existingUser) {
+        return res.status(404).json({ error: "User not found" });
+    }
+
+    if(existingUser.verificationCode !== otp){
+        return res.status(400).json({ error: "Invalid verification code", success: false });
+    }
+
+    existingUser.verificationCode = ""
+    await existingUser.save();
+
+    return res.status(200).json({ message: "verified", success: true})
+  } catch (error) {
+      return res.status(500).json({ message: "Internal server error", success: false})
+  }
+})
+
+router.post("/reset-password", async(req, res)=>{
+  try {
+    const {id, password} = req.body
+    
+    const user = await User.findOne({ _id: id });
+    if (!user) {
+      return res.status(401).json({ error: "User not found" });
+    }
+    
+    user.password = password;
+    await user.save();
+    res.json({ message: "Password reset successful" });
+  } catch (error) {
+    res.status(501).json({ error: "Internal server error" });
+  }
+})
 
 // feedback submit
 router.post("/submit", async (req, res) => {
