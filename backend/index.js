@@ -12,7 +12,7 @@ const envPath =
   process.env.NODE_ENV === "production" ? ".env.production" : ".env";
 dotenv.config({ path: path.resolve(__dirname, envPath) });
 
-const { MONGO_URI } = process.env;
+const { MONGODB_URI } = process.env;
 
 // Use cors middleware before defining any routes
 const allowedOrigins =
@@ -34,7 +34,7 @@ app.use(
 // Connect to MongoDB
 (async function () {
   try {
-    await mongoose.connect(MONGO_URI)
+    await mongoose.connect(MONGODB_URI)
     console.log("MongoDB connected")
   } catch (error) {
     console.error("MongoDB connection error:", error)
