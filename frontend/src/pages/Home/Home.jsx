@@ -161,7 +161,7 @@ const Home = () => {
     );
 
     try {
-      const response = await axiosInstance.get("/search-notes", { params: { query } });
+      const response = await axiosInstance.get("http://localhost:5000/search-notes", { params: { query } });
       if (response.data && response.data.notes) {
         setIsSearch(true);
         setAllNotes(filteredNotes);
@@ -256,7 +256,7 @@ const debouncedSearch = debounce(onSearchNote, 300);
 
     try {
       // Send one API call to pin/unpin the selected notes
-      await axiosInstance.put('/bulk-update-notes-pinned', updateData);
+      await axiosInstance.put('http://localhost:5000/bulk-update-notes-pinned', updateData);
 
       // Refresh notes and clear selection
       getAllNotes();
@@ -290,7 +290,7 @@ const debouncedSearch = debounce(onSearchNote, 300);
       // Send selected note IDs via the data field, since Axios delete doesn't send req.body directly
       await axiosInstance({
         method: 'delete',
-        url: '/delete-multiple-notes',
+        url: 'http://localhost:5000/delete-multiple-notes',
         data: { noteIds: selectedNotes }, // Pass the noteIds in the data field
       });
 
@@ -309,7 +309,7 @@ const debouncedSearch = debounce(onSearchNote, 300);
     try {
       // console.log(color);
       // Send an array of selected note IDs and the new background color in one request
-      await axiosInstance.put('/update-notes-background', {
+      await axiosInstance.put('http://localhost:5000/update-notes-background', {
         noteIds: selectedNotes,
         background: color,
       });

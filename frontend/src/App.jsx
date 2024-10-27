@@ -25,6 +25,9 @@ import ArchivedNotes from "./components/ArchivedNotes/ArchivedNotes";
 
 
 import Preloader from "./components/Preloader";
+import VerifyEmail from "./pages/ForgotPassword/VerifyEmail";
+import VerifyOtp from "./pages/ForgotPassword/VerifyOtp";
+import NewPassword from "./pages/ForgotPassword/NewPassword";
 
 // currently this component is hide
 // import Navbar from './components/Navbar';
@@ -69,7 +72,9 @@ const App = () => {
           <Route path="/landing" exact element={<Hero />} />
           <Route path="/dashboard" exact element={<Home />} />
           <Route path="/" exact element={<Hero />} />
-
+          <Route path="/verify-email" exact element={<VerifyEmail />} />
+          <Route path="/verify-otp/:id" exact element={<VerifyOtp />} />
+          <Route path="/reset-password/:id" exact element={<NewPassword />} />
           <Route path="/login" exact element={<Login setUser={setUser} />} />
           <Route path="/testimonial" exact element={<Testimonial />} />
           <Route path="/pricing" exact element={<Pricing />} />
