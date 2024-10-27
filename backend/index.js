@@ -13,7 +13,7 @@ const envPath =
   process.env.NODE_ENV === "production" ? ".env.production" : ".env";
 dotenv.config({ path: path.resolve(__dirname, envPath) });
 
-const { MONGODB_URI } = process.env;
+const { MONGO_URI } = process.env;
 
 // Log the MongoDB URI to verify it's loaded
 console.log("MongoDB URI:", MONGO_URI);
@@ -42,7 +42,7 @@ app.use(
 // Connect to MongoDB
 (async function () {
   try {
-    await mongoose.connect(MONGODB_URI)
+    await mongoose.connect(MONGO_URI)
     console.log("MongoDB connected")
   } catch (error) {
     console.error("MongoDB connection error:", error);
