@@ -333,7 +333,7 @@ router.put(
     const { title, content, tags, isPinned, background, attachments } =
       req.body;
     const { user } = req.user;
-
+    const tagsArray = JSON.parse(tags)
     try {
       const note = await Note.findOne({ _id: noteId, userId: user._id });
 
@@ -341,7 +341,7 @@ router.put(
         const updateFields = {};
         if (title) updateFields.title = title;
         if (content) updateFields.content = content;
-        if (tags) updateFields.tags = tags;
+        if (tags) updateFields.tags = tagsArray;
         if (isPinned !== undefined) updateFields.isPinned = isPinned;
         if (background) updateFields.background = background;
         if (attachments) updateFields.attachments = attachments;
@@ -717,11 +717,14 @@ router.get("/search-notes/", authenticationToken, async (req, res) => {
   }
 
   try {
+    const regexQuery = new RegExp(query, "i");
+
     const matchingNotes = await Note.find({
       userId: user._id,
       $or: [
-        { title: { $regex: new RegExp(query, "i") } },
-        { content: { $regex: new RegExp(query, "i") } },
+        { title: { $regex: regexQuery } },
+        { content: { $regex: regexQuery } },
+        { tags: { $elemMatch: { $regex: regexQuery } } }, // optimized for tags as array of strings
       ],
     });
 
