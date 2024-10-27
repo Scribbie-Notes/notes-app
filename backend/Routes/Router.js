@@ -6,6 +6,7 @@ const bcrypt = require("bcrypt");
 const { HTTP_STATUS, MESSAGES, ERROR_MESSAGES } = require("../utils/const");
 const dotenv = require("dotenv");
 const path = require("path");
+const rateLimit = require("express-rate-limit");
 
 const fs = require("fs");
 const { OAuth2Client } = require("google-auth-library");
@@ -41,6 +42,19 @@ const storage = multer.diskStorage({
   },
 });
 
+// rate limiter middleware
+const loginLimiter = rateLimit({
+  windowMs: 5 * 60 * 1000, // 15 minutes
+  max: 6, // Limit each IP to 5 login requests per windowMs
+  message: {
+    error: true,
+    message:
+      "Too many login attempts from this IP, please try again after 5 minutes.",
+  },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
 const upload = multer({ storage: storage });
 //upload multiple attachments files
 const uploadMultiple = multer({ storage: storage }).array("attachments", 10);
@@ -73,7 +87,6 @@ router.post("/contact", async (req, res) => {
       error: false,
       message: "Mail send successfully",
     });
-
   } catch (err) {
     console.log(err.message);
     return res.status(500).json({
@@ -205,7 +218,7 @@ router.get("/verify/:token", async (req, res) => {
 });
 
 // Login
-router.post("/login", async (req, res) => {
+router.post("/login", loginLimiter, async (req, res) => {
   const { email, password } = req.body;
   if (!email || !password) {
     return res
@@ -228,13 +241,13 @@ router.post("/login", async (req, res) => {
   //     .json({ message: ERROR_MESSAGES.EMAIL_NOT_VERIFIED });
   // }
 
-  const accessToken = jwt.sign({ user: userInfo }, ACCESS_TOKEN_SECRET, {
+  const accessToken = jwt.sign({ user: userInfo }, "Ayush", {
     expiresIn: "36000m",
   });
 
   return res.json({
     error: false,
-    message: "Login Successful",
+    message: "Login Successful", 
     user: userInfo,
     accessToken,
   });
@@ -280,17 +293,19 @@ router.post(
     }
 
     try {
-        const attachmentPaths = req.files.map(file => `/uploads/${file.filename}`);
+      const attachmentPaths = req.files.map(
+        (file) => `/uploads/${file.filename}`
+      );
 
-        const note = new Note({
-            title,
-            content,
-            tags: tags || [],
-            userId: user._id,
-            attachments: attachmentPaths,
-            background: background || "#ffffff", // Default to white if not provided
-        });
-        await note.save();
+      const note = new Note({
+        title,
+        content,
+        tags: tags || [],
+        userId: user._id,
+        attachments: attachmentPaths,
+        background: background || "#ffffff", // Default to white if not provided
+      });
+      await note.save();
 
       return res.json({
         error: false,
@@ -320,7 +335,6 @@ router.put(
     const { user } = req.user;
 
     try {
-
       const note = await Note.findOne({ _id: noteId, userId: user._id });
 
       try {
@@ -427,7 +441,6 @@ router.put(
 
 // Get all notes
 router.get("/get-all-notes", authenticationToken, async (req, res) => {
-
   const { user } = req.user;
   try {
     const notes = await Note.find({
@@ -440,8 +453,7 @@ router.get("/get-all-notes", authenticationToken, async (req, res) => {
       error: false,
       notes,
       message: MESSAGES.NOTES_FETCHED_SUCCESSFULLY,
-    })
-
+    });
   } catch (error) {
     console.error("Error fetching notes: ", error);
     return res
@@ -451,27 +463,28 @@ router.get("/get-all-notes", authenticationToken, async (req, res) => {
 });
 
 router.get("/get-archived-notes", authenticationToken, async (req, res) => {
+  try {
+    // Use req.user directly, as the user is authenticated via the authenticationToken middleware
+    const { user } = req.user;
 
-    try {
-        // Use req.user directly, as the user is authenticated via the authenticationToken middleware
-        const { user } = req.user;
+    // Fetch archived notes that belong to the user and where deleted is false
+    const notes = await Note.find({
+      userId: user._id,
+      deleted: false,
+      isArchived: true,
+    }).sort({ isPinned: -1 });
 
-        // Fetch archived notes that belong to the user and where deleted is false
-        const notes = await Note.find({
-            userId: user._id,
-            deleted: false,
-            isArchived: true,
-        }).sort({ isPinned: -1 });
-
-        return res.json({
-            error: false,
-            notes,
-            message: "Archived notes fetched successfully",
-        });
-    } catch (error) {
-        console.error("Error fetching archived notes:", error);
-        return res.status(500).json({ error: true, message: "Internal server error" });
-    }
+    return res.json({
+      error: false,
+      notes,
+      message: "Archived notes fetched successfully",
+    });
+  } catch (error) {
+    console.error("Error fetching archived notes:", error);
+    return res
+      .status(500)
+      .json({ error: true, message: "Internal server error" });
+  }
 });
 
 // Delete note
@@ -594,11 +607,9 @@ router.put(
           { _id: { $in: noteIds } }, // Match notes with the given noteIds
           { $set: { isPinned: isPinned } } // Set isPinned value
         );
-        res
-          .status(200)
-          .json({
-            message: `Notes successfully ${isPinned ? "pinned" : "unpinned"}`,
-          });
+        res.status(200).json({
+          message: `Notes successfully ${isPinned ? "pinned" : "unpinned"}`,
+        });
       } catch (error) {
         console.error("Error updating notes:", error);
         res.status(500).json({ message: "Failed to update notes" });
@@ -618,7 +629,6 @@ router.put(
       try {
         // Update the selected notes to set isArchived to true
         await Note.updateMany(
-
           { _id: { $in: noteIds }, deleted: false }, // Ensure the notes are not deleted
           { $set: { isArchived: true } }
         );
@@ -663,7 +673,6 @@ router.put(
       res.status(200).json({
         message: `Notes successfully ${isPinned ? "pinned" : "unpinned"}`,
       });
-
     } catch (error) {
       console.error("Error updating notes:", error);
       res.status(500).json({ message: "Failed to update notes" });
@@ -977,16 +986,15 @@ router.post("/reset-password", async(req, res)=>{
 
 // feedback submit
 router.post("/submit", async (req, res) => {
+  const { name, email, feedback, rating } = req.body;
 
-    const { name, email, feedback,rating } = req.body;
-
-    try {
-        const newFeedback = new Feedback({
-            name,
-            email,
-            feedback,
-            rating
-        });
+  try {
+    const newFeedback = new Feedback({
+      name,
+      email,
+      feedback,
+      rating,
+    });
 
     await newFeedback.save();
     res
