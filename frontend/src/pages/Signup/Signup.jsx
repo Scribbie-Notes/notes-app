@@ -155,7 +155,10 @@ const Signup = () => {
 
     // signup api call
     try {
-      const response = await axiosInstance.post("/create-account", {
+
+      // console.log(process.env.VITE_BACKEND_URL)
+      const response = await axiosInstance.post("http://localhost:5000/create-account", {
+
         fullName: name,
         email: email,
         password: password,

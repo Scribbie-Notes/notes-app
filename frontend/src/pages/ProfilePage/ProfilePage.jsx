@@ -120,7 +120,7 @@ const ProfilePage = () => {
   const handleEmailModalSave = async () => {
     try {
       console.log("New email to update:", newEmail);
-      const response = await axiosInstance.put(`/update-email`, { newEmail });
+      const response = await axiosInstance.put(`http://localhost:5000/update-email`, { newEmail });
       console.log("Response from API:", response);
 
       if (response.data && validateEmail(newEmail)) {
@@ -190,7 +190,7 @@ const ProfilePage = () => {
         });
       }
       console.log("New phone to update:", newPhone);
-      const response = await axiosInstance.put(`/update-phone`, {
+      const response = await axiosInstance.put(`http://localhost:5000/update-phone`, {
         newPhone,
         userId: user._id,
       });
