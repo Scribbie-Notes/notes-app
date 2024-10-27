@@ -88,7 +88,6 @@ const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
     onSearchNote(searchQuery);
   };
 
-<<<
   // console.log(location.pathname);
   return (
     <div

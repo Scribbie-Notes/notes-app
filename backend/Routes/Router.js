@@ -225,16 +225,16 @@ router.post("/login", loginLimiter, async (req, res) => {
       .status(HTTP_STATUS.BAD_REQUEST)
       .json({ message: ERROR_MESSAGES.EMAIL_PASSWORD_REQUIRED });
   }
-  
-  
+
+
   const userInfo = await User.findOne({ email });
-  
+
   if (!userInfo || !userInfo.checkPassword(password)) {
     return res
       .status(HTTP_STATUS.BAD_REQUEST)
       .json({ message: ERROR_MESSAGES.INVALID_CREDENTIALS });
     }
-    console.log("hii");
+    //console.log("hii");
   // if (!userInfo.isEmailVerified) {
   //   return res
   //     .status(HTTP_STATUS.BAD_REQUEST)
@@ -247,7 +247,7 @@ router.post("/login", loginLimiter, async (req, res) => {
 
   return res.json({
     error: false,
-    message: "Login Successful", 
+    message: "Login Successful",
     user: userInfo,
     accessToken,
   });
@@ -590,95 +590,102 @@ router.delete("/delete-user", authenticationToken, async (req, res) => {
   }
 });
 
-// Update isPinned
-router.put(
-  "/update-note-pinned/:noteId",
-  authenticationToken,
-  async (req, res) => {
-    const { noteId } = req.params;
-    const { isPinned } = req.body;
-    const { user } = req.user;
-
-    router.put("/bulk-update-notes-pinned", async (req, res) => {
-      const { noteIds, isPinned } = req.body;
-      try {
-        // Update multiple notes at once
-        await Note.updateMany(
-          { _id: { $in: noteIds } }, // Match notes with the given noteIds
-          { $set: { isPinned: isPinned } } // Set isPinned value
-        );
-        res.status(200).json({
-          message: `Notes successfully ${isPinned ? "pinned" : "unpinned"}`,
-        });
-      } catch (error) {
-        console.error("Error updating notes:", error);
-        res.status(500).json({ message: "Failed to update notes" });
-      }
-    });
-
-    // archive multiple notes
-    router.put("/archive-notes", async (req, res) => {
-      const { noteIds } = req.body;
-
-      if (!Array.isArray(noteIds) || noteIds.length === 0) {
-        return res
-          .status(400)
-          .json({ message: "Invalid request, noteIds must be an array" });
-      }
-
-      try {
-        // Update the selected notes to set isArchived to true
-        await Note.updateMany(
-          { _id: { $in: noteIds }, deleted: false }, // Ensure the notes are not deleted
-          { $set: { isArchived: true } }
-        );
-
-        res.status(200).json({ message: "Notes archived successfully" });
-      } catch (error) {
-        console.error("Error updating note pinned: ", error);
-        return res
-          .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
-          .json({ error: true, message: ERROR_MESSAGES.INTERNAL_SERVER_ERROR });
-      }
-    });
-
-    // Un-archive multiple notes
-    router.put("/un-archive-notes", async (req, res) => {
-      const { noteIds } = req.body;
-      if (!Array.isArray(noteIds) || noteIds.length === 0) {
-        return res
-          .status(400)
-          .json({ message: "Invalid request, noteIds must be an array" });
-      }
-      try {
-        // Update the selected notes to set isArchived to true
-        await Note.updateMany(
-          { _id: { $in: noteIds }, deleted: false }, // Ensure the notes are not deleted
-          { $set: { isArchived: false } }
-        );
-
-        res.status(200).json({ message: "Notes archived successfully" });
-      } catch (error) {
-        console.error("Error archiving notes:", error);
-        res.status(500).json({ message: "Failed to archive notes" });
-      }
-    });
-
+router.put("/bulk-update-notes-pinned", async (req, res) => {
+    const { noteIds, isPinned } = req.body;
     try {
-      // Update multiple notes at once
-      await Note.updateMany(
+    // Update multiple notes at once
+    await Note.updateMany(
         { _id: { $in: noteIds } }, // Match notes with the given noteIds
         { $set: { isPinned: isPinned } } // Set isPinned value
-      );
-      res.status(200).json({
-        message: `Notes successfully ${isPinned ? "pinned" : "unpinned"}`,
-      });
+    );
+    res.status(200).json({
+        message: `Bulk Notes successfully ${isPinned ? "pinned" : "unpinned"}`,
+    });
     } catch (error) {
-      console.error("Error updating notes:", error);
-      res.status(500).json({ message: "Failed to update notes" });
+    console.error("Error updating notes:", error);
+    res.status(500).json({ message: "Failed to update notes" });
     }
-  }
-);
+});
+
+// archive multiple notes
+router.put("/archive-notes", async (req, res) => {
+    const { noteIds } = req.body;
+
+    if (!Array.isArray(noteIds) || noteIds.length === 0) {
+    return res
+        .status(400)
+        .json({ message: "Invalid request, noteIds must be an array" });
+    }
+
+    try {
+    // Update the selected notes to set isArchived to true
+    await Note.updateMany(
+        { _id: { $in: noteIds }, deleted: false }, // Ensure the notes are not deleted
+        { $set: { isArchived: true } }
+    );
+
+    res.status(200).json({ message: "Notes archived successfully" });
+    } catch (error) {
+    console.error("Error updating note pinned: ", error);
+    return res
+        .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
+        .json({ error: true, message: ERROR_MESSAGES.INTERNAL_SERVER_ERROR });
+    }
+});
+
+// Un-archive multiple notes
+router.put("/un-archive-notes", async (req, res) => {
+    const { noteIds } = req.body;
+    if (!Array.isArray(noteIds) || noteIds.length === 0) {
+    return res
+        .status(400)
+        .json({ message: "Invalid request, noteIds must be an array" });
+    }
+    try {
+    // Update the selected notes to set isArchived to true
+    await Note.updateMany(
+        { _id: { $in: noteIds }, deleted: false }, // Ensure the notes are not deleted
+        { $set: { isArchived: false } }
+    );
+
+    res.status(200).json({ message: "Notes archived successfully" });
+    } catch (error) {
+    console.error("Error archiving notes:", error);
+    res.status(500).json({ message: "Failed to archive notes" });
+    }
+});
+
+// Update isPinned
+router.put(
+    "/update-note-pinned/:noteId",
+    authenticationToken,
+    async (req, res) => {
+      const { noteId } = req.params;
+      const { isPinned } = req.body;
+      const { user } = req.user;
+
+      try {
+        // Update a single note and return the updated document
+        const updatedNote = await Note.findOneAndUpdate(
+          { _id: noteId }, // Match the note with the given noteId
+          { $set: { isPinned: isPinned } }, // Set isPinned value
+          { new: true } // Return the updated document
+        );
+
+        if (updatedNote) {
+          res.status(200).json({
+            message: `Note successfully ${isPinned ? "pinned" : "unpinned"}`,
+            note: updatedNote,
+          });
+        } else {
+          res.status(404).json({ message: "Note not found" });
+        }
+      } catch (error) {
+        console.error("Error updating note:", error);
+        res.status(500).json({ message: "Failed to update note" });
+      }
+    }
+  );
 
 // archive multiple notes
 router.put("/archive-notes", async (req, res) => {
@@ -934,7 +941,7 @@ router.post("/verify-email", async(req, res)=>{
   existingUser.verificationCode = verifyCode;
   await existingUser.save();
 
-  
+
   try {
     sendVerificationMail(email, verifyCode);
     res.status(201).json({ id: existingUser._id, success: true });
@@ -970,12 +977,12 @@ router.post("/verify-otp", async(req, res)=>{
 router.post("/reset-password", async(req, res)=>{
   try {
     const {id, password} = req.body
-    
+
     const user = await User.findOne({ _id: id });
     if (!user) {
       return res.status(401).json({ error: "User not found" });
     }
-    
+
     user.password = password;
     await user.save();
     res.json({ message: "Password reset successful" });
