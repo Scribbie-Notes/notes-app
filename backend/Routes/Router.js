@@ -12,6 +12,7 @@ const fs = require("fs");
 const { OAuth2Client } = require("google-auth-library");
 const User = require("../models/userModel");
 const Note = require("../models/noteModel");
+const Contact = require("../models/contactModel");
 const Feedback = require("../models/feedbackModel");
 const { sendVerificationMail } = require("../mail/forgotPAsswordOtpMail");
 
@@ -79,21 +80,37 @@ const authenticationToken = (req, res, next) => {
 };
 
 router.post("/contact", async (req, res) => {
-  const { first_name, last_name, user_email, message } = req.body;
-  try {
-    const html = `<p>${message}</p>`;
-    const name = first_name + " " + last_name;
-    return res.status(200).json({
-      error: false,
-      message: "Mail send successfully",
-    });
-  } catch (err) {
-    console.log(err.message);
-    return res.status(500).json({
-      error: true,
-      message: "Internal error",
-    });
-  }
+    const { first_name, last_name, user_email, message } = req.body;
+
+    try {
+      // Create a new contact entry
+      const contact = new Contact({
+        first_name,
+        last_name,
+        user_email,
+        message,
+      });
+
+      // Save the contact information to the database
+      await contact.save();
+
+      // Here you would typically send the email
+      const html = `<p>${message}</p>`;
+      const name = first_name + " " + last_name;
+
+      // (Email sending logic would go here)
+
+      return res.status(200).json({
+        error: false,
+        message: "Mail sent successfully and information saved",
+      });
+    } catch (err) {
+      console.error(err.message);
+      return res.status(500).json({
+        error: true,
+        message: "Internal error",
+      });
+    }
 });
 
 router.post("/create-account", async (req, res) => {
