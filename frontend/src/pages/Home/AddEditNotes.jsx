@@ -226,7 +226,7 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
   };
 
   return (
-    <div className="relative">
+    <div className="relative h-[650px] overflow-auto">
       <button
         className="w-10 h-10 rounded-full flex items-center bg-gray-50 transition-all justify-center absolute -top-3 -right-3 hover:bg-red-100"
         onClick={onClose}
@@ -234,9 +234,9 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
         <MdClose className="text-xl text-slate-400" />
       </button>
 
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-1">
         <label className="font-medium">Title</label>
-        <div className="relative">
+        <div className="relative mr-2">
           <input
             type="text"
             className="p-2 border rounded-md text-sm w-full pr-12"
@@ -250,8 +250,9 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
         </div>
       </div>
 
+      <div className='mt-3'>
       <label className="font-medium">Content</label>
-      <div className="flex flex-col gap-2 mt-4">
+      <div className="flex flex-col gap-2 mt-1 mr-2">
         <div className="relative">
           <ReactQuill
             value={content}
@@ -289,8 +290,9 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
           )}
         </div>
       </div>
+      </div>
 
-      <div className="flex flex-col gap-2 mt-12">
+      <div className="flex flex-col gap-1 mt-14">
         <label className="font-medium">Background Color</label>
         <input
           type="color"
@@ -300,17 +302,17 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
         />
       </div>
 
-      <div className="flex flex-col gap-2 mt-4">
+      <div className="flex flex-col gap-1 mt-4">
         <label className="font-medium md:text-base">Tags</label>
         <TagInput tags={tags} setTags={setTags} />
       </div>
 
-      <div className="flex flex-col gap-2 mt-4">
+      <div className="flex flex-col gap-1 mt-4">
         <label className="font-medium md:text-base">Add Attachments</label>
         <AddAttachmentsInput onFileUpload={handleFileUpload} />
       </div>
 
-      <div className="flex flex-col gap-2 mt-4">
+      <div className="flex flex-col gap-1 mt-4">
         <label className="font-medium md:text-base">Add Photos</label>
         <AddAttachmentsInput
           onFileUpload={handlePhotoUpload}
@@ -329,7 +331,7 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
       {error && <p className="text-red-500 mt-2">{error}</p>}
 
       <button
-        className="w-full items-center text-white bg-gray-800 hover:bg-gray-900 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 transition-all dark:border-gray-700 mt-4"
+        className="w-auto items-center text-white bg-gray-800 hover:bg-gray-900 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 transition-all dark:border-gray-700 mt-4"
         onClick={handleSaveNote}
       >
         {type === "edit" ? "Update Note" : "Add Note"}
