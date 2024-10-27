@@ -333,7 +333,9 @@ router.put(
     const { title, content, tags, isPinned, background, attachments } =
       req.body;
     const { user } = req.user;
+  const tagsArray = JSON.parse(tags);
 
+  console.log(tagsArray , typeof(tagsArray))
     try {
       const note = await Note.findOne({ _id: noteId, userId: user._id });
 
@@ -341,11 +343,12 @@ router.put(
         const updateFields = {};
         if (title) updateFields.title = title;
         if (content) updateFields.content = content;
-        if (tags) updateFields.tags = tags;
+        if (tags) updateFields.tags = tagsArray;
         if (isPinned !== undefined) updateFields.isPinned = isPinned;
         if (background) updateFields.background = background;
         if (attachments) updateFields.attachments = attachments;
 
+        console.log(updateFields)
         const note = await Note.findOneAndUpdate(
           { _id: noteId, userId: user._id },
           { $set: updateFields },
