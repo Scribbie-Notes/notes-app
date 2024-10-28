@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../../components/Navbar";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import {
   validateEmail,
   validateName,
@@ -12,9 +12,8 @@ import { FaRegEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa";
 import { GoogleLogin } from "@react-oauth/google";
 import CircularLoader from "../../components/CircularLoader";
-import axios from "axios";
 
-const Signup = () => {
+const NewPassword = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -25,6 +24,8 @@ const Signup = () => {
   const [error, setError] = useState(null);
 
   const navigate = useNavigate();
+
+  const {id} = useParams();
 
   const responseMsg = async (response) => {
     try {
@@ -85,40 +86,6 @@ const Signup = () => {
   const handleSignup = async (e) => {
     e.preventDefault();
 
-    // validation for name
-    const nameValidation = validateName(name);
-    if (!nameValidation.valid) {
-      toast.error(`${nameValidation.error}`, {
-        style: {
-          fontSize: "13px",
-          maxWidth: "400px",
-          boxShadow: "px 4px 8px rgba(0, 1, 4, 0.1)",
-          borderRadius: "8px",
-          borderColor: "rgba(0, 0, 0, 0.8)",
-          marginTop: "60px",
-          marginRight: "10px",
-        },
-      });
-      return;
-    }
-
-    // validations for email
-    const emailValidation = validateEmail(email);
-    if (!emailValidation.valid) {
-      toast.error(`${emailValidation.error}`, {
-        style: {
-          fontSize: "13px",
-          maxWidth: "400px",
-          boxShadow: "px 4px 8px rgba(0, 1, 4, 0.1)",
-          borderRadius: "8px",
-          borderColor: "rgba(0, 0, 0, 0.8)",
-          marginTop: "60px",
-          marginRight: "10px",
-        },
-      });
-      return;
-    }
-
     // valiations for password
     const passwordValidation = validatePassword(password);
     if (!passwordValidation.valid) {
@@ -155,12 +122,8 @@ const Signup = () => {
 
     // signup api call
     try {
-
-      // console.log(process.env.VITE_BACKEND_URL)
-      const response = await axiosInstance.post("http://localhost:5000/create-account", {
-
-        fullName: name,
-        email: email,
+      const response = await axiosInstance.post("http://localhost:5000/reset-password", {
+        id: id,
         password: password,
       });
 
@@ -170,11 +133,11 @@ const Signup = () => {
         return;
       }
 
-      if (response.data && response.data.accessToken) {
+      if (response.data) {
         localStorage.setItem("token", response.data.accessToken);
         localStorage.setItem("user", JSON.stringify(response.data.user));
-        navigate("/dashboard");
-        toast.success("Signed up successfully", {
+        navigate("/login");
+        toast.success("password Reset successfully", {
           style: {
             fontSize: "13px",
             maxWidth: "400px",
@@ -250,7 +213,7 @@ const Signup = () => {
           </section>
 
           <main className="flex items-center justify-center px-8 py-8 sm:px-12 lg:col-span-7 lg:px-16 lg:py-12 xl:col-span-6">
-            <div className="max-w-xl lg:max-w-3xl">
+            <div className="max-w-xl w-1/2 lg:max-w-1/3">
               <div className="relative -mt-16 block lg:hidden">
                 <h1 className="mt-12 text-2xl font-bold text-gray-900 sm:text-3xl md:text-4xl">
                   Welcome to Scribbie!
@@ -264,46 +227,10 @@ const Signup = () => {
 
               <form
                 onSubmit={handleSignup}
-                className="mt-8 grid grid-cols-6 gap-6"
+                className="mt-8 w-full flex flex-col gap-6"
               >
-                <div className="col-span-6">
-                  <label
-                    htmlFor="FirstName"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    Name
-                  </label>
 
-                  <input
-                    type="text"
-                    id="FirstName"
-                    name="first_name"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    className="mt-1 p-2 w-full rounded-md border border-gray-100 bg-white text-sm text-gray-700 shadow-sm"
-                  />
-                </div>
-
-                <div className="col-span-6">
-                  <label
-                    htmlFor="Email"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    {" "}
-                    Email{" "}
-                  </label>
-
-                  <input
-                    type="email"
-                    id="Email"
-                    name="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="mt-1 p-2 w-full rounded-md border border-gray-100 bg-white text-sm text-gray-700 shadow-sm"
-                  />
-                </div>
-
-                <div className="col-span-6 sm:col-span-3 relative">
+                <div className="w-full relative">
                   <label
                     htmlFor="Password"
                     className="block text-sm font-medium text-gray-700"
@@ -337,7 +264,7 @@ const Signup = () => {
                   </button>
                 </div>
 
-                <div className="col-span-6 sm:col-span-3 relative">
+                <div className="w-full relative">
                   <label
                     htmlFor="PasswordConfirmation"
                     className="block text-sm font-medium text-gray-700"
@@ -370,35 +297,6 @@ const Signup = () => {
                   </button>
                 </div>
 
-                <div className="col-span-6">
-                  <label htmlFor="MarketingAccept" className="flex gap-4">
-                    <input
-                      type="checkbox"
-                      id="MarketingAccept"
-                      name="marketing_accept"
-                      className="size-5 rounded-md border border-gray-100 bg-white shadow-sm"
-                    />
-
-                    <span className="text-sm text-gray-700">
-                      I want to receive emails about events, product updates and
-                      company announcements.
-                    </span>
-                  </label>
-                </div>
-
-                <div className="col-span-6">
-                  <p className="text-sm text-gray-500">
-                    By creating an account, you agree to our{" "}
-                    <a href="#" className="text-gray-700 underline">
-                      terms and conditions
-                    </a>{" "}
-                    and{" "}
-                    <a href="#" className="text-gray-700 underline">
-                      privacy policy
-                    </a>
-                    .
-                  </p>
-                </div>
 
                 {error && <p className="text-red-500 col-span-6">{error}</p>}
                 <div>
@@ -409,38 +307,16 @@ const Signup = () => {
                     >
                       {loading ? (
                         <span className="gap-x-2 flex justify-center items-center">
-                          <CircularLoader /> Creating
+                          <CircularLoader /> Resetting
                         </span>
                       ) : (
-                        "Create an account"
+                        "Reset Password"
                       )}
                     </button>
 
-                    {/* <div className="mb-2 sm:text-sm text-gray-500 sm:mt-0">
-                      <GoogleLogin onSuccess={responseMsg} onError={errorMsg} />
-                    </div> */}
-
-                    <div className="mb-3">
-                      <GoogleLogin
-                        clientId={
-                          import.meta.env.VITE_REACT_APP_GOOGLE_API_TOKEN
-                        }
-                        onSuccess={responseMsg}
-                        onError={errorMsg}
-                      />
-                    </div>
                   </div>
                 </div>
               </form>
-              <p className="mt-8 text-sm text-gray-500 sm:mt-0">
-                Already have an account? <span></span>
-                <Link
-                  to="/login"
-                  className="text-gray-700 underline font-semibold"
-                >
-                  Log in
-                </Link>
-              </p>
             </div>
           </main>
         </div>
@@ -449,4 +325,4 @@ const Signup = () => {
   );
 };
 
-export default Signup;
+export default NewPassword;

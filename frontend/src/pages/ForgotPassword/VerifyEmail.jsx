@@ -7,9 +7,8 @@ import toast from "react-hot-toast";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { GoogleLogin } from "@react-oauth/google";
 import CircularLoader from "../../components/CircularLoader";
-import axios from "axios";
 
-const Login = ({ setUser }) => {
+const VerifyEmail = ({ setUser }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -74,7 +73,7 @@ const Login = ({ setUser }) => {
     console.log(error);
   };
 
-  const handleLogin = async (e) => {
+  const handleOtpSend = async (e) => {
     e.preventDefault();
 
     if (!validateEmail(email)) {
@@ -91,34 +90,18 @@ const Login = ({ setUser }) => {
       return;
     }
 
-    if (!password) {
-      toast.error("Please enter a valid password", {
-        style: {
-          fontSize: "13px",
-          maxWidth: "400px",
-          boxShadow: "px 4px 8px rgba(0, 1, 4, 0.1)",
-          borderRadius: "8px",
-          borderColor: "rgba(0, 0, 0, 0.8)",
-          marginRight: "10px",
-        },
-      });
-      return;
-    }
-
     setError(null);
 
     try {
-      const response = await axiosInstance.post("http://localhost:5000/login", {
-        email,
-        password,
+      const response = await axiosInstance.post("http://localhost:5000/verify-email", {
+        email
       });
 
-      if (response.data && response.data.accessToken) {
-        localStorage.setItem("token", response.data.accessToken);
-        localStorage.setItem("user", JSON.stringify(response.data.user)); // Store user data
-        setUser(response.data.user); // Assuming response includes user data
-        navigate("/dashboard");
-        toast.success("Logged in successfully", {
+      if (response.data) {
+        console.log(response)
+        const id = response.data.id
+        navigate(`/verify-otp/${id}`);
+        toast.success("Otp Sent successfully", {
           style: {
             fontSize: "13px",
             maxWidth: "400px",
@@ -210,16 +193,15 @@ const Login = ({ setUser }) => {
               </div>
 
               <form
-                onSubmit={handleLogin}
+                onSubmit={handleOtpSend}
                 className="mt-8 grid grid-cols-6 gap-6"
               >
                 <div className="col-span-12">
                   <label
                     htmlFor="Email"
-                    className="block text-sm font-medium text-gray-700"
+                    className="block text-xl mb-4 font-bold text-gray-700"
                   >
-                    {" "}
-                    Email{" "}
+                    Enter your Email id to reset password
                   </label>
                   <input
                     type="email"
@@ -231,49 +213,6 @@ const Login = ({ setUser }) => {
                   />
                 </div>
 
-                <div className="col-span-12">
-                  <label
-                    htmlFor="Password"
-                    className="text-sm font-medium text-gray-700 flex justify-between"
-                  >
-                    <p>Password</p>
-
-                    <Link to="/verify-email" className="text-xs hover:text-red-500">Forgot password?</Link>
-                  </label>
-                  <div className="relative">
-                    <input
-                      type={showPassword ? "text" : "password"}
-                      id="Password"
-                      name="password"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      className="mt-1 p-2 w-full rounded-md border border-gray-100 bg-white text-sm text-gray-700 shadow-sm"
-                    />
-                    <button
-                      type="button"
-                      onClick={togglePasswordVisibility}
-                      className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5"
-                    >
-                      {showPassword ? <FaEye /> : <FaEyeSlash />}
-                    </button>
-                  </div>
-                </div>
-
-                <div className="col-span-6">
-                  <label htmlFor="MarketingAccept" className="flex gap-2">
-                    <input
-                      type="checkbox"
-                      id="MarketingAccept"
-                      name="marketing_accept"
-                      className="size-4 rounded-md border border-gray-100 bg-white shadow-sm"
-                    />
-
-                    <span className="text-xs text-gray-700">
-                      Remember for next 30 days
-                    </span>
-                  </label>
-                </div>
-
                 <div className="col-span-12 sm:flex sm:items-center mt-4 sm:gap-4 mb-6">
                   <button
                     className="inline-flex items-center text-white bg-gray-800 hover:bg-gray-900 focus:outline-none  font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700  dark:border-gray-700 transition-all"
@@ -281,32 +220,15 @@ const Login = ({ setUser }) => {
                   >
                     {loading ? (
                       <span className="gap-x-2 flex justify-center items-center">
-                        <CircularLoader /> logging in
+                        <CircularLoader /> sending otp
                       </span>
                     ) : (
-                      "Login"
+                      "Send OTP"
                     )}
                   </button>
 
-                  <div className="mb-3">
-                    <GoogleLogin
-                      clientId={import.meta.env.VITE_REACT_APP_GOOGLE_API_TOKEN}
-                      onSuccess={responseMsg}
-                      onError={errorMsg}
-                    />
-                  </div>
                 </div>
               </form>
-              <p className="mt-8 text-sm text-gray-500 sm:mt-0">
-                Don't have an account? <span> </span>
-                <Link
-                  to="/signup"
-                  className="text-gray-700 underline font-semibold"
-                >
-                  Signup
-                </Link>
-                .
-              </p>
             </div>
           </main>
         </div>
@@ -315,4 +237,4 @@ const Login = ({ setUser }) => {
   );
 };
 
-export default Login;
+export default VerifyEmail;

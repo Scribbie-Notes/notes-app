@@ -7,6 +7,7 @@ import AddAttachmentsInput from "../../components/Input/AddAttachmentInput";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { FaMicrophone, FaMicrophoneSlash } from "react-icons/fa";
+const apiBaseUrl = import.meta.env.VITE_BACKEND_URL;
 
 const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
   const [title, setTitle] = useState("");
@@ -18,6 +19,7 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
   const [photos, setPhotos] = useState([]);
   const [videos, setVideos] = useState([]);
   const [isListening, setIsListening] = useState(false);
+  const [isPinned, setIsPinned] = useState(false);
   const [isSpeechSupported, setIsSpeechSupported] = useState(true);
   const MAX_TITLE_LENGTH = 60;
   const MAX_CONTENT_LENGTH = 2500;
@@ -133,6 +135,8 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
     formData.append("title", title);
     formData.append("content", content);
     formData.append("background", background);
+    formData.append("isPinned", isPinned);
+
     tags.forEach((tag) => {
       formData.append("tags[]", tag);
     });
@@ -147,7 +151,7 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
     });
 
     try {
-      const response = await axiosInstance.post("/add-note", formData, {
+      const response = await axiosInstance.post(`${apiBaseUrl}/add-note`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

@@ -52,8 +52,8 @@ app.use(
 // Connect to MongoDB
 (async function () {
   try {
-    await mongoose.connect(MONGO_URI);
-    console.log("MongoDB connected");
+    await mongoose.connect(MONGO_URI)
+    console.log("MongoDB connected")
   } catch (error) {
     console.error("MongoDB connection error:", error);
   }
@@ -68,4 +68,8 @@ app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
 
+
 export default app;
+
+
+
