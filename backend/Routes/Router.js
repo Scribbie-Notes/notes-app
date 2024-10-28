@@ -333,7 +333,9 @@ router.put(
     const { title, content, tags, isPinned, background, attachments } =
       req.body;
     const { user } = req.user;
-    const tagsArray = JSON.parse(tags)
+    const tagsArray = JSON.parse(tags);
+
+    console.log(tagsArray , typeof(tagsArray))
     try {
       const note = await Note.findOne({ _id: noteId, userId: user._id });
 
