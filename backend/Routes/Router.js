@@ -744,11 +744,14 @@ router.get("/search-notes/", authenticationToken, async (req, res) => {
   }
 
   try {
+    const regexQuery = new RegExp(query, "i");
+
     const matchingNotes = await Note.find({
       userId: user._id,
       $or: [
-        { title: { $regex: new RegExp(query, "i") } },
-        { content: { $regex: new RegExp(query, "i") } },
+        { title: { $regex: regexQuery } },
+        { content: { $regex: regexQuery } },
+        { tags: { $elemMatch: { $regex: regexQuery } } }, // optimized for tags as array of strings
       ],
     });
 

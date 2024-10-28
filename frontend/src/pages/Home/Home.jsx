@@ -164,8 +164,9 @@ const Home = () => {
       const response = await axiosInstance.get("http://localhost:5000/search-notes", { params: { query } });
       if (response.data && response.data.notes) {
         setIsSearch(true);
-        setAllNotes(filteredNotes);
+        setAllNotes(response.data.notes);
       }
+      // console.log(response);
     } catch (error) {
       console.log("Error while searching notes");
     }
