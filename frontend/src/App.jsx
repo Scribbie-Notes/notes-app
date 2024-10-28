@@ -94,7 +94,6 @@ const App = () => {
 const AppWithRouter = () => (
   <Router>
     <App />
-    
   </Router>
 );
 
