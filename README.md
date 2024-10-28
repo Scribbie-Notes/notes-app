@@ -105,6 +105,42 @@ Follow these steps to get Scribbie running on your local machine:
 
 ---
 
+### [![My Skills](https://skillicons.dev/icons?i=docker)](https://skillicons.dev)     Running Scribbie Locally with Docker
+Follow these steps to Run Locally with Docker
+ - Make  Sure to Install Docker Desktop first
+
+ 1. **Clone the repository**:
+    ```bash
+    git clone https://github.com/yashmandi/notes-app.git
+    ```
+
+2. **Navigate to the project directory**:
+    ```bash
+    cd notes-app
+    ```
+3. **Set up environment variables**: Create `.env` files in both backend and frontend directories with the necessary values.  
+   Here's a sample configuration:
+
+    **Backend `.env`:**
+    ```bash
+    # Backend Environment Variables
+    PORT=5000
+    MONGODB_URI=mongodb://root:example@mongo:27017/db
+    GOOGLE_API_TOKEN=your_google_api_token_here
+    ```
+
+    **Frontend `.env`:**
+    ```bash
+    # Frontend Environment Variables
+    VITE_BACKEND_URL=http://localhost:5000
+    VITE_REACT_APP_GOOGLE_API_TOKEN=your_google_api_token_here
+    ```
+4. **Run `docker-compose up` in the root folder**
+- Make Sure docker engine is Running
+  ```bash
+      docker-compose up
+  ```
+ 
 # 📚 Contribution Guidelines
 We welcome contributions from the community! Please see the [CONTRIBUTING.md](CONTRIBUTING.md) file for detailed guidelines.
 
