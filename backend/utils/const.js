@@ -67,8 +67,4 @@ const ERROR_MESSAGES = {
   INTERNAL_SERVER_ERROR: "Internal server error",
 };
 
-module.exports = {
-  HTTP_STATUS,
-  MESSAGES,
-  ERROR_MESSAGES,
-};
+export { HTTP_STATUS, MESSAGES, ERROR_MESSAGES };
