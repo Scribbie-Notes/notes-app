@@ -4,8 +4,13 @@ import axiosInstance from '../../utils/axiosInstance';
 import NoteCard from '../Cards/NoteCard';
 import { MdColorLens, MdDelete, MdOutlinePushPin, MdOutlineUnarchive, MdPushPin } from 'react-icons/md';
 import toast from 'react-hot-toast';
+<<<<<<< HEAD
 import EmptyCard from "../EmptyCard/EmptyCard"
 import axios from 'axios';
+=======
+import AddEditNotes from "../../pages/Home/AddEditNotes";
+
+>>>>>>> 36cd9d9... Initial commit for edit modal
 const ArchivedNotes = () => {
   const user = JSON.parse(localStorage.getItem("user"));
   const [isLoading, setIsLoading] = useState(true);
@@ -16,6 +21,11 @@ const ArchivedNotes = () => {
   const [isColorPickerOpen, setIsColorPickerOpen] = useState(false);
   const [noteToDelete, setNoteToDelete] = useState(null);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [openAddEditModal, setOpenAddEditModal] = useState({
+    isShown: false,
+    type: "add",
+    data: null,
+  });
 
   const getArchivedNotes = async () => {
     setIsLoading(true);
@@ -120,7 +130,7 @@ const ArchivedNotes = () => {
       console.error("Error deleting notes:", error);
       toast.error("Failed to delete selected notes");
     }
-  }; 
+  };
 
   const handleBulkPin = async () => {
     const isAllPinnedSelected = selectedNotes.some((selectedNote) =>
@@ -152,7 +162,6 @@ const ArchivedNotes = () => {
 
   const undoDelete = async (deletedNotes) => {
     try {
-      console.log(deletedNotes)
       const accessToken = localStorage.getItem("token");
       // Send a request to restore the deleted notes
       const response = await axios.put('http://localhost:5000/undo-delete-notes', {
@@ -164,8 +173,6 @@ const ArchivedNotes = () => {
         }
       });
 
-
-      console.log(response)
       // Refresh the notes list
       getArchivedNotes();
       toast.success("Undo successful. Notes restored.");
@@ -173,6 +180,10 @@ const ArchivedNotes = () => {
       console.error("Error restoring notes:", error.message);
       toast.error("Failed to undo delete");
     }
+  }
+
+  const handleEdit = (noteDetails) => {
+    setOpenAddEditModal({ isShown: true, type: "edit", data: noteDetails });
   };
 
   return (
@@ -240,6 +251,7 @@ const ArchivedNotes = () => {
             })}
           </div>
         ) : archivedNotes.length > 0 ? (
+<<<<<<< HEAD
           <>
             {pinnedNotes.length > 0 && (
               <div>
@@ -296,6 +308,44 @@ const ArchivedNotes = () => {
               ))}
             </div>
           </>
+=======
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 mt-2 transition-all">
+            {archivedNotes.map(note => (
+              <NoteCard
+                key={note._id}
+                id={note._id}
+                title={note.title}
+                date={note.createdOn}
+                content={note.content}
+                tags={note.tags}
+                isPinned={note.isPinned}
+                background={note.background}
+                onEdit={() => handleEdit(note)}
+                onDelete={() => deleteNote(note._id)}
+                onPinNote={() => updateIsPinned(note)}
+                onClick={() => handleViewNote(note)}
+                onSelect={() => handleNoteSelection(note._id)}
+                isSelected={selectedNotes.includes(note._id)}
+              />
+            ))}
+
+            {openAddEditModal.isShown && (
+                <div className="fixed inset-0 flex items-center justify-center z-50">
+                <div className="absolute inset-0 bg-black opacity-50"></div>
+                <div className="bg-white p-5 rounded-lg shadow-lg z-10 w-[90%] sm:w-[80%] md:w-[60%] lg:w-[40%] max-h-3/4 overflow-hidden">
+                    <AddEditNotes
+                    type={openAddEditModal.type}
+                    noteData={openAddEditModal.data}
+                    onClose={() =>
+                        setOpenAddEditModal({ isShown: false, type: "add", data: null })
+                    }
+                    getAllNotes={getArchivedNotes}
+                    />
+                </div>
+                </div>
+            )}
+          </div>
+>>>>>>> 36cd9d9... Initial commit for edit modal
         ) : (
            <div>No archived notes</div>
         )}
