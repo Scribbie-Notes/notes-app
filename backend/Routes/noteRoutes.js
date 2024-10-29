@@ -15,7 +15,7 @@ import {
   getArchiveNotesController,
   searchNotesController,
   updateNotePinnedController,
-} from "../controllers/note.controllers.js";
+} from "../controllers/noteControllers.js";
 
 
 
