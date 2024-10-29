@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Navbar from '../Navbar';
 import axiosInstance from '../../utils/axiosInstance';
 import NoteCard from '../Cards/NoteCard';
-import { MdColorLens, MdDelete, MdOutlineUnarchive } from 'react-icons/md';
+import { MdColorLens, MdDelete, MdOutlinePushPin, MdOutlineUnarchive, MdPushPin } from 'react-icons/md';
 import toast from 'react-hot-toast';
 
 const ArchivedNotes = () => {
@@ -112,6 +112,34 @@ const ArchivedNotes = () => {
     }
   }; 
 
+  const handleBulkPin = async () => {
+    const isAllPinnedSelected = selectedNotes.some((selectedNote) =>
+      otherNotes.some((note) => note._id === selectedNote && !note.isPinned)
+    );
+
+    const updateData = {
+      noteIds: selectedNotes,
+      isPinned: isAllPinnedSelected // true to pin, false to unpin
+    };
+
+    try {
+      // Send one API call to pin/unpin the selected notes
+      await axiosInstance.put('http://localhost:5000/bulk-update-notes-pinned', updateData);
+
+      // Refresh notes and clear selection
+      getArchivedNotes();
+      setSelectedNotes([]);
+      toast.success(`Selected archived notes ${isAllPinnedSelected ? 'pinned' : 'unpinned'} successfully`);
+      setIsColorPickerOpen(false);
+    } catch (error) {
+      console.error("Error updating notes:", error);
+      toast.error(`Failed to ${isAllPinnedSelected ? 'pin' : 'unpin'} selected notes`);
+    }
+  };
+
+  const pinnedNotes = archivedNotes.filter((note) => note.isPinned === true);
+  const otherNotes = archivedNotes.filter((note) => note.isPinned !== true);
+
   return (
     <div>
       {selectedNotes.length > 0 ? (
@@ -139,6 +167,20 @@ const ArchivedNotes = () => {
                 </div>
               )}
             </div>
+            <button onClick={handleBulkPin} className="mr-2">
+              {
+                // Check if any selectedNote is found in the otherNotes array and is unpinned
+                selectedNotes.some((selectedNote) =>
+                  otherNotes.some(
+                    (note) => note._id === selectedNote && !note.isPinned
+                  )
+                ) ? (
+                  <MdOutlinePushPin className="text-2xl" /> // Outlined icon for unpinned notes
+                ) : (
+                  <MdPushPin className="text-2xl" />
+                ) // Filled icon for pinned notes
+              }
+            </button>
             <button onClick={handleBulkUnArchive}>
               <MdOutlineUnarchive className="text-2xl text-black" />
             </button>
@@ -153,35 +195,86 @@ const ArchivedNotes = () => {
       <div className="container h-auto p-6 pb-12 mx-auto">
         {isLoading ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 mt-4 transition-all">
-            {Array.from({ length: 9 }).map((_, i) => (
-              <div key={i} className="animate-pulse group min-h-[170px] bg-gray-200 transition-all duration-300 w-full border rounded-sm" />
-            ))}
+            {Array.from({ length: 9 }).map((item, i) => {
+              return (
+                <div
+                  key={i}
+                  className=" animate-pulse group min-h-[170px] bg-gray-200 transition-all duration-300 w-full border rounded-sm"
+                ></div>
+              );
+            })}
           </div>
         ) : archivedNotes.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 mt-2 transition-all">
-            {archivedNotes.map(note => (
-              <NoteCard
-                key={note._id}
-                id={note._id}
-                title={note.title}
-                date={note.createdOn}
-                content={note.content}
-                tags={note.tags}
-                isPinned={note.isPinned}
-                background={note.background}
-                onEdit={() => handleEdit(note)}
-                onDelete={() => deleteNote(note._id)}
-                onPinNote={() => updateIsPinned(note)}
-                onClick={() => handleViewNote(note)}
-                onSelect={() => handleNoteSelection(note._id)}
-                isSelected={selectedNotes.includes(note._id)}
-              />
-            ))}
-          </div>
+          <>
+            {pinnedNotes.length > 0 && (
+              <div>
+                <h1 className="font-bold pl-2">PINNED</h1>
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 mt-2 transition-all mb-3">
+                  {pinnedNotes.map((item) => (
+                    <NoteCard
+                      key={item._id}
+                      id={item._id}
+                      title={item.title}
+                      date={item.createdOn}
+                      content={item.content}
+                      tags={item.tags}
+                      isPinned={item.isPinned}
+
+                      background={item.background}
+                      onEdit={() => handleEdit(item)}
+                      onDelete={() => handleDeleteModalOpen(item._id)}
+                      onPinNote={() => {
+                        updateIsPinned(item);
+                      }}
+                      isSelected={selectedNotes.includes(item._id)}
+                      onSelect={handleNoteSelection}
+                      onClick={() => handleViewNote(item)}
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
+            {
+              pinnedNotes.length > 0 && <h1 className="font-bold pl-2">OTHERS</h1>
+            }
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 mt-2 transition-all">
+              {otherNotes.map((item) => (
+                <NoteCard
+                  key={item._id}
+                  id={item._id}
+                  title={item.title}
+                  date={item.createdOn}
+                  content={item.content}
+                  tags={item.tags}
+                  isPinned={item.isPinned}
+
+                  background={item.background}
+                  onEdit={() => handleEdit(item)}
+                  onDelete={() => handleDeleteModalOpen(item._id)}
+                  onPinNote={() => {
+                    updateIsPinned(item);
+                  }}
+                  onClick={() => handleViewNote(item)}
+                  onSelect={handleNoteSelection}
+                  isSelected={selectedNotes.includes(item._id)}
+                />
+              ))}
+            </div>
+          </>
         ) : (
-          <div className="flex justify-center items-center h-64">
-            <p className="text-gray-500 text-lg">No archived notes found</p>
-          </div>
+          <EmptyCard
+            imgSrc={isSearch ? noFound : addPost}
+            message={
+              isSearch ? (
+                <p className="text-xl">Oops! No notes found matching</p>
+              ) : (
+                <p className="text-xl">
+                  Start adding notes by clicking on the "+" button. Lets get
+                  started!
+                </p>
+              )
+            }
+          />
         )}
       </div>
     </div>
