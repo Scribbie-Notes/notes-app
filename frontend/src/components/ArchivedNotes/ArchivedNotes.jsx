@@ -67,12 +67,16 @@ const ArchivedNotes = () => {
 
   const handleBulkUnArchive = async () => {
     try {
-      await axiosInstance.put("/un-archive-notes", { noteIds: selectedNotes });
-      setSelectedNotes([]);
-      toast.success("Selected notes un-archived successfully");
-      setRefreshNotes(prev => !prev);
+      const noteIds = selectedNotes;
+      console.log(noteIds)
+      const response = await axiosInstance.put("/un-archive-notes", { noteIds: selectedNotes });
+      if (response.status === 200) {
+        toast.success("Selected notes un-archived successfully");
+        setSelectedNotes([]); // Clear selection after successful update
+        setRefreshNotes(prev => !prev); // Trigger refresh
+      }
     } catch (error) {
-      console.error("Error un-archiving notes:", error);
+      console.error("Error un-archiving notes:", error.message);
       toast.error("Failed to un-archive selected notes");
     }
   };
