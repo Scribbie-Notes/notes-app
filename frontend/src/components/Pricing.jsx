@@ -20,7 +20,7 @@ const Pricing = () => {
               and capital can unlock long-term value and drive economic growth.
             </p>
           </div>
-          <div className="mx-auto grid grid-cols-1 gap-8 md:grid-cols-3">
+          <div className="relative mx-auto grid grid-cols-1 gap-8 md:grid-cols-3" style={{zIndex: -1}}>
             <Card
               id="#1"
               title="Starter"
@@ -36,6 +36,7 @@ const Pricing = () => {
               ]}
             />
             <Card
+            id="#2"
               title="Company"
               description="Relevant for multiple users, extended & premium support."
               price="$99"
@@ -49,6 +50,7 @@ const Pricing = () => {
               ]}
             />
             <Card
+              id="#3"
               title="Enterprise"
               description="Best for large scale uses and extended redistribution rights."
               price="$499"
@@ -81,9 +83,9 @@ const Card = ({ id, title, description, price, period, features }) => {
           scale: 1.05,
         },
       }}
-      className="relative h-auto w-full max-w-sm shrink-0 overflow-hidden rounded-xl bg-gray-500 p-8 mb-[10]"
+      className="relative h-auto w-full max-w-sm shrink-0 overflow-hidden bg-gray-500 rounded-xl p-8 mb-[10]"
     >
-      <div className="relative z-10 text-white">
+      <div className="text-white z-30">
         <span className="mb-3 block w-fit rounded-full bg-white/30 px-3 py-0.5 text-sm font-light text-slate-800">
           {title}
         </span>
@@ -126,10 +128,13 @@ const Card = ({ id, title, description, price, period, features }) => {
             </li>
           ))}
         </ul>
-      </div>
-      <button className="absolute bottom-4 left-4 right-4 z-20 rounded border-2 border-white bg-white py-2 text-center font-mono font-black uppercase text-neutral-800 backdrop-blur transition-colors hover:bg-white/30 hover:text-white">
+        <div className=" rounded border-2 border-white bg-white py-2 text-center font-mono font-black uppercase text-neutral-800 backdrop-blur transition-colors hover:bg-white/30 hover:text-white">
         Get it now
-      </button>
+      </div>
+      </div>
+      {/* <button className="absolute bottom-4 left-4 right-4 z-20 rounded border-2 border-white bg-white py-2 text-center font-mono font-black uppercase text-neutral-800 backdrop-blur transition-colors hover:bg-white/30 hover:text-white">
+        Get it now
+      </button> */}
       <Background />
     </motion.div>
   );
@@ -143,7 +148,8 @@ const Background = () => {
       viewBox="0 0 320 384"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      className="absolute inset-0 z-0"
+      className="absolute inset-0"
+      style={{zIndex:-1}}
       variants={{
         hover: {
           scale: 1.5,

@@ -9,7 +9,12 @@ export default {
       colors: {
         primary: "#2b85ff",
         secondary: "#ef863e",
-      }
+      },
+      zIndex: {
+        '-1': '-1',
+        '-10': '-10',
+        '-20': '-20',
+      },
     },
   },
   plugins: [
