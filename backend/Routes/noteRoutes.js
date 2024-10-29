@@ -15,7 +15,8 @@ import {
   getArchiveNotesController,
   searchNotesController,
   updateNotePinnedController,
-} from "../controllers/note.controllers.js";
+  updateNotesBackgroundController,
+} from "../controllers/noteControllers.js";
 
 
 
@@ -40,7 +41,7 @@ noteRoutes.put(
   editNoteByIdController
 );
 
-noteRoutes.put("/update-notes-background", authenticationToken);
+noteRoutes.put("/update-notes-background", authenticationToken,updateNotesBackgroundController);
 
 noteRoutes.get("/get-all-notes", authenticationToken, getAllNotesController);
 
@@ -61,6 +62,7 @@ noteRoutes.put('/bulk-update-notes-pinned', bulkUpdateNotePinnedController);
 noteRoutes.put('/archive-notes',archiveNoteController);
 
 noteRoutes.get("/search-notes/", authenticationToken, searchNotesController);
+
 
 
 export default noteRoutes;
