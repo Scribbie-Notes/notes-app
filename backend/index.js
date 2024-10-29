@@ -5,7 +5,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 import cors from "cors";
 import userRoutes from "./Routes/user.routes.js";
-import noteRoutes from "./Routes/note.routes.js";
+import noteRoutes from "./Routes/noteRoutes.js";
 
 // Defined __filename and __dirname
 const __filename = fileURLToPath(import.meta.url);
