@@ -353,6 +353,26 @@ const searchNotesController=async (req, res) => {
   }
 }
 
+const unArchiveController = async (req,res) => {
+  const { noteIds } = req.body;
+  if (!Array.isArray(noteIds) || noteIds.length === 0) {
+  return res
+      .status(400)
+      .json({ message: "Invalid request, noteIds must be an array" });
+  }
+  try {
+  // Update the selected notes to set isArchived to true
+  await Note.updateMany(
+      { _id: { $in: noteIds }, deleted: false }, // Ensure the notes are not deleted
+      { $set: { isArchived: false } }
+  );
+
+  res.status(200).json({ message: "Notes archived successfully" });
+  } catch (error) {
+  console.error("Error archiving notes:", error);
+  res.status(500).json({ message: "Failed to archive notes" });
+  }
+}
 
 export {
   addNoteController,
@@ -365,5 +385,6 @@ export {
   updateNotePinnedController,
   bulkUpdateNotePinnedController,
   archiveNoteController,
-  searchNotesController
+  searchNotesController,
+  unArchiveController
 };
