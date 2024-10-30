@@ -22,17 +22,11 @@ import {
 import noteModel from "../models/noteModel.js";
 import mongoose from "mongoose";
 
-
-
 const noteRoutes = Router();
-
-
 
 // const upload = multer({ storage: storage });
 //upload multiple attachments files
 const uploadMultiple = multer({ storage: storage }).array("attachments", 10);
-
-
 
 noteRoutes.post(
   "/add-note",
@@ -41,10 +35,14 @@ noteRoutes.post(
   addNoteController
 );
 
+// Configure multer to not accept any files
+const upload_note = multer().none(); // This allows only non-file data
+
 noteRoutes.put(
   "/edit-note/:noteId",
-  authenticationToken,
-  editNoteByIdController
+  authenticationToken, // Ensure this middleware runs first
+  upload_note, // Use the updated multer configuration
+  editNoteByIdController // Your controller function
 );
 
 noteRoutes.put("/update-notes-background", authenticationToken,updateNotesBackgroundController);
