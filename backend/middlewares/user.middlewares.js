@@ -66,6 +66,7 @@ const createAccountMiddleware = async (req, res, next) => {
 };
 
 const authenticationToken = (req, res, next) => {
+  // console.log(req.headers)
   const token = req.headers["authorization"].split(" ")[1];
   // console.log("Authorization header:", token); // Log the token for debugging
 
