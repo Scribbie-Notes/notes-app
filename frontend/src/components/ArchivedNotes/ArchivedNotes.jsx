@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Navbar from '../Navbar';
 import axiosInstance from '../../utils/axiosInstance';
 import NoteCard from '../Cards/NoteCard';
-import { MdColorLens, MdOutlineUnarchive } from 'react-icons/md';
+import { MdColorLens, MdDelete, MdOutlineUnarchive } from 'react-icons/md';
 import toast from 'react-hot-toast';
 
 const ArchivedNotes = () => {
@@ -97,6 +97,25 @@ const ArchivedNotes = () => {
     setBackground(e.target.value);
   };
 
+  const handleBulkDelete = async () => {
+    try {
+      // Send selected note IDs via the data field, since Axios delete doesn't send req.body directly
+      await axiosInstance({
+        method: 'delete',
+        url: 'http://localhost:5000/delete-multiple-notes',
+        data: { noteIds: selectedNotes }, // Pass the noteIds in the data field
+      });
+
+      // After successful deletion, refresh the notes and reset selected notes
+      getArchivedNotes();
+      setSelectedNotes([]);
+      toast.success("Deleted Archived Notes successfully");
+    } catch (error) {
+      console.error("Error deleting notes:", error);
+      toast.error("Failed to delete selected notes");
+    }
+  }; 
+
   return (
     <div>
       {selectedNotes.length > 0 ? (
@@ -126,6 +145,9 @@ const ArchivedNotes = () => {
             </div>
             <button onClick={handleBulkUnArchive}>
               <MdOutlineUnarchive className="text-2xl text-black" />
+            </button>
+            <button onClick={handleBulkDelete}>
+              <MdDelete className="text-2xl  text-black" />
             </button>
           </div>
         </div>
