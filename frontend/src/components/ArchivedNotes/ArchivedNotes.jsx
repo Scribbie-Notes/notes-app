@@ -4,13 +4,9 @@ import axiosInstance from '../../utils/axiosInstance';
 import NoteCard from '../Cards/NoteCard';
 import { MdColorLens, MdDelete, MdOutlinePushPin, MdOutlineUnarchive, MdPushPin } from 'react-icons/md';
 import toast from 'react-hot-toast';
-<<<<<<< HEAD
-import EmptyCard from "../EmptyCard/EmptyCard"
 import axios from 'axios';
-=======
 import AddEditNotes from "../../pages/Home/AddEditNotes";
 
->>>>>>> 36cd9d9... Initial commit for edit modal
 const ArchivedNotes = () => {
   const user = JSON.parse(localStorage.getItem("user"));
   const [isLoading, setIsLoading] = useState(true);
@@ -266,64 +262,6 @@ const ArchivedNotes = () => {
             })}
           </div>
         ) : archivedNotes.length > 0 ? (
-<<<<<<< HEAD
-          <>
-            {pinnedNotes.length > 0 && (
-              <div>
-                <h1 className="font-bold pl-2">PINNED</h1>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 mt-2 transition-all mb-3">
-                  {pinnedNotes.map((item) => (
-                    <NoteCard
-                      key={item._id}
-                      id={item._id}
-                      title={item.title}
-                      date={item.createdOn}
-                      content={item.content}
-                      tags={item.tags}
-                      isPinned={item.isPinned}
-
-                      background={item.background}
-                      onEdit={() => handleEdit(item)}
-                      onDelete={() => handleDeleteModalOpen(item._id)}
-                      onPinNote={() => {
-                        updateIsPinned(item);
-                      }}
-                      isSelected={selectedNotes.includes(item._id)}
-                      onSelect={handleNoteSelection}
-                      onClick={() => handleViewNote(item)}
-                    />
-                  ))}
-                </div>
-              </div>
-            )}
-            {
-              pinnedNotes.length > 0 && <h1 className="font-bold pl-2">OTHERS</h1>
-            }
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 mt-2 transition-all">
-              {otherNotes.map((item) => (
-                <NoteCard
-                  key={item._id}
-                  id={item._id}
-                  title={item.title}
-                  date={item.createdOn}
-                  content={item.content}
-                  tags={item.tags}
-                  isPinned={item.isPinned}
-
-                  background={item.background}
-                  onEdit={() => handleEdit(item)}
-                  onDelete={() => handleDeleteModalOpen(item._id)}
-                  onPinNote={() => {
-                    updateIsPinned(item);
-                  }}
-                  onClick={() => handleViewNote(item)}
-                  onSelect={handleNoteSelection}
-                  isSelected={selectedNotes.includes(item._id)}
-                />
-              ))}
-            </div>
-          </>
-=======
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 mt-2 transition-all">
             {archivedNotes.map(note => (
               <NoteCard
@@ -361,7 +299,6 @@ const ArchivedNotes = () => {
                 </div>
             )}
           </div>
->>>>>>> 36cd9d9... Initial commit for edit modal
         ) : (
            <div>No archived notes</div>
         )}
