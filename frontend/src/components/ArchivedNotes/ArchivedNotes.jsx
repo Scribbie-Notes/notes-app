@@ -262,43 +262,62 @@ const ArchivedNotes = () => {
             })}
           </div>
         ) : archivedNotes.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 mt-2 transition-all">
-            {archivedNotes.map(note => (
-              <NoteCard
-                key={note._id}
-                id={note._id}
-                title={note.title}
-                date={note.createdOn}
-                content={note.content}
-                tags={note.tags}
-                isPinned={note.isPinned}
-                background={note.background}
-                onEdit={() => handleEdit(note)}
-                onDelete={() => deleteNote(note._id)}
-                onPinNote={() => updateIsPinned(note)}
-                onClick={() => handleViewNote(note)}
-                onSelect={() => handleNoteSelection(note._id)}
-                isSelected={selectedNotes.includes(note._id)}
-              />
-            ))}
+            <>
+            {pinnedNotes.length > 0 && (
+              <div>
+                <h1 className="font-bold pl-2">PINNED</h1>
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 mt-2 transition-all mb-3">
+                  {pinnedNotes.map((item) => (
+                    <NoteCard
+                      key={item._id}
+                      id={item._id}
+                      title={item.title}
+                      date={item.createdOn}
+                      content={item.content}
+                      tags={item.tags}
+                      isPinned={item.isPinned}
 
-            {openAddEditModal.isShown && (
-                <div className="fixed inset-0 flex items-center justify-center z-50">
-                <div className="absolute inset-0 bg-black opacity-50"></div>
-                <div className="bg-white p-5 rounded-lg shadow-lg z-10 w-[90%] sm:w-[80%] md:w-[60%] lg:w-[40%] max-h-3/4 overflow-hidden">
-                    <AddEditNotes
-                    type={openAddEditModal.type}
-                    noteData={openAddEditModal.data}
-                    onClose={() =>
-                        setOpenAddEditModal({ isShown: false, type: "add", data: null })
-                    }
-                    getAllNotes={getArchivedNotes}
-                    onUpdate={handleUpdateNote} // Add this line
+                      background={item.background}
+                      onEdit={() => handleEdit(item)}
+                      onDelete={() => handleDeleteModalOpen(item._id)}
+                      onPinNote={() => {
+                        updateIsPinned(item);
+                      }}
+                      isSelected={selectedNotes.includes(item._id)}
+                      onSelect={handleNoteSelection}
+                      onClick={() => handleViewNote(item)}
                     />
+                  ))}
                 </div>
-                </div>
+              </div>
             )}
-          </div>
+            {
+              pinnedNotes.length > 0 && <h1 className="font-bold pl-2">OTHERS</h1>
+            }
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 mt-2 transition-all">
+              {otherNotes.map((item) => (
+                <NoteCard
+                  key={item._id}
+                  id={item._id}
+                  title={item.title}
+                  date={item.createdOn}
+                  content={item.content}
+                  tags={item.tags}
+                  isPinned={item.isPinned}
+
+                  background={item.background}
+                  onEdit={() => handleEdit(item)}
+                  onDelete={() => handleDeleteModalOpen(item._id)}
+                  onPinNote={() => {
+                    updateIsPinned(item);
+                  }}
+                  onClick={() => handleViewNote(item)}
+                  onSelect={handleNoteSelection}
+                  isSelected={selectedNotes.includes(item._id)}
+                />
+              ))}
+            </div>
+          </>
         ) : (
            <div>No archived notes</div>
         )}
