@@ -1,5 +1,5 @@
 import Note from "../models/noteModel.js";
-import { HTTP_STATUS,MESSAGES,ERROR_MESSAGES } from "../utils/const.js";
+import { HTTP_STATUS, MESSAGES, ERROR_MESSAGES } from "../utils/const.js";
 
 const addNoteController = async (req, res) => {
   const { title, content, tags, background } = req.body;
@@ -215,13 +215,13 @@ const deleteMultipleNotesController = async (req, res) => {
 
   try {
     // Delete the notes that belong to the authenticated user and match the IDs
-    const result = await Note.deleteMany({
-      _id: { $in: noteIds },
-      userId: user._id, // Ensure notes belong to the authenticated user
-    });
+    const result = await Note.updateMany(
+      { _id: { $in: noteIds }, userId: user._id },
+      { $set: { deleted: true, deletedAt: new Date() } }
+    );
 
     // Handle case when no notes were deleted
-    if (result.deletedCount === 0) {
+    if (result.modifiedCount === 0) {
       return res.status(HTTP_STATUS.NOT_FOUND).json({
         error: true,
         message: ERROR_MESSAGES.NOTES_NOT_FOUND,
@@ -232,7 +232,7 @@ const deleteMultipleNotesController = async (req, res) => {
     return res.json({
       error: false,
       message: MESSAGES.NOTES_DELETED_SUCCESSFULLY,
-      deletedCount: result.deletedCount, // Return number of deleted notes
+      modifiedCount: result.modifiedCount, // Return number of deleted notes
     });
   } catch (error) {
     console.error("Error deleting notes:", error);
@@ -320,59 +320,97 @@ const archiveNoteController = async (req, res) => {
   }
 };
 
-const searchNotesController=async (req, res) => {
+const searchNotesController = async (req, res) => {
   const { user } = req.user;
   const { query } = req.query;
 
   if (!query) {
-      return res.status(HTTP_STATUS.BAD_REQUEST).json({
-          error: true,
-          message: ERROR_MESSAGES.PROVIDE_SEARCH_QUERY,
-      });
+    return res.status(HTTP_STATUS.BAD_REQUEST).json({
+      error: true,
+      message: ERROR_MESSAGES.PROVIDE_SEARCH_QUERY,
+    });
   }
 
   try {
-      const matchingNotes = await Note.find({
-          userId: user._id,
-          $or: [
-              { title: { $regex: new RegExp(query, "i") } },
-              { content: { $regex: new RegExp(query, "i") } },
-          ],
-      });
+    const matchingNotes = await Note.find({
+      userId: user._id,
+      $or: [
+        { title: { $regex: new RegExp(query, "i") } },
+        { content: { $regex: new RegExp(query, "i") } },
+      ],
+    });
 
-      return res.json({
-          error: false,
-          notes: matchingNotes,
-          message: MESSAGES.NOTES_FETCHED_SUCCESSFULLY,
-      });
+    return res.json({
+      error: false,
+      notes: matchingNotes,
+      message: MESSAGES.NOTES_FETCHED_SUCCESSFULLY,
+    });
   } catch (error) {
-      console.error("Error searching notes: ", error);
-      return res
-          .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
-          .json({ error: true, message: ERROR_MESSAGES.INTERNAL_SERVER_ERROR });
+    console.error("Error searching notes: ", error);
+    return res
+      .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
+      .json({ error: true, message: ERROR_MESSAGES.INTERNAL_SERVER_ERROR });
   }
-}
+};
 
-const unArchiveController = async (req,res) => {
+const unArchiveController = async (req, res) => {
   const { noteIds } = req.body;
   if (!Array.isArray(noteIds) || noteIds.length === 0) {
-  return res
+    return res
       .status(400)
       .json({ message: "Invalid request, noteIds must be an array" });
   }
   try {
-  // Update the selected notes to set isArchived to true
-  await Note.updateMany(
+    // Update the selected notes to set isArchived to true
+    await Note.updateMany(
       { _id: { $in: noteIds }, deleted: false }, // Ensure the notes are not deleted
       { $set: { isArchived: false } }
-  );
+    );
 
-  res.status(200).json({ message: "Notes archived successfully" });
+    res.status(200).json({ message: "Notes archived successfully" });
   } catch (error) {
-  console.error("Error archiving notes:", error);
-  res.status(500).json({ message: "Failed to archive notes" });
+    console.error("Error archiving notes:", error);
+    res.status(500).json({ message: "Failed to archive notes" });
   }
-}
+};
+
+const restoreDeletedNotesController = async (req, res) => {
+  const { noteIds } = req.body;
+  const { user } = req.user;
+  console.log(noteIds);
+  if (!noteIds || !Array.isArray(noteIds) || noteIds.length === 0) {
+    return res.status(HTTP_STATUS.BAD_REQUEST).json({
+      error: true,
+      message: ERROR_MESSAGES.PROVIDE_FIELD_TO_UPDATE,
+    });
+  }
+
+  try {
+    // Restore notes by setting `deleted` back to false
+    const result = await Note.updateMany(
+      { _id: { $in: noteIds }, userId: user._id },
+      { $set: { deleted: false, deletedAt: null } }
+    );
+
+    if (result.modifiedCount === 0) {
+      return res.status(HTTP_STATUS.NOT_FOUND).json({
+        error: true,
+        message: ERROR_MESSAGES.NOTES_NOT_FOUND,
+      });
+    }
+
+    return res.json({
+      error: false,
+      message: MESSAGES.NOTES_RESTORED_SUCCESSFULLY,
+      modifiedCount: result.modifiedCount,
+    });
+  } catch (error) {
+    console.error("Error restoring notes: ", error);
+    return res
+      .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
+      .json({ error: true, message: ERROR_MESSAGES.INTERNAL_SERVER_ERROR });
+  }
+};
 
 export {
   addNoteController,
@@ -386,5 +424,6 @@ export {
   bulkUpdateNotePinnedController,
   archiveNoteController,
   searchNotesController,
-  unArchiveController
+  unArchiveController,
+  restoreDeletedNotesController,
 };

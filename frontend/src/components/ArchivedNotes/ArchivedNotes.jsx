@@ -4,7 +4,8 @@ import axiosInstance from '../../utils/axiosInstance';
 import NoteCard from '../Cards/NoteCard';
 import { MdColorLens, MdDelete, MdOutlinePushPin, MdOutlineUnarchive, MdPushPin } from 'react-icons/md';
 import toast from 'react-hot-toast';
-
+import EmptyCard from "../EmptyCard/EmptyCard"
+import axios from 'axios';
 const ArchivedNotes = () => {
   const user = JSON.parse(localStorage.getItem("user"));
   const [isLoading, setIsLoading] = useState(true);
@@ -99,6 +100,8 @@ const ArchivedNotes = () => {
 
   const handleBulkDelete = async () => {
     try {
+      const deletedNotes = selectedNotes;
+      console.log(deletedNotes)
       // Send selected note IDs via the data field, since Axios delete doesn't send req.body directly
       await axiosInstance({
         method: 'delete',
@@ -109,7 +112,10 @@ const ArchivedNotes = () => {
       // After successful deletion, refresh the notes and reset selected notes
       getArchivedNotes();
       setSelectedNotes([]);
-      toast.success("Deleted Archived Notes successfully");
+      toast.success(<div>
+        Archived Notes deleted. <button className='bg-green-500 p-2 text-white rounded' onClick={() => undoDelete(deletedNotes)}>Undo</button>
+      </div>,
+      { autoClose: 5000 } );
     } catch (error) {
       console.error("Error deleting notes:", error);
       toast.error("Failed to delete selected notes");
@@ -143,6 +149,31 @@ const ArchivedNotes = () => {
 
   const pinnedNotes = archivedNotes.filter((note) => note.isPinned === true);
   const otherNotes = archivedNotes.filter((note) => note.isPinned !== true);
+
+  const undoDelete = async (deletedNotes) => {
+    try {
+      console.log(deletedNotes)
+      const accessToken = localStorage.getItem("token");
+      // Send a request to restore the deleted notes
+      const response = await axios.put('http://localhost:5000/undo-delete-notes', {
+        noteIds: deletedNotes
+      },{
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}` // Replace `yourToken` with your actual token variable
+        }
+      });
+
+
+      console.log(response)
+      // Refresh the notes list
+      getArchivedNotes();
+      toast.success("Undo successful. Notes restored.");
+    } catch (error) {
+      console.error("Error restoring notes:", error.message);
+      toast.error("Failed to undo delete");
+    }
+  };
 
   return (
     <div>
@@ -266,19 +297,7 @@ const ArchivedNotes = () => {
             </div>
           </>
         ) : (
-          <EmptyCard
-            imgSrc={isSearch ? noFound : addPost}
-            message={
-              isSearch ? (
-                <p className="text-xl">Oops! No notes found matching</p>
-              ) : (
-                <p className="text-xl">
-                  Start adding notes by clicking on the "+" button. Lets get
-                  started!
-                </p>
-              )
-            }
-          />
+           <div>No archived notes</div>
         )}
       </div>
     </div>
