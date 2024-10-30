@@ -84,6 +84,16 @@ const SlideTabs = ({ theme }) => {
       >
         Contact Us
       </Tab>
+      <Tab
+        theme={theme}
+        setPosition={setPosition}
+        to="/calendar"
+        currentPathName={currentPathName}
+        hoveredTab={hoveredTab}
+        setHoveredTab={setHoveredTab}
+      >
+        Calendar
+      </Tab>
       <Cursor position={position} theme={theme} />
     </ul>
   );
