@@ -6,6 +6,8 @@ import { fileURLToPath } from "url";
 import cors from "cors";
 import userRoutes from "./Routes/user.routes.js";
 import noteRoutes from "./Routes/noteRoutes.js";
+import eventRoutes from "./Routes/eventRoutes.js";
+
 
 // Defined __filename and __dirname
 const __filename = fileURLToPath(import.meta.url);
@@ -62,6 +64,7 @@ app.use(
 //new better and structured routes
 app.use(userRoutes);
 app.use(noteRoutes);
+app.use(eventRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
