@@ -8,23 +8,29 @@ import toast from 'react-hot-toast';// Make sure you have react-toastify install
 const Calendar = () => {
   const user = JSON.parse(localStorage.getItem("user"));
   const [events, setEvents] = useState([]);
-  const [newEvent, setNewEvent] = useState({ date: "", title: "", color: "" });
+  const [newEvent, setNewEvent] = useState({ date: "", title: "", color: "gray" });
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [selectedEvent, setSelectedEvent] = useState(null); // State to hold the selected event
   const [isModalOpen, setIsModalOpen] = useState(false); // State to control modal visibility
 
   useEffect(() => {
     const fetchEvents = async () => {
-      const response = await axiosInstance.get("/events");
+      const response = await axiosInstance.get("/get/events");
       setEvents(response.data);
     };
     fetchEvents();
   }, []);
 
   const handleAddEvent = async () => {
-    const response = await axiosInstance.post("/events", newEvent);
+
+    if (!newEvent.date || !newEvent.title) {
+        toast.error("Please add date and title of event");
+        return;
+    }
+
+    const response = await axiosInstance.post("/add/event", newEvent);
     setEvents([...events, response.data]);
-    setNewEvent({ date: "", title: "", color: "" }); // Reset form
+    setNewEvent({ date: "", title: "", color: "gray" }); // Reset form
   };
 
   const handleEventClick = (event) => {
@@ -34,7 +40,7 @@ const Calendar = () => {
 
   const handleDeleteEvent = async (eventId) => {
     try {
-      await axiosInstance.delete(`/events/${eventId}`); // Update this based on your API
+      await axiosInstance.delete(`/delete/event/${eventId}`); // Update this based on your API
       setEvents(events.filter(event => event._id !== eventId));
       toast.success("Event deleted successfully");
       setIsModalOpen(false); // Close the modal after deletion
