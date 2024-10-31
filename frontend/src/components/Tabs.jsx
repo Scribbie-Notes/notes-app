@@ -30,7 +30,7 @@ const SlideTabs = ({ theme }) => {
         }));
         setHoveredTab(null);
       }}
-      className={`relative mx-auto flex w-fit p-1 flex-col md:flex-row gap-7 ${
+      className={`relative mx-auto flex w-fit p-1 flex-col md:flex-row gap-5 ${
         theme === "dark" ? "bg-black" : "bg-white"
       }`}
     >
