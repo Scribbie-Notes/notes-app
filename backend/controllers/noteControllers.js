@@ -41,45 +41,57 @@ const addNoteController = async (req, res) => {
 };
 
 const editNoteByIdController = async (req, res) => {
-  const { noteId } = req.params;
-  const { title, content, tags, isPinned, background } = req.body;
-  const { user } = req.user;
+    const { noteId } = req.params;
+    const { title, content, tags, isPinned, background } = req.body;
+    const { user } = req.user;
+    const tagsArray = JSON.parse(tags);
 
-  if (!title && !content && !tags && isPinned === undefined && !background) {
-    return res.status(HTTP_STATUS.BAD_REQUEST).json({
-      error: true,
-      message: ERROR_MESSAGES.PROVIDE_FIELD_TO_UPDATE,
-    });
-  }
-
-  try {
-    const note = await Note.findOne({ _id: noteId, userId: user._id });
-
-    if (!note) {
-      return res
-        .status(HTTP_STATUS.NOT_FOUND)
-        .json({ error: true, message: ERROR_MESSAGES.NOTE_NOT_FOUND });
+    // Validate input
+    const isUpdateRequired = title || content || tags || isPinned !== undefined || background;
+    if (!isUpdateRequired) {
+      return res.status(HTTP_STATUS.BAD_REQUEST).json({
+        error: true,
+        message: ERROR_MESSAGES.PROVIDE_FIELD_TO_UPDATE,
+      });
     }
 
-    if (title) note.title = title;
-    if (content) note.content = content;
-    if (tags) note.tags = tags;
-    if (isPinned !== undefined) note.isPinned = isPinned;
-    if (background) note.background = background;
+    try {
+      // Find the note by ID and user ID
+      const note = await Note.findOne({ _id: noteId, userId: user._id });
 
-    await note.save();
+      // Check if the note exists
+      if (!note) {
+        return res.status(HTTP_STATUS.NOT_FOUND).json({
+          error: true,
+          message: ERROR_MESSAGES.NOTE_NOT_FOUND,
+        });
+      }
 
-    return res.json({
-      error: false,
-      note,
-      message: MESSAGES.NOTE_UPDATED_SUCCESSFULLY,
-    });
-  } catch (error) {
-    console.error("Error editing note: ", error);
-    return res
-      .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
-      .json({ error: true, message: ERROR_MESSAGES.INTERNAL_SERVER_ERROR });
-  }
+      // Update fields conditionally
+      const updates = {};
+      if (title) updates.title = title;
+      if (content) updates.content = content;
+      if (tags) updates.tags = tagsArray;
+      if (isPinned !== undefined) updates.isPinned = isPinned;
+      if (background) updates.background = background;
+
+      Object.assign(note, updates); // Apply updates
+
+      // Save the updated note
+      await note.save();
+
+      return res.status(200).json({
+        error: false,
+        note,
+        message: MESSAGES.NOTE_UPDATED_SUCCESSFULLY,
+      });
+    } catch (error) {
+      console.error("Error editing note:", error);
+      return res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({
+        error: true,
+        message: ERROR_MESSAGES.INTERNAL_SERVER_ERROR,
+      });
+    }
 };
 
 const updateNotesBackgroundController = async (req, res) => {

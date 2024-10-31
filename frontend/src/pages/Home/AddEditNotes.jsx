@@ -180,6 +180,8 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
       formData.append("content", content);
       formData.append("tags", JSON.stringify(tags));
       formData.append("background", background);
+      formData.append("isPinned", isPinned);
+
       attachments.forEach((file) => {
         formData.append("attachments", file);
       });

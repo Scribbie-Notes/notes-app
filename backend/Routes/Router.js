@@ -258,7 +258,7 @@ router.post("/login", loginLimiter, async (req, res) => {
   //     .json({ message: ERROR_MESSAGES.EMAIL_NOT_VERIFIED });
   // }
 
-  const accessToken = jwt.sign({ user: userInfo }, "Ayush", {
+  const accessToken = jwt.sign({ user: userInfo }, ACCESS_TOKEN_SECRET, {
     expiresIn: "36000m",
   });
 
