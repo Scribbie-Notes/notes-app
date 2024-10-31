@@ -182,21 +182,6 @@ const ArchivedNotes = () => {
     setOpenAddEditModal({ isShown: true, type: "edit", data: noteDetails });
   };
 
-  const handleUpdateNote = async (noteId, updatedData) => {
-    console.log(noteId, updatedData);
-    /*
-    try {
-      const response = await axiosInstance.put(`/update-note/${noteId}`, updatedData);
-      if (response.data && !response.data.error) {
-        toast.success("Note updated successfully");
-        setRefreshNotes(prev => !prev); // Refresh notes
-      }
-    } catch (error) {
-      console.error("Error updating note:", error);
-      toast.error("Failed to update note");
-    }*/
-  };
-
   return (
     <div>
       {selectedNotes.length > 0 ? (
