@@ -104,14 +104,14 @@ const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
         </div>
       </Link>
 
-      <div className="flex items-center gap-x-10">
-        <div className="md:block hidden">
+      <div className="flex items-center gap-x-5">
+        <div className="xl:block hidden">
           <SlideTabsExample theme={theme} />
         </div>
 
         {/* Main navigation for larger screens */}
         <div
-          className={`hidden md:flex flex-grow justify-center mr-20 ${
+          className={`hidden md:flex flex-grow justify-center  ${
             userInfo && !hideSearchBarPaths.includes(location.pathname)
               ? ""
               : "hidden"
@@ -127,7 +127,7 @@ const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
         </div>
 
         {/* Toggle theme and profile/login/signup */}
-        <div className="hidden md:flex gap-x-5 items-center">
+        <div className=" flex gap-x-3 items-center">
           <button
             onClick={toggleTheme}
             className={`flex items-center gap-2 p-3 rounded-full transition-colors duration-300  ${
@@ -176,7 +176,7 @@ const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
         </div>
         {/* Hamburger icon for small screens */}
         <button
-          className="block md:hidden text-xl"
+          className="block xl:hidden text-xl"
           onClick={toggleMenu}
           aria-label="Toggle menu"
         >
@@ -186,15 +186,15 @@ const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
 
       {/* Dropdown menu for mobile */}
       {isMenuOpen && (
-        <div className="absolute top-14 left-0 w-full bg-white shadow-lg z-10 p-4 flex flex-col md:hidden gap-3">
-          <div className="flex items-center gap-x-10  justify-center">
+        <div className="absolute top-14 left-0 w-full bg-white shadow-lg z-50 p-4 flex flex-col md:hidden gap-3">
+          <div className="flex flex-col  gap-x-10">
             <SlideTabsExample theme={theme} />
 
             {/* Hamburger icon for small screens */}
 
             {/* Main navigation for larger screens */}
             <div
-              className={`hidden md:flex flex-grow justify-center mr-20 ${
+              className={`flex md:hidden flex-grow justify-center  ${
                 userInfo && !hideSearchBarPaths.includes(location.pathname)
                   ? ""
                   : "hidden"
@@ -210,79 +210,9 @@ const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
             </div>
 
             {/* Toggle theme and profile/login/signup */}
-            <div className="hidden md:flex gap-x-5 items-center">
-              <button
-                onClick={toggleTheme}
-                className={`flex items-center gap-2 p-3 rounded-full transition-colors duration-300 ${
-                  theme === "dark"
-                    ? "bg-gray-800 text-white"
-                    : "bg-gray-200 text-gray-800"
-                }`}
-              >
-                {theme === "dark" ? (
-                  <FiMoon className="text-lg" />
-                ) : (
-                  <FiSun className="text-lg" />
-                )}
-              </button>
-
-              {userInfo ? (
-                <div ref={profileRef}>
-                  <ProfileInfo userInfo={userInfo} onLogout={onLogout} />
-                </div>
-              ) : (
-                <>
-                  {location.pathname !== "/login" && (
-                    <button
-                      ref={loginButtonRef}
-                      onClick={() => navigate("/login")}
-                      className={`pr-3 transition ${
-                        theme === "dark"
-                          ? "text-white hover:text-gray-300"
-                          : "text-gray-700 hover:text-gray-700/75"
-                      }`}
-                    >
-                      Login
-                    </button>
-                  )}
-                  {location.pathname !== "/signup" && (
-                    <button
-                      ref={signupButtonRef}
-                      onClick={() => navigate("/signup")}
-                      className="text-zinc-200 bg-black rounded-md py-2 px-3 transition hover:text-black hover:bg-zinc-200"
-                    >
-                      Signup
-                    </button>
-                  )}
-                </>
-              )}
-            </div>
+            
           </div>
-          <button
-            onClick={toggleTheme}
-            className="mt-4 mb-2 flex justify-center items-center gap-3"
-          >
-            {theme === "dark" ? <FiSun /> : <FiMoon />}
-            Toggle Theme
-          </button>
-          {userInfo ? (
-            <div className="flex justify-center">
-              <ProfileInfo userInfo={userInfo} onLogout={onLogout} />
-            </div>
-          ) : (
-            <>
-              {location.pathname !== "/login" && (
-                <button onClick={() => navigate("/login")} className="mt-2">
-                  Login
-                </button>
-              )}
-              {location.pathname !== "/signup" && (
-                <button onClick={() => navigate("/signup")} className="mt-2">
-                  Signup
-                </button>
-              )}
-            </>
-          )}
+          
         </div>
       )}
     </div>

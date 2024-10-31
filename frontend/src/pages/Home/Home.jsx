@@ -428,7 +428,7 @@ const debouncedSearch = debounce(onSearchNote, 300);
         />
       )}
 
-      <div className="container h-auto p-6 pb-12 mx-auto">
+      <div className="container h-auto p-6 pb-12 mx-auto relative" style={{zIndex:-1}}>
         {isLoading ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 mt-4 transition-all">
             {Array.from({ length: 9 }).map((item, i) => {
