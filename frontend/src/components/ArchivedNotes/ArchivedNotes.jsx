@@ -317,6 +317,21 @@ const ArchivedNotes = () => {
                 />
               ))}
             </div>
+            {openAddEditModal.isShown && (
+                <div className="fixed inset-0 flex items-center justify-center z-50">
+                    <div className="absolute inset-0 bg-black opacity-50"></div>
+                    <div className="bg-white p-5 rounded-lg shadow-lg z-10 w-[90%] sm:w-[80%] md:w-[60%] lg:w-[40%] max-h-3/4 overflow-hidden">
+                        <AddEditNotes
+                        type={openAddEditModal.type}
+                        noteData={openAddEditModal.data}
+                        onClose={() =>
+                            setOpenAddEditModal({ isShown: false, type: "add", data: null })
+                        }
+                            getAllNotes={getArchivedNotes}
+                        />
+                    </div>
+                </div>
+            )}
           </>
         ) : (
            <div>No archived notes</div>
