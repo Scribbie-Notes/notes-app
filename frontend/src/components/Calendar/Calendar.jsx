@@ -117,7 +117,7 @@ const Calendar = () => {
                       style={{ backgroundColor: event.color }}
                       onClick={() => handleEventClick(event)} // Open modal on click
                     >
-                      <h4>{event.title}</h4>
+                      <h4 className="break-words">{event.title}</h4>
                     </div>
                   ))}
               </div>
