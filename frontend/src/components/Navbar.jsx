@@ -104,14 +104,14 @@ const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
         </div>
       </Link>
 
-      <div className="flex items-center gap-x-5">
+      <div className="flex items-center gap-x-10">
         <div className="md:block hidden">
           <SlideTabsExample theme={theme} />
         </div>
 
         {/* Main navigation for larger screens */}
         <div
-          className={`hidden md:flex flex-grow justify-center ${
+          className={`hidden md:flex flex-grow justify-center mr-20 ${
             userInfo && !hideSearchBarPaths.includes(location.pathname)
               ? ""
               : "hidden"
@@ -127,7 +127,7 @@ const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
         </div>
 
         {/* Toggle theme and profile/login/signup */}
-        <div className="hidden md:flex gap-x-2 items-center">
+        <div className="hidden md:flex gap-x-5 items-center">
           <button
             onClick={toggleTheme}
             className={`flex items-center gap-2 p-3 rounded-full transition-colors duration-300  ${
