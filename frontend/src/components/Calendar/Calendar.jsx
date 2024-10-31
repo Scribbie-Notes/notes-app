@@ -2,13 +2,16 @@
 import React, { useState, useEffect } from "react";
 import axiosInstance from "../../utils/axiosInstance";
 import Navbar from "../Navbar";
-// import axios from './axiosInstance'; // Adjust the import based on your structure
+import Modal from "../Modal"; // Import the Modal component
+import toast from 'react-hot-toast';// Make sure you have react-toastify installed
 
 const Calendar = () => {
   const user = JSON.parse(localStorage.getItem("user"));
   const [events, setEvents] = useState([]);
   const [newEvent, setNewEvent] = useState({ date: "", title: "", color: "" });
   const [currentMonth, setCurrentMonth] = useState(new Date());
+  const [selectedEvent, setSelectedEvent] = useState(null); // State to hold the selected event
+  const [isModalOpen, setIsModalOpen] = useState(false); // State to control modal visibility
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -19,34 +22,37 @@ const Calendar = () => {
   }, []);
 
   const handleAddEvent = async () => {
-    console.log(newEvent);
     const response = await axiosInstance.post("/events", newEvent);
     setEvents([...events, response.data]);
     setNewEvent({ date: "", title: "", color: "" }); // Reset form
   };
 
+  const handleEventClick = (event) => {
+    setSelectedEvent(event);
+    setIsModalOpen(true);
+  };
+
+  const handleDeleteEvent = async (eventId) => {
+    try {
+      await axiosInstance.delete(`/events/${eventId}`); // Update this based on your API
+      setEvents(events.filter(event => event._id !== eventId));
+      toast.success("Event deleted successfully");
+      setIsModalOpen(false); // Close the modal after deletion
+    } catch (error) {
+      toast.error("Error deleting event");
+    }
+  };
+
   const handlePrevMonth = () => {
-    setCurrentMonth(
-      (prev) => new Date(prev.getFullYear(), prev.getMonth() - 1)
-    );
+    setCurrentMonth((prev) => new Date(prev.getFullYear(), prev.getMonth() - 1));
   };
 
   const handleNextMonth = () => {
-    setCurrentMonth(
-      (prev) => new Date(prev.getFullYear(), prev.getMonth() + 1)
-    );
+    setCurrentMonth((prev) => new Date(prev.getFullYear(), prev.getMonth() + 1));
   };
 
-  const daysInMonth = new Date(
-    currentMonth.getFullYear(),
-    currentMonth.getMonth() + 1,
-    0
-  ).getDate();
-  const startDay = new Date(
-    currentMonth.getFullYear(),
-    currentMonth.getMonth(),
-    1
-  ).getDay();
+  const daysInMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 0).getDate();
+  const startDay = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), 1).getDay();
 
   return (
     <div>
@@ -64,44 +70,29 @@ const Calendar = () => {
             type="text"
             placeholder="Event Title"
             value={newEvent.title}
-            onChange={(e) =>
-              setNewEvent({ ...newEvent, title: e.target.value })
-            }
+            onChange={(e) => setNewEvent({ ...newEvent, title: e.target.value })}
             className="border p-1 mb-2 w-full"
           />
           <input
             type="color"
             value={newEvent.color}
-            onChange={(e) =>
-              setNewEvent({ ...newEvent, color: e.target.value })
-            }
+            onChange={(e) => setNewEvent({ ...newEvent, color: e.target.value })}
             className="mb-2"
           />
-
-          <button
-            onClick={handleAddEvent}
-            className="bg-blue-500 text-white p-2 w-full"
-          >
+          <button onClick={handleAddEvent} className="bg-blue-500 text-white p-2 w-full">
             Add Event
           </button>
         </div>
 
         <div className="w-2/3 p-4">
           <div className="flex justify-between items-center mb-4">
-            <button
-              onClick={handlePrevMonth}
-              className="bg-gray-300 p-2 rounded"
-            >
+            <button onClick={handlePrevMonth} className="bg-gray-300 p-2 rounded">
               Prev
             </button>
             <h2 className="text-xl">
-              {currentMonth.toLocaleString("default", { month: "long" })}{" "}
-              {currentMonth.getFullYear()}
+              {currentMonth.toLocaleString("default", { month: "long" })} {currentMonth.getFullYear()}
             </h2>
-            <button
-              onClick={handleNextMonth}
-              className="bg-gray-300 p-2 rounded"
-            >
+            <button onClick={handleNextMonth} className="bg-gray-300 p-2 rounded">
               Next
             </button>
           </div>
@@ -117,14 +108,14 @@ const Calendar = () => {
                   .filter(
                     (event) =>
                       new Date(event.date).getDate() === i + 1 &&
-                      new Date(event.date).getMonth() ===
-                        currentMonth.getMonth()
+                      new Date(event.date).getMonth() === currentMonth.getMonth()
                   )
                   .map((event) => (
                     <div
                       key={event._id}
-                      className="p-1 text-center mb-1"
+                      className="p-1 text-center mb-1 cursor-pointer"
                       style={{ backgroundColor: event.color }}
+                      onClick={() => handleEventClick(event)} // Open modal on click
                     >
                       <h4>{event.title}</h4>
                     </div>
@@ -134,6 +125,14 @@ const Calendar = () => {
           </div>
         </div>
       </div>
+
+      {/* Modal for event details */}
+      <Modal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        event={selectedEvent}
+        onDelete={handleDeleteEvent}
+      />
     </div>
   );
 };
