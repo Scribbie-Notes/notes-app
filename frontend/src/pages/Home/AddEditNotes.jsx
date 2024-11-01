@@ -84,6 +84,7 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
       setBackground(noteData.background || "#ffffff");
       setPhotos(noteData.photos || []);
       setVideos(noteData.videos || []);
+      setIsPinned(noteData.isPinned || false);
     }
   }, [type, noteData]);
 
@@ -180,15 +181,14 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
       formData.append("content", content);
       formData.append("tags", JSON.stringify(tags));
       formData.append("background", background);
-      formData.append("isPinned", isPinned);
-
-      attachments.forEach((file) => {
+      formData.append('isPinned', isPinned);
+      attachments?.forEach((file) => {
         formData.append("attachments", file);
       });
-      photos.forEach((photo) => {
+      photos?.forEach((photo) => {
         formData.append("photos", photo);
       });
-      videos.forEach((video) => {
+      videos?.forEach((video) => {
         formData.append("videos", video);
       });
 
