@@ -28,6 +28,7 @@ import Preloader from "./components/Preloader";
 import VerifyEmail from "./pages/ForgotPassword/VerifyEmail";
 import VerifyOtp from "./pages/ForgotPassword/VerifyOtp";
 import NewPassword from "./pages/ForgotPassword/NewPassword";
+import Calendar from "./components/Calendar/Calendar";
 
 // currently this component is hide
 // import Navbar from './components/Navbar';
@@ -84,6 +85,7 @@ const App = () => {
           <Route path="/about" exact element={<About />} />
           <Route path="/my-profile" exact element={<ProfilePage />} />
           <Route path="/archived-notes" exact element={<ArchivedNotes />} />
+          <Route path="/calendar" exact element={<Calendar />} />
           {/* <Route path="/404" exact element={<ErrorPage/>} /> */}
         </Routes>
       )}
@@ -94,7 +96,6 @@ const App = () => {
 const AppWithRouter = () => (
   <Router>
     <App />
-    
   </Router>
 );
 

@@ -25,6 +25,7 @@ import NoDataImg from "../../assets/images/no-data.svg";
 import toast from "react-hot-toast";
 import noFound from "../../assets/images/noFound.svg";
 import addPost from "../../assets/images/addPost.svg";
+import axios from 'axios';
 
 const Home = () => {
   const [openAddEditModal, setOpenAddEditModal] = useState({
@@ -164,8 +165,9 @@ const Home = () => {
       const response = await axiosInstance.get("http://localhost:5000/search-notes", { params: { query } });
       if (response.data && response.data.notes) {
         setIsSearch(true);
-        setAllNotes(filteredNotes);
+        setAllNotes(response.data.notes);
       }
+      // console.log(response);
     } catch (error) {
       console.log("Error while searching notes");
     }
@@ -287,6 +289,7 @@ const debouncedSearch = debounce(onSearchNote, 300);
 
   const handleBulkDelete = async () => {
     try {
+      const deletedNotes = selectedNotes;
       // Send selected note IDs via the data field, since Axios delete doesn't send req.body directly
       await axiosInstance({
         method: 'delete',
@@ -297,7 +300,10 @@ const debouncedSearch = debounce(onSearchNote, 300);
       // After successful deletion, refresh the notes and reset selected notes
       getAllNotes();
       setSelectedNotes([]);
-      toast.success("Deleted Notes successfully");
+      toast.success(<div>
+        Notes deleted. <button className='bg-green-500 p-2 text-white rounded' onClick={() => undoDelete(deletedNotes)}>Undo</button>
+      </div>,
+      { autoClose: 5000 } );
     } catch (error) {
       console.error("Error deleting notes:", error);
       toast.error("Failed to delete selected notes");
@@ -331,6 +337,31 @@ const debouncedSearch = debounce(onSearchNote, 300);
   const otherNotes = allNotes.filter((note) => note.isPinned !== true);
   // console.log('pinnedNotes',pinnedNotes)
   // console.log('otherNotes',otherNotes)
+
+  const undoDelete = async (deletedNotes) => {
+    try {
+      console.log(deletedNotes)
+      const accessToken = localStorage.getItem("token");
+      // Send a request to restore the deleted notes
+      const response = await axios.put('http://localhost:5000/undo-delete-notes', {
+        noteIds: deletedNotes
+      },{
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}` // Replace `yourToken` with your actual token variable
+        }
+      });
+
+
+      console.log(response)
+      // Refresh the notes list
+      getAllNotes();
+      toast.success("Undo successful. Notes restored.");
+    } catch (error) {
+      console.error("Error restoring notes:", error.message);
+      toast.error("Failed to undo delete");
+    }
+  };
 
   console.log(import.meta.env.VITE_BACKEND_URL)
   return (
@@ -397,7 +428,7 @@ const debouncedSearch = debounce(onSearchNote, 300);
         />
       )}
 
-      <div className="container h-auto p-6 pb-12 mx-auto">
+      <div className="container h-auto p-6 pb-12 mx-auto relative" style={{zIndex:-1}}>
         {isLoading ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 mt-4 transition-all">
             {Array.from({ length: 9 }).map((item, i) => {

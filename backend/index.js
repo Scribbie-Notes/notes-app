@@ -1,10 +1,21 @@
-const express = require("express");
-const mongoose = require("mongoose");
-const dotenv = require("dotenv");
-const path = require("path");
-const cors = require('cors');
+import express from "express";
+import mongoose from "mongoose";
+import dotenv from "dotenv";
+import path from "path";
+import { fileURLToPath } from "url";
+import cors from "cors";
+import userRoutes from "./Routes/user.routes.js";
+import noteRoutes from "./Routes/noteRoutes.js";
+import eventRoutes from "./Routes/eventRoutes.js";
+
+
+// Defined __filename and __dirname
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// const Router = require("./Routes/Router");
+
 const app = express();
-const Router = require('./Routes/Router');
 
 app.use(express.json());
 
@@ -14,6 +25,7 @@ const envPath =
 dotenv.config({ path: path.resolve(__dirname, envPath) });
 
 const { MONGO_URI } = process.env;
+console.log(MONGO_URI);
 
 // Log the MongoDB URI to verify it's loaded
 console.log("MongoDB URI:", MONGO_URI);
@@ -49,12 +61,18 @@ app.use(
   }
 })();
 
-// All the routes are available here
-app.use('/', Router);
+//new better and structured routes
+app.use(userRoutes);
+app.use(noteRoutes);
+app.use(eventRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
 
-module.exports = app;
+
+export default app;
+
+
+

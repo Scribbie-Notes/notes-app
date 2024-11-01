@@ -7,6 +7,7 @@ import AddAttachmentsInput from "../../components/Input/AddAttachmentInput";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { FaMicrophone, FaMicrophoneSlash } from "react-icons/fa";
+const apiBaseUrl = import.meta.env.VITE_BACKEND_URL;
 
 const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
   const [title, setTitle] = useState("");
@@ -18,6 +19,7 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
   const [photos, setPhotos] = useState([]);
   const [videos, setVideos] = useState([]);
   const [isListening, setIsListening] = useState(false);
+  const [isPinned, setIsPinned] = useState(false);
   const [isSpeechSupported, setIsSpeechSupported] = useState(true);
   const MAX_TITLE_LENGTH = 60;
   const MAX_CONTENT_LENGTH = 2500;
@@ -82,6 +84,7 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
       setBackground(noteData.background || "#ffffff");
       setPhotos(noteData.photos || []);
       setVideos(noteData.videos || []);
+      setIsPinned(noteData.isPinned || false);
     }
   }, [type, noteData]);
 
@@ -133,6 +136,8 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
     formData.append("title", title);
     formData.append("content", content);
     formData.append("background", background);
+    formData.append("isPinned", isPinned);
+
     tags.forEach((tag) => {
       formData.append("tags[]", tag);
     });
@@ -147,7 +152,7 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
     });
 
     try {
-      const response = await axiosInstance.post("http://localhost:5000/add-note", formData, {
+      const response = await axiosInstance.post(`${apiBaseUrl}/add-note`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -176,13 +181,14 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
       formData.append("content", content);
       formData.append("tags", JSON.stringify(tags));
       formData.append("background", background);
-      attachments.forEach((file) => {
+      formData.append('isPinned', isPinned);
+      attachments?.forEach((file) => {
         formData.append("attachments", file);
       });
-      photos.forEach((photo) => {
+      photos?.forEach((photo) => {
         formData.append("photos", photo);
       });
-      videos.forEach((video) => {
+      videos?.forEach((video) => {
         formData.append("videos", video);
       });
 

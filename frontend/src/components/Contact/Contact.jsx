@@ -30,20 +30,20 @@ const Contact = () => {
       toast.error("All Fields are required:)");
       return;
     }
-    const id = toast.loading("Loading..");
-    const response = await axiosInstance.post("/contact", {
-      data,
-    });
+    //const id = toast.loading("Loading..");
+    const response = await axiosInstance.post("/contact", data);
 
     // handle successful registration response
     if (response.data.error) {
       toast.error("Failed submission");
       return;
     }
+
     console.log("CONTACT US RESPONSE---");
     console.log(response);
-    toast.dismiss(id);
+    //toast.dismiss(id);
     toast.success("Will connect to you soon");
+
     setData({ first_name: "", last_name: "", user_email: "", message: "" });
   };
 

@@ -30,7 +30,7 @@ const SlideTabs = ({ theme }) => {
         }));
         setHoveredTab(null);
       }}
-      className={`relative mx-auto flex w-fit p-1 flex-col md:flex-row gap-7 ${
+      className={`relative mx-auto flex w-fit p-1 flex-col md:flex-row gap-5 ${
         theme === "dark" ? "bg-black" : "bg-white"
       }`}
     >
@@ -83,6 +83,16 @@ const SlideTabs = ({ theme }) => {
         setHoveredTab={setHoveredTab}
       >
         Contact Us
+      </Tab>
+      <Tab
+        theme={theme}
+        setPosition={setPosition}
+        to="/calendar"
+        currentPathName={currentPathName}
+        hoveredTab={hoveredTab}
+        setHoveredTab={setHoveredTab}
+      >
+        Calendar
       </Tab>
       <Cursor position={position} theme={theme} />
     </ul>
