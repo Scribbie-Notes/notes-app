@@ -305,7 +305,7 @@ const ArchivedNotes = () => {
 
                       background={item.background}
                       onEdit={() => handleEdit(item)}
-                      onDelete={() => handleDeleteModalOpen(item._id)}
+                      onDelete={() => deleteNote(item._id)}
                       onPinNote={() => {
                         updateIsPinned(item);
                       }}
@@ -333,7 +333,7 @@ const ArchivedNotes = () => {
 
                   background={item.background}
                   onEdit={() => handleEdit(item)}
-                  onDelete={() => handleDeleteModalOpen(item._id)}
+                  onDelete={() => deleteNote(item._id)}
                   onPinNote={() => {
                     updateIsPinned(item);
                   }}
