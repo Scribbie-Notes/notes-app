@@ -128,6 +128,37 @@ const ArchivedNotes = () => {
     }
   };
 
+  const updateIsPinned = async (noteData) => {
+    const noteId = noteData._id;
+    const newIsPinnedStatus = !noteData.isPinned;
+
+    try {
+      const response = await axiosInstance.put(
+        `/update-note-pinned/${noteId}`,
+        {
+          isPinned: newIsPinnedStatus,
+        }
+      );
+
+      if (response.data && response.data.note) {
+        const message = newIsPinnedStatus ? "Note Pinned" : "Note Unpinned";
+        toast.success(message, {
+          style: {
+            fontSize: "13px",
+            maxWidth: "400px",
+            boxShadow: "0px 4px 8px rgba(0, 1, 4, 0.1)",
+            borderRadius: "8px",
+            borderColor: "rgba(0, 0, 0, 0.8)",
+            marginRight: "10px",
+          },
+        });
+        getArchivedNotes();
+      }
+    } catch (error) {
+      console.log("Error while updating note pinned status:", error);
+    }
+  };
+
   const handleBulkPin = async () => {
     const isAllPinnedSelected = selectedNotes.some((selectedNote) =>
       otherNotes.some((note) => note._id === selectedNote && !note.isPinned)
