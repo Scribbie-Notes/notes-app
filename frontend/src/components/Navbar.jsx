@@ -194,7 +194,7 @@ const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
 
       {/* Dropdown menu for mobile */}
       {isMenuOpen && (
-        <div className="absolute top-14 left-0 w-full bg-white shadow-lg z-50 p-4 flex flex-col md:hidden gap-3">
+        <div className="absolute top-14 left-0 w-full bg-white shadow-lg z-50 p-4 flex flex-col xl:hidden gap-3">
           <div className="flex flex-col gap-x-10">
             <SlideTabsExample theme={theme} />
 
