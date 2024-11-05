@@ -8,7 +8,7 @@ import toast from 'react-hot-toast';// Make sure you have react-toastify install
 const Calendar = () => {
   const user = JSON.parse(localStorage.getItem("user"));
   const [events, setEvents] = useState([]);
-  const [newEvent, setNewEvent] = useState({ date: "", title: "", color: "gray" });
+  const [newEvent, setNewEvent] = useState({ date: "", title: "", color: "gray", description: "" });
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [selectedEvent, setSelectedEvent] = useState(null); // State to hold the selected event
   const [isModalOpen, setIsModalOpen] = useState(false); // State to control modal visibility
@@ -30,7 +30,7 @@ const Calendar = () => {
 
     const response = await axiosInstance.post("/add/event", newEvent);
     setEvents([...events, response.data]);
-    setNewEvent({ date: "", title: "", color: "gray" }); // Reset form
+    setNewEvent({ date: "", title: "", color: "gray", description: "" }); // Reset form
   };
 
   const handleEventClick = (event) => {
@@ -77,6 +77,13 @@ const Calendar = () => {
             placeholder="Event Title"
             value={newEvent.title}
             onChange={(e) => setNewEvent({ ...newEvent, title: e.target.value })}
+            className="border p-1 mb-2 w-full"
+          />
+          <input
+            type="text"
+            placeholder="Event Description"
+            value={newEvent.description}
+            onChange={(e) => setNewEvent({ ...newEvent, description: e.target.value })}
             className="border p-1 mb-2 w-full"
           />
           <input
