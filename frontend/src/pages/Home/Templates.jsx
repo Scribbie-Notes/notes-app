@@ -2,48 +2,60 @@ export const templates = {
     meeting: {
       title: "Meeting Notes",
       content: `
-        Date: [Enter date]
-        Attendees: [Enter attendees]
+        <p>Date: [Enter date]</p>
+        <p>Attendees: [Enter attendees]</p>
 
-        Agenda:
-        1. [Enter agenda item]
-        2. [Enter agenda item]
+        <h3>Agenda:</h3>
+        <ol>
+          <li>[Enter agenda item]</li>
+          <li>[Enter agenda item]</li>
+        </ol>
 
-        Notes:
-        - [Enter meeting note]
+        <h3>Notes:</h3>
+        <ul>
+          <li>[Enter meeting note]</li>
+        </ul>
 
-        Action Items:
-        - [Enter action item with owner and due date]
+        <h3>Action Items:</h3>
+        <ul>
+          <li>[Enter action item with owner and due date]</li>
+        </ul>
       `,
       tags: ["meeting", "notes"]
     },
     todo: {
       title: "To-Do List",
       content: `
-        To-Do List
-        Tasks:
-        - [ ] Task 1
-        - [ ] Task 2
-        - [ ] Task 3
+        <p>Tasks:</p>
+        <ul>
+          <li><input type="checkbox"> Task 1</li>
+          <li><input type="checkbox"> Task 2</li>
+          <li><input type="checkbox"> Task 3</li>
+        </ul>
 
-        Notes:
-        - [Enter any additional notes]
+        <h3>Notes:</h3>
+        <ul>
+          <li>[Enter any additional notes]</li>
+        </ul>
       `,
       tags: ["to-do", "list"]
     },
     brainstorming: {
       title: "Brainstorming Notes",
       content: `
-        Brainstorming Notes
-        Topic: [Enter topic]
+        <p>Topic: [Enter topic]</p>
 
-        Ideas:
-        - [Enter idea 1]
-        - [Enter idea 2]
-        - [Enter idea 3]
+        <h3>Ideas:</h3>
+        <ul>
+          <li>[Enter idea 1]</li>
+          <li>[Enter idea 2]</li>
+          <li>[Enter idea 3]</li>
+        </ul>
 
-        Next Steps:
-        - [Enter next step or action]
+        <h3>Next Steps:</h3>
+        <ul>
+          <li>[Enter next step or action]</li>
+        </ul>
       `,
       tags: ["brainstorming", "ideas"]
     }
