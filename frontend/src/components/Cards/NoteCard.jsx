@@ -8,6 +8,7 @@ import {
   MdOutlinePushPin,
   MdCheckBox,
   MdCheckBoxOutlineBlank,
+  MdDownload,
 } from "react-icons/md";
 
 const getContrastColor = (background) => {
@@ -37,7 +38,26 @@ const NoteCard = ({
 }) => {
   const textColor = getContrastColor(background);
 
+  // Function to download the note
+  const downloadNote = (content, title, date) => {
+    // Remove HTML tags from the content using a regular expression
+    const strippedContent = content.replace(/<[^>]+>/g, '').trim();
 
+    // Format the date (this is the note creation date)
+    const formattedDate = moment(date).format("Do MMM YYYY");
+
+    // Combine title, date, description, and content
+    const textToDownload = `Title: ${title}\nDate of Creation: ${formattedDate}\nContent: ${strippedContent}`;
+
+    // Create a Blob from the string to download
+    const blob = new Blob([textToDownload], { type: "text/plain;charset=utf-8" });
+
+    // Create an anchor element to trigger the download
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = `${title}.txt`; // Download as a .txt file
+    link.click();
+  };
 
   return (
     <div
@@ -54,9 +74,7 @@ const NoteCard = ({
 
         <div className="relative group">
           <MdOutlinePushPin
-            className={`icon-btn ${
-              isPinned ? "text-primary" : "text-slate-300"
-            }`}
+            className={`icon-btn ${isPinned ? "text-primary" : "text-slate-300"}`}
             onClick={(e) => {
               e.stopPropagation();
               onPinNote();
@@ -95,8 +113,6 @@ const NoteCard = ({
               </span>
             ))}
         </div>
-
-        
 
         <div className="flex items-center gap-2">
           <div className="relative group">
@@ -141,6 +157,21 @@ const NoteCard = ({
               )}
             </div>
           </div>
+
+          {/* Export Icon (Download Button) */}
+          <div className="relative group">
+            <MdDownload
+              className="icon-btn hover:text-blue-500 cursor-pointer transition-all"
+              onClick={(e) => {
+                e.stopPropagation();
+                downloadNote(content, title, date);
+              }}
+              style={{ color: textColor }}
+            />
+            <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 hidden group-hover:flex items-center justify-center bg-black text-white text-xs rounded px-2 py-1">
+              {"Export Note"}
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -149,8 +180,7 @@ const NoteCard = ({
 
 NoteCard.propTypes = {
   title: PropTypes.string.isRequired,
-  date: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Date)])
-    .isRequired,
+  date: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Date)]).isRequired,
   content: PropTypes.string.isRequired,
   tags: PropTypes.arrayOf(PropTypes.string).isRequired,
   isPinned: PropTypes.bool,
