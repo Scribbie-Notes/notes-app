@@ -34,7 +34,7 @@ const ProgressBar = () => {
       >
         {/* Glowing Progress Bar */}
         <div
-          className="progress-bar animate-glowingBar"
+          className="progress-bar"
           style={{
             border: "none",
             borderRadius: "2rem",
