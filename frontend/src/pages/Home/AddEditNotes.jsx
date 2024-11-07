@@ -127,6 +127,22 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
     }
   };
 
+  // Custom toolbar configuration
+  const customModules = {
+    toolbar: [
+      [{ header: [1, 2, false] }],
+      ["bold", "italic", "underline"],
+      [{ list: "ordered" }, { list: "bullet" }],
+      ["code-block", "link"], // Markdown-like options (code-block, link)
+      [{ 'align': [] }],
+      ["clean"],
+      [{ 'indent': '-1'}, { 'indent': '+1'}], // Indentation options (useful for blockquotes)
+    ],
+    clipboard: {
+      matchVisual: false,
+    },
+  };
+
   const handleBackgroundChange = (e) => {
     setBackground(e.target.value);
   };
@@ -180,17 +196,7 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
           <ReactQuill
             value={content}
             onChange={handleContentChange}
-            modules={{
-              toolbar: [
-                [{ header: [1, 2, false] }],
-                ["bold", "italic", "underline"],
-                [{ list: "ordered" }, { list: "bullet" }],
-                ["clean"],
-              ],
-              clipboard: {
-                matchVisual: false,
-              },
-            }}
+            modules={customModules}
             placeholder="Enter note content"
             style={{
               height: "100px",
