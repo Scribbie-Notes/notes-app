@@ -76,7 +76,7 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
   }
 
   useEffect(() => {
-    if (type === "edit" && noteData) {
+    if (noteData) {
       setTitle(noteData.title);
       setContent(noteData.content);
       setTags(noteData.tags);
