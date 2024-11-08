@@ -3,6 +3,7 @@ import 'react-quill/dist/quill.snow.css';
 import { useState, useEffect } from "react";
 import Navbar from "../../components/Navbar";
 import NoteCard from "../../components/Cards/NoteCard";
+import { templates } from "./Templates";
 
 import {
   MdAdd,
@@ -13,6 +14,7 @@ import {
   MdPushPin,
   MdOutlineUnarchive,
   MdOutlineArchive,
+  MdListAlt
 } from "react-icons/md";
 
 import AddEditNotes from "./AddEditNotes";
@@ -26,6 +28,7 @@ import toast from "react-hot-toast";
 import noFound from "../../assets/images/noFound.svg";
 import addPost from "../../assets/images/addPost.svg";
 import axios from 'axios';
+const apiBaseUrl = import.meta.env.VITE_BACKEND_URL;
 
 const Home = () => {
   const [openAddEditModal, setOpenAddEditModal] = useState({
@@ -44,6 +47,11 @@ const Home = () => {
     isShown: false,
     data: null,
   });
+  const [showTemplates, setShowTemplates] = useState(false); // State to toggle templates visibility
+  // Function to toggle the templates visibility
+  const toggleTemplates = () => {
+    setShowTemplates(!showTemplates);
+  };
 
   const handleDeleteModalOpen = (noteId) => {
     setNoteToDelete(noteId);
@@ -53,6 +61,11 @@ const Home = () => {
   const handleDeleteModalClose = () => {
     setNoteToDelete(null);
     setIsDeleteModalOpen(false);
+  };
+
+  const handleAddTemplate = (template) => {
+    setOpenAddEditModal({ isShown: true, type: "add", data: template });
+    setShowTemplates(false);
   };
 
   const [allNotes, setAllNotes] = useState([]);
@@ -74,8 +87,8 @@ const Home = () => {
   // get user info
   const getUserInfo = async () => {
     try {
-      const response = await axiosInstance.get("http://localhost:5000/get-user");
-      console.log(response);
+      const response = await axiosInstance.get(`${apiBaseUrl}/get-user`);
+
       if (response.data && response.data.user) {
         setUserInfo(response.data.user);
       }
@@ -97,14 +110,13 @@ const Home = () => {
   const getAllNotes = async () => {
     setIsLoading(true);
     try {
-      const response = await axiosInstance.get("http://localhost:5000/get-all-notes");
-      console.log(response)
+      const response = await axiosInstance.get(`${apiBaseUrl}/get-all-notes`);
+
       if (response.data && response.data.notes) {
         const notes = response.data.notes.map((note) => ({
           ...note,
           tags: Array.isArray(note.tags) ? note.tags : [], // Ensure tags is always an array
         }));
-        // console.log("Fetched Notes:", notes);
         setAllNotes(notes);
       }
     } catch (error) {
@@ -162,12 +174,11 @@ const Home = () => {
     );
 
     try {
-      const response = await axiosInstance.get("http://localhost:5000/search-notes", { params: { query } });
+      const response = await axiosInstance.get(`${apiBaseUrl}/search-notes`, { params: { query } });
       if (response.data && response.data.notes) {
         setIsSearch(true);
         setAllNotes(response.data.notes);
       }
-      // console.log(response);
     } catch (error) {
       console.log("Error while searching notes");
     }
@@ -235,7 +246,6 @@ const debouncedSearch = debounce(onSearchNote, 300);
   }, []);
 
   const handleNoteSelection = (noteId) => {
-    // console.log(noteId)
     setSelectedNotes(prevSelected => {
       if (prevSelected.includes(noteId)) {
         return prevSelected.filter(id => id !== noteId);
@@ -258,7 +268,7 @@ const debouncedSearch = debounce(onSearchNote, 300);
 
     try {
       // Send one API call to pin/unpin the selected notes
-      await axiosInstance.put('http://localhost:5000/bulk-update-notes-pinned', updateData);
+      await axiosInstance.put(`${apiBaseUrl}/bulk-update-notes-pinned`, updateData);
 
       // Refresh notes and clear selection
       getAllNotes();
@@ -293,7 +303,7 @@ const debouncedSearch = debounce(onSearchNote, 300);
       // Send selected note IDs via the data field, since Axios delete doesn't send req.body directly
       await axiosInstance({
         method: 'delete',
-        url: 'http://localhost:5000/delete-multiple-notes',
+        url: `${apiBaseUrl}/delete-multiple-notes`,
         data: { noteIds: selectedNotes }, // Pass the noteIds in the data field
       });
 
@@ -310,12 +320,11 @@ const debouncedSearch = debounce(onSearchNote, 300);
     }
   };
 
-
   const handleBulkColor = async (color) => {
     try {
-      // console.log(color);
+
       // Send an array of selected note IDs and the new background color in one request
-      await axiosInstance.put('http://localhost:5000/update-notes-background', {
+      await axiosInstance.put(`${apiBaseUrl}/update-notes-background`, {
         noteIds: selectedNotes,
         background: color,
       });
@@ -329,21 +338,17 @@ const debouncedSearch = debounce(onSearchNote, 300);
     }
   };
 
-
   const handleColorChange = (e) => {
     setBackground(e.target.value);
   };
+
   const pinnedNotes = allNotes.filter((note) => note.isPinned === true);
   const otherNotes = allNotes.filter((note) => note.isPinned !== true);
-  // console.log('pinnedNotes',pinnedNotes)
-  // console.log('otherNotes',otherNotes)
-
   const undoDelete = async (deletedNotes) => {
     try {
-      console.log(deletedNotes)
       const accessToken = localStorage.getItem("token");
       // Send a request to restore the deleted notes
-      const response = await axios.put('http://localhost:5000/undo-delete-notes', {
+      const response = await axios.put(`${apiBaseUrl}/undo-delete-notes`, {
         noteIds: deletedNotes
       },{
         headers: {
@@ -352,8 +357,6 @@ const debouncedSearch = debounce(onSearchNote, 300);
         }
       });
 
-
-      console.log(response)
       // Refresh the notes list
       getAllNotes();
       toast.success("Undo successful. Notes restored.");
@@ -363,7 +366,6 @@ const debouncedSearch = debounce(onSearchNote, 300);
     }
   };
 
-  console.log(import.meta.env.VITE_BACKEND_URL)
   return (
     <div>
 
@@ -428,7 +430,7 @@ const debouncedSearch = debounce(onSearchNote, 300);
         />
       )}
 
-      <div className="container h-auto p-6 pb-12 mx-auto relative" style={{zIndex:-1}}>
+      <div className="container h-auto p-6 pb-12 mx-auto">
         {isLoading ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 mt-4 transition-all">
             {Array.from({ length: 9 }).map((item, i) => {
@@ -523,10 +525,39 @@ const debouncedSearch = debounce(onSearchNote, 300);
         <MdAdd className="text-[32px] text-white transition-all" />
       </button>
 
+      {/* Button to toggle the templates visibility */}
+      <button
+        onClick={toggleTemplates}
+        className="fixed right-32 bottom-10 z-50 text-white bg-gray-700 p-3 rounded-full hover:bg-gray-600"
+      >
+        <MdListAlt className="text-[32px]" />
+      </button>
+
+      {/* Pre-built templates section */}
+      {showTemplates && (
+       <div className="fixed inset-0 flex items-center justify-center z-50">
+        <div className="absolute inset-0 bg-black opacity-50"></div>
+        <div className="relative bg-white p-5 rounded-lg shadow-lg z-10 w-[90%] sm:w-[80%] md:w-[60%] lg:w-[40%]">
+          <h2 className="text-lg font-bold mb-4">Choose a Template</h2>
+          <div className="flex gap-4">
+            {Object.keys(templates).map((templateKey) => (
+              <button
+                key={templateKey}
+                onClick={() => handleAddTemplate(templates[templateKey])}
+                className="px-4 py-2 bg-blue-500 text-white rounded"
+              >
+                {templates[templateKey].title}
+              </button>
+            ))}
+          </div>
+        </div>
+       </div>
+      )}
+
       {openAddEditModal.isShown && (
         <div className="fixed inset-0 flex items-center justify-center z-50">
           <div className="absolute inset-0 bg-black opacity-50"></div>
-          <div className="bg-white p-5 rounded-lg shadow-lg z-10 w-[90%] sm:w-[80%] md:w-[60%] lg:w-[40%] max-h-3/4 overflow-hidden">
+          <div className="bg-white p-5 rounded-lg shadow-lg z-10 w-[90%] sm:w-[80%] md:w-[60%] lg:w-[55%] max-h-3/4 overflow-hidden">
             <AddEditNotes
               type={openAddEditModal.type}
               noteData={openAddEditModal.data}

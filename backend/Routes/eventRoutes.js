@@ -10,7 +10,7 @@ const getUserFromRequest = (req) => req.user?.user;
 
 // Create an event
 eventRoutes.post('/add/event', authenticationToken, async (req, res) => {
-    const { date, title, color } = req.body;
+    const { date, title, color, description } = req.body;
     const user = getUserFromRequest(req);
 
     if (!user) {
@@ -18,7 +18,7 @@ eventRoutes.post('/add/event', authenticationToken, async (req, res) => {
     }
 
     try {
-        const event = new Event({ date, title, color, userId: user._id });
+        const event = new Event({ date, title, color, description, userId: user._id });
         await event.save();
         res.status(201).json(event);
     } catch (error) {

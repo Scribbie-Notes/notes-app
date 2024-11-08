@@ -2,10 +2,12 @@ import React, { useEffect, useState } from 'react';
 import Navbar from '../Navbar';
 import axiosInstance from '../../utils/axiosInstance';
 import NoteCard from '../Cards/NoteCard';
-import { MdColorLens, MdDelete, MdOutlinePushPin, MdOutlineUnarchive, MdPushPin } from 'react-icons/md';
+import { MdColorLens, MdDelete, MdOutlinePushPin, MdOutlineUnarchive, MdPushPin, MdClose} from 'react-icons/md';
 import toast from 'react-hot-toast';
 import axios from 'axios';
 import AddEditNotes from "../../pages/Home/AddEditNotes";
+import moment from "moment";
+import ReactQuill from 'react-quill';
 
 const ArchivedNotes = () => {
   const user = JSON.parse(localStorage.getItem("user"));
@@ -20,6 +22,10 @@ const ArchivedNotes = () => {
   const [openAddEditModal, setOpenAddEditModal] = useState({
     isShown: false,
     type: "add",
+    data: null,
+  });
+  const [viewNoteModal, setViewNoteModal] = useState({
+    isShown: false,
     data: null,
   });
 
@@ -128,6 +134,37 @@ const ArchivedNotes = () => {
     }
   };
 
+  const updateIsPinned = async (noteData) => {
+    const noteId = noteData._id;
+    const newIsPinnedStatus = !noteData.isPinned;
+
+    try {
+      const response = await axiosInstance.put(
+        `/update-note-pinned/${noteId}`,
+        {
+          isPinned: newIsPinnedStatus,
+        }
+      );
+
+      if (response.data && response.data.note) {
+        const message = newIsPinnedStatus ? "Note Pinned" : "Note Unpinned";
+        toast.success(message, {
+          style: {
+            fontSize: "13px",
+            maxWidth: "400px",
+            boxShadow: "0px 4px 8px rgba(0, 1, 4, 0.1)",
+            borderRadius: "8px",
+            borderColor: "rgba(0, 0, 0, 0.8)",
+            marginRight: "10px",
+          },
+        });
+        getArchivedNotes();
+      }
+    } catch (error) {
+      console.log("Error while updating note pinned status:", error);
+    }
+  };
+
   const handleBulkPin = async () => {
     const isAllPinnedSelected = selectedNotes.some((selectedNote) =>
       otherNotes.some((note) => note._id === selectedNote && !note.isPinned)
@@ -180,6 +217,10 @@ const ArchivedNotes = () => {
 
   const handleEdit = (noteDetails) => {
     setOpenAddEditModal({ isShown: true, type: "edit", data: noteDetails });
+  };
+
+  const handleViewNote = (noteDetails) => {
+    setViewNoteModal({ isShown: true, data: noteDetails });
   };
 
   return (
@@ -264,7 +305,7 @@ const ArchivedNotes = () => {
 
                       background={item.background}
                       onEdit={() => handleEdit(item)}
-                      onDelete={() => handleDeleteModalOpen(item._id)}
+                      onDelete={() => deleteNote(item._id)}
                       onPinNote={() => {
                         updateIsPinned(item);
                       }}
@@ -292,7 +333,7 @@ const ArchivedNotes = () => {
 
                   background={item.background}
                   onEdit={() => handleEdit(item)}
-                  onDelete={() => handleDeleteModalOpen(item._id)}
+                  onDelete={() => deleteNote(item._id)}
                   onPinNote={() => {
                     updateIsPinned(item);
                   }}
@@ -315,6 +356,37 @@ const ArchivedNotes = () => {
                             getAllNotes={getArchivedNotes}
                         />
                     </div>
+                </div>
+            )}
+            {viewNoteModal.isShown && (
+                <div className="fixed inset-0 flex items-center justify-center z-50">
+                <div className="absolute inset-0 bg-black opacity-50"></div>
+                <div className="relative bg-white p-5 rounded-lg shadow-lg z-10 w-[90%] sm:w-[80%] md:w-[60%] lg:w-[40%] max-h-3/4 overflow-hidden">
+                    <button
+                    className="absolute top-3 right-3 text-gray-900 transition-all bg-gray-50 hover:bg-red-100 hover:text-gray-500 focus:outline-none font-medium rounded-full text-sm px-2.5 py-2.5 text-xs"
+                    onClick={() => setViewNoteModal({ isShown: false, data: null })}
+                    >
+                    <MdClose className="text-xl text-slate-400" />
+                    </button>
+                    <div className="overflow-auto">
+                    <h2 className="text-2xl font-semibold">
+                        {viewNoteModal.data.title}
+                    </h2>
+                    <span className="text-xs text-slate-500">
+                        {moment(viewNoteModal.data.date).format("Do MMM YYYY")}
+                    </span>
+                    <p className="text-gray-700 mt-4"><ReactQuill value={viewNoteModal.data.content} readOnly={true} theme="bubble" /></p>
+                    <div className="mt-4">
+                        {viewNoteModal.data.tags.map((tag, index) => (
+                        <span
+                            key={index}
+                            className="inline-block bg-gray-100 mr-2 text-gray-800 text-xs font-medium px-1.5 py-0.5 rounded dark:bg-blue-100 dark:text-gray-800"
+                        >#{tag}
+                        </span>
+                        ))}
+                    </div>
+                    </div>
+                </div>
                 </div>
             )}
           </>

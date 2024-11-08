@@ -44,7 +44,14 @@ const editNoteByIdController = async (req, res) => {
     const { noteId } = req.params;
     const { title, content, tags, isPinned, background } = req.body;
     const { user } = req.user;
-    const tagsArray = JSON.parse(tags);
+    let tagsArray = [];
+
+    if (Array.isArray(tags)) {
+        tagsArray = tags;
+    }
+    else {
+        tagsArray = tags ? JSON.parse(tags) : [];
+    }
 
     // Validate input
     const isUpdateRequired = title || content || tags || isPinned !== undefined || background;

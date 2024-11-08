@@ -16,6 +16,7 @@
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "framer-motion": "^11.11.6",
+    "gapi-script": "^1.2.0",
     "gsap": "^3.12.5",
     "http-proxy-middleware": "^3.0.0",
     "js-cookie": "^3.0.5",
@@ -28,7 +29,8 @@
     "react-modal": "^3.16.1",
     "react-quill": "^2.0.0",
     "react-router-dom": "^6.26.2",
-    "react-scroll": "^1.9.0"
+    "react-scroll": "^1.9.0",
+    "react-simple-scroll-up": "^0.2.3"
   },
   "devDependencies": {
     "@types/react": "^18.2.66",

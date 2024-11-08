@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from "react";
 import TagInput from "../../components/Input/TagInput";
 import { MdClose } from "react-icons/md";
-import axiosInstance from "../../utils/axiosInstance";
 import toast from "react-hot-toast";
 import AddAttachmentsInput from "../../components/Input/AddAttachmentInput";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { FaMicrophone, FaMicrophoneSlash } from "react-icons/fa";
-const apiBaseUrl = import.meta.env.VITE_BACKEND_URL;
+import noteActions from "../../hooks/noteActions"; // Import the hook
 
 const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
   const [title, setTitle] = useState("");
@@ -27,6 +26,7 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
   const SpeechRecognition =
     window.SpeechRecognition || window.webkitSpeechRecognition;
   const recognition = SpeechRecognition ? new SpeechRecognition() : null;
+  const { addNewNote, editNote } = noteActions(getAllNotes, onClose);
 
   useEffect(() => {
     if (!SpeechRecognition) {
@@ -76,7 +76,7 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
   }
 
   useEffect(() => {
-    if (type === "edit" && noteData) {
+    if (noteData) {
       setTitle(noteData.title);
       setContent(noteData.content);
       setTags(noteData.tags);
@@ -127,91 +127,24 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
     }
   };
 
+  // Custom toolbar configuration
+  const customModules = {
+    toolbar: [
+      [{ header: [1, 2, false] }],
+      ["bold", "italic", "underline"],
+      [{ list: "ordered" }, { list: "bullet" }],
+      ["code-block", "link"], // Markdown-like options (code-block, link)
+      [{ 'align': [] }],
+      ["clean"],
+      [{ 'indent': '-1'}, { 'indent': '+1'}], // Indentation options (useful for blockquotes)
+    ],
+    clipboard: {
+      matchVisual: false,
+    },
+  };
+
   const handleBackgroundChange = (e) => {
     setBackground(e.target.value);
-  };
-
-  const addNewNote = async () => {
-    const formData = new FormData();
-    formData.append("title", title);
-    formData.append("content", content);
-    formData.append("background", background);
-    formData.append("isPinned", isPinned);
-
-    tags.forEach((tag) => {
-      formData.append("tags[]", tag);
-    });
-    attachments.forEach((file) => {
-      formData.append("attachments", file);
-    });
-    photos.forEach((photo) => {
-      formData.append("photos", photo);
-    });
-    videos.forEach((video) => {
-      formData.append("videos", video);
-    });
-
-    try {
-      const response = await axiosInstance.post(`${apiBaseUrl}/add-note`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-      if (response.data && response.data.note) {
-        getAllNotes();
-        onClose();
-        toast.success("Note added successfully");
-      }
-    } catch (error) {
-      console.error("Error adding note:", error);
-      setError("An error occurred while adding the note.");
-      toast.error("Failed to add a note");
-    }
-  };
-
-  const editNote = async () => {
-    try {
-      if (!noteData || !noteData._id) {
-        setError("Invalid note data.");
-        return;
-      }
-
-      const formData = new FormData();
-      formData.append("title", title);
-      formData.append("content", content);
-      formData.append("tags", JSON.stringify(tags));
-      formData.append("background", background);
-      formData.append('isPinned', isPinned);
-      attachments?.forEach((file) => {
-        formData.append("attachments", file);
-      });
-      photos?.forEach((photo) => {
-        formData.append("photos", photo);
-      });
-      videos?.forEach((video) => {
-        formData.append("videos", video);
-      });
-
-      const response = await axiosInstance.put(
-        `/edit-note/${noteData._id}`, // Corrected this line
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-
-      if (response.data && response.data.note) {
-        getAllNotes();
-        onClose();
-        toast.success("Note updated successfully");
-      }
-    } catch (error) {
-      console.error("Error updating note:", error);
-      setError("An error occurred while updating the note.");
-      toast.error("Failed to update a note");
-    }
   };
 
   const handleSaveNote = () => {
@@ -225,9 +158,9 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
     }
 
     if (type === "edit") {
-      editNote();
+        editNote({ _id: noteData._id, title, content, tags, attachments, photos, videos, background, isPinned });
     } else {
-      addNewNote();
+        addNewNote({ title, content, tags, attachments, photos, videos, background, isPinned });
     }
   };
 
@@ -263,17 +196,7 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
           <ReactQuill
             value={content}
             onChange={handleContentChange}
-            modules={{
-              toolbar: [
-                [{ header: [1, 2, false] }],
-                ["bold", "italic", "underline"],
-                [{ list: "ordered" }, { list: "bullet" }],
-                ["clean"],
-              ],
-              clipboard: {
-                matchVisual: false,
-              },
-            }}
+            modules={customModules}
             placeholder="Enter note content"
             style={{
               height: "100px",

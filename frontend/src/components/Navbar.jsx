@@ -8,9 +8,7 @@ import { FiMoon, FiSun, FiMenu } from "react-icons/fi";
 import { SlideTabsExample } from "./Tabs"; // Ensure correct import
 
 const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
-  // console.log(userInfo);
   const [theme, setTheme] = useState("light"); // Manage theme state
-
   const [searchQuery, setSearchQuery] = useState("");
   const [isMenuOpen, setIsMenuOpen] = useState(false); // State to toggle mobile menu
   const navigate = useNavigate();
@@ -22,8 +20,20 @@ const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
   const loginButtonRef = useRef(null);
   const signupButtonRef = useRef(null);
 
+  // Fetch theme from localStorage on mount
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme) {
+      setTheme(savedTheme);
+    }
+  }, []);
+
   const toggleTheme = () => {
-    setTheme((prevTheme) => (prevTheme === "light" ? "dark" : "light"));
+    setTheme((prevTheme) => {
+      const newTheme = prevTheme === "light" ? "dark" : "light";
+      localStorage.setItem("theme", newTheme); // Save new theme to localStorage
+      return newTheme;
+    });
   };
 
   const toggleMenu = () => {
@@ -88,7 +98,6 @@ const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
     onSearchNote(searchQuery);
   };
 
-  // console.log(location.pathname);
   return (
     <div
       className={`flex items-center justify-between px-4 py-2 drop-shadow-md ${
@@ -126,8 +135,7 @@ const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
           />
         </div>
 
-        {/* Toggle theme and profile/login/signup */}
-        <div className=" flex gap-x-3 items-center">
+        <div className="flex gap-x-3 items-center">
           <button
             onClick={toggleTheme}
             className={`flex items-center gap-2 p-3 rounded-full transition-colors duration-300  ${
@@ -186,8 +194,8 @@ const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
 
       {/* Dropdown menu for mobile */}
       {isMenuOpen && (
-        <div className="absolute top-14 left-0 w-full bg-white shadow-lg z-50 p-4 flex flex-col md:hidden gap-3">
-          <div className="flex flex-col  gap-x-10">
+        <div className="absolute top-14 left-0 w-full bg-white shadow-lg z-50 p-4 flex flex-col xl:hidden gap-3">
+          <div className="flex flex-col gap-x-10">
             <SlideTabsExample theme={theme} />
 
             {/* Hamburger icon for small screens */}
@@ -208,11 +216,7 @@ const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
                 onClearSearch={onClearSearch}
               />
             </div>
-
-            {/* Toggle theme and profile/login/signup */}
-            
           </div>
-          
         </div>
       )}
     </div>
