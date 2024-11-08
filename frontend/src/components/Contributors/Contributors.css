@@ -1,141 +1,114 @@
+/* Overall container */
 .contributors-container {
-  width: 100%;
-  height: 100%;
-  padding-top: 2rem;
-  overflow: hidden;
-}
-
-.github-icon {
-  margin-right: 0.5rem;
-  vertical-align: middle;
-  fill: white; /* Adjust color as needed */
-}
-
-.contributors-title {
-  margin-top: 0rem;
-  text-align: center;
-  color: #050505;
-  font-size: 2.5rem;
-  font-weight: bold;
-  margin-bottom: 2rem;
-  text-transform: uppercase;
-}
-
-.contributors-grid {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 2rem;
-  margin-bottom: 4rem;
-}
-
-.contributor-card {
-  position: relative;
-  width: 100%;
-  max-width: 25%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background-color: rgb(211, 211, 212);
-  border: 2px solid #050506;
-  border-radius: 0.5rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-  padding: 1rem;
-  overflow: hidden;
-  transition: transform 0.4s ease, box-shadow 0.3s ease;
-}
-
-.contributor-card:hover {
-  transform: scale(1.05);
-  box-shadow: 0 4px 6px rgba(7, 9, 9, 0.752);
-}
-
-.contributor-card:hover p {
-  text-shadow: 1px 1px 2px rgb(79, 80, 80), 0 0 0.2em rgb(0, 191, 255),
-    0 0 0.8em rgb(135, 206, 235);
-  color: rgb(0, 0, 0);
-  font-weight: 500;
-}
-
-.contributor-card:hover h2 {
-  text-shadow: 1px 1px 2px rgba(25, 23, 28, 0.926), 0 0 0.2em rgb(125, 127, 127),
-    0 0 0.8em rgb(155, 157, 158);
-  color: rgb(14, 13, 13);
-  font-size: 1.04rem;
-  font-weight: 600;
-  text-decoration: wavy;
-}
-
-.contributor-card:hover .contributor-avatar {
-  border: 3.5px solid #fafcfc;
-  width: 5.2rem;
-  box-shadow: -2px 4px 10px 1px rgba(16, 16, 19, 0.75);
-  height: 5.2rem;
-}
-
-.contributor-card::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(152deg, #222222 50%, #f3f3f4 50%);
-  transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
-  transform: translate(-100%, -100%);
-  opacity: 0;
-  z-index: -1;
-}
-
-.contributor-card:hover::before {
-  transform: translate(0, 0);
-  opacity: 1;
-}
-
-.contributor-link {
-  display: block;
-}
-
-.contributor-avatar {
-  width: 5rem;
-  height: 5rem;
-  border-radius: 50%;
-  object-fit: cover;
-  margin-bottom: 1rem;
-  border: 2px solid #00b4d8;
-  transition: border 0.4s ease-in-out, height 0.4s ease-in-out,
-    width 0.4s ease-in-out, box-shadow 0.3s ease-in-out;
-}
-
-.contributor-name {
-  font-size: 1rem;
-  font-weight: 600;
-  color: #030303;
-  margin-bottom: 0.5rem;
-  transition: text-shadow 0.4s ease-in-out, font-size 0.5s ease-in-out,
-    text-decoration 0.4s ease-in-out;
-}
-
-.contributor-contributions {
-  color: #0b0b0b;
-  transition: text-shadow 0.4s ease-in-out;
-}
-
-/* Media Queries for Responsiveness */
-@media (max-width: 1200px) {
-  .contributor-card {
-    max-width: 33.333%;
+    width: 100%;
+    height: 100%;
+    padding: 4rem 2rem;
+    overflow: hidden;
+    background-color: #f4f5f7;
   }
-}
 
-@media (max-width: 992px) {
-  .contributor-card {
-    max-width: 50%;
+  /* Title Styles */
+  .contributors-title {
+    text-align: center;
+    color: #333;
+    font-size: 2.8rem;
+    font-weight: 700;
+    margin-bottom: 3rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-family: 'Poppins', sans-serif;
   }
-}
 
-@media (max-width: 768px) {
-  .contributor-card {
-    max-width: 97%;
+  /* Grid for contributors */
+  .contributors-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 3rem;
+    margin-bottom: 4rem;
   }
-}
+
+  /* Contributor Card */
+  .contributor-card {
+    position: relative;
+    width: 100%;
+    max-width: 250px;
+    background-color: #ffffff;
+    border: 2px solid #ddd;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+    text-align: center;
+    transition: all 0.3s ease-in-out;
+    overflow: hidden;
+    font-family: 'Roboto', sans-serif;
+    cursor: pointer; /* Make the card appear clickable */
+  }
+
+  .contributor-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+  }
+
+  /* Avatar */
+  .contributor-avatar {
+    width: 6rem;
+    height: 6rem;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid #00b4d8;
+    margin-bottom: 1.5rem;
+    transition: transform 0.3s ease, border-color 0.3s ease;
+  }
+
+  .contributor-avatar:hover {
+    transform: scale(1.1);
+    border-color: #0299a5;
+  }
+
+  /* Contributor Name */
+  .contributor-name {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 0.5rem;
+    transition: color 0.3s ease;
+  }
+
+  /* Contributions Text */
+  .contributor-contributions {
+    color: #555;
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin-top: 0.5rem;
+    transition: color 0.3s ease;
+  }
+
+  /* Hover Effects for Text */
+  .contributor-card:hover .contributor-name {
+    color: #00b4d8;
+  }
+
+  .contributor-card:hover .contributor-contributions {
+    color: #444;
+    font-weight: 600;
+  }
+
+  /* Media Queries for Responsiveness */
+  @media (max-width: 1200px) {
+    .contributor-card {
+      max-width: 220px;
+    }
+  }
+
+  @media (max-width: 992px) {
+    .contributor-card {
+      max-width: 45%;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .contributor-card {
+      max-width: 95%;
+    }
+  }
