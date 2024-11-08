@@ -45,7 +45,6 @@ const editNoteByIdController = async (req, res) => {
     const { title, content, tags, isPinned, background } = req.body;
     const { user } = req.user;
     let tagsArray = [];
-    console.log(tags);
 
     if (Array.isArray(tags)) {
         tagsArray = tags;
