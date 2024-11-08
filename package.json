@@ -1,5 +1,6 @@
 {
   "dependencies": {
-    "gsap": "^3.12.5"
+    "gsap": "^3.12.5",
+    "react-modal": "^3.16.1"
   }
 }

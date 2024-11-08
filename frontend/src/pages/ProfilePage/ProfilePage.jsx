@@ -7,12 +7,13 @@ import { IoMdArrowRoundBack } from "react-icons/io";
 import { toast } from "react-hot-toast";
 import axiosInstance from "../../utils/axiosInstance";
 import { useNavigate } from "react-router-dom";
+const apiBaseUrl = import.meta.env.VITE_BACKEND_URL;
+
 
 const validatePhoneNumber = (phoneNumber) => {
   const regex = /^[6-9]\d{9}$/;
   return regex.test(phoneNumber);
 };
-
 
 const validateEmail = (email) => {
   const emailregex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -54,7 +55,7 @@ const ProfilePage = () => {
 
       try {
         const response = await axiosInstance.put(
-          "/update-profile-photo",
+          `${apiBaseUrl}/update-profile-photo`,
           formData,
           {
             headers: {
@@ -120,10 +121,10 @@ const ProfilePage = () => {
   const handleEmailModalSave = async () => {
     try {
       console.log("New email to update:", newEmail);
-      const response = await axiosInstance.put(`/update-email`, { newEmail });
+      const response = await axiosInstance.put(`http://localhost:5000/update-email`, { newEmail });
       console.log("Response from API:", response);
 
-      if (response.data&&validateEmail(newEmail)) {
+      if (response.data && validateEmail(newEmail)) {
         // Update email in state and local storage
         const updatedUser = { ...user, email: newEmail };
         setUser(updatedUser);
@@ -190,7 +191,7 @@ const ProfilePage = () => {
         });
       }
       console.log("New phone to update:", newPhone);
-      const response = await axiosInstance.put(`/update-phone`, {
+      const response = await axiosInstance.put(`http://localhost:5000/update-phone`, {
         newPhone,
         userId: user._id,
       });
@@ -320,7 +321,7 @@ const ProfilePage = () => {
   console.log(user);
 
   return (
-    <div className="bg-gray-50 relative">
+    <div className="bg-gray-50 ">
       <Navbar userInfo={user} />
       <Link to="/dashboard">
         <div className="p-5">
@@ -329,20 +330,20 @@ const ProfilePage = () => {
           </button>
         </div>
       </Link>
-      <div className="flex">
+      <div className="flex"  >
         <div className="container items-center justify-center px-4 pb-28">
           <div>
-            <div className="bg-white relative shadow rounded-lg w-full md:w-5/6 lg:w-4/6 xl:w-3/6 mx-auto mt-12">
-              <div className="flex justify-center">
+            <div className="bg-white shadow rounded-lg w-full md:w-5/6 lg:w-4/6 xl:w-3/6 mx-auto mt-12" style={{zIndex:-1}}>
+              <div className="  flex justify-center" style={{zIndex:-1}}>
                 <div
-                  className="flex items-center justify-center p-3 rounded-full text-slate-950 font-medium bg-gray-50 cursor-pointer mx-auto absolute -top-16 md:-top-20 w-24 md:w-32 h-24 md:h-32 shadow-md border-4 border-white transition duration-200 transform hover:scale-110 text-3xl md:text-4xl"
+                  className="flex items-center justify-center p-3 mt-3 rounded-full text-slate-950 font-medium bg-gray-50 cursor-pointer mx-auto  w-24 md:w-32 h-24 md:h-32 shadow-md border-4 border-white transition duration-200 transform hover:scale-110 text-3xl md:text-4xl absolute"
                   onMouseEnter={() => setIsHovered(true)}
                   onMouseLeave={() => setIsHovered(false)}
-                  onClick={() => document.getElementById("fileInput").click()}
+                  onClick={() => document.getElementById("fileInput").click()} style={{zIndex:-1}}
                 >
                   {profilePhoto ? (
                     <img
-                      src={`http://localhost:8000${profilePhoto}`}
+                      src={`${apiBaseUrl}${profilePhoto}`}
                       className="w-full h-full rounded-full object-cover"
                     />
                   ) : (
@@ -366,7 +367,7 @@ const ProfilePage = () => {
                 )} */}
               </div>
 
-              <div className="mt-16">
+              <div className=" mt-16" >
                 {user && (
                   <>
                     <h1 className="font-bold text-center text-3xl text-gray-900">

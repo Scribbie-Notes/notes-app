@@ -3,27 +3,32 @@ import img from "./Footer/logo.png";
 import Modal from "react-modal";
 import GoogleTranslate from "./GoogleTranslate";
 import { Link } from "react-router-dom";
-import axiosInstance from "../utils/axiosInstance";
-import toast, { Toaster } from "react-hot-toast";
 import axios from "axios";
+import toast, { Toaster } from "react-hot-toast";
+
+const apiBaseUrl = import.meta.env.VITE_BACKEND_URL;
 
 const StickyFooter = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [appVersionModalIsOpen, setAppVersionModalIsOpen] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [rating, setRating] = useState(0);
   const [feedback, setFeedback] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const openModal = () => setModalIsOpen(true);
-  const closeModal = () => setModalIsOpen(false);
+  const openFeedbackModal = () => setModalIsOpen(true);
+  const closeFeedbackModal = () => setModalIsOpen(false);
+
+  const openAppVersionModal = () => setAppVersionModalIsOpen(true);
+  const closeAppVersionModal = () => setAppVersionModalIsOpen(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    if (!name || !email || !feedback || !rating){
+    if (!name || !email || !feedback || !rating) {
       setLoading(false);
-      return  toast.error("Fill all the fields", {
+      return toast.error("Fill all the fields", {
         style: {
           fontSize: "13px",
           maxWidth: "400px",
@@ -45,11 +50,7 @@ const StickyFooter = () => {
     };
     // console.log(feedbackData)
     try {
-      const response = await axios.post(
-        "http://localhost:5000/submit",
-        feedbackData
-      );
-      // console.log(response);
+      const response = await axios.post(`${apiBaseUrl}/submit`, feedbackData);
       toast.success("Feedback submitted successfully", {
         style: {
           fontSize: "13px",
@@ -60,7 +61,7 @@ const StickyFooter = () => {
           marginRight: "10px",
         },
       });
-      closeModal();
+      closeFeedbackModal();
     } catch (error) {
       console.error("Error submitting feedback:", error.message);
       toast.error("Error submitting feedback", {
@@ -88,7 +89,7 @@ const StickyFooter = () => {
       {/* Feedback Model */}
       <Modal
         isOpen={modalIsOpen}
-        onRequestClose={closeModal}
+        onRequestClose={closeFeedbackModal}
         contentLabel="Feedback Modal"
         style={{ overlay: { zIndex: 1000 } }}
         // Ensure modal appears on top of other elements
@@ -100,9 +101,7 @@ const StickyFooter = () => {
           ) : (
             <form onSubmit={handleSubmit}>
               <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700">
-                  Name
-                </label>
+                <label className="block text-sm font-medium text-gray-700">Name</label>
                 <input
                   type="text"
                   value={name}
@@ -111,9 +110,7 @@ const StickyFooter = () => {
                 />
               </div>
               <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700">
-                  Email
-                </label>
+                <label className="block text-sm font-medium text-gray-700">Email</label>
                 <input
                   type="email"
                   value={email}
@@ -122,9 +119,7 @@ const StickyFooter = () => {
                 />
               </div>
               <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700">
-                  Feedback
-                </label>
+                <label className="block text-sm font-medium text-gray-700">Feedback</label>
                 <textarea
                   value={feedback}
                   onChange={(e) => setFeedback(e.target.value)}
@@ -133,9 +128,7 @@ const StickyFooter = () => {
                 ></textarea>
               </div>
               <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Rating
-                </label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Rating</label>
                 <div className="flex space-x-1">
                   {[1, 2, 3, 4, 5].map((star) => (
                     <svg
@@ -161,7 +154,7 @@ const StickyFooter = () => {
               <div className="flex justify-end space-x-2">
                 <button
                   type="button"
-                  onClick={closeModal}
+                  onClick={closeFeedbackModal}
                   className="inline-flex items-center text-gray-900 bg-gray-200 hover:bg-red-200 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-xs transition-all"
                 >
                   Cancel
@@ -178,15 +171,61 @@ const StickyFooter = () => {
         </div>
       </Modal>
 
+      {/* App Version Modal */}
+      <Modal
+        isOpen={appVersionModalIsOpen}
+        onRequestClose={closeAppVersionModal}
+        contentLabel="App Version Modal"
+        style={{ overlay: { zIndex: 1000 } }}
+      >
+        <div className="bg-white p-4 rounded-lg ">
+          <h2 className="text-2xl font-bold mb-8">App Version</h2>
+            <section className="mb-12 flex flex-col items-center">
+                <p className="text-md w-[60%] text-center mb-2">
+                    <span className="font-semibold">Current Version: v0.1.0 (29 June 2024)</span>
+                </p>
+                <p className="text-md w-[60%] mb-6">
+                    The Source Code is available on{" "}
+                  <span className="text-blue-500 underline">
+                    <a
+                        href="https://github.com/yashmandi/notes-app"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        GitHub
+                    </a>
+                    </span>{" "}
+                    and you can find the latest release at{" "}
+                    <span className="text-blue-500 underline">
+                    <a
+                        href="https://github.com/Scribbie-Notes/notes-app/releases/tag/Latest"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        Latest Release
+                    </a>
+                </span>. Feel free to explore, contribute, and find issues.
+              </p>
+            </section>
+          <div className="flex justify-end">
+            <button
+              type="button"
+              onClick={closeAppVersionModal}
+              className="inline-flex items-center text-gray-900 bg-gray-200 hover:bg-red-200 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-xs transition-all"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </Modal>
+
       {/* Footer content */}
       <div className="flex flex-col md:flex-row">
         {/* First part: Website Description taking one-third of the space */}
         <div className="flex flex-col items-center md:items-start w-full md:w-1/2 px-4 md:px-10 py-6">
           <div className="flex items-center mt-2">
             <img src={img} alt="logo" className="h-12 mb-3 mt-6" />
-            <p className="text-xl md:text-2xl font-medium -ml-3 mt-4">
-              cribbie
-            </p>
+            <p className="text-xl md:text-2xl font-medium -ml-3 mt-4">cribbie</p>
           </div>
           <p className="text-sm mt-2">
             Scribbie is a platform that connects people with the resources they
@@ -202,25 +241,16 @@ const StickyFooter = () => {
             <h3 className="font-semibold text-lg mb-4">Explore</h3>
             <ul className="space-y-3">
               <Link to={"/about"}>
-                <li className="cursor-pointer hover:text-gray-700 hover:underline underline-offset-2">
-                  About
-                </li>
+                <li className="cursor-pointer hover:text-gray-700 hover:underline underline-offset-2">About</li>
               </Link>
               <Link to={"/contact-us"}>
-                <li className="cursor-pointer hover:text-gray-700 hover:underline underline-offset-2">
-                  Contact Us
-                </li>
+                <li className="cursor-pointer hover:text-gray-700 hover:underline underline-offset-2">Contact Us</li>
               </Link>
-              <Link to="#" onClick={openModal}>
-                <li className="cursor-pointer hover:text-gray-700 hover:underline underline-offset-2">
-                  Feedback
-                </li>
+              <Link to="#" onClick={openFeedbackModal}>
+                <li className="cursor-pointer hover:text-gray-700 hover:underline underline-offset-2">Feedback</li>
               </Link>
-
-              <Link to={"/version"}>
-                <li className="cursor-pointer hover:text-gray-700 hover:underline underline-offset-2">
-                  App Version
-                </li>
+              <Link to="#" onClick={openAppVersionModal}>
+                <li className="cursor-pointer hover:text-gray-700 hover:underline underline-offset-2">App Version</li>
               </Link>
             </ul>
           </div>
@@ -230,19 +260,13 @@ const StickyFooter = () => {
             <h3 className="font-semibold text-lg mb-4">Help & Support</h3>
             <ul className="space-y-3">
               <Link to={"/help"}>
-                <li className="cursor-pointer hover:text-gray-700 hover:underline underline-offset-2">
-                  Help Center
-                </li>
+                <li className="cursor-pointer hover:text-gray-700 hover:underline underline-offset-2">Help Center</li>
               </Link>
               <Link to={"/query"}>
-                <li className="cursor-pointer hover:text-gray-700 hover:underline underline-offset-2">
-                  Submit a Query
-                </li>
+                <li className="cursor-pointer hover:text-gray-700 hover:underline underline-offset-2">Submit a Query</li>
               </Link>
               <Link to={"/contact"}>
-                <li className="cursor-pointer hover:text-gray-700 hover:underline underline-offset-2">
-                  Contact Support
-                </li>
+                <li className="cursor-pointer hover:text-gray-700 hover:underline underline-offset-2">Contact Support</li>
               </Link>
             </ul>
           </div>
@@ -267,13 +291,12 @@ const StickyFooter = () => {
           </div>
         </div>
       </div>
+
       <hr className="border-t-2 border-grey w-full" />
       {/* Footer Note */}
       <div className="border-t border-gray-200 pt-3 text-center">
         <p className="text-sm md:text-base font-bold">Made with ❤️ in India</p>
-        <p className="text-sm mt-2">
-          &copy; {new Date().getFullYear()} Cribbie. All rights reserved.
-        </p>
+        <p className="text-sm mt-2">&copy; {new Date().getFullYear()} Cribbie. All rights reserved.</p>
       </div>
       <Toaster />
     </div>

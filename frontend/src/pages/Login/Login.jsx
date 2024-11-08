@@ -7,6 +7,7 @@ import toast from "react-hot-toast";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { GoogleLogin } from "@react-oauth/google";
 import CircularLoader from "../../components/CircularLoader";
+import axios from "axios";
 
 const Login = ({ setUser }) => {
   const [email, setEmail] = useState("");
@@ -107,7 +108,7 @@ const Login = ({ setUser }) => {
     setError(null);
 
     try {
-      const response = await axiosInstance.post("/login", {
+      const response = await axiosInstance.post("http://localhost:5000/login", {
         email,
         password,
       });
@@ -121,7 +122,7 @@ const Login = ({ setUser }) => {
           style: {
             fontSize: "13px",
             maxWidth: "400px",
-            boxShadow: "px 4px 8px rgba(0, 1, 4, 0.1)",
+            boxShadow: "px 4px 8px rgba(0, 1, 4, 0.1)", 
             borderRadius: "8px",
             borderColor: "rgba(0, 0, 0, 0.8)",
             marginRight: "10px",
@@ -233,10 +234,11 @@ const Login = ({ setUser }) => {
                 <div className="col-span-12">
                   <label
                     htmlFor="Password"
-                    className="block text-sm font-medium text-gray-700"
+                    className="text-sm font-medium text-gray-700 flex justify-between"
                   >
-                    {" "}
-                    Password{" "}
+                    <p>Password</p>
+
+                    <Link to="/verify-email" className="text-xs hover:text-red-500">Forgot password?</Link>
                   </label>
                   <div className="relative">
                     <input

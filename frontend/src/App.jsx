@@ -25,6 +25,13 @@ import ArchivedNotes from "./components/ArchivedNotes/ArchivedNotes";
 
 
 import Preloader from "./components/Preloader";
+import VerifyEmail from "./pages/ForgotPassword/VerifyEmail";
+import VerifyOtp from "./pages/ForgotPassword/VerifyOtp";
+import NewPassword from "./pages/ForgotPassword/NewPassword";
+import Calendar from "./components/Calendar/Calendar";
+//importing the progress bar and the scroll to top button
+import ProgressBar from "./components/Progressbar";
+import { ScrollToTop } from "react-simple-scroll-up";
 
 // currently this component is hide
 // import Navbar from './components/Navbar';
@@ -65,22 +72,43 @@ const App = () => {
       {user && location.pathname === "/" ? (
         <Navigate to="/dashboard" replace />
       ) : (
-        <Routes>
-          <Route path="/landing" exact element={<Hero />} />
-          <Route path="/dashboard" exact element={<Home />} />
-          <Route path="/" exact element={<Hero />} />
-
-          <Route path="/login" exact element={<Login setUser={setUser} />} />
-          <Route path="/testimonial" exact element={<Testimonial />} />
-          <Route path="/pricing" exact element={<Pricing />} />
-          <Route path="/contact-us" exact element={<Contact />} />
-          <Route path="/footer" exact element={<Footer />} />
-          <Route path="/signup" exact element={<Signup />} />
-          <Route path="/about" exact element={<About />} />
-          <Route path="/my-profile" exact element={<ProfilePage />} />
-          <Route path="/archived-notes" exact element={<ArchivedNotes />} />
-          {/* <Route path="/404" exact element={<ErrorPage/>} /> */}
-        </Routes>
+        <>
+          <ProgressBar />
+          <Routes>
+            <Route path="/landing" exact element={<Hero />} />
+            <Route path="/dashboard" exact element={<Home />} />
+            <Route path="/" exact element={<Hero />} />
+            <Route path="/verify-email" exact element={<VerifyEmail />} />
+            <Route path="/verify-otp/:id" exact element={<VerifyOtp />} />
+            <Route path="/reset-password/:id" exact element={<NewPassword />} />
+            <Route path="/login" exact element={<Login setUser={setUser} />} />
+            <Route path="/testimonial" exact element={<Testimonial />} />
+            <Route path="/pricing" exact element={<Pricing />} />
+            <Route path="/contact-us" exact element={<Contact />} />
+            <Route path="/footer" exact element={<Footer />} />
+            <Route path="/signup" exact element={<Signup />} />
+            <Route path="/about" exact element={<About />} />
+            <Route path="/my-profile" exact element={<ProfilePage />} />
+            <Route path="/archived-notes" exact element={<ArchivedNotes />} />
+            <Route path="/calendar" exact element={<Calendar />} />
+            {/* <Route path="/404" exact element={<ErrorPage/>} /> */}
+          </Routes>
+          <ScrollToTop
+            className="scroll-to-top"
+            symbol={
+              <span style={{ fontSize: "1.5rem", color: "#fff" }}>
+                {" "}
+                <i class="fa-solid fa-arrow-up"></i>
+              </span>
+            }
+            size={65}
+            bgColor="#111827"
+            strokeWidth={5}
+            strokeFillColor="#6B7280"
+            strokeEmptyColor="#CBCBCB"
+            symbolColor="#fff"
+          />
+        </>
       )}
     </div>
   );
@@ -89,7 +117,6 @@ const App = () => {
 const AppWithRouter = () => (
   <Router>
     <App />
-    
   </Router>
 );
 
