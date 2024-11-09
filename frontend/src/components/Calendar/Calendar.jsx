@@ -22,7 +22,7 @@ const Calendar = () => {
   const [selectedEvent, setSelectedEvent] = useState(null); // State to hold the selected event
   const [isModalOpen, setIsModalOpen] = useState(false); // State to control modal visibility
   const [googleCalendarEvents, setGoogleCalendarEvents] = useState([]); // State for Google Calendar events
-  const [loading, setLoading] = useState(true); // Loading state for backdrop
+  const [loading, setLoading] = useState(false); // Loading state for backdrop
 
   const clientId = import.meta.env.VITE_GOOGLE_CLIENT; // Corrected to use Google OAuth Client ID
   const apiToken = import.meta.env.VITE_GOOGLE_API_TOKEN; // Google API token for Calendar API
