@@ -13,7 +13,7 @@ const SearchBar = ({ value, tag, searchType, onChange, onTagChange, onClearSearc
                 onChange={onSearchTypeChange}
                 className="text-xs bg-transparent outline-none mr-4"
             >
-                <option value="text">Text</option>
+                <option value="text">Title</option>
                 <option value="tag">Tag</option>
             </select>
 

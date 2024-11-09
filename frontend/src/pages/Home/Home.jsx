@@ -162,16 +162,26 @@ const Home = () => {
       handleDeleteModalClose();
     }
   };
-  const onSearchNote = async (query) => {
+  const onSearchNote = async (query, queryType) => {
+
     setSearchQuery(query);
     if (query.trim() === "") {
       setIsSearch(false);
       getAllNotes();
       return;
     }
-    const filteredNotes = allNotes.filter(note =>
-      note.title.toLowerCase().includes(query.toLowerCase())
-    );
+
+    if (queryType == "text") {
+        const filteredNotes = allNotes.filter(note => note.title.toLowerCase().includes(query.toLowerCase()));
+        setIsSearch(true);
+        setAllNotes(filteredNotes);
+    }
+    else if (queryType == "tag") {
+        const filteredNotes = allNotes.filter(note => note.tags.includes(query.toLowerCase()));
+        setIsSearch(true);
+        setAllNotes(filteredNotes);
+    }
+    /*
 
     try {
       const response = await axiosInstance.get(`${apiBaseUrl}/search-notes`, { params: { query } });
@@ -182,6 +192,7 @@ const Home = () => {
     } catch (error) {
       console.log("Error while searching notes");
     }
+      */
   };
 
   // Debounce function to limit the rate of search
@@ -200,8 +211,8 @@ const debouncedSearch = debounce(onSearchNote, 300);
   }, []);
 
 
-  const handleSearchInputChange = (query) => {
-    debouncedSearch(query);
+  const handleSearchInputChange = (query, queryType) => {
+    debouncedSearch(query, queryType);
   };
 
   const updateIsPinned = async (noteData) => {
