@@ -5,18 +5,27 @@ import Navbar from "../Navbar";
 import Modal from "../Modal"; // Import the Modal component
 import toast from "react-hot-toast"; // Ensure you have react-toastify installed
 import { gapi } from "gapi-script"; // Import the Google API client
+import Backdrop from "@mui/material/Backdrop"; // Import MUI Backdrop
+import Button from "@mui/material/Button"; // Import MUI Button
+import { CircularProgress } from "@mui/material"; // Import CircularProgress for loading indicator
 
 const Calendar = () => {
   const user = JSON.parse(localStorage.getItem("user"));
   const [events, setEvents] = useState([]); // Local events from your server
-  const [newEvent, setNewEvent] = useState({ date: "", title: "", color: "gray", description: "" });
+  const [newEvent, setNewEvent] = useState({
+    date: "",
+    title: "",
+    color: "gray",
+    description: "",
+  });
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [selectedEvent, setSelectedEvent] = useState(null); // State to hold the selected event
   const [isModalOpen, setIsModalOpen] = useState(false); // State to control modal visibility
   const [googleCalendarEvents, setGoogleCalendarEvents] = useState([]); // State for Google Calendar events
+  const [loading, setLoading] = useState(true); // Loading state for backdrop
 
-  const clientId = import.meta.env.VITE_GOOGLE_CLIENT;  // Corrected to use Google OAuth Client ID
-  const apiToken = import.meta.env.VITE_GOOGLE_API_TOKEN;  // Google API token for Calendar API
+  const clientId = import.meta.env.VITE_GOOGLE_CLIENT; // Corrected to use Google OAuth Client ID
+  const apiToken = import.meta.env.VITE_GOOGLE_API_TOKEN; // Google API token for Calendar API
 
   // Fetch events from your server
   useEffect(() => {
@@ -33,7 +42,7 @@ const Calendar = () => {
       gapi.load("client:auth2", async () => {
         await gapi.auth2.init({
           client_id: clientId,
-          scope: "https://www.googleapis.com/auth/calendar" // Request full access to Calendar
+          scope: "https://www.googleapis.com/auth/calendar", // Request full access to Calendar
         });
       });
     };
@@ -43,11 +52,12 @@ const Calendar = () => {
   // Google authentication and event syncing
   const handleGoogleAuth = async () => {
     const authInstance = gapi.auth2.getAuthInstance();
+    setLoading(true);
 
     // If the user is not signed in or doesn't have the correct scope, sign them out and prompt for reauthorization
     if (!authInstance.isSignedIn.get()) {
       await authInstance.signIn({
-        scope: "https://www.googleapis.com/auth/calendar" // Full access to Google Calendar
+        scope: "https://www.googleapis.com/auth/calendar", // Full access to Google Calendar
       });
     } else {
       // If already signed in, check if the token has the correct scope
@@ -64,20 +74,25 @@ const Calendar = () => {
     }
 
     // After successful sign-in with the required scope, fetch Google Calendar events
-    fetchGoogleCalendarEvents();
+    await fetchGoogleCalendarEvents();
+    setLoading(false);
   };
 
   // Fetch Google Calendar events
   const fetchGoogleCalendarEvents = async () => {
     const authInstance = gapi.auth2.getAuthInstance();
     if (authInstance.isSignedIn.get()) {
-      const accessToken = authInstance.currentUser.get().getAuthResponse().access_token;
+      const accessToken = authInstance.currentUser
+        .get()
+        .getAuthResponse().access_token;
       gapi.client.setApiKey(apiToken); // Use the correct API token for requests
-      await gapi.client.load("https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest");
+      await gapi.client.load(
+        "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"
+      );
 
       const response = await gapi.client.calendar.events.list({
         calendarId: "primary", // Use primary calendar
-        timeMin: (new Date()).toISOString(),
+        timeMin: new Date().toISOString(),
         maxResults: 10,
         singleEvents: true,
         orderBy: "startTime",
@@ -119,20 +134,35 @@ const Calendar = () => {
 
   // Navigate to the previous month
   const handlePrevMonth = () => {
-    setCurrentMonth((prev) => new Date(prev.getFullYear(), prev.getMonth() - 1));
+    setCurrentMonth(
+      (prev) => new Date(prev.getFullYear(), prev.getMonth() - 1)
+    );
   };
 
   // Navigate to the next month
   const handleNextMonth = () => {
-    setCurrentMonth((prev) => new Date(prev.getFullYear(), prev.getMonth() + 1));
+    setCurrentMonth(
+      (prev) => new Date(prev.getFullYear(), prev.getMonth() + 1)
+    );
   };
 
-  const daysInMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 0).getDate();
-  const startDay = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), 1).getDay();
+  const daysInMonth = new Date(
+    currentMonth.getFullYear(),
+    currentMonth.getMonth() + 1,
+    0
+  ).getDate();
+  const startDay = new Date(
+    currentMonth.getFullYear(),
+    currentMonth.getMonth(),
+    1
+  ).getDay();
 
   return (
     <div>
       <Navbar userInfo={user} />
+      <Backdrop open={loading}>
+        <CircularProgress color="inherit" />
+      </Backdrop>
       <div className="flex container mx-auto p-4">
         <div className="w-1/3 p-4 border-r">
           <h1 className="text-xl font-bold mb-4">Add New Event</h1>
@@ -146,41 +176,64 @@ const Calendar = () => {
             type="text"
             placeholder="Event Title"
             value={newEvent.title}
-            onChange={(e) => setNewEvent({ ...newEvent, title: e.target.value })}
+            onChange={(e) =>
+              setNewEvent({ ...newEvent, title: e.target.value })
+            }
             className="border p-1 mb-2 w-full"
           />
           <input
             type="text"
             placeholder="Event Description"
             value={newEvent.description}
-            onChange={(e) => setNewEvent({ ...newEvent, description: e.target.value })}
+            onChange={(e) =>
+              setNewEvent({ ...newEvent, description: e.target.value })
+            }
             className="border p-1 mb-2 w-full"
           />
           <input
             type="color"
             value={newEvent.color}
-            onChange={(e) => setNewEvent({ ...newEvent, color: e.target.value })}
+            onChange={(e) =>
+              setNewEvent({ ...newEvent, color: e.target.value })
+            }
             className="mb-2"
           />
           <br />
-          <button onClick={handleAddEvent} className="bg-blue-600 text-white p-2">
+          <Button
+            onClick={handleAddEvent}
+            variant="contained"
+            color="primary"
+            className="mb-2"
+          >
             Add Event
-          </button>
+          </Button>
           <br />
-          <button onClick={handleGoogleAuth} className="bg-green-800 text-white p-2 mt-4">
+          <Button
+            onClick={handleGoogleAuth}
+            variant="contained"
+            color="secondary"
+            className="mt-4"
+          >
             Sync with Google Calendar
-          </button>
+          </Button>
         </div>
 
         <div className="w-2/3 p-4">
           <div className="flex justify-between items-center mb-4">
-            <button onClick={handlePrevMonth} className="bg-gray-300 p-2 rounded">
+            <button
+              onClick={handlePrevMonth}
+              className="bg-gray-300 p-2 rounded"
+            >
               Prev
             </button>
             <h2 className="text-xl">
-              {currentMonth.toLocaleString("default", { month: "long" })} {currentMonth.getFullYear()}
+              {currentMonth.toLocaleString("default", { month: "long" })}{" "}
+              {currentMonth.getFullYear()}
             </h2>
-            <button onClick={handleNextMonth} className="bg-gray-300 p-2 rounded">
+            <button
+              onClick={handleNextMonth}
+              className="bg-gray-300 p-2 rounded"
+            >
               Next
             </button>
           </div>
@@ -197,33 +250,34 @@ const Calendar = () => {
                   .filter(
                     (event) =>
                       new Date(event.date).getDate() === i + 1 &&
-                      new Date(event.date).getMonth() === currentMonth.getMonth()
+                      new Date(event.date).getMonth() ===
+                        currentMonth.getMonth()
                   )
                   .map((event) => (
                     <div
                       key={event._id}
-                      className="p-1 text-center mb-1 cursor-pointer"
+                      className="p-1 my-1 rounded text-white cursor-pointer"
                       style={{ backgroundColor: event.color }}
-                      onClick={() => handleEventClick(event)} // Open modal on click
+                      onClick={() => handleEventClick(event)}
                     >
-                      <h4 className="break-words">{event.title}</h4>
+                      {event.title}
                     </div>
                   ))}
                 {/* Render Google Calendar events */}
                 {googleCalendarEvents
                   .filter(
                     (event) =>
-                      new Date(event.start.dateTime || event.start.date).getDate() === i + 1 &&
-                      new Date(event.start.dateTime || event.start.date).getMonth() === currentMonth.getMonth()
+                      new Date(event.start.dateTime).getDate() === i + 1 &&
+                      new Date(event.start.dateTime).getMonth() ===
+                        currentMonth.getMonth()
                   )
-                  .map((event, idx) => (
+                  .map((event, index) => (
                     <div
-                      key={idx}
-                      className="p-1 text-center mb-1 cursor-pointer"
-                      style={{ backgroundColor: "#FF4081" }}
-                      onClick={() => alert(`Google Event: ${event.summary}`)}
+                      key={index}
+                      className="p-1 my-1 rounded text-white cursor-pointer bg-blue-500"
+                      onClick={() => handleEventClick(event)}
                     >
-                      <h4 className="break-words">{event.summary}</h4>
+                      {event.summary}
                     </div>
                   ))}
               </div>
@@ -231,14 +285,15 @@ const Calendar = () => {
           </div>
         </div>
       </div>
-
-      {/* Modal for event details */}
-      <Modal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        event={selectedEvent}
-        onDelete={handleDeleteEvent}
-      />
+      {/* Modal to display event details */}
+      {selectedEvent && (
+        <Modal
+          open={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          event={selectedEvent}
+          onDelete={() => handleDeleteEvent(selectedEvent._id)}
+        />
+      )}
     </div>
   );
 };
