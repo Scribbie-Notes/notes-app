@@ -22,7 +22,7 @@ const Calendar = () => {
 
   const clientId = import.meta.env.VITE_GOOGLE_CLIENT; // Corrected to use Google OAuth Client ID
   const apiToken = import.meta.env.VITE_GOOGLE_API_TOKEN; // Google API token for Calendar API
-
+  const [minDate, setMinDate] = useState("");
   // Fetch events from your server
   useEffect(() => {
     const fetchEvents = async () => {
@@ -30,6 +30,10 @@ const Calendar = () => {
       setEvents(response.data); // Fetch events from your backend server
     };
     fetchEvents();
+  }, []);
+
+  useEffect(() => {
+    setMinDate(new Date().toISOString().split("T")[0]);
   }, []);
 
   // Initialize the Google API client
@@ -162,7 +166,7 @@ const Calendar = () => {
             value={newEvent.date}
             onChange={(e) => setNewEvent({ ...newEvent, date: e.target.value })}
             className="border p-1 mb-2 w-full"
-            min={new Date().toISOString().split("T")[0]} // Set minimum date to today
+            min={minDate}
           />
           <input
             type="text"
