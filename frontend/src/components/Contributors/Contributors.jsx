@@ -5,7 +5,7 @@ import "./Contributors.css";
 function Contributors() {
   const [contributors, setContributors] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null); // Added error state
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     async function fetchContributors() {
@@ -32,39 +32,44 @@ function Contributors() {
         }
         setContributors(allContributors);
       } catch (error) {
-        console.error("Error fetching contributors:", error.message);
-        setError("Failed to load contributors. Please try again later."); // Set error message
+        console.error("Error fetching contributors:", error);
+        setError("Failed to load contributors. Please try again later.");
       } finally {
         setLoading(false);
       }
     }
+
     fetchContributors();
   }, []);
+
+  if (loading) {
+    return <div className="loading">Loading contributors...</div>;
+  }
 
   return (
     <div className="contributors-container">
       <h1 className="contributors-title">Our Contributors</h1>
+      {error && <p className="error-message">{error}</p>}
       <div className="contributors-grid">
         {contributors.length > 0 ? (
           contributors.map((contributor) => (
-            <div key={contributor.id} className="contributor-card">
-              <a
-                href={contributor.html_url}
-                className="contributor-link"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <img
-                  src={contributor.avatar_url}
-                  alt={contributor.login}
-                  className="contributor-avatar"
-                />
-              </a>
+            <a
+              key={contributor.id}
+              href={contributor.html_url}  // Link to the contributor's GitHub profile
+              target="_blank"
+              rel="noopener noreferrer"
+              className="contributor-card" // Apply card styling
+            >
+              <img
+                src={contributor.avatar_url}
+                alt={contributor.login}
+                className="contributor-avatar"
+              />
               <h2 className="contributor-name">{contributor.login}</h2>
               <p className="contributor-contributions">
                 Contributions: {contributor.contributions}
               </p>
-            </div>
+            </a>
           ))
         ) : (
           <p>No contributors found.</p>

@@ -39,7 +39,7 @@ const StickyFooter = () => {
         },
       });
     }
-    
+
 
 
     const feedbackData = {
@@ -245,6 +245,9 @@ const StickyFooter = () => {
               </Link>
               <Link to={"/contact-us"}>
                 <li className="cursor-pointer hover:text-gray-700 hover:underline underline-offset-2">Contact Us</li>
+              </Link>
+              <Link to={"/contributors"}>
+                <li className="cursor-pointer hover:text-gray-700 hover:underline underline-offset-2">Contributors</li>
               </Link>
               <Link to="#" onClick={openFeedbackModal}>
                 <li className="cursor-pointer hover:text-gray-700 hover:underline underline-offset-2">Feedback</li>
