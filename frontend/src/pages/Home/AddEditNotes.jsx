@@ -20,6 +20,8 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
   const [isListening, setIsListening] = useState(false);
   const [isPinned, setIsPinned] = useState(false);
   const [isSpeechSupported, setIsSpeechSupported] = useState(true);
+  const [initialData, setInitialData] = useState(null); // To store the initial data for revert functionality
+
   const MAX_TITLE_LENGTH = 60;
   const MAX_CONTENT_LENGTH = 2500;
 
@@ -77,6 +79,10 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
 
   useEffect(() => {
     if (noteData) {
+      // Set initial data state for revert functionality
+      setInitialData({ ...noteData });
+
+      // Set form data
       setTitle(noteData.title);
       setContent(noteData.content);
       setTags(noteData.tags);
@@ -162,6 +168,20 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
     } else {
         addNewNote({ title, content, tags, attachments, photos, videos, background, isPinned });
     }
+  };
+
+  const handleRevertChanges = () => {
+    if (!initialData) return;
+
+    // Revert all form fields to initial data values
+    setTitle(initialData.title);
+    setContent(initialData.content);
+    setTags(initialData.tags);
+    setAttachments(initialData.files || []);
+    setBackground(initialData.background || "#ffffff");
+    setPhotos(initialData.photos || []);
+    setVideos(initialData.videos || []);
+    setIsPinned(initialData.isPinned || false);
   };
 
   return (
@@ -265,6 +285,16 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
       >
         {type === "edit" ? "Update Note" : "Add Note"}
       </button>
+
+      {/* Revert Button */}
+      {initialData && (
+        <button
+          className="w-auto items-center text-white bg-red-500 hover:bg-red-700 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 mt-2"
+          onClick={handleRevertChanges}
+        >
+          Revert Changes
+        </button>
+      )}
     </div>
   );
 };

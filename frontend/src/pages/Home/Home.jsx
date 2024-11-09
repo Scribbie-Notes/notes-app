@@ -14,7 +14,8 @@ import {
   MdPushPin,
   MdOutlineUnarchive,
   MdOutlineArchive,
-  MdListAlt
+  MdListAlt,
+  MdSort
 } from "react-icons/md";
 
 import AddEditNotes from "./AddEditNotes";
@@ -73,6 +74,7 @@ const Home = () => {
   const [userInfo, setUserInfo] = useState(null);
   const [isSearch, setIsSearch] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [sortOrder, setSortOrder] = useState('ascending'); // 'ascending' or 'descending'
 
   const navigate = useNavigate();
 
@@ -162,16 +164,26 @@ const Home = () => {
       handleDeleteModalClose();
     }
   };
-  const onSearchNote = async (query) => {
+  const onSearchNote = async (query, queryType) => {
+
     setSearchQuery(query);
     if (query.trim() === "") {
       setIsSearch(false);
       getAllNotes();
       return;
     }
-    const filteredNotes = allNotes.filter(note =>
-      note.title.toLowerCase().includes(query.toLowerCase())
-    );
+
+    if (queryType == "text") {
+        const filteredNotes = allNotes.filter(note => note.title.toLowerCase().includes(query.toLowerCase()));
+        setIsSearch(true);
+        setAllNotes(filteredNotes);
+    }
+    else if (queryType == "tag") {
+        const filteredNotes = allNotes.filter(note => note.tags.includes(query.toLowerCase()));
+        setIsSearch(true);
+        setAllNotes(filteredNotes);
+    }
+    /*
 
     try {
       const response = await axiosInstance.get(`${apiBaseUrl}/search-notes`, { params: { query } });
@@ -182,6 +194,7 @@ const Home = () => {
     } catch (error) {
       console.log("Error while searching notes");
     }
+      */
   };
 
   // Debounce function to limit the rate of search
@@ -200,8 +213,8 @@ const debouncedSearch = debounce(onSearchNote, 300);
   }, []);
 
 
-  const handleSearchInputChange = (query) => {
-    debouncedSearch(query);
+  const handleSearchInputChange = (query, queryType) => {
+    debouncedSearch(query, queryType);
   };
 
   const updateIsPinned = async (noteData) => {
@@ -342,6 +355,33 @@ const debouncedSearch = debounce(onSearchNote, 300);
     setBackground(e.target.value);
   };
 
+  const handleSortByDate = (order) => {
+    const sortedNotes = [...allNotes];
+
+    // Sort notes based on date
+    sortedNotes.sort((a, b) => {
+      const dateA = new Date(a.createdOn);
+      const dateB = new Date(b.createdOn);
+
+      // Sorting logic based on selected order
+      if (order === 'ascending') {
+        return dateA - dateB;
+      } else {
+        return dateB - dateA;
+      }
+    });
+
+    // Update the state with sorted notes
+    setAllNotes(sortedNotes);
+  };
+
+  // Handle change in sort order from the dropdown
+  const handleSortOrderChange = (e) => {
+    const selectedOrder = e.target.value;
+    setSortOrder(selectedOrder);
+    handleSortByDate(selectedOrder); // Sort according to the selected option
+  };
+
   const pinnedNotes = allNotes.filter((note) => note.isPinned === true);
   const otherNotes = allNotes.filter((note) => note.isPinned !== true);
   const undoDelete = async (deletedNotes) => {
@@ -368,7 +408,6 @@ const debouncedSearch = debounce(onSearchNote, 300);
 
   return (
     <div>
-
       {selectedNotes.length > 0 ? (
         <div className=" bg-white shadow-md z-50 p-4 flex justify-between items-center">
           <span>{selectedNotes.length} notes selected</span>
@@ -431,6 +470,20 @@ const debouncedSearch = debounce(onSearchNote, 300);
       )}
 
       <div className="container h-auto p-6 pb-12 mx-auto">
+        {/* Sort dropdown aligned to the right */}
+        <div className="flex justify-end">
+            <div className="flex justify-end text-white bg-blue-500 p-1 rounded-md">
+            <MdSort className="" />
+            <select
+                value={sortOrder}
+                onChange={handleSortOrderChange}
+                className="bg-blue-500 text-white rounded-md"
+            >
+                <option value="ascending">Ascending</option>
+                <option value="descending">Descending</option>
+            </select>
+            </div>
+        </div>
         {isLoading ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 mt-4 transition-all">
             {Array.from({ length: 9 }).map((item, i) => {
