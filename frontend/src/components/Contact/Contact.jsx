@@ -6,6 +6,8 @@ import { IoLogoInstagram } from "react-icons/io5";
 import { FaXTwitter } from "react-icons/fa6";
 import axiosInstance from "../../utils/axiosInstance";
 import toast from "react-hot-toast";
+import Backdrop from "@mui/material/Backdrop";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const Contact = () => {
   const [data, setData] = useState({
@@ -14,6 +16,7 @@ const Contact = () => {
     user_email: "",
     message: "",
   });
+  const [loading, setLoading] = useState(false); // State for loading indicator
 
   const changeHandler = (e) => {
     setData((prevData) => ({
@@ -24,39 +27,42 @@ const Contact = () => {
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    console.log("FORM DATA----: ");
-    console.log(data);
+    console.log("FORM DATA----: ", data);
+
     if (!data.user_email || !data.first_name || !data.message) {
-      toast.error("All Fields are required:)");
-      return;
-    }
-    //const id = toast.loading("Loading..");
-    const response = await axiosInstance.post("/contact", data);
-
-    // handle successful registration response
-    if (response.data.error) {
-      toast.error("Failed submission");
+      toast.error("All Fields are required :)");
       return;
     }
 
-    console.log("CONTACT US RESPONSE---");
-    console.log(response);
-    //toast.dismiss(id);
-    toast.success("Will connect to you soon");
+    setLoading(true);
+    try {
+      const response = await axiosInstance.post("/contact", data);
 
-    setData({ first_name: "", last_name: "", user_email: "", message: "" });
+      if (response.data.error) {
+        toast.error("Failed submission");
+      } else {
+        toast.success("Will connect to you soon");
+        setData({ first_name: "", last_name: "", user_email: "", message: "" });
+      }
+    } catch (error) {
+      toast.error("Submission failed");
+    } finally {
+      setLoading(false); // Hide loading indicator
+    }
   };
 
   useEffect(() => {
     window.scrollTo(0, 0);
-  });
+  }, []);
+
   const form = useRef();
   const user = JSON.parse(localStorage.getItem("user"));
+
   return (
     <div>
       <Navbar userInfo={user} />
-      <div className="contact-section  flex sm:px-16 gap-x-10 sm:py-10 h-[580px] flex-col sm:flex-row w-full p-4 ">
-        <div className="sm:w-2/6 bg-slate-800  p-6 text-white flex  flex-col gap-y-5  shadow-[inset_0_-10px_15px_0_rgba(255,255,255,0.5)] w-full">
+      <div className="contact-section flex sm:px-16 gap-x-10 sm:py-10 h-[580px] flex-col sm:flex-row w-full p-4 ">
+        <div className="sm:w-2/6 bg-slate-800 p-6 text-white flex flex-col gap-y-5 shadow-[inset_0_-10px_15px_0_rgba(255,255,255,0.5)] w-full">
           <h1 className="text-xl">Get in touch</h1>
           <div>
             <h1>Visit us</h1>
@@ -94,7 +100,7 @@ const Contact = () => {
           </div>
         </div>
 
-        <div className=" sm:w-4/6 w-full mt-5">
+        <div className="sm:w-4/6 w-full mt-5">
           <form
             onSubmit={submitHandler}
             ref={form}
@@ -153,7 +159,7 @@ const Contact = () => {
                 className="mr-2"
               />
               <label htmlFor="subscribe" className="text-sm">
-                I&#39;d like to receive more information about company. I
+                I&#39;d like to receive more information about the company. I
                 understand and agree to the{" "}
                 <span className="text-gray-500 font-bold">Privacy Policy</span>
               </label>
@@ -166,6 +172,11 @@ const Contact = () => {
           </form>
         </div>
       </div>
+
+      {/* MUI Backdrop with CircularProgress */}
+      <Backdrop sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }} open={loading}>
+        <CircularProgress color="inherit" />
+      </Backdrop>
     </div>
   );
 };

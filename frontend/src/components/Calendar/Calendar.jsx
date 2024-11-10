@@ -27,6 +27,10 @@ const Calendar = () => {
   const clientId = import.meta.env.VITE_GOOGLE_CLIENT; // Corrected to use Google OAuth Client ID
   const apiToken = import.meta.env.VITE_GOOGLE_API_TOKEN; // Google API token for Calendar API
 
+
+
+  const [minDate, setMinDate] = useState("");
+
   // Fetch events from your server
   useEffect(() => {
     const fetchEvents = async () => {
@@ -34,6 +38,10 @@ const Calendar = () => {
       setEvents(response.data); // Fetch events from your backend server
     };
     fetchEvents();
+  }, []);
+
+  useEffect(() => {
+    setMinDate(new Date().toISOString().split("T")[0]);
   }, []);
 
   // Initialize the Google API client
@@ -171,6 +179,7 @@ const Calendar = () => {
             value={newEvent.date}
             onChange={(e) => setNewEvent({ ...newEvent, date: e.target.value })}
             className="border p-1 mb-2 w-full"
+            min={minDate}
           />
           <input
             type="text"
@@ -199,20 +208,24 @@ const Calendar = () => {
             className="mb-2"
           />
           <br />
+
           <Button
             onClick={handleAddEvent}
             variant="contained"
             color="primary"
             className="mb-2"
+
           >
             Add Event
           </Button>
           <br />
+
           <Button
             onClick={handleGoogleAuth}
             variant="contained"
             color="secondary"
             className="mt-4"
+
           >
             Sync with Google Calendar
           </Button>
@@ -267,9 +280,15 @@ const Calendar = () => {
                 {googleCalendarEvents
                   .filter(
                     (event) =>
-                      new Date(event.start.dateTime).getDate() === i + 1 &&
-                      new Date(event.start.dateTime).getMonth() ===
-                        currentMonth.getMonth()
+
+                      new Date(
+                        event.start.dateTime || event.start.date
+                      ).getDate() ===
+                        i + 1 &&
+                      new Date(
+                        event.start.dateTime || event.start.date
+                      ).getMonth() === currentMonth.getMonth()
+
                   )
                   .map((event, index) => (
                     <div

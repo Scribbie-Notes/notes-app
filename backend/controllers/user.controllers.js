@@ -11,7 +11,10 @@ import contactSendMail from "../mail/contactUsMailSender.js";
 const client = new OAuth2Client(GOOGLE_API_TOKEN);
 
 const createAccountController = async (req, res) => {
-  const isUser = await userModel.findOne({ email });
+  const { fullName, email, password } = req.body; // Fix: destructuring missing variables
+
+  // Check if user already exists
+  const isUser = await User.findOne({ email });
   if (isUser) {
     return res.json({
       error: true,
@@ -30,14 +33,16 @@ const createAccountController = async (req, res) => {
     });
   }
 
+  // Create and save new user
   const user = new User({ fullName, email, password: hashedPass });
   await user.save();
-  const expiresIn = 60 * 20;
+  const expiresIn = 60 * 20; // token expiry time
   const token = jwt.sign({ sub: user._id, expiresIn }, ACCESS_TOKEN_SECRET);
   const url = `http://localhost:${process.env.PORT}/verify/${token}`;
   const html = `<a href="${url}">Click here to verify your account</a>`;
-  sendMail(email, html);
+  sendMail(email, html); // send verification email
 
+  // Generate access token for the new user
   const accessToken = jwt.sign({ user }, ACCESS_TOKEN_SECRET, {
     expiresIn: "36000m",
   });
@@ -99,6 +104,7 @@ const loginAccountController = async (req, res) => {
       .status(HTTP_STATUS.BAD_REQUEST)
       .json({ message: ERROR_MESSAGES.INVALID_CREDENTIALS });
   }
+
   if (!userInfo.isEmailVerified) {
     return res
       .status(HTTP_STATUS.BAD_REQUEST)
@@ -142,30 +148,21 @@ const getCurrentAccountController = async (req, res) => {
 
 const deleteUserController = async (req, res) => {
   try {
-    // destructuring to get userID
-    const {
-      user: { _id: userId },
-    } = req.user;
+    const { user: { _id: userId } } = req.user;
     if (!userId) {
       return res.status(400).json({ error: true, message: "User Id required" });
     }
 
-    // deleting notes
     const deleteNotesResult = await Note.deleteMany({ userId });
-
-    // deleting user
     const deleteUserResult = await User.findByIdAndDelete(userId);
 
-    // checking if user doesn't exist
     if (!deleteUserResult) {
-      return res.status(404).json({ error: true, message: "User not found " });
+      return res.status(404).json({ error: true, message: "User not found" });
     }
     return res.json({ error: false, message: "User deleted successfully" });
   } catch (error) {
     console.log("Error while deleting user", { error });
-    return res
-      .status(500)
-      .json({ error: true, message: "Something went wrong" });
+    return res.status(500).json({ error: true, message: "Something went wrong" });
   }
 };
 
@@ -179,9 +176,6 @@ const updateFullNameController = async (req, res) => {
       .status(HTTP_STATUS.UNAUTHORIZED)
       .json({ error: ERROR_MESSAGES.USER_NOT_AUTHENTICATED });
   }
-
-  console.log("User ID:", user._id);
-  console.log("New Full Name:", newFullName);
 
   try {
     const updatedUser = await User.findByIdAndUpdate(
@@ -197,7 +191,6 @@ const updateFullNameController = async (req, res) => {
         .json({ error: ERROR_MESSAGES.USER_NOT_FOUND });
     }
 
-    console.log("Name updated successfully", updatedUser);
     return res.status(HTTP_STATUS.OK).json({
       message: MESSAGES.FULLNAME_UPDATED_SUCCESSFULLY,
       user: updatedUser,
@@ -220,6 +213,7 @@ const updateEmailController = async (req, res) => {
       .status(HTTP_STATUS.UNAUTHORIZED)
       .json({ error: ERROR_MESSAGES.USER_NOT_AUTHENTICATED });
   }
+
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!emailRegex.test(newEmail)) {
     return res
@@ -241,7 +235,6 @@ const updateEmailController = async (req, res) => {
         .json({ error: ERROR_MESSAGES.USER_NOT_FOUND });
     }
 
-    console.log("Email updated successfully", updatedUser);
     return res.status(HTTP_STATUS.OK).json({
       message: MESSAGES.EMAIL_UPDATED_SUCCESSFULLY,
       user: updatedUser,
@@ -256,29 +249,23 @@ const updateEmailController = async (req, res) => {
 
 const updatePhoneController = async (req, res) => {
   const { newPhone } = req.body;
-  const userId = req.body.userId;
+  const { userId } = req.body;
 
   try {
     const user = await User.findById(userId);
     if (user) {
       user.phone = newPhone;
       await user.save();
-      res
-        .status(HTTP_STATUS.OK)
-        .json({ message: MESSAGES.PHONE_UPDATED_SUCCESSFULLY });
+      res.status(HTTP_STATUS.OK).json({ message: MESSAGES.PHONE_UPDATED_SUCCESSFULLY });
     } else {
-      res
-        .status(HTTP_STATUS.NOT_FOUND)
-        .json({ message: ERROR_MESSAGES.USER_NOT_FOUND });
+      res.status(HTTP_STATUS.NOT_FOUND).json({ message: ERROR_MESSAGES.USER_NOT_FOUND });
     }
   } catch (error) {
-    res
-      .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
-      .json({ message: ERROR_MESSAGES.INTERNAL_SERVER_ERROR, error });
+    res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({ message: ERROR_MESSAGES.INTERNAL_SERVER_ERROR, error });
   }
 };
 
-const updatePofilePhotoController = async (req, res) => {
+const updateProfilePhotoController = async (req, res) => {
   if (!req.file) {
     return res.status(400).json({ message: "Profile photo is required" });
   }
@@ -295,9 +282,7 @@ const updatePofilePhotoController = async (req, res) => {
     });
   } catch (error) {
     console.error("Error updating profile photo:", error);
-    res
-      .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
-      .json({ message: ERROR_MESSAGES.INTERNAL_SERVER_ERROR });
+    res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({ message: ERROR_MESSAGES.INTERNAL_SERVER_ERROR });
   }
 };
 
@@ -320,7 +305,7 @@ const googleAuthController = async (req, res) => {
       user = new User({
         fullName: payload["name"],
         email: email,
-        password: "", // You might want to generate a random password or handle this differently
+        password: "", // Handle password logic for OAuth users
       });
       await user.save();
     }
@@ -366,13 +351,15 @@ const feedbackSubmitController = async (req, res) => {
 
 const contactUsMailController = async (req, res) => {
   const { first_name, last_name, user_email, message } = req.body;
+
   try {
     const html = `<p>${message}</p>`;
     const name = first_name + " " + last_name;
     contactSendMail(user_email, name, html);
+
     return res.status(200).json({
       error: false,
-      message: "Mail send successfully",
+      message: "Mail sent successfully",
     });
   } catch (err) {
     console.log(err.message);
@@ -392,7 +379,7 @@ export {
   updateFullNameController,
   updateEmailController,
   updatePhoneController,
-  updatePofilePhotoController,
+  updateProfilePhotoController,  // Corrected name
   googleAuthController,
   feedbackSubmitController,
   contactUsMailController,
