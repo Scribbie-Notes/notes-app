@@ -1,4 +1,6 @@
 import User from "../models/userModel.js";
+import Note from "../models/noteModel.js";
+
 import bcrypt from "bcrypt";
 import sendMail from "../mail/sendMail.js";
 import jwt from "jsonwebtoken";
@@ -11,7 +13,8 @@ import contactSendMail from "../mail/contactUsMailSender.js";
 const client = new OAuth2Client(GOOGLE_API_TOKEN);
 
 const createAccountController = async (req, res) => {
-  const isUser = await userModel.findOne({ email });
+  const {email, password, fullName}  = req.body;
+  const isUser = await User.findOne({ email });
   if (isUser) {
     return res.json({
       error: true,
@@ -150,9 +153,13 @@ const deleteUserController = async (req, res) => {
       return res.status(400).json({ error: true, message: "User Id required" });
     }
 
-    // deleting notes
+    // Deleting notes only if the user exists
     const deleteNotesResult = await Note.deleteMany({ userId });
-
+    if (deleteNotesResult.deletedCount === 0) {
+      console.log("No notes found for this user.");
+    } else {
+      console.log(`${deleteNotesResult.deletedCount} notes deleted for user ${userId}.`);
+    }
     // deleting user
     const deleteUserResult = await User.findByIdAndDelete(userId);
 
