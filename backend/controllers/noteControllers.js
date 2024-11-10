@@ -1,5 +1,7 @@
 import Note from "../models/noteModel.js";
 import { HTTP_STATUS, MESSAGES, ERROR_MESSAGES } from "../utils/const.js";
+import moment from 'moment';  // Add this import at the top
+
 
 const addNoteController = async (req, res) => {
   const { title, content, tags, background } = req.body;
@@ -339,6 +341,44 @@ const archiveNoteController = async (req, res) => {
   }
 };
 
+const viewNotesController = async (req, res) => {
+    try {
+      const { noteId } = req.params;
+
+      // Find the note by ID
+      const note = await Note.findById(noteId);
+
+      // If note doesn't exist, return a 404 error
+      if (!note) {
+        return res.status(HTTP_STATUS.NOT_FOUND).send("<h1>Note not found</h1>");
+      }
+
+      // If the note is archived or deleted
+      if (note.deleted) {
+        return res.status(HTTP_STATUS.GONE).send("<h1>Note is deleted</h1>");
+      }
+
+      // Send the note data as HTML
+      const noteHtml = `
+        <html>
+          <head><title>${note.title}</title></head>
+          <body>
+            <h1>${note.title}</h1>
+            <p><strong>Created At:</strong> ${moment(note.createdAt).format("Do MMM YYYY")}</p>
+            <p><strong>Tags:</strong> ${note.tags.join(", ")}</p>
+            <p><strong>Content:</strong>${note.content}</p>
+          </body>
+        </html>
+      `;
+
+      res.setHeader('Content-Type', 'text/html');
+      res.send(noteHtml);
+    } catch (error) {
+      console.error("Error fetching shared note:", error);
+      return res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).send("<h1>Internal Server Error</h1>");
+    }
+};
+
 const searchNotesController = async (req, res) => {
   const { user } = req.user;
   const { query } = req.query;
@@ -445,4 +485,5 @@ export {
   searchNotesController,
   unArchiveController,
   restoreDeletedNotesController,
+  viewNotesController
 };
