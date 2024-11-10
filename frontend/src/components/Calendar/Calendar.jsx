@@ -9,15 +9,20 @@ import { gapi } from "gapi-script"; // Import the Google API client
 const Calendar = () => {
   const user = JSON.parse(localStorage.getItem("user"));
   const [events, setEvents] = useState([]); // Local events from your server
-  const [newEvent, setNewEvent] = useState({ date: "", title: "", color: "gray", description: "" });
+  const [newEvent, setNewEvent] = useState({
+    date: "",
+    title: "",
+    color: "gray",
+    description: "",
+  });
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [selectedEvent, setSelectedEvent] = useState(null); // State to hold the selected event
   const [isModalOpen, setIsModalOpen] = useState(false); // State to control modal visibility
   const [googleCalendarEvents, setGoogleCalendarEvents] = useState([]); // State for Google Calendar events
 
-  const clientId = import.meta.env.VITE_GOOGLE_CLIENT;  // Corrected to use Google OAuth Client ID
-  const apiToken = import.meta.env.VITE_GOOGLE_API_TOKEN;  // Google API token for Calendar API
-
+  const clientId = import.meta.env.VITE_GOOGLE_CLIENT; // Corrected to use Google OAuth Client ID
+  const apiToken = import.meta.env.VITE_GOOGLE_API_TOKEN; // Google API token for Calendar API
+  const [minDate, setMinDate] = useState("");
   // Fetch events from your server
   useEffect(() => {
     const fetchEvents = async () => {
@@ -27,13 +32,17 @@ const Calendar = () => {
     fetchEvents();
   }, []);
 
+  useEffect(() => {
+    setMinDate(new Date().toISOString().split("T")[0]);
+  }, []);
+
   // Initialize the Google API client
   useEffect(() => {
     const initializeGapi = () => {
       gapi.load("client:auth2", async () => {
         await gapi.auth2.init({
           client_id: clientId,
-          scope: "https://www.googleapis.com/auth/calendar" // Request full access to Calendar
+          scope: "https://www.googleapis.com/auth/calendar", // Request full access to Calendar
         });
       });
     };
@@ -47,7 +56,7 @@ const Calendar = () => {
     // If the user is not signed in or doesn't have the correct scope, sign them out and prompt for reauthorization
     if (!authInstance.isSignedIn.get()) {
       await authInstance.signIn({
-        scope: "https://www.googleapis.com/auth/calendar" // Full access to Google Calendar
+        scope: "https://www.googleapis.com/auth/calendar", // Full access to Google Calendar
       });
     } else {
       // If already signed in, check if the token has the correct scope
@@ -71,13 +80,17 @@ const Calendar = () => {
   const fetchGoogleCalendarEvents = async () => {
     const authInstance = gapi.auth2.getAuthInstance();
     if (authInstance.isSignedIn.get()) {
-      const accessToken = authInstance.currentUser.get().getAuthResponse().access_token;
+      const accessToken = authInstance.currentUser
+        .get()
+        .getAuthResponse().access_token;
       gapi.client.setApiKey(apiToken); // Use the correct API token for requests
-      await gapi.client.load("https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest");
+      await gapi.client.load(
+        "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"
+      );
 
       const response = await gapi.client.calendar.events.list({
         calendarId: "primary", // Use primary calendar
-        timeMin: (new Date()).toISOString(),
+        timeMin: new Date().toISOString(),
         maxResults: 10,
         singleEvents: true,
         orderBy: "startTime",
@@ -119,16 +132,28 @@ const Calendar = () => {
 
   // Navigate to the previous month
   const handlePrevMonth = () => {
-    setCurrentMonth((prev) => new Date(prev.getFullYear(), prev.getMonth() - 1));
+    setCurrentMonth(
+      (prev) => new Date(prev.getFullYear(), prev.getMonth() - 1)
+    );
   };
 
   // Navigate to the next month
   const handleNextMonth = () => {
-    setCurrentMonth((prev) => new Date(prev.getFullYear(), prev.getMonth() + 1));
+    setCurrentMonth(
+      (prev) => new Date(prev.getFullYear(), prev.getMonth() + 1)
+    );
   };
 
-  const daysInMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 0).getDate();
-  const startDay = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), 1).getDay();
+  const daysInMonth = new Date(
+    currentMonth.getFullYear(),
+    currentMonth.getMonth() + 1,
+    0
+  ).getDate();
+  const startDay = new Date(
+    currentMonth.getFullYear(),
+    currentMonth.getMonth(),
+    1
+  ).getDay();
 
   return (
     <div>
@@ -141,46 +166,66 @@ const Calendar = () => {
             value={newEvent.date}
             onChange={(e) => setNewEvent({ ...newEvent, date: e.target.value })}
             className="border p-1 mb-2 w-full"
+            min={minDate}
           />
           <input
             type="text"
             placeholder="Event Title"
             value={newEvent.title}
-            onChange={(e) => setNewEvent({ ...newEvent, title: e.target.value })}
+            onChange={(e) =>
+              setNewEvent({ ...newEvent, title: e.target.value })
+            }
             className="border p-1 mb-2 w-full"
           />
           <input
             type="text"
             placeholder="Event Description"
             value={newEvent.description}
-            onChange={(e) => setNewEvent({ ...newEvent, description: e.target.value })}
+            onChange={(e) =>
+              setNewEvent({ ...newEvent, description: e.target.value })
+            }
             className="border p-1 mb-2 w-full"
           />
           <input
             type="color"
             value={newEvent.color}
-            onChange={(e) => setNewEvent({ ...newEvent, color: e.target.value })}
+            onChange={(e) =>
+              setNewEvent({ ...newEvent, color: e.target.value })
+            }
             className="mb-2"
           />
           <br />
-          <button onClick={handleAddEvent} className="bg-blue-600 text-white p-2">
+          <button
+            onClick={handleAddEvent}
+            className="bg-blue-600 text-white p-2"
+          >
             Add Event
           </button>
           <br />
-          <button onClick={handleGoogleAuth} className="bg-green-800 text-white p-2 mt-4">
+          <button
+            onClick={handleGoogleAuth}
+            className="bg-green-800 text-white p-2 mt-4"
+          >
             Sync with Google Calendar
           </button>
         </div>
 
         <div className="w-2/3 p-4">
           <div className="flex justify-between items-center mb-4">
-            <button onClick={handlePrevMonth} className="bg-gray-300 p-2 rounded">
+            <button
+              onClick={handlePrevMonth}
+              className="bg-gray-300 p-2 rounded"
+            >
               Prev
             </button>
             <h2 className="text-xl">
-              {currentMonth.toLocaleString("default", { month: "long" })} {currentMonth.getFullYear()}
+              {currentMonth.toLocaleString("default", { month: "long" })}{" "}
+              {currentMonth.getFullYear()}
             </h2>
-            <button onClick={handleNextMonth} className="bg-gray-300 p-2 rounded">
+            <button
+              onClick={handleNextMonth}
+              className="bg-gray-300 p-2 rounded"
+            >
               Next
             </button>
           </div>
@@ -197,7 +242,8 @@ const Calendar = () => {
                   .filter(
                     (event) =>
                       new Date(event.date).getDate() === i + 1 &&
-                      new Date(event.date).getMonth() === currentMonth.getMonth()
+                      new Date(event.date).getMonth() ===
+                        currentMonth.getMonth()
                   )
                   .map((event) => (
                     <div
@@ -213,8 +259,13 @@ const Calendar = () => {
                 {googleCalendarEvents
                   .filter(
                     (event) =>
-                      new Date(event.start.dateTime || event.start.date).getDate() === i + 1 &&
-                      new Date(event.start.dateTime || event.start.date).getMonth() === currentMonth.getMonth()
+                      new Date(
+                        event.start.dateTime || event.start.date
+                      ).getDate() ===
+                        i + 1 &&
+                      new Date(
+                        event.start.dateTime || event.start.date
+                      ).getMonth() === currentMonth.getMonth()
                   )
                   .map((event, idx) => (
                     <div
