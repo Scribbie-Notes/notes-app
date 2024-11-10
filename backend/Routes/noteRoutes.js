@@ -17,6 +17,7 @@ import {
   updateNotePinnedController,
   unArchiveController,
   updateNotesBackgroundController,
+  viewNotesController,
   restoreDeletedNotesController
 } from "../controllers/noteControllers.js";
 import noteModel from "../models/noteModel.js";
@@ -34,6 +35,10 @@ noteRoutes.post(
   uploadMultiple,
   addNoteController
 );
+
+
+noteRoutes.get("/view-note/:noteId", viewNotesController);
+
 
 // Configure multer to not accept any files
 const upload_note = multer().none(); // This allows only non-file data

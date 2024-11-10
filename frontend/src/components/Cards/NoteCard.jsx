@@ -9,6 +9,7 @@ import {
   MdCheckBox,
   MdCheckBoxOutlineBlank,
   MdDownload,
+  MdShare, // Import Share Icon
 } from "react-icons/md";
 
 const getContrastColor = (background) => {
@@ -40,28 +41,30 @@ const NoteCard = ({
 
   // Function to download the note
   const downloadNote = (content, title, date) => {
-    // Remove HTML tags from the content using a regular expression
     const strippedContent = content.replace(/<[^>]+>/g, '').trim();
-
-    // Format the date (this is the note creation date)
     const formattedDate = moment(date).format("Do MMM YYYY");
-
-    // Combine title, date, description, and content
     const textToDownload = `Title: ${title}\nDate of Creation: ${formattedDate}\nContent: ${strippedContent}`;
-
-    // Create a Blob from the string to download
     const blob = new Blob([textToDownload], { type: "text/plain;charset=utf-8" });
-
-    // Create an anchor element to trigger the download
     const link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
-    link.download = `${title}.txt`; // Download as a .txt file
+    link.download = `${title}.txt`;
     link.click();
+  };
+
+  const apiBaseUrl = import.meta.env.VITE_BACKEND_URL;
+
+
+  // Share the note by copying the link to the clipboard
+  const shareNote = (id, title) => {
+    const noteLink = `${apiBaseUrl}/view-note/${id}`; // Modify based on your app's route
+    navigator.clipboard.writeText(noteLink).then(() => {
+      alert(`Note link copied: ${noteLink}`);
+    });
   };
 
   return (
     <div
-      className=" border rounded p-5 hover:bg-slate-100 cursor-pointer transition duration-300 ease-in-out "
+      className="border rounded p-5 hover:bg-slate-100 cursor-pointer transition duration-300 ease-in-out"
       style={{ backgroundColor: background, color: textColor }}
     >
       <div className="flex items-center justify-between" onClick={onClick}>
@@ -108,7 +111,6 @@ const NoteCard = ({
                 key={index}
                 className="bg-gray-100 text-gray-800 text-xs font-medium px-1.5 py-0.5 rounded dark:bg-blue-100 dark:text-gray-800"
               >
-              {/* fix blank tag div  */}
                 {tag !== "" ? `#${tag}` : ""}
               </span>
             ))}
@@ -170,6 +172,21 @@ const NoteCard = ({
             />
             <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 hidden group-hover:flex items-center justify-center bg-black text-white text-xs rounded px-2 py-1">
               {"Export Note"}
+            </div>
+          </div>
+
+          {/* Share Icon */}
+          <div className="relative group">
+            <MdShare
+              className="icon-btn hover:text-blue-500 cursor-pointer transition-all"
+              onClick={(e) => {
+                e.stopPropagation();
+                shareNote(id, title);
+              }}
+              style={{ color: textColor }}
+            />
+            <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 hidden group-hover:flex items-center justify-center bg-black text-white text-xs rounded px-2 py-1">
+              {"Share Note"}
             </div>
           </div>
         </div>
