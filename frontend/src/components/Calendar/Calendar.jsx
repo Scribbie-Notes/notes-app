@@ -196,7 +196,7 @@ const Calendar = () => {
                 {events
                   .filter(
                     (event) =>
-                      new Date(event.date).getDate() === i + 1 &&
+                      new Date(event.date).getDate() === i &&
                       new Date(event.date).getMonth() === currentMonth.getMonth()
                   )
                   .map((event) => (
