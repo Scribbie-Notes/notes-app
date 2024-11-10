@@ -5,6 +5,9 @@ import Navbar from "../Navbar";
 import Modal from "../Modal"; // Import the Modal component
 import toast from "react-hot-toast"; // Ensure you have react-toastify installed
 import { gapi } from "gapi-script"; // Import the Google API client
+import Backdrop from "@mui/material/Backdrop"; // Import MUI Backdrop
+import Button from "@mui/material/Button"; // Import MUI Button
+import { CircularProgress } from "@mui/material"; // Import CircularProgress for loading indicator
 
 const Calendar = () => {
   const user = JSON.parse(localStorage.getItem("user"));
@@ -19,10 +22,15 @@ const Calendar = () => {
   const [selectedEvent, setSelectedEvent] = useState(null); // State to hold the selected event
   const [isModalOpen, setIsModalOpen] = useState(false); // State to control modal visibility
   const [googleCalendarEvents, setGoogleCalendarEvents] = useState([]); // State for Google Calendar events
+  const [loading, setLoading] = useState(false); // Loading state for backdrop
 
   const clientId = import.meta.env.VITE_GOOGLE_CLIENT; // Corrected to use Google OAuth Client ID
   const apiToken = import.meta.env.VITE_GOOGLE_API_TOKEN; // Google API token for Calendar API
+
+
+
   const [minDate, setMinDate] = useState("");
+
   // Fetch events from your server
   useEffect(() => {
     const fetchEvents = async () => {
@@ -52,6 +60,7 @@ const Calendar = () => {
   // Google authentication and event syncing
   const handleGoogleAuth = async () => {
     const authInstance = gapi.auth2.getAuthInstance();
+    setLoading(true);
 
     // If the user is not signed in or doesn't have the correct scope, sign them out and prompt for reauthorization
     if (!authInstance.isSignedIn.get()) {
@@ -73,7 +82,8 @@ const Calendar = () => {
     }
 
     // After successful sign-in with the required scope, fetch Google Calendar events
-    fetchGoogleCalendarEvents();
+    await fetchGoogleCalendarEvents();
+    setLoading(false);
   };
 
   // Fetch Google Calendar events
@@ -158,6 +168,9 @@ const Calendar = () => {
   return (
     <div>
       <Navbar userInfo={user} />
+      <Backdrop open={loading}>
+        <CircularProgress color="inherit" />
+      </Backdrop>
       <div className="flex container mx-auto p-4">
         <div className="w-1/3 p-4 border-r">
           <h1 className="text-xl font-bold mb-4">Add New Event</h1>
@@ -195,19 +208,27 @@ const Calendar = () => {
             className="mb-2"
           />
           <br />
-          <button
+
+          <Button
             onClick={handleAddEvent}
-            className="bg-blue-600 text-white p-2"
+            variant="contained"
+            color="primary"
+            className="mb-2"
+
           >
             Add Event
-          </button>
+          </Button>
           <br />
-          <button
+
+          <Button
             onClick={handleGoogleAuth}
-            className="bg-green-800 text-white p-2 mt-4"
+            variant="contained"
+            color="secondary"
+            className="mt-4"
+
           >
             Sync with Google Calendar
-          </button>
+          </Button>
         </div>
 
         <div className="w-2/3 p-4">
@@ -248,17 +269,18 @@ const Calendar = () => {
                   .map((event) => (
                     <div
                       key={event._id}
-                      className="p-1 text-center mb-1 cursor-pointer"
+                      className="p-1 my-1 rounded text-white cursor-pointer"
                       style={{ backgroundColor: event.color }}
-                      onClick={() => handleEventClick(event)} // Open modal on click
+                      onClick={() => handleEventClick(event)}
                     >
-                      <h4 className="break-words">{event.title}</h4>
+                      {event.title}
                     </div>
                   ))}
                 {/* Render Google Calendar events */}
                 {googleCalendarEvents
                   .filter(
                     (event) =>
+
                       new Date(
                         event.start.dateTime || event.start.date
                       ).getDate() ===
@@ -266,15 +288,15 @@ const Calendar = () => {
                       new Date(
                         event.start.dateTime || event.start.date
                       ).getMonth() === currentMonth.getMonth()
+
                   )
-                  .map((event, idx) => (
+                  .map((event, index) => (
                     <div
-                      key={idx}
-                      className="p-1 text-center mb-1 cursor-pointer"
-                      style={{ backgroundColor: "#FF4081" }}
-                      onClick={() => alert(`Google Event: ${event.summary}`)}
+                      key={index}
+                      className="p-1 my-1 rounded text-white cursor-pointer bg-blue-500"
+                      onClick={() => handleEventClick(event)}
                     >
-                      <h4 className="break-words">{event.summary}</h4>
+                      {event.summary}
                     </div>
                   ))}
               </div>
@@ -282,14 +304,15 @@ const Calendar = () => {
           </div>
         </div>
       </div>
-
-      {/* Modal for event details */}
-      <Modal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        event={selectedEvent}
-        onDelete={handleDeleteEvent}
-      />
+      {/* Modal to display event details */}
+      {selectedEvent && (
+        <Modal
+          open={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          event={selectedEvent}
+          onDelete={() => handleDeleteEvent(selectedEvent._id)}
+        />
+      )}
     </div>
   );
 };
