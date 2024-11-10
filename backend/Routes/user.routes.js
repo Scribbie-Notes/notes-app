@@ -13,7 +13,7 @@ import {
   updateEmailController,
   updateFullNameController,
   updatePhoneController,
-  updatePofilePhotoController,
+  updateProfilePhotoController,
   verifyAccountController,
 } from "../controllers/user.controllers.js";
 
@@ -56,7 +56,7 @@ userRoutes.put("/update-phone", updatePhoneController);
 userRoutes.put(
   "/update-profile-photo",
   upload.single("profilePhoto"),
-  updatePofilePhotoController
+  updateProfilePhotoController
 );
 
 userRoutes.post("/google-auth", googleAuthController);
