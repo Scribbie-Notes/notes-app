@@ -174,14 +174,14 @@ const Home = () => {
     }
 
     if (queryType == "text") {
-        const filteredNotes = allNotes.filter(note => note.title.toLowerCase().includes(query.toLowerCase()));
-        setIsSearch(true);
-        setAllNotes(filteredNotes);
+      const filteredNotes = allNotes.filter(note => note.title.toLowerCase().includes(query.toLowerCase()));
+      setIsSearch(true);
+      setAllNotes(filteredNotes);
     }
     else if (queryType == "tag") {
-        const filteredNotes = allNotes.filter(note => note.tags.includes(query.toLowerCase()));
-        setIsSearch(true);
-        setAllNotes(filteredNotes);
+      const filteredNotes = allNotes.filter(note => note.tags.includes(query.toLowerCase()));
+      setIsSearch(true);
+      setAllNotes(filteredNotes);
     }
     /*
 
@@ -200,12 +200,12 @@ const Home = () => {
   // Debounce function to limit the rate of search
   const debounce = (func, delay) => {
     let timeout;
-    return function(...args) {
+    return function (...args) {
       clearTimeout(timeout);
       timeout = setTimeout(() => func.apply(this, args), delay);
     };
   };
-const debouncedSearch = debounce(onSearchNote, 300);
+  const debouncedSearch = debounce(onSearchNote, 300);
 
   useEffect(() => {
     getAllNotes();
@@ -326,7 +326,7 @@ const debouncedSearch = debounce(onSearchNote, 300);
       toast.success(<div>
         Notes deleted. <button className='bg-green-500 p-2 text-white rounded' onClick={() => undoDelete(deletedNotes)}>Undo</button>
       </div>,
-      { autoClose: 5000 } );
+        { autoClose: 5000 });
     } catch (error) {
       console.error("Error deleting notes:", error);
       toast.error("Failed to delete selected notes");
@@ -390,7 +390,7 @@ const debouncedSearch = debounce(onSearchNote, 300);
       // Send a request to restore the deleted notes
       const response = await axios.put(`${apiBaseUrl}/undo-delete-notes`, {
         noteIds: deletedNotes
-      },{
+      }, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${accessToken}` // Replace `yourToken` with your actual token variable
@@ -409,10 +409,10 @@ const debouncedSearch = debounce(onSearchNote, 300);
   return (
     <div>
       {selectedNotes.length > 0 ? (
-        <div className=" bg-white shadow-md z-50 p-4 flex justify-between items-center">
+        <div className="bg-white shadow-md z-50 p-4 flex justify-between items-center">
           <span>{selectedNotes.length} notes selected</span>
           <div className="flex items-center gap-x-5">
-          <div className="relative  flex ">
+            <div className="relative  flex ">
               <button
                 onClick={() => setIsColorPickerOpen(!isColorPickerOpen)}
 
@@ -428,7 +428,7 @@ const debouncedSearch = debounce(onSearchNote, 300);
                     className="w-8 h-8 border-none"
                   />
                   <button
-                    onClick={()=>handleBulkColor(background)}
+                    onClick={() => handleBulkColor(background)}
                     className="ml-2 px-2 py-1 bg-blue-500 text-white rounded text-sm"
                   >
                     Apply
@@ -452,7 +452,7 @@ const debouncedSearch = debounce(onSearchNote, 300);
               }
             </button>
             <button onClick={handleBulkArchive}>
-                <MdOutlineArchive className="text-2xl  text-black"/>
+              <MdOutlineArchive className="text-2xl  text-black" />
             </button>
 
             <button onClick={handleBulkDelete}>
@@ -469,21 +469,21 @@ const debouncedSearch = debounce(onSearchNote, 300);
         />
       )}
 
-      <div className="container h-auto p-6 pb-12 mx-auto">
-        {/* Sort dropdown aligned to the right */}
+      {/* <div className="container h-auto pl-6 p-6 pb-12 mx-auto">
         <div className="flex justify-end">
-            <div className="flex justify-end text-white bg-blue-500 p-1 rounded-md">
-            <MdSort className="" />
+          <div className="flex justify-end text-white bg-slate-800 p-3 rounded-md">
+            <MdSort />
             <select
-                value={sortOrder}
-                onChange={handleSortOrderChange}
-                className="bg-blue-500 text-white rounded-md"
+              value={sortOrder}
+              onChange={handleSortOrderChange}
+              className="bg-slate-800 text-white rounded-md w-32"
             >
-                <option value="ascending">Ascending</option>
-                <option value="descending">Descending</option>
+              <option value="ascending">Ascending</option>
+              <option value="descending">Descending</option>
             </select>
-            </div>
+          </div>
         </div>
+
         {isLoading ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 mt-4 transition-all">
             {Array.from({ length: 9 }).map((item, i) => {
@@ -567,7 +567,7 @@ const debouncedSearch = debounce(onSearchNote, 300);
             }
           />
         )}
-      </div>
+      </div> */}
 
       <button
         className="w-16 h-16 flex justify-center rounded-2xl items-center text-white bg-gray-800 hover:bg-gray-900 transition-all focus:outline-none fixed right-10 bottom-10 z-50"
@@ -588,23 +588,23 @@ const debouncedSearch = debounce(onSearchNote, 300);
 
       {/* Pre-built templates section */}
       {showTemplates && (
-       <div className="fixed inset-0 flex items-center justify-center z-50">
-        <div className="absolute inset-0 bg-black opacity-50"></div>
-        <div className="relative bg-white p-5 rounded-lg shadow-lg z-10 w-[90%] sm:w-[80%] md:w-[60%] lg:w-[40%]">
-          <h2 className="text-lg font-bold mb-4">Choose a Template</h2>
-          <div className="flex gap-4">
-            {Object.keys(templates).map((templateKey) => (
-              <button
-                key={templateKey}
-                onClick={() => handleAddTemplate(templates[templateKey])}
-                className="px-4 py-2 bg-blue-500 text-white rounded"
-              >
-                {templates[templateKey].title}
-              </button>
-            ))}
+        <div className="fixed inset-0 flex items-center justify-center z-50">
+          <div className="absolute inset-0 bg-black opacity-50"></div>
+          <div className="relative bg-white p-5 rounded-lg shadow-lg z-10 w-[90%] sm:w-[80%] md:w-[60%] lg:w-[40%]">
+            <h2 className="text-lg font-bold mb-4">Choose a Template</h2>
+            <div className="flex gap-4">
+              {Object.keys(templates).map((templateKey) => (
+                <button
+                  key={templateKey}
+                  onClick={() => handleAddTemplate(templates[templateKey])}
+                  className="px-4 py-2 bg-blue-500 text-white rounded"
+                >
+                  {templates[templateKey].title}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
-       </div>
       )}
 
       {openAddEditModal.isShown && (

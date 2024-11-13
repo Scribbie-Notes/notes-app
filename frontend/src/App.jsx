@@ -24,8 +24,6 @@ import VerifyEmail from "./pages/ForgotPassword/VerifyEmail";
 import VerifyOtp from "./pages/ForgotPassword/VerifyOtp";
 import NewPassword from "./pages/ForgotPassword/NewPassword";
 import Calendar from "./components/Calendar/Calendar";
-//importing the progress bar and the scroll to top button
-import ProgressBar from "./components/Progressbar";
 import { ScrollToTop } from "react-simple-scroll-up";
 
 // currently this component is hide
@@ -68,7 +66,6 @@ const App = () => {
         <Navigate to="/dashboard" replace />
       ) : (
         <>
-          <ProgressBar />
           <Routes>
             <Route path="/landing" exact element={<Hero />} />
             <Route path="/dashboard" exact element={<Home />} />
