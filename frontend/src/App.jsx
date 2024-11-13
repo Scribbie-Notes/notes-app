@@ -19,11 +19,6 @@ import Footer from "./components/sticky_footer/Footer";
 import Contact from "./components/Contact/Contact";
 import Contributors from "./components/Contributors/Contributors";
 import ArchivedNotes from "./components/ArchivedNotes/ArchivedNotes";
-
-
-
-
-
 import Preloader from "./components/Preloader";
 import VerifyEmail from "./pages/ForgotPassword/VerifyEmail";
 import VerifyOtp from "./pages/ForgotPassword/VerifyOtp";
