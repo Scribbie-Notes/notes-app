@@ -1,5 +1,4 @@
 import { useRef, useState } from "react";
-import { motion } from "framer-motion";
 import { Link, useLocation } from "react-router-dom";
 
 // Accept theme as a prop in SlideTabsExample
@@ -30,7 +29,7 @@ const SlideTabs = ({ theme }) => {
         }));
         setHoveredTab(null);
       }}
-      className={`relative mx-auto flex w-fit p-1 flex-col md:flex-row gap-5 ${
+      className={`relative mx-auto flex w-fit p-1 flex-col md:flex-row gap-5  ${
         theme === "dark" ? "bg-black" : "bg-white"
       }`}
     >
@@ -43,46 +42,6 @@ const SlideTabs = ({ theme }) => {
         setHoveredTab={setHoveredTab}
       >
         Home
-      </Tab>
-      <Tab
-        theme={theme}
-        setPosition={setPosition}
-        to="/about"
-        currentPathName={currentPathName}
-        hoveredTab={hoveredTab}
-        setHoveredTab={setHoveredTab}
-      >
-        About
-      </Tab>
-      <Tab
-        theme={theme}
-        setPosition={setPosition}
-        to="/testimonial"
-        currentPathName={currentPathName}
-        hoveredTab={hoveredTab}
-        setHoveredTab={setHoveredTab}
-      >
-        Testimonial
-      </Tab>
-      <Tab
-        theme={theme}
-        setPosition={setPosition}
-        to="/pricing"
-        currentPathName={currentPathName}
-        hoveredTab={hoveredTab}
-        setHoveredTab={setHoveredTab}
-      >
-        Pricing
-      </Tab>
-      <Tab
-        theme={theme}
-        setPosition={setPosition}
-        to="/contact-us"
-        currentPathName={currentPathName}
-        hoveredTab={hoveredTab}
-        setHoveredTab={setHoveredTab}
-      >
-        Contact Us
       </Tab>
       <Tab
         theme={theme}
@@ -125,7 +84,7 @@ const Tab = ({
         });
         setHoveredTab(to);
       }}
-      className={`relative z-10 block cursor-pointer px-3 py-1.5 text-xs uppercase md:px-5 md:py-3 md:text-base transition-colors duration-200 ${
+      className={`relative z-10 block cursor-pointer px-3 py-1.5 text-xs uppercase md:px-5 md:py-3 md:text-base ${
         isActive
           ? "bg-black text-white rounded-lg"
           : isHovered
@@ -142,11 +101,15 @@ const Tab = ({
   );
 };
 
-// Cursor animation component
+// Cursor component without animation
 const Cursor = ({ position, theme }) => {
   return (
-    <motion.li
-      animate={position}
+    <li
+      style={{
+        left: position.left,
+        width: position.width,
+        opacity: position.opacity,
+      }}
       className={`absolute z-0 h-7 rounded-lg md:h-12 ${
         theme === "dark" ? "bg-gray-900" : "bg-gray-300"
       }`}

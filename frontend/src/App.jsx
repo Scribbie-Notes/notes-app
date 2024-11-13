@@ -60,7 +60,7 @@ const App = () => {
 
   return (
     <div>
-      <Preloader />
+      {/* <Preloader /> */}
       {loading && <Loading />}
       {user && location.pathname === "/" ? (
         <Navigate to="/dashboard" replace />

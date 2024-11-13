@@ -41,17 +41,17 @@ const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
     setIsMenuOpen(!isMenuOpen);
   };
 
-  useEffect(() => {
-    gsap.fromTo(logoRef.current, { y: -20, opacity: 0, scale: 0.8 }, { duration: 1, y: 0, opacity: 1, scale: 1, ease: "power3.out" });
-    gsap.fromTo(searchBarRef.current, { x: 50, opacity: 0 }, { duration: 1, x: 0, opacity: 1, ease: "power3.out", delay: 0.5 });
+  // useEffect(() => {
+  //   gsap.fromTo(logoRef.current, { y: -20, opacity: 0, scale: 0.8 }, { duration: 1, y: 0, opacity: 1, scale: 1, ease: "power3.out" });
+  //   gsap.fromTo(searchBarRef.current, { x: 50, opacity: 0 }, { duration: 1, x: 0, opacity: 1, ease: "power3.out", delay: 0.5 });
 
-    if (loginButtonRef.current) {
-      gsap.fromTo(loginButtonRef.current, { opacity: 0, y: 20 }, { duration: 1, opacity: 1, y: 0, ease: "bounce.out", delay: 1.7 });
-    }
-    if (signupButtonRef.current) {
-      gsap.fromTo(signupButtonRef.current, { opacity: 0, y: 20 }, { duration: 1, opacity: 1, y: 0, ease: "bounce.out", delay: 1.5 });
-    }
-  }, []);
+  //   if (loginButtonRef.current) {
+  //     gsap.fromTo(loginButtonRef.current, { opacity: 0, y: 20 }, { duration: 1, opacity: 1, y: 0, ease: "bounce.out", delay: 1.7 });
+  //   }
+  //   if (signupButtonRef.current) {
+  //     gsap.fromTo(signupButtonRef.current, { opacity: 0, y: 20 }, { duration: 1, opacity: 1, y: 0, ease: "bounce.out", delay: 1.5 });
+  //   }
+  // }, []);
 
   const onLogout = () => {
     localStorage.clear();
