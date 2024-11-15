@@ -4,7 +4,7 @@ import ProfileInfo from "./Cards/ProfileInfo";
 import SearchBar from "./SearchBar/SearchBar";
 import { toast } from "react-hot-toast";
 import gsap from "gsap/all";
-import { FiMoon, FiSun, FiMenu } from "react-icons/fi";
+import { FiMenu } from "react-icons/fi";
 import { SlideTabsExample } from "./Tabs";
 
 const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
@@ -15,7 +15,6 @@ const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
-
   const logoRef = useRef(null);
   const searchBarRef = useRef(null);
   const profileRef = useRef(null);
@@ -86,7 +85,7 @@ const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
       <div className="flex items-center gap-x-5">
         <div className="xl:block hidden"><SlideTabsExample theme={theme} /></div>
 
-        <div className={`hidden md:flex flex-grow justify-center ${userInfo && location.pathname !== "/my-profile" ? "" : "hidden"}`} ref={searchBarRef}>
+        {/* <div className={`hidden md:flex flex-grow justify-center ${userInfo && location.pathname !== "/my-profile" && location.pathname !== "/my-profile" && location.pathname !== "/login"  ? "" : "hidden"}`} ref={searchBarRef}>
           <SearchBar
             value={searchType === "text" ? searchQuery : tagQuery}
             tag={searchType === "tag" ? tagQuery : ""}
@@ -97,19 +96,19 @@ const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
             handleSearch={handleSearch}
             onClearSearch={onClearSearch}
           />
-        </div>
+        </div> */}
 
         <div className="flex gap-x-3 items-center">
-          <button onClick={toggleTheme} className={`flex items-center gap-2 p-3 rounded-full transition-colors duration-300 ${theme === "dark" ? "bg-gray-800 text-white" : "bg-gray-200 text-gray-800"}`}>
+          {/* <button onClick={toggleTheme} className={`flex items-center gap-2 p-3 rounded-full transition-colors duration-300 ${theme === "dark" ? "bg-gray-800 text-white" : "bg-gray-200 text-gray-800"}`}>
             {theme === "dark" ? <FiMoon className="text-lg" /> : <FiSun className="text-lg" />}
-          </button>
+          </button> */}
 
           {userInfo ? (
             <div ref={profileRef}><ProfileInfo userInfo={userInfo} onLogout={onLogout} /></div>
           ) : (
             <>
               {location.pathname !== "/login" && <button ref={loginButtonRef} onClick={() => navigate("/login")} className="pr-3">Login</button>}
-              {location.pathname !== "/signup" && <button ref={signupButtonRef} onClick={() => navigate("/signup")} className="text-zinc-200 bg-black rounded-md py-2 px-3">Signup</button>}
+              {/* {location.pathname !== "/signup" && <button ref={signupButtonRef} onClick={() => navigate("/signup")} className="text-zinc-200 bg-black rounded-md py-2 px-3">Signup</button>} */}
             </>
           )}
         </div>
