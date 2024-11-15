@@ -185,9 +185,9 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
   };
 
   return (
-    <div className="relative h-[650px] overflow-auto">
+    <div className="relative h-[650px] pl-6 pr-6 pt-8 overflow-auto">
       <button
-        className="w-10 h-10 rounded-full flex items-center bg-gray-50 transition-all justify-center absolute -top-3 -right-3 hover:bg-red-100"
+        className="w-10 h-10 rounded-full flex items-center bg-gray-50 transition-all justify-center absolute -top-0 -right-0 hover:bg-red-100"
         onClick={onClose}
       >
         <MdClose className="text-xl text-slate-400" />
@@ -225,13 +225,13 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
           <span className="absolute right-2 bottom-2 text-gray-500 text-xs">
             {content.length}/{MAX_CONTENT_LENGTH}
           </span>
-          <button
+          {/* <button
             className="absolute right-2 top-2 text-gray-500"
             onClick={toggleListening}
             disabled={!isSpeechSupported}
           >
             {isListening ? <FaMicrophoneSlash /> : <FaMicrophone />}
-          </button>
+          </button> */}
           {!isSpeechSupported && (
             <p className="text-red-500 text-xs mt-1">
               Speech recognition is not supported in this browser.
@@ -247,7 +247,7 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
           type="color"
           value={background}
           onChange={handleBackgroundChange}
-          className="p-1 border rounded-md w-full"
+          className="w-9 h-9 cursor-pointer"
         />
       </div>
 
