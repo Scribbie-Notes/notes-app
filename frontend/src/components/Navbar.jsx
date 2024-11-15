@@ -81,7 +81,7 @@ const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
 
   return (
     <div className={`flex items-center justify-between px-4 py-2 drop-shadow-md ${theme === "dark" ? "bg-black text-white" : "bg-white text-black"}`}>
-      <Link to={userInfo ? "/dashboard" : "/"}><div ref={logoRef} className="flex items-center p-1"><img src="/logo.png" className="h-10" alt="logo" /><h2 className="text-2xl font-medium ml-[-4px] mt-2 tracking-tight">cribbie</h2></div></Link>
+      <Link to={userInfo ? "/dashboard" : "/"}><div ref={logoRef} className="flex items-center p-1"><img src="/logo.png" className="h-10" alt="logo" /><h2 className="text-2xl font-medium ml-[-10px] mt-2 tracking-tight">cribbie</h2></div></Link>
 
       <div className="flex items-center gap-x-5">
         <div className="xl:block hidden"><SlideTabsExample theme={theme} /></div>

@@ -84,7 +84,7 @@ const StickyFooter = () => {
   };
 
   return (
-    <div className="bg-gradient-to-b from-white to-gray-300 border-t border-gray-200 pb-6">
+    <div className="bg-gradient-to-b from-white to-gray-100  pb-6">
       {/* Flex container for company description and grid layout */}
       {/* Feedback Model */}
       <Modal
@@ -298,8 +298,7 @@ const StickyFooter = () => {
       <hr className="border-t-2 border-grey w-full" />
       {/* Footer Note */}
       <div className="border-t border-gray-200 pt-3 text-center">
-        <p className="text-sm md:text-base font-bold">Made with ❤️ in India</p>
-        <p className="text-sm mt-2">&copy; {new Date().getFullYear()} Cribbie. All rights reserved.</p>
+        <p className="text-sm mt-2">&copy; {new Date().getFullYear()} Scribbie. All rights reserved.</p>
       </div>
       <Toaster />
     </div>
