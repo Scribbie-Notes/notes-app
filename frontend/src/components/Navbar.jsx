@@ -103,42 +103,18 @@ const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
           />
         </div> */}
 
-        <div className="flex gap-x-3 items-center">
-          {/* <button onClick={toggleTheme} className={`flex items-center gap-2 p-3 rounded-full transition-colors duration-300 ${theme === "dark" ? "bg-gray-800 text-white" : "bg-gray-200 text-gray-800"}`}>
-            {theme === "dark" ? <FiMoon className="text-lg" /> : <FiSun className="text-lg" />}
-          </button> */}
+        <div>
 
           {userInfo ? (
             <div ref={profileRef}><ProfileInfo userInfo={userInfo} onLogout={onLogout} /></div>
           ) : (
-            <>
-              {location.pathname !== "/login" && <button ref={loginButtonRef} onClick={() => navigate("/login")} className="pr-20">Login</button>}
+            <div className="pr-20">
+              {location.pathname !== "/login" && <button ref={loginButtonRef} onClick={() => navigate("/login")} className=" text-white bg-gray-800 hover:bg-gray-700 transition duration-300 ease-in-out font-medium rounded-lg text-md px-4 py-1.5">Login</button>}
               {/* {location.pathname !== "/signup" && <button ref={signupButtonRef} onClick={() => navigate("/signup")} className="text-zinc-200 bg-black rounded-md py-2 px-3">Signup</button>} */}
-            </>
+            </div>
           )}
         </div>
-
-        <button className="block xl:hidden text-xl" onClick={toggleMenu}><FiMenu /></button>
       </div>
-
-      {isMenuOpen && (
-        <div className="absolute top-14 left-0 w-full bg-white shadow-lg z-50 p-4 flex flex-col xl:hidden gap-3">
-          <div className="flex flex-col gap-x-10"><SlideTabsExample theme={theme} />
-            <div className={`flex md:hidden flex-grow justify-center ${userInfo && location.pathname !== "/my-profile" ? "" : "hidden"}`} ref={searchBarRef}>
-              <SearchBar
-                value={searchType === "text" ? searchQuery : tagQuery}
-                tag={searchType === "tag" ? tagQuery : ""}
-                searchType={searchType}
-                onChange={({ target }) => setSearchQuery(target.value)}
-                onTagChange={({ target }) => setTagQuery(target.value)}
-                onSearchTypeChange={({ target }) => setSearchType(target.value)}
-                handleSearch={handleSearch}
-                onClearSearch={onClearSearch}
-              />
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
