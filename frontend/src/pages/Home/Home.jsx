@@ -409,18 +409,18 @@ const Home = () => {
   return (
     <div>
       {selectedNotes.length > 0 ? (
-        <div className="bg-white shadow-md z-50 p-4 flex justify-between items-center">
-          <span>{selectedNotes.length} notes selected</span>
+        <div className="bg-white shadow z-50 p-[26px] pl-16 pr-20 flex justify-between items-center">
+          <span className="text-gray-800 text-2xl font-semibold">{selectedNotes.length} Notes Selected</span>
           <div className="flex items-center gap-x-5">
             <div className="relative  flex ">
               <button
                 onClick={() => setIsColorPickerOpen(!isColorPickerOpen)}
 
               >
-                <MdColorLens className="text-2xl" />
+                <MdColorLens className="text-2xl text-gray-600 hover:text-gray-800 transition-all" />
               </button>
               {isColorPickerOpen && (
-                <div className="absolute top-5 right-0 mt-2 p-2 bg-white  rounded shadow-lg">
+                <div className="absolute top-5 right-0 mt-2 p-2 bg-white rounded shadow-lg">
                   <input
                     type="color"
                     value={background}
@@ -429,7 +429,7 @@ const Home = () => {
                   />
                   <button
                     onClick={() => handleBulkColor(background)}
-                    className="ml-2 px-2 py-1 bg-blue-500 text-white rounded text-sm"
+                    className="ml-2 px-2 py-1 bg-gray-500 text-white rounded text-sm"
                   >
                     Apply
                   </button>
@@ -445,19 +445,19 @@ const Home = () => {
                     (note) => note._id === selectedNote && !note.isPinned
                   )
                 ) ? (
-                  <MdOutlinePushPin className="text-2xl" /> // Outlined icon for unpinned notes
+                  <MdOutlinePushPin className="text-2xl text-gray-600 hover:text-gray-800 transition-all" /> // Outlined icon for unpinned notes
                 ) : (
-                  <MdPushPin className="text-2xl" />
+                  <MdPushPin className="text-2xl text-gray-600 hover:text-gray-800 transition-all" />
                 ) // Filled icon for pinned notes
               }
             </button>
 
             <button onClick={handleBulkArchive}>
-              <MdOutlineArchive className="text-2xl  text-black" />
+              <MdOutlineArchive className="text-2xl  text-black text-gray-600 hover:text-gray-800 transition-all" />
             </button>
 
             <button onClick={handleBulkDelete}>
-              <MdDelete className="text-2xl  text-black" />
+              <MdDelete className="text-2xl  text-black text-gray-600 hover:text-gray-800 transition-all" />
             </button>
           </div>
         </div>
@@ -472,12 +472,12 @@ const Home = () => {
 
       <div className="container h-auto pr-6 p-6 pb-12 mx-auto">
         <div className="flex justify-end pr-8 mb-4">
-          <div className="flex justify-end text-white bg-slate-800 p-1.5 rounded-md">
-            <MdSort className='mt-1 mr-1'/>
+          <div className="flex justify-end text-white bg-slate-700  cursor-pointer p-1.5 rounded-md">
+            <MdSort className='mt-1 mr-1 text-gray-600 hover:text-gray-800 transition-all'/>
             <select
               value={sortOrder}
               onChange={handleSortOrderChange}
-              className="bg-slate-800 text-white rounded-md"
+              className="bg-slate-700 cursor-pointer text-white rounded-md"
             >
               <option value="ascending">Ascending</option>
               <option value="descending">Descending</option>

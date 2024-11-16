@@ -174,7 +174,7 @@ const NoteCard = ({
               onClick={(e) => {
                 e.stopPropagation();
                 onSelect(id);
-              }}
+            }}
             >
               
               {isSelected ? (

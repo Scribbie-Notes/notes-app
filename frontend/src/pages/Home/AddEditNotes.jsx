@@ -170,19 +170,19 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
     }
   };
 
-  const handleRevertChanges = () => {
-    if (!initialData) return;
+  // const handleRevertChanges = () => {
+  //   if (!initialData) return;
 
-    // Revert all form fields to initial data values
-    setTitle(initialData.title);
-    setContent(initialData.content);
-    setTags(initialData.tags);
-    setAttachments(initialData.files || []);
-    setBackground(initialData.background || "#ffffff");
-    setPhotos(initialData.photos || []);
-    setVideos(initialData.videos || []);
-    setIsPinned(initialData.isPinned || false);
-  };
+  //   // Revert all form fields to initial data values
+  //   setTitle(initialData.title);
+  //   setContent(initialData.content);
+  //   setTags(initialData.tags);
+  //   setAttachments(initialData.files || []);
+  //   setBackground(initialData.background || "#ffffff");
+  //   setPhotos(initialData.photos || []);
+  //   setVideos(initialData.videos || []);
+  //   setIsPinned(initialData.isPinned || false);
+  // };
 
   return (
     <div className="relative h-[500px] pl-4 pr-4 pt-4 overflow-auto">
@@ -292,14 +292,14 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
       </div>
 
       {/* Revert Button */}
-      {initialData && (
+      {/* {initialData && (
         <button
           className="w-auto items-center text-white bg-red-500 hover:bg-red-700 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 mt-2"
           onClick={handleRevertChanges}
         >
           Revert Changes
         </button>
-      )}
+      )} */}
     </div>
   );
 };
