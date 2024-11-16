@@ -79,42 +79,42 @@ const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
   };
 
   return (
-    <div className={`flex items-center shadow justify-between px-4 py-3  ${theme === "dark" ? "bg-black text-white" : "bg-white text-black"}`}>
+    <div
+      className={`flex items-center shadow justify-between px-4 py-3 ${theme === "dark" ? "bg-black text-white" : "bg-white text-black"}`}
+    >
       <Link to={userInfo ? "/dashboard" : "/"}>
-        <div ref={logoRef} className="flex items-center pl-20 p-2">
+        <div ref={logoRef} className="flex items-center xl:pl-16 p-2">
           <img src="/logo.png" className="h-12" alt="logo" />
           <h2 className="text-3xl font-medium ml-[-12px] mt-2 tracking-tight">cribbie</h2>
         </div>
       </Link>
 
-      <div className="flex items-center gap-x-5">
-        <div className="xl:block hidden"><SlideTabsExample theme={theme} /></div>
-
-        {/* <div className={`hidden md:flex flex-grow justify-center ${userInfo && location.pathname !== "/my-profile" && location.pathname !== "/my-profile" && location.pathname !== "/login"  ? "" : "hidden"}`} ref={searchBarRef}>
-          <SearchBar
-            value={searchType === "text" ? searchQuery : tagQuery}
-            tag={searchType === "tag" ? tagQuery : ""}
-            searchType={searchType}
-            onChange={({ target }) => setSearchQuery(target.value)}
-            onTagChange={({ target }) => setTagQuery(target.value)}
-            onSearchTypeChange={({ target }) => setSearchType(target.value)}
-            handleSearch={handleSearch}
-            onClearSearch={onClearSearch}
-          />
-        </div> */}
-
+      <div className="flex items-center gap-x-5 flex-grow justify-between">
+        {/* Hide on mobile, show on xl and up */}
+        <div className="xl:block hidden">
+          <SlideTabsExample theme={theme} />
+        </div>
 
         {userInfo ? (
-          <div 
-          className="pr-20" ref={profileRef}><ProfileInfo userInfo={userInfo} onLogout={onLogout} /></div>
+          <div className="sm:pr-20 sm:pl-10 " ref={profileRef}>
+            <ProfileInfo userInfo={userInfo} onLogout={onLogout} />
+          </div>
         ) : (
-          <div className="pr-20">
-            {location.pathname !== "/login" && <button ref={loginButtonRef} onClick={() => navigate("/login")} className=" text-white bg-gray-800 hover:bg-gray-700 transition duration-300 ease-in-out font-medium rounded-lg text-md px-4 py-1.5">Login</button>}
-            {/* {location.pathname !== "/signup" && <button ref={signupButtonRef} onClick={() => navigate("/signup")} className="text-zinc-200 bg-black rounded-md py-2 px-3">Signup</button>} */}
+          <div className="pr-20 sm:pr-20 sm:pl-10 ">
+            {location.pathname !== "/login" && (
+              <button
+                ref={loginButtonRef}
+                onClick={() => navigate("/login")}
+                className="text-white bg-gray-800 hover:bg-gray-700 transition duration-300 ease-in-out font-medium rounded-lg text-md px-4 py-1.5"
+              >
+                Login
+              </button>
+            )}
           </div>
         )}
       </div>
     </div>
+
   );
 };
 
