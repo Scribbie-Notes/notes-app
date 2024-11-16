@@ -69,6 +69,11 @@ const Home = () => {
     setShowTemplates(false);
   };
 
+  const closeTemplateModal = () => {
+    setOpenAddEditModal({ isShown: false, type: "", data: null });
+    setShowTemplates(false);
+  };
+
   const [allNotes, setAllNotes] = useState([]);
 
   const [userInfo, setUserInfo] = useState(null);
@@ -117,7 +122,7 @@ const Home = () => {
       if (response.data && response.data.notes) {
         const notes = response.data.notes.map((note) => ({
           ...note,
-          tags: Array.isArray(note.tags) ? note.tags : [], 
+          tags: Array.isArray(note.tags) ? note.tags : [],
         }));
         setAllNotes(notes);
       }
@@ -165,6 +170,7 @@ const Home = () => {
       handleDeleteModalClose();
     }
   };
+  // search notes
   const onSearchNote = async (query, queryType) => {
 
     setSearchQuery(query);
@@ -473,7 +479,7 @@ const Home = () => {
       <div className="container h-auto pr-6 p-6 pb-12 mx-auto">
         <div className="flex justify-end pr-8 mb-4">
           <div className="flex justify-end text-white bg-slate-700  cursor-pointer p-1.5 rounded-md">
-            <MdSort className='mt-1 mr-1 text-gray-600 hover:text-gray-800 transition-all'/>
+            <MdSort className='mt-1 mr-1 text-gray-600 hover:text-gray-800 transition-all' />
             <select
               value={sortOrder}
               onChange={handleSortOrderChange}
@@ -592,17 +598,25 @@ const Home = () => {
         <div className="fixed inset-0 flex items-center justify-center z-50">
           <div className="absolute inset-0 bg-black opacity-50"></div>
           <div className="relative bg-white p-5 rounded-lg shadow-lg z-10 w-[90%] sm:w-[80%] md:w-[60%] lg:w-[40%]">
-            <h2 className="text-lg font-bold mb-4">Choose a Template</h2>
-            <div className="flex gap-4">
+            <h2 className="text-xl font-semibold mb-4">Choose a Template and Start Writing!</h2>
+            <div className="flex flex-col items-start gap-4">
               {Object.keys(templates).map((templateKey) => (
                 <button
                   key={templateKey}
                   onClick={() => handleAddTemplate(templates[templateKey])}
-                  className="px-4 py-2 bg-blue-500 text-white rounded"
+                  className="px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-900 transition-all text-white rounded"
                 >
                   {templates[templateKey].title}
                 </button>
               ))}
+            </div>
+            <div className="flex justify-end mt-4">
+              <button
+                onClick={closeTemplateModal}
+                className="justify-end text-gray-900 bg-gray-200 hover:bg-red-200 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-sm font-semibold dark:bg-gray-300  border-gray-800 transition-all"
+              >
+                Close
+              </button>
             </div>
           </div>
         </div>
