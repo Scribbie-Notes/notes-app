@@ -84,10 +84,7 @@ const Hero = () => {
       </section>
 
 
-      <section
-        ref={sectionRef}
-        className="pl-20 pr-20  py-12 mt-8 mb-4"
-      >
+      <section ref={sectionRef} className="pl-6 pr-6 py-12 mt-8 mb-4 sm:pl-10 sm:pr-10 lg:pl-20 lg:pr-20">
         <h1 className="section-title text-4xl font-bold text-center text-gray-900">
           Unlock Powerful Features to
         </h1>
@@ -95,7 +92,7 @@ const Hero = () => {
           Enhance Your Note-Taking Experience
         </h1>
         <div className="max-w-screen-xl mx-auto px-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             <div
               ref={(el) => (featureCards.current[0] = el)}
               className="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition duration-300 ease-in-out border border-gray-200"
@@ -105,8 +102,7 @@ const Hero = () => {
                 <h3 className="text-xl font-bold">Organize Effortlessly</h3>
               </div>
               <p className="text-gray-700">
-                Keep your notes neatly categorized with customizable folders
-                and tags.
+                Keep your notes neatly categorized with customizable folders and tags.
               </p>
             </div>
 
@@ -119,8 +115,7 @@ const Hero = () => {
                 <h3 className="text-xl font-bold">Search with Ease</h3>
               </div>
               <p className="text-gray-700">
-                Quickly find any note with a powerful, real-time search
-                engine.
+                Quickly find any note with a powerful, real-time search engine.
               </p>
             </div>
 
@@ -139,6 +134,8 @@ const Hero = () => {
           </div>
         </div>
       </section>
+
+
       <Testimonial />
       <Pricing />
       <Faq />
