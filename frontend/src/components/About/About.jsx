@@ -108,10 +108,10 @@ const About = () => {
       <Navbar userInfo={user} />
       <div className="bg-white">
 
-        <Link to="/dashboard">
+      <Link to="/dashboard">
           <div className="p-5 pl-28">
-            <button className="inline-flex items-center text-white bg-gray-800 hover:bg-gray-900 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-700">
-              <IoMdArrowRoundBack />
+            <button className="inline-flex items-center text-white bg-gray-800 hover:bg-gray-900 focus:outline-none font-medium rounded-lg text-sm px-5 py-2 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-700">
+              <IoMdArrowRoundBack className="mr-2 ml-[-5px]" />Back
             </button>
           </div>
         </Link>
