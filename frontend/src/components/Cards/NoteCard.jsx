@@ -64,26 +64,25 @@ const NoteCard = ({
 
   return (
     <div
-      className="border rounded p-5 hover:bg-slate-100 cursor-pointer transition duration-300 ease-in-out"
-      style={{ backgroundColor: background, color: textColor }}
+      className="border rounded p-5 bg-gray-100 hover:bg-slate-100 cursor-pointer transition duration-300 ease-in-out"
     >
       <div className="flex items-center justify-between" onClick={onClick}>
         <div>
-          <h6 className="text-sm font-medium">{title}</h6>
-          <span className="text-xs" style={{ color: textColor }}>
+          <h6 className="text-lg font-medium">{title}</h6>
+          <span className="text-sm text-gray-500">
             {moment(date).format("Do MMM YYYY")}
           </span>
         </div>
 
         <div className="relative group">
           <MdOutlinePushPin
-            className={`icon-btn ${isPinned ? "text-primary" : "text-slate-300"}`}
+            className={`icon-btn ${isPinned ? "text-slate-800" : "text-slate-400 mb-8"}`}
             onClick={(e) => {
               e.stopPropagation();
               onPinNote();
             }}
           />
-          <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 hidden group-hover:flex items-center justify-center bg-black text-white text-xs rounded px-2 py-1">
+          <div className="absolute bottom-14 left-1/2 transform -translate-x-1/2 hidden group-hover:flex items-center justify-center bg-gray-600 text-white text-xs rounded-xl px-2 py-1">
             {isPinned ? "Unpin Note" : "Pin Note"}
           </div>
         </div>
@@ -119,58 +118,40 @@ const NoteCard = ({
         <div className="flex items-center gap-2">
           <div className="relative group">
             <MdCreate
-              className="icon-btn hover:text-green-500 cursor-pointer transition-all"
+              className="icon-btn text-gray-500 hover:text-slate-800 cursor-pointer transition-all"
               onClick={(e) => {
                 e.stopPropagation();
                 onEdit();
               }}
-              style={{ color: textColor }}
             />
-            <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 hidden group-hover:flex items-center justify-center bg-black text-white text-xs rounded px-2 py-1">
+            <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 hidden group-hover:flex items-center justify-center bg-gray-600 rounded-xl text-white text-xs  px-2 py-1">
               {"Edit Note"}
             </div>
           </div>
 
           <div className="relative group">
             <MdDelete
-              className="icon-btn hover:text-red-400 cursor-pointer transition-all"
+              className="icon-btn text-gray-500 hover:text-slate-800 cursor-pointer transition-all"
               onClick={(e) => {
                 e.stopPropagation();
                 onDelete();
               }}
-              style={{ color: textColor }}
             />
-            <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 hidden group-hover:flex items-center justify-center bg-black text-white text-xs rounded px-2 py-1">
+            <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 hidden group-hover:flex items-center justify-center bg-gray-600 rounded-xl text-white text-xs rounded px-2 py-1">
               {"Delete Note"}
-            </div>
-          </div>
-
-          <div>
-            <div
-              onClick={(e) => {
-                e.stopPropagation();
-                onSelect(id);
-              }}
-            >
-              {isSelected ? (
-                <MdCheckBox className="text-2xl" />
-              ) : (
-                <MdCheckBoxOutlineBlank className="text-2xl" />
-              )}
             </div>
           </div>
 
           {/* Export Icon (Download Button) */}
           <div className="relative group">
             <MdDownload
-              className="icon-btn hover:text-blue-500 cursor-pointer transition-all"
+              className="icon-btn text-gray-500 hover:text-slate-800 cursor-pointer transition-all"
               onClick={(e) => {
                 e.stopPropagation();
                 downloadNote(content, title, date);
               }}
-              style={{ color: textColor }}
             />
-            <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 hidden group-hover:flex items-center justify-center bg-black text-white text-xs rounded px-2 py-1">
+            <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 hidden group-hover:flex items-center justify-center bg-gray-600 rounded-xl text-white text-xs rounded px-2 py-1">
               {"Export Note"}
             </div>
           </div>
@@ -178,17 +159,31 @@ const NoteCard = ({
           {/* Share Icon */}
           <div className="relative group">
             <MdShare
-              className="icon-btn hover:text-blue-500 cursor-pointer transition-all"
+              className="icon-btn text-gray-500 hover:text-slate-800 cursor-pointer transition-all"
               onClick={(e) => {
                 e.stopPropagation();
                 shareNote(id, title);
               }}
-              style={{ color: textColor }}
             />
-            <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 hidden group-hover:flex items-center justify-center bg-black text-white text-xs rounded px-2 py-1">
+            <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 hidden group-hover:flex items-center justify-center bg-gray-600 rounded-xl text-white text-xs rounded px-2 py-1">
               {"Share Note"}
             </div>
           </div>
+
+          <div
+              onClick={(e) => {
+                e.stopPropagation();
+                onSelect(id);
+              }}
+            >
+              
+              {isSelected ? (
+                <MdCheckBox className="text-2xl text-gray-500 hover:text-slate-800" />
+              ) : (
+                <MdCheckBoxOutlineBlank className="text-2xl text-gray-500 hover:text-slate-800" />
+              )}
+              
+            </div>
         </div>
       </div>
     </div>

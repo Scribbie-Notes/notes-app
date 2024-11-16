@@ -451,6 +451,7 @@ const Home = () => {
                 ) // Filled icon for pinned notes
               }
             </button>
+
             <button onClick={handleBulkArchive}>
               <MdOutlineArchive className="text-2xl  text-black" />
             </button>
@@ -469,14 +470,14 @@ const Home = () => {
         />
       )}
 
-      {/* <div className="container h-auto pl-6 p-6 pb-12 mx-auto">
-        <div className="flex justify-end">
-          <div className="flex justify-end text-white bg-slate-800 p-3 rounded-md">
-            <MdSort />
+      <div className="container h-auto pr-6 p-6 pb-12 mx-auto">
+        <div className="flex justify-end pr-8 mb-4">
+          <div className="flex justify-end text-white bg-slate-800 p-1.5 rounded-md">
+            <MdSort className='mt-1 mr-1'/>
             <select
               value={sortOrder}
               onChange={handleSortOrderChange}
-              className="bg-slate-800 text-white rounded-md w-32"
+              className="bg-slate-800 text-white rounded-md"
             >
               <option value="ascending">Ascending</option>
               <option value="descending">Descending</option>
@@ -567,7 +568,7 @@ const Home = () => {
             }
           />
         )}
-      </div> */}
+      </div>
 
       <button
         className="w-12 h-12 flex justify-center rounded-2xl items-center text-white bg-gray-800 hover:bg-gray-900 transition-all focus:outline-none fixed right-24 bottom-10 z-50"
