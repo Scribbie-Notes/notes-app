@@ -1,3 +1,11 @@
 html {
     scroll-behavior: smooth;
 }
+
+body {
+    font-family: 'Poppins', sans-serif;
+  }
+
+  .note-content .ql-editor {
+    font-family: 'Poppins', sans-serif;
+  }

@@ -95,18 +95,18 @@ const NoteCard = ({
       </div>
 
       <p
-        style={{
-          display: "-webkit-box",
-          WebkitLineClamp: 3,
-          WebkitBoxOrient: "vertical",
-          overflow: "hidden",
-          textOverflow: "ellipsis",
-          color: textColor,
-        }}
-        className="text-xs mt-2"
-      >
-        <ReactQuill value={truncateContent(content)} readOnly={true} theme="bubble" />
-      </p>
+  style={{
+    display: "-webkit-box",
+    WebkitLineClamp: 3,
+    WebkitBoxOrient: "vertical",
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+    color: textColor,
+    fontFamily: "Poppins, sans-serif", // Apply Poppins font
+  }}
+  className="text-xs mt-2 mb-8"
+  dangerouslySetInnerHTML={{ __html: truncateContent(content) }} // Render HTML content
+/>
 
       <div className="flex items-center justify-between mb-[-8px]">
         <div className="flex flex-wrap gap-1">
@@ -177,19 +177,19 @@ const NoteCard = ({
           </div>
 
           <div
-              onClick={(e) => {
-                e.stopPropagation();
-                onSelect(id);
+            onClick={(e) => {
+              e.stopPropagation();
+              onSelect(id);
             }}
-            >
-              
-              {isSelected ? (
-                <MdCheckBox className="text-2xl text-gray-500 hover:text-slate-800" />
-              ) : (
-                <MdCheckBoxOutlineBlank className="text-2xl text-gray-500 hover:text-slate-800" />
-              )}
-              
-            </div>
+          >
+
+            {isSelected ? (
+              <MdCheckBox className="text-2xl text-gray-500 hover:text-slate-800" />
+            ) : (
+              <MdCheckBoxOutlineBlank className="text-2xl text-gray-500 hover:text-slate-800" />
+            )}
+
+          </div>
         </div>
       </div>
     </div>
@@ -214,12 +214,12 @@ NoteCard.propTypes = {
 NoteCard.defaultProps = {
   isPinned: false,
   background: "#ffffff",
-  onEdit: () => {},
-  onDelete: () => {},
-  onPinNote: () => {},
-  onClick: () => {},
+  onEdit: () => { },
+  onDelete: () => { },
+  onPinNote: () => { },
+  onClick: () => { },
   isSelected: false,
-  onSelect: () => {},
+  onSelect: () => { },
 };
 
 export default NoteCard;
