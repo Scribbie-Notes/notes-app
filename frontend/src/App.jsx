@@ -79,7 +79,6 @@ const App = () => {
             <Route path="/contact-us" exact element={<Contact />} />
             <Route path="/contributors" exact element={<Contributors />} />
 
-            <Route path="/footer" exact element={<Footer />} />
             <Route path="/signup" exact element={<Signup />} />
             <Route path="/about" exact element={<About />} />
             <Route path="/my-profile" exact element={<ProfilePage />} />

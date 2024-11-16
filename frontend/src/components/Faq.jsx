@@ -65,7 +65,7 @@ const Faq = () => {
   };
 
   return (
-    <div className="bg-neutral-100 text-center rounded-2xl p-8">
+    <div className="py-12 text-center rounded-2xl p-8">
       <h1 className="text-4xl mb-6 font-extrabold text-black">
         Frequently Asked Questions
       </h1>

@@ -84,7 +84,7 @@ const StickyFooter = () => {
   };
 
   return (
-    <div className="bg-gradient-to-b from-white to-gray-100  pb-6">
+    <div className="bg-gradient-to-b from-white to-gray-300 py-16 pl-20 pr-20 pb-6">
       {/* Flex container for company description and grid layout */}
       {/* Feedback Model */}
       <Modal
@@ -225,9 +225,9 @@ const StickyFooter = () => {
         <div className="flex flex-col items-center md:items-start w-full md:w-1/2 px-4 md:px-10 py-6">
           <div className="flex items-center mt-2">
             <img src={img} alt="logo" className="h-12 mb-3 mt-6" />
-            <p className="text-xl md:text-2xl font-medium -ml-3 mt-4">cribbie</p>
+            <p className="text-2xl md:text-2xl font-medium  -ml-3 mt-4">cribbie</p>
           </div>
-          <p className="text-sm mt-2">
+          <p className="text- mt-2">
             Scribbie is a platform that connects people with the resources they
             need to stay organized and productive. Explore our features and join
             the community.
@@ -241,19 +241,19 @@ const StickyFooter = () => {
             <h3 className="font-semibold text-lg mb-4">Explore</h3>
             <ul className="space-y-3">
               <Link to={"/about"}>
-                <li className="cursor-pointer hover:text-gray-700 hover:underline underline-offset-2">About</li>
+                <li className="cursor-pointer hover:text-gray-900 hover:underline ">About</li>
               </Link>
               <Link to={"/contact-us"}>
-                <li className="cursor-pointer hover:text-gray-700 hover:underline underline-offset-2">Contact Us</li>
+                <li className="cursor-pointer hover:text-gray-900 hover:underline">Contact Us</li>
               </Link>
               <Link to={"/contributors"}>
-                <li className="cursor-pointer hover:text-gray-700 hover:underline underline-offset-2">Contributors</li>
+                <li className="cursor-pointer hover:text-gray-900 hover:underline">Contributors</li>
               </Link>
               <Link to="#" onClick={openFeedbackModal}>
-                <li className="cursor-pointer hover:text-gray-700 hover:underline underline-offset-2">Feedback</li>
+                <li className="cursor-pointer hover:text-gray-900 hover:underline">Feedback</li>
               </Link>
               <Link to="#" onClick={openAppVersionModal}>
-                <li className="cursor-pointer hover:text-gray-700 hover:underline underline-offset-2">App Version</li>
+                <li className="cursor-pointer hover:text-gray-900 hover:underline">App Version</li>
               </Link>
             </ul>
           </div>
@@ -263,13 +263,13 @@ const StickyFooter = () => {
             <h3 className="font-semibold text-lg mb-4">Help & Support</h3>
             <ul className="space-y-3">
               <Link to={"/help"}>
-                <li className="cursor-pointer hover:text-gray-700 hover:underline underline-offset-2">Help Center</li>
+                <li className="cursor-pointer hover:text-gray-900 hover:underline">Help Center</li>
               </Link>
               <Link to={"/query"}>
-                <li className="cursor-pointer hover:text-gray-700 hover:underline underline-offset-2">Submit a Query</li>
+                <li className="cursor-pointer hover:text-gray-900 hover:underline">Submit a Query</li>
               </Link>
               <Link to={"/contact"}>
-                <li className="cursor-pointer hover:text-gray-700 hover:underline underline-offset-2">Contact Support</li>
+                <li className="cursor-pointer hover:text-gray-900 hover:underline">Contact Support</li>
               </Link>
             </ul>
           </div>
@@ -295,9 +295,8 @@ const StickyFooter = () => {
         </div>
       </div>
 
-      <hr className="border-t-2 border-grey w-full" />
       {/* Footer Note */}
-      <div className="border-t border-gray-200 pt-3 text-center">
+      <div className="pt-3 text-center">
         <p className="text-sm mt-2">&copy; {new Date().getFullYear()} Scribbie. All rights reserved.</p>
       </div>
       <Toaster />
