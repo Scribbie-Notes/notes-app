@@ -16,7 +16,7 @@ const Pricing = () => {
           </div>
           <div className="space-y-8 lg:grid lg:grid-cols-3 sm:gap-6 xl:gap-10 lg:space-y-0">
             <div className="flex flex-col p-6 mx-auto max-w-lg text-center text-gray-900 bg-white
-             hover:bg-gray-100 transition-all rounded-lg border border-gray-100 shadow dark:border-gray-600 xl:p-8  dark:text-slate-800">
+             hover:bg-gray-100 transition-all rounded-lg border-2 border-gray-100  shadow  xl:p-8  dark:text-slate-800">
               <h3 className="mb-4 text-2xl font-semibold">Starter</h3>
               <p className="font-light text-slate-800 sm:text-lg ">
                 Best option for personal use & for your next project.
@@ -118,7 +118,7 @@ const Pricing = () => {
                 Get started
               </a>
             </div>
-            <div className="flex flex-col p-6 mx-auto max-w-lg text-center text-gray-900 bg-white rounded-lg border border-gray-100 hover:bg-gray-100 transition-all shadow dark:border-gray-600 xl:p-8  dark:text-slate-800">
+            <div className="flex flex-col p-6 mx-auto max-w-lg text-center text-gray-900 bg-white rounded-lg  hover:bg-gray-100 border-2 border-gray-100 transition-all shadow xl:p-8  dark:text-slate-800">
               <h3 className="mb-4 text-2xl font-semibold">Company</h3>
               <p className="font-light text-slate-800 sm:text-lg ">
                 Relevant for multiple users, extended & premium support.
@@ -220,7 +220,7 @@ const Pricing = () => {
                 Get started
               </a>
             </div>
-            <div className="flex flex-col p-6 mx-auto max-w-lg text-center text-gray-900 bg-white rounded-lg border border-gray-100 hover:bg-gray-100 transition-all shadow dark:border-gray-600 xl:p-8  dark:text-slate-800">
+            <div className="flex flex-col p-6 mx-auto max-w-lg text-center text-gray-900 bg-white rounded-lg  hover:bg-gray-100 border-2 border-gray-100 transition-all shadow xl:p-8  dark:text-slate-800">
               <h3 className="mb-4 text-2xl font-semibold">Enterprise</h3>
               <p className="font-light text-slate-800 sm:text-lg ">
                 Best for large scale uses and extended redistribution rights.
