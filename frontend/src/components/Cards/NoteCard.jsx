@@ -44,7 +44,7 @@ const NoteCard = ({
     const strippedContent = content.replace(/<[^>]+>/g, '').trim();
     const formattedDate = moment(date).format("Do MMM YYYY");
     const textToDownload = `Title: ${title}\nDate of Creation: ${formattedDate}\nContent: ${strippedContent}`;
-    const blob = new Blob([textToDownload], { type: "text/plain;charset=utf-8" });
+    const blob = new Blob([textToDownload], { typze: "text/plain;charset=utf-8" });
     const link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
     link.download = `${title}.txt`;
@@ -102,7 +102,7 @@ const NoteCard = ({
         <ReactQuill value={content} readOnly={true} theme="bubble" />
       </p>
 
-      <div className="flex items-center justify-between mt-3 mb-[-8px]">
+      <div className="flex items-center justify-between mb-[-8px]">
         <div className="flex flex-wrap gap-1">
           {tags.length > 0 &&
             tags.map((tag, index) => (
