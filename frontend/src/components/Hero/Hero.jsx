@@ -207,7 +207,7 @@ const Hero = () => {
 
         <section
           ref={sectionRef}
-          className=" py-12 mt-8 mb-4"
+          className="pl-20 pr-20  py-12 mt-8 mb-4"
         >
           <h1 className="section-title text-4xl font-bold text-center text-gray-900">
             Unlock Powerful Features to
