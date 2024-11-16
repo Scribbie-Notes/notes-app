@@ -481,20 +481,22 @@ const Home = () => {
         />
       )}
 
-      <div className="container h-auto pr-6 p-6 pb-12 mx-auto">
-        <div className="flex justify-end pr-8 mb-4">
-          <div className="flex justify-end text-white bg-slate-800  cursor-pointer p-1.5 rounded-md">
-            <MdSort className='mt-1 ml-1 mr-1 text-gray-100 hover:text-gray-800 transition-all' />
-            <select
-              value={sortOrder}
-              onChange={handleSortOrderChange}
-              className="bg-slate-800 cursor-pointer text-white rounded-md"
-            >
-              <option value="ascending">Ascending</option>
-              <option value="descending">Descending</option>
-            </select>
-          </div>
-        </div>
+<div className="container h-auto pr-6 p-4 pb-8 mx-auto sm:p-3 sm:pb-6">
+  <div className="flex justify-end pr-6 mb-4 sm:pr-4">
+    <div className="flex justify-end text-white bg-slate-800 cursor-pointer p-1 r
+    ounded-md text-sm sm:text-base ml-12">
+      <MdSort className='mt-1 ml-1 mr-1 text-gray-100 transition-all' />
+      <select
+        value={sortOrder}
+        onChange={handleSortOrderChange}
+        className="bg-slate-800 cursor-pointer text-white rounded-md text-sm sm:text-base"
+      >
+        <option value="ascending">Ascending</option>
+        <option value="descending">Descending</option>
+      </select>
+    </div>
+  </div>
+
 
         {isLoading ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 mt-4 transition-all">
@@ -591,115 +593,123 @@ const Home = () => {
         <MdAdd className="text-[30px] text-white transition-all" />
       </button>
 
-      {/* Button to toggle the templates visibility */}
-      <button
-        onClick={toggleTemplates}
-        className="fixed right-44 bottom-10 z-50 text-white bg-gray-800 p-2 rounded-full hover:bg-gray-900"
-      >
-        <MdListAlt className="text-[31px]" />
-      </button>
+      {/* Button to toggle the templates visibility */ }
+  <button
+    onClick={toggleTemplates}
+    className="fixed right-44 bottom-10 z-50 text-white bg-gray-800 p-2 rounded-full hover:bg-gray-900"
+  >
+    <MdListAlt className="text-[31px]" />
+  </button>
 
-      {/* Pre-built templates section */}
-      {showTemplates && (
-        <div className="fixed inset-0 flex items-center justify-center z-50">
-          <div className="absolute inset-0 bg-black opacity-50"></div>
-          <div className="relative bg-white p-5 rounded-lg shadow-lg z-10 w-[90%] sm:w-[80%] md:w-[60%] lg:w-[40%]">
-            <h2 className="text-xl font-semibold mb-4">Choose a Template and Start Writing!</h2>
-            <div className="flex flex-col items-start gap-4">
-              {Object.keys(templates).map((templateKey) => (
-                <button
-                  key={templateKey}
-                  onClick={() => handleAddTemplate(templates[templateKey])}
-                  className="px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-900 transition-all text-white rounded"
-                >
-                  {templates[templateKey].title}
-                </button>
+  {/* Pre-built templates section */ }
+  {
+    showTemplates && (
+      <div className="fixed inset-0 flex items-center justify-center z-50">
+        <div className="absolute inset-0 bg-black opacity-50"></div>
+        <div className="relative bg-white p-5 rounded-lg shadow-lg z-10 w-[90%] sm:w-[80%] md:w-[60%] lg:w-[40%]">
+          <h2 className="text-xl font-semibold mb-4">Choose a Template and Start Writing!</h2>
+          <div className="flex flex-col items-start gap-4">
+            {Object.keys(templates).map((templateKey) => (
+              <button
+                key={templateKey}
+                onClick={() => handleAddTemplate(templates[templateKey])}
+                className="px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-900 transition-all text-white rounded"
+              >
+                {templates[templateKey].title}
+              </button>
+            ))}
+          </div>
+          <div className="flex justify-end mt-4">
+            <button
+              onClick={closeTemplateModal}
+              className="justify-end text-gray-900 bg-gray-200 hover:bg-red-200 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-sm font-semibold dark:bg-gray-300  border-gray-800 transition-all"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  {
+    openAddEditModal.isShown && (
+      <div className="fixed inset-0 flex items-center justify-center z-50">
+        <div className="absolute inset-0 bg-black opacity-50"></div>
+        <div className="bg-white p-5 rounded-lg shadow-lg z-10 w-[90%] sm:w-[80%] md:w-[60%] lg:w-[55%] max-h-3/4 overflow-hidden">
+          <AddEditNotes
+            type={openAddEditModal.type}
+            noteData={openAddEditModal.data}
+            onClose={() =>
+              setOpenAddEditModal({ isShown: false, type: "add", data: null })
+            }
+            getAllNotes={getAllNotes}
+          />
+        </div>
+      </div>
+    )
+  }
+
+  {
+    viewNoteModal.isShown && (
+      <div className="fixed inset-0 flex items-center justify-center z-50">
+        <div className="absolute inset-0 bg-black opacity-50"></div>
+        <div className="relative bg-white p-5 rounded-lg shadow-lg z-10 w-[90%] sm:w-[80%] md:w-[60%] lg:w-[40%] max-h-3/4 overflow-hidden">
+          <button
+            className="absolute top-3 right-3 text-gray-900 transition-all bg-gray-50 hover:bg-red-100 hover:text-gray-500 focus:outline-none font-medium rounded-full text-sm px-2.5 py-2.5 text-xs"
+            onClick={() => setViewNoteModal({ isShown: false, data: null })}
+          >
+            <MdClose className="text-xl text-slate-400" />
+          </button>
+          <div className="overflow-auto">
+            <h2 className="text-2xl font-semibold">
+              {viewNoteModal.data.title}
+            </h2>
+            <span className="text-xs text-slate-500">
+              {moment(viewNoteModal.data.date).format("Do MMM YYYY")}
+            </span>
+            <p className="text-gray-700 mt-4"><ReactQuill value={viewNoteModal.data.content} readOnly={true} theme="bubble" /></p>
+            <div className="mt-4">
+              {viewNoteModal.data.tags.map((tag, index) => (
+                <span
+                  key={index}
+                  className="inline-block bg-gray-100 mr-2 text-gray-800  font-medium px-1.5 py-0.5 rounded  "
+                >#{tag}
+                </span>
               ))}
             </div>
-            <div className="flex justify-end mt-4">
-              <button
-                onClick={closeTemplateModal}
-                className="justify-end text-gray-900 bg-gray-200 hover:bg-red-200 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-sm font-semibold dark:bg-gray-300  border-gray-800 transition-all"
-              >
-                Close
-              </button>
-            </div>
           </div>
         </div>
-      )}
+      </div>
+    )
+  }
 
-      {openAddEditModal.isShown && (
-        <div className="fixed inset-0 flex items-center justify-center z-50">
-          <div className="absolute inset-0 bg-black opacity-50"></div>
-          <div className="bg-white p-5 rounded-lg shadow-lg z-10 w-[90%] sm:w-[80%] md:w-[60%] lg:w-[55%] max-h-3/4 overflow-hidden">
-            <AddEditNotes
-              type={openAddEditModal.type}
-              noteData={openAddEditModal.data}
-              onClose={() =>
-                setOpenAddEditModal({ isShown: false, type: "add", data: null })
-              }
-              getAllNotes={getAllNotes}
-            />
-          </div>
-        </div>
-      )}
-
-      {viewNoteModal.isShown && (
-        <div className="fixed inset-0 flex items-center justify-center z-50">
-          <div className="absolute inset-0 bg-black opacity-50"></div>
-          <div className="relative bg-white p-5 rounded-lg shadow-lg z-10 w-[90%] sm:w-[80%] md:w-[60%] lg:w-[40%] max-h-3/4 overflow-hidden">
+  {
+    isDeleteModalOpen && (
+      <div className="fixed inset-0 flex items-center justify-center z-50">
+        <div className="absolute inset-0 bg-black opacity-50"></div>
+        <div className="bg-white p-5 rounded-lg shadow-lg z-10 w-[90%] max-w-md">
+          <h2 className="text-lg font-bold mb-4">Confirm Delete</h2>
+          <p>Are you sure you want to delete this note?</p>
+          <div className="flex justify-end gap-2 mt-4">
             <button
-              className="absolute top-3 right-3 text-gray-900 transition-all bg-gray-50 hover:bg-red-100 hover:text-gray-500 focus:outline-none font-medium rounded-full text-sm px-2.5 py-2.5 text-xs"
-              onClick={() => setViewNoteModal({ isShown: false, data: null })}
+              onClick={handleDeleteModalClose}
+              className="inline-flex items-center text-gray-900 bg-gray-200 hover:bg-red-200 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-xs dark:bg-gray-300  border-gray-800 transition-all"
             >
-              <MdClose className="text-xl text-slate-400" />
+              Cancel
             </button>
-            <div className="overflow-auto">
-              <h2 className="text-2xl font-semibold">
-                {viewNoteModal.data.title}
-              </h2>
-              <span className="text-xs text-slate-500">
-                {moment(viewNoteModal.data.date).format("Do MMM YYYY")}
-              </span>
-              <p className="text-gray-700 mt-4"><ReactQuill value={viewNoteModal.data.content} readOnly={true} theme="bubble" /></p>
-              <div className="mt-4">
-                {viewNoteModal.data.tags.map((tag, index) => (
-                  <span
-                    key={index}
-                    className="inline-block bg-gray-100 mr-2 text-gray-800  font-medium px-1.5 py-0.5 rounded  "
-                  >#{tag}
-                  </span>
-                ))}
-              </div>
-            </div>
+            <button
+              onClick={deleteNote}
+              className="inline-flex items-center text-white bg-gray-800 hover:bg-gray-900 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-xs dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-700 transition-all"
+            >
+              Delete
+            </button>
           </div>
         </div>
-      )}
-
-      {isDeleteModalOpen && (
-        <div className="fixed inset-0 flex items-center justify-center z-50">
-          <div className="absolute inset-0 bg-black opacity-50"></div>
-          <div className="bg-white p-5 rounded-lg shadow-lg z-10 w-[90%] max-w-md">
-            <h2 className="text-lg font-bold mb-4">Confirm Delete</h2>
-            <p>Are you sure you want to delete this note?</p>
-            <div className="flex justify-end gap-2 mt-4">
-              <button
-                onClick={handleDeleteModalClose}
-                className="inline-flex items-center text-gray-900 bg-gray-200 hover:bg-red-200 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-xs dark:bg-gray-300  border-gray-800 transition-all"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={deleteNote}
-                className="inline-flex items-center text-white bg-gray-800 hover:bg-gray-900 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-xs dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-700 transition-all"
-              >
-                Delete
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
+      </div>
+    )
+  }
+    </div >
   );
 };
 
