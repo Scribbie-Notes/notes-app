@@ -268,7 +268,6 @@ const Home = () => {
     });
   };
 
-
   const handleBulkPin = async () => {
     const isAllPinnedSelected = selectedNotes.some((selectedNote) =>
       otherNotes.some((note) => note._id === selectedNote && !note.isPinned)

@@ -142,7 +142,7 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
       ["code-block", "link"], // Markdown-like options (code-block, link)
       [{ 'align': [] }],
       ["clean"],
-      [{ 'indent': '-1'}, { 'indent': '+1'}], // Indentation options (useful for blockquotes)
+      [{ 'indent': '-1' }, { 'indent': '+1' }], // Indentation options (useful for blockquotes)
     ],
     clipboard: {
       matchVisual: false,
@@ -164,9 +164,9 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
     }
 
     if (type === "edit") {
-        editNote({ _id: noteData._id, title, content, tags, attachments, photos, videos, background, isPinned });
+      editNote({ _id: noteData._id, title, content, tags, attachments, photos, videos, background, isPinned });
     } else {
-        addNewNote({ title, content, tags, attachments, photos, videos, background, isPinned });
+      addNewNote({ title, content, tags, attachments, photos, videos, background, isPinned });
     }
   };
 
@@ -185,13 +185,13 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
   };
 
   return (
-    <div className="relative h-[650px] pl-6 pr-6 pt-8 overflow-auto">
-      <button
+    <div className="relative h-[500px] pl-4 pr-4 pt-4 overflow-auto">
+      {/* <button
         className="w-10 h-10 rounded-full flex items-center bg-gray-50 transition-all justify-center absolute -top-0 -right-0 hover:bg-red-100"
         onClick={onClose}
       >
         <MdClose className="text-xl text-slate-400" />
-      </button>
+      </button> */}
 
       <div className="flex flex-col gap-1">
         <label className="font-medium">Title</label>
@@ -210,35 +210,35 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
       </div>
 
       <div className='mt-3'>
-      <label className="font-medium">Content</label>
-      <div className="flex flex-col gap-2 mt-1 mr-2">
-        <div className="relative">
-          <ReactQuill
-            value={content}
-            onChange={handleContentChange}
-            modules={customModules}
-            placeholder="Enter note content"
-            style={{
-              height: "100px",
-            }}
-          />
-          <span className="absolute right-2 bottom-2 text-gray-500 text-xs">
-            {content.length}/{MAX_CONTENT_LENGTH}
-          </span>
-          {/* <button
+        <label className="font-medium">Content</label>
+        <div className="flex flex-col gap-2 mt-1 mr-2">
+          <div className="relative">
+            <ReactQuill
+              value={content}
+              onChange={handleContentChange}
+              modules={customModules}
+              placeholder="Enter note content"
+              style={{
+                height: "100px",
+              }}
+            />
+            <span className="absolute right-2 bottom-2 text-gray-500 text-xs">
+              {content.length}/{MAX_CONTENT_LENGTH}
+            </span>
+            {/* <button
             className="absolute right-2 top-2 text-gray-500"
             onClick={toggleListening}
             disabled={!isSpeechSupported}
           >
             {isListening ? <FaMicrophoneSlash /> : <FaMicrophone />}
           </button> */}
-          {!isSpeechSupported && (
-            <p className="text-red-500 text-xs mt-1">
-              Speech recognition is not supported in this browser.
-            </p>
-          )}
+            {!isSpeechSupported && (
+              <p className="text-red-500 text-xs mt-1">
+                Speech recognition is not supported in this browser.
+              </p>
+            )}
+          </div>
         </div>
-      </div>
       </div>
 
       <div className="flex flex-col gap-1 mt-14">
@@ -279,12 +279,17 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
 
       {error && <p className="text-red-500 mt-2">{error}</p>}
 
-      <button
-        className="w-auto items-center text-white bg-gray-800 hover:bg-gray-900 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 transition-all dark:border-gray-700 mt-4"
-        onClick={handleSaveNote}
-      >
+      <div className="flex justify-end">
+        <button className="w-auto items-center text-black bg-red-100 hover:bg-gray-900 hover:text-white  focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2  transition-all dark:border-gray-700 mt-4" onClick={onClose}>
+          Close
+        </button>
+        <button
+          className="w-auto items-center text-white bg-gray-800 hover:bg-gray-900 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 transition-all dark:border-gray-700 mt-4"
+          onClick={handleSaveNote}
+        >
         {type === "edit" ? "Update Note" : "Add Note"}
-      </button>
+        </button>
+      </div>
 
       {/* Revert Button */}
       {initialData && (
