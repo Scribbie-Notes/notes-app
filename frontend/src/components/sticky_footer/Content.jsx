@@ -94,7 +94,7 @@ const Footer = () => {
             onClick={scrollToTop}
             className="fixed bottom-[3.7rem] right-9 px-3 py-2 bg-white text-[#111828] rounded-lg border border-transparent hover:text-white hover:bg-[#111828] hover:border-white transition-colors"
           >
-            <FaArrowUp size={25} />
+            <FaArrowUp size={20} />
           </button>
         )}
       </div>

@@ -7,7 +7,7 @@ import gsap from "gsap/all";
 import { FiMenu } from "react-icons/fi";
 import { SlideTabsExample } from "./Tabs";
 
-const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
+const Navbar2 = ({ userInfo, onSearchNote, handleClearSearch }) => {
   const [theme, setTheme] = useState("light");
   const [searchQuery, setSearchQuery] = useState("");
   const [tagQuery, setTagQuery] = useState("");
@@ -117,4 +117,4 @@ const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
   );
 };
 
-export default Navbar;
+export default Navbar2;

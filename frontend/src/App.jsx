@@ -87,16 +87,16 @@ const App = () => {
             {/* <Route path="/404" exact element={<ErrorPage/>} /> */}
           </Routes>
           <ScrollToTop
-            className="scroll-to-top"
+            className="scroll-to-top mr-2 mb-2"
             symbol={
               <span style={{ fontSize: "1.5rem", color: "#fff" }}>
                 {" "}
-                <i class="fa-solid fa-arrow-up"></i>
+                <i className="fa-solid fa-arrow-up"></i>
               </span>
             }
-            size={65}
+            size={40}
             bgColor="#111827"
-            strokeWidth={5}
+            strokeWidth={3}
             strokeFillColor="#6B7280"
             strokeEmptyColor="#CBCBCB"
             symbolColor="#fff"

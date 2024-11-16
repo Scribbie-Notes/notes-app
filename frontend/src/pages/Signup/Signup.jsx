@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Navbar from "../../components/Navbar";
+import Navbar2 from "../../components/Navbar-2";
 import { Link, useNavigate } from "react-router-dom";
 import {
   validateEmail,
@@ -224,7 +224,7 @@ const Signup = () => {
   return (
     <div>
       <div className="fixed top-0 left-0 right-0 z-50">
-        <Navbar />
+        <Navbar2 />
       </div>
 
       <section className="bg-white">
@@ -264,7 +264,7 @@ const Signup = () => {
 
               <form
                 onSubmit={handleSignup}
-                className="mt-8 grid grid-cols-6 gap-6"
+                className="mt-24 grid grid-cols-6 gap-6"
               >
                 <div className="col-span-6">
                   <label

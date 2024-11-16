@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Navbar from "../../components/Navbar";
+import Navbar2 from "../../components/Navbar-2";
 import { Link, useNavigate } from "react-router-dom";
 import { validateEmail } from "../../utils/helper";
 import axiosInstance from "../../utils/axiosInstance";
@@ -169,10 +169,10 @@ const Login = ({ setUser }) => {
   return (
     <div>
       <div className="fixed top-0 left-0 right-0 z-50">
-        <Navbar />
+        <Navbar2 />
       </div>
 
-      <section className="bg-white">
+      <section className="bg-white pt-">
         <div className="lg:grid lg:min-h-screen lg:grid-cols-12">
           <section className="relative flex h-32 items-end bg-gray-900 lg:col-span-5 lg:h-full xl:col-span-6">
             <img
@@ -211,7 +211,7 @@ const Login = ({ setUser }) => {
 
               <form
                 onSubmit={handleLogin}
-                className="mt-8 grid grid-cols-6 gap-6"
+                className="mt-16 grid grid-cols-6 gap-6"
               >
                 <div className="col-span-12">
                   <label
