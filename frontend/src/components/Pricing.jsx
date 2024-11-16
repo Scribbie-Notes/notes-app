@@ -3,7 +3,7 @@ import React from "react";
 const Pricing = () => {
   return (
     <div>
-      <section className="bg-white ">
+      <section className="bg-white py-24 pl-16 pr-16">
         <div className="py-8 px-4 mx-auto max-w-screen-xl lg:py-16 lg:px-6">
           <div className="mx-auto max-w-screen-md text-center mb-8 lg:mb-12">
             <h2 className="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 ">
@@ -15,7 +15,8 @@ const Pricing = () => {
             </p>
           </div>
           <div className="space-y-8 lg:grid lg:grid-cols-3 sm:gap-6 xl:gap-10 lg:space-y-0">
-            <div className="flex flex-col p-6 mx-auto max-w-lg text-center text-gray-900 bg-white rounded-lg border border-gray-100 shadow dark:border-gray-600 xl:p-8  dark:text-slate-800">
+            <div className="flex flex-col p-6 mx-auto max-w-lg text-center text-gray-900 bg-white
+             hover:bg-gray-100 transition-all rounded-lg border border-gray-100 shadow dark:border-gray-600 xl:p-8  dark:text-slate-800">
               <h3 className="mb-4 text-2xl font-semibold">Starter</h3>
               <p className="font-light text-slate-800 sm:text-lg ">
                 Best option for personal use & for your next project.
@@ -117,7 +118,7 @@ const Pricing = () => {
                 Get started
               </a>
             </div>
-            <div className="flex flex-col p-6 mx-auto max-w-lg text-center text-gray-900 bg-white rounded-lg border border-gray-100 shadow dark:border-gray-600 xl:p-8  dark:text-slate-800">
+            <div className="flex flex-col p-6 mx-auto max-w-lg text-center text-gray-900 bg-white rounded-lg border border-gray-100 hover:bg-gray-100 transition-all shadow dark:border-gray-600 xl:p-8  dark:text-slate-800">
               <h3 className="mb-4 text-2xl font-semibold">Company</h3>
               <p className="font-light text-slate-800 sm:text-lg ">
                 Relevant for multiple users, extended & premium support.
@@ -219,7 +220,7 @@ const Pricing = () => {
                 Get started
               </a>
             </div>
-            <div className="flex flex-col p-6 mx-auto max-w-lg text-center text-gray-900 bg-white rounded-lg border border-gray-100 shadow dark:border-gray-600 xl:p-8  dark:text-slate-800">
+            <div className="flex flex-col p-6 mx-auto max-w-lg text-center text-gray-900 bg-white rounded-lg border border-gray-100 hover:bg-gray-100 transition-all shadow dark:border-gray-600 xl:p-8  dark:text-slate-800">
               <h3 className="mb-4 text-2xl font-semibold">Enterprise</h3>
               <p className="font-light text-slate-800 sm:text-lg ">
                 Best for large scale uses and extended redistribution rights.
