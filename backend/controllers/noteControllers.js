@@ -145,6 +145,7 @@ const updateNotesBackgroundController = async (req, res) => {
   }
 };
 
+// Function to get all notes
 const getAllNotesController = async (req, res) => {
   const { user } = req.user;
 

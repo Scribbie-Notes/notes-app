@@ -117,12 +117,13 @@ const Home = () => {
       if (response.data && response.data.notes) {
         const notes = response.data.notes.map((note) => ({
           ...note,
-          tags: Array.isArray(note.tags) ? note.tags : [], // Ensure tags is always an array
+          tags: Array.isArray(note.tags) ? note.tags : [], 
         }));
         setAllNotes(notes);
       }
     } catch (error) {
       console.log("Error while fetching notes");
+      toast.error("Failed to fetch notes");
     } finally {
       setIsLoading(false);
     }

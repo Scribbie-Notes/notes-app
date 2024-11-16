@@ -35,6 +35,7 @@ const noteActions = (getAllNotes, onClose) => {
         getAllNotes();
         onClose();
         toast.success("Note added successfully");
+        console.log(response.data);
       }
     } catch (err) {
       console.log(err, "Failed to add a note");

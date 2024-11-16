@@ -105,7 +105,8 @@ const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
 
 
         {userInfo ? (
-          <div ref={profileRef}><ProfileInfo userInfo={userInfo} onLogout={onLogout} /></div>
+          <div 
+          className="pr-20" ref={profileRef}><ProfileInfo userInfo={userInfo} onLogout={onLogout} /></div>
         ) : (
           <div className="pr-20">
             {location.pathname !== "/login" && <button ref={loginButtonRef} onClick={() => navigate("/login")} className=" text-white bg-gray-800 hover:bg-gray-700 transition duration-300 ease-in-out font-medium rounded-lg text-md px-4 py-1.5">Login</button>}
