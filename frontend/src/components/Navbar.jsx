@@ -79,11 +79,11 @@ const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
   };
 
   return (
-    <div className={`flex items-center justify-between px-4 py-3  ${theme === "dark" ? "bg-black text-white" : "bg-white text-black"}`}>
+    <div className={`flex items-center pt-8 justify-between px-4 py-3  ${theme === "dark" ? "bg-black text-white" : "bg-white text-black"}`}>
       <Link to={userInfo ? "/dashboard" : "/"}>
         <div ref={logoRef} className="flex items-center pl-20 p-2">
-          <img src="/logo.png" className="h-10" alt="logo" />
-          <h2 className="text-2xl font-medium ml-[-10px] mt-2 tracking-tight">cribbie</h2>
+          <img src="/logo.png" className="h-12" alt="logo" />
+          <h2 className="text-3xl font-medium ml-[-12px] mt-2 tracking-tight">cribbie</h2>
         </div>
       </Link>
 
