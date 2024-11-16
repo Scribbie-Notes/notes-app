@@ -366,10 +366,10 @@ const ProfilePage = () => {
                 )} */}
               </div>
 
-              <div className=" mt-16" >
+              <div className="mt-12" >
                 {user && (
                   <>
-                    <h1 className="font-bold text-center text-3xl text-gray-900">
+                    <h1 className="font-bold text-center text-4xl text-gray-900">
                       {user.fullName}
                     </h1>
                     <p className="text-center text-sm mt-2 text-gray-400 font-medium">

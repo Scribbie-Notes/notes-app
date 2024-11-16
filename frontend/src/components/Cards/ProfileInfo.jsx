@@ -78,37 +78,37 @@ const handleArchivedNotes = () => {
             className="flex items-center gap-2 w-full text-start px-4 py-2 text-gray-700 hover:bg-gray-100"
             onClick={handleMyProfile}
           >
-            <span className="scale-125">
+            <span className="scale-125 mr-1">
               <CiUser />
             </span>
-            Profile & Settings
+            <span className="text-md font-medium">Profile Settings</span>
           </button>
           <button
             className="flex items-center gap-2 w-full text-start px-4 py-2 text-gray-700 hover:bg-gray-100"
             onClick={handleArchivedNotes}
           >
-            <span className="scale-125">
+            <span className="scale-125 mr-1">
               <MdOutlineArchive />
             </span>
-            Archived Notes
+            <span className="text-md font-medium">Archived Notes </span>
           </button>
           <button
             className="flex gap-2 items-center w-full text-start px-4 py-2  text-gray-700 hover:bg-gray-100"
             onClick={handleAbout}
           >
-            <span className="scale-125">
+            <span className="scale-125 mr-1">
               <CiCircleInfo />
             </span>
-            About
+            <span className="text-md font-medium">About </span>
           </button>
           <button
             className="flex gap-2 items-center w-full text-start px-4 py-2  text-gray-700 hover:bg-gray-100"
             onClick={handleLogout}
           >
-            <span className="scale-125">
+            <span className="scale-125 mr-1">
               <CiLogout />
             </span>
-            Logout
+            <span className="text-md font-medium">Logout </span>
           </button>
         </div>
       )}
