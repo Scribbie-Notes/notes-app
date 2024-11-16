@@ -8,6 +8,8 @@ import axios from 'axios';
 import AddEditNotes from "../../pages/Home/AddEditNotes";
 import moment from "moment";
 import ReactQuill from 'react-quill';
+import { Link } from 'react-router-dom';
+import {IoMdArrowRoundBack} from 'react-icons/io';
 
 const ArchivedNotes = () => {
   const user = JSON.parse(localStorage.getItem("user"));
@@ -275,6 +277,13 @@ const ArchivedNotes = () => {
       ) : (
         <Navbar userInfo={user} />
       )}
+      <Link to="/dashboard">
+          <div className="p-5 pl-28">
+            <button className="inline-flex items-center text-white bg-gray-800 hover:bg-gray-900 focus:outline-none font-medium rounded-lg text-sm px-5 py-2 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-700">
+              <IoMdArrowRoundBack className="mr-2 ml-[-5px]" />Back
+            </button>
+          </div>
+        </Link>
       <div className="container h-auto p-6 pb-12 mx-auto">
         {isLoading ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 mt-4 transition-all">
@@ -391,7 +400,7 @@ const ArchivedNotes = () => {
             )}
           </>
         ) : (
-           <div>No archived notes</div>
+           <div className="text-center text-2xl mt-24">No Archived Notes</div>
         )}
       </div>
     </div>
