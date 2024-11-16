@@ -46,8 +46,8 @@ const Testimonial = () => {
   return (
     <>
       {location.pathname === '/testimonial' && <Navbar userInfo={user} />}
-      <div className="relative h-[400px] py-32 pl-16 pr-16" style={{zIndex:-1}}>
-        <div className=" container mx-auto px-6" >
+      <div className="relative h-[400px] py-32 px-6 sm:px-12 lg:px-16 hidden lg:block" style={{ zIndex: -1 }}>
+        <div className="container mx-auto px-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             {/* Left Side - Title */}
             <div className="max-w-lg mt-10">
@@ -92,6 +92,7 @@ const Testimonial = () => {
         </div>
       </div>
     </>
+
   );
 };
 
