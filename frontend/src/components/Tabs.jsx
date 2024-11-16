@@ -4,7 +4,7 @@ import { Link, useLocation } from "react-router-dom";
 // Accept theme as a prop in SlideTabsExample
 export const SlideTabsExample = ({ theme }) => {
   return (
-    <div className={theme === "dark" ? "bg-gray-800" : "bg-white py-2"}>
+    <div className={theme === "dark" ? "bg-slate-800" : "bg-white py-2"}>
       <SlideTabs theme={theme} />
     </div>
   );
@@ -33,7 +33,7 @@ const SlideTabs = ({ theme }) => {
         theme === "dark" ? "bg-black" : "bg-white"
       }`}
     >
-      <Tab
+      {/* <Tab
         theme={theme}
         setPosition={setPosition}
         to="/"
@@ -52,7 +52,7 @@ const SlideTabs = ({ theme }) => {
         setHoveredTab={setHoveredTab}
       >
         Calendar
-      </Tab>
+      </Tab> */}
       <Cursor position={position} theme={theme} />
     </ul>
   );

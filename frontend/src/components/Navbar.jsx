@@ -79,8 +79,13 @@ const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
   };
 
   return (
-    <div className={`flex items-center justify-between px-4 py-2 drop-shadow-md ${theme === "dark" ? "bg-black text-white" : "bg-white text-black"}`}>
-      <Link to={userInfo ? "/dashboard" : "/"}><div ref={logoRef} className="flex items-center p-1"><img src="/logo.png" className="h-10" alt="logo" /><h2 className="text-2xl font-medium ml-[-10px] mt-2 tracking-tight">cribbie</h2></div></Link>
+    <div className={`flex items-center justify-between px-4 py-3 drop-shadow-md ${theme === "dark" ? "bg-black text-white" : "bg-white text-black"}`}>
+      <Link to={userInfo ? "/dashboard" : "/"}>
+        <div ref={logoRef} className="flex items-center pl-20 p-2">
+          <img src="/logo.png" className="h-10" alt="logo" />
+          <h2 className="text-2xl font-medium ml-[-10px] mt-2 tracking-tight">cribbie</h2>
+        </div>
+      </Link>
 
       <div className="flex items-center gap-x-5">
         <div className="xl:block hidden"><SlideTabsExample theme={theme} /></div>
@@ -107,7 +112,7 @@ const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
             <div ref={profileRef}><ProfileInfo userInfo={userInfo} onLogout={onLogout} /></div>
           ) : (
             <>
-              {location.pathname !== "/login" && <button ref={loginButtonRef} onClick={() => navigate("/login")} className="pr-3">Login</button>}
+              {location.pathname !== "/login" && <button ref={loginButtonRef} onClick={() => navigate("/login")} className="pr-20">Login</button>}
               {/* {location.pathname !== "/signup" && <button ref={signupButtonRef} onClick={() => navigate("/signup")} className="text-zinc-200 bg-black rounded-md py-2 px-3">Signup</button>} */}
             </>
           )}
