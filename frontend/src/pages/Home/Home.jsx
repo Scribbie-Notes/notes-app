@@ -570,20 +570,20 @@ const Home = () => {
       </div> */}
 
       <button
-        className="w-16 h-16 flex justify-center rounded-2xl items-center text-white bg-gray-800 hover:bg-gray-900 transition-all focus:outline-none fixed right-10 bottom-10 z-50"
+        className="w-12 h-12 flex justify-center rounded-2xl items-center text-white bg-gray-800 hover:bg-gray-900 transition-all focus:outline-none fixed right-24 bottom-10 z-50"
         onClick={() => {
           setOpenAddEditModal({ isShown: true, type: "add", data: null });
         }}
       >
-        <MdAdd className="text-[32px] text-white transition-all" />
+        <MdAdd className="text-[30px] text-white transition-all" />
       </button>
 
       {/* Button to toggle the templates visibility */}
       <button
         onClick={toggleTemplates}
-        className="fixed right-32 bottom-10 z-50 text-white bg-gray-700 p-3 rounded-full hover:bg-gray-600"
+        className="fixed right-44 bottom-10 z-50 text-white bg-gray-800 p-2 rounded-full hover:bg-gray-900"
       >
-        <MdListAlt className="text-[32px]" />
+        <MdListAlt className="text-[31px]" />
       </button>
 
       {/* Pre-built templates section */}
