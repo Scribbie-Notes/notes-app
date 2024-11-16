@@ -20,7 +20,8 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
   const [isListening, setIsListening] = useState(false);
   const [isPinned, setIsPinned] = useState(false);
   const [isSpeechSupported, setIsSpeechSupported] = useState(true);
-  const [initialData, setInitialData] = useState(null); // To store the initial data for revert functionality
+  const [initialData, setInitialData] = useState(null);
+  const predefinedColors = ["#f4f4f4", "#ffcccc", "#ffeeba", "#fff4c2", "#d4f8d4", "#c8f6f4"];
 
   const MAX_TITLE_LENGTH = 60;
   const MAX_CONTENT_LENGTH = 2500;
@@ -243,13 +244,26 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
 
       <div className="flex flex-col gap-1 mt-14">
         <label className="font-medium">Background Color</label>
-        <input
-          type="color"
-          value={background}
-          onChange={handleBackgroundChange}
-          className="w-9 h-9 cursor-pointer"
-        />
+        <div className="flex gap-2">
+          {predefinedColors.map((color) => (
+            <button
+              key={color}
+              onClick={() => setBackground(color)}
+              // className="border border-2"
+              style={{
+                marginTop: "8px",
+                backgroundColor: color,
+                width: "36px",
+                height: "36px",
+                borderRadius: "50%",
+                border: background === color ? "2px solid black" : "1px solid gray",
+                cursor: "pointer",
+              }}
+            ></button>
+          ))}
+        </div>
       </div>
+
 
       <div className="flex flex-col gap-1 mt-4">
         <label className="font-medium md:text-base">Tags</label>
@@ -287,7 +301,7 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
           className="w-auto items-center text-white bg-gray-800 hover:bg-gray-900 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 transition-all dark:border-gray-700 mt-4"
           onClick={handleSaveNote}
         >
-        {type === "edit" ? "Update Note" : "Add Note"}
+          {type === "edit" ? "Update Note" : "Add Note"}
         </button>
       </div>
 
