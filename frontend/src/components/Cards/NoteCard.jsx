@@ -69,7 +69,7 @@ const NoteCard = ({
 
   return (
     <div
-      className="border rounded-lg p-5 bg-gray-100 hover:bg-slate-100 cursor-pointer transition duration-300 ease-in-out"
+      className="border rounded-lg p-5 mb-4 bg-gray-100 hover:bg-slate-100 cursor-pointer transition duration-300 ease-in-out"
       style={{ backgroundColor: background }}
     >
       <div className="flex items-center justify-between" onClick={onClick}>
