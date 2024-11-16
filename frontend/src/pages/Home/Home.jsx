@@ -666,7 +666,7 @@ const Home = () => {
                 {viewNoteModal.data.tags.map((tag, index) => (
                   <span
                     key={index}
-                    className="inline-block bg-gray-100 mr-2 text-gray-800 text-xs font-medium px-1.5 py-0.5 rounded dark:bg-blue-100 dark:text-gray-800"
+                    className="inline-block bg-gray-100 mr-2 text-gray-800  font-medium px-1.5 py-0.5 rounded  "
                   >#{tag}
                   </span>
                 ))}

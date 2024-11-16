@@ -86,21 +86,22 @@ const App = () => {
             <Route path="/calendar" exact element={<Calendar />} />
             {/* <Route path="/404" exact element={<ErrorPage/>} /> */}
           </Routes>
-          <ScrollToTop
-            className="scroll-to-top mr-2 mb-2"
-            symbol={
-              <span style={{ fontSize: "1.5rem", color: "#fff" }}>
-                {" "}
-                <i className="fa-solid fa-arrow-up"></i>
-              </span>
-            }
-            size={40}
-            bgColor="#111827"
-            strokeWidth={3}
-            strokeFillColor="#6B7280"
-            strokeEmptyColor="#CBCBCB"
-            symbolColor="#fff"
-          />
+          {location.pathname !== "/dashboard" && (
+            <ScrollToTop
+              className="scroll-to-top mr-2 mb-2"
+              symbol={
+                <span style={{ fontSize: "1.5rem", color: "#fff" }}>
+                  <i className="fa-solid fa-arrow-up"></i>
+                </span>
+              }
+              size={40}
+              bgColor="#111827"
+              strokeWidth={3}
+              strokeFillColor="#6B7280"
+              strokeEmptyColor="#CBCBCB"
+              symbolColor="#fff"
+            />
+          )}
         </>
       )}
     </div>
