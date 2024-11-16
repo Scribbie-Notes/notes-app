@@ -79,7 +79,7 @@ const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
   };
 
   return (
-    <div className={`flex items-center justify-between px-4 py-3 drop-shadow-md ${theme === "dark" ? "bg-black text-white" : "bg-white text-black"}`}>
+    <div className={`flex items-center justify-between px-4 py-3  ${theme === "dark" ? "bg-black text-white" : "bg-white text-black"}`}>
       <Link to={userInfo ? "/dashboard" : "/"}>
         <div ref={logoRef} className="flex items-center pl-20 p-2">
           <img src="/logo.png" className="h-10" alt="logo" />
@@ -103,17 +103,15 @@ const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
           />
         </div> */}
 
-        <div>
 
-          {userInfo ? (
-            <div ref={profileRef}><ProfileInfo userInfo={userInfo} onLogout={onLogout} /></div>
-          ) : (
-            <div className="pr-20">
-              {location.pathname !== "/login" && <button ref={loginButtonRef} onClick={() => navigate("/login")} className=" text-white bg-gray-800 hover:bg-gray-700 transition duration-300 ease-in-out font-medium rounded-lg text-md px-4 py-1.5">Login</button>}
-              {/* {location.pathname !== "/signup" && <button ref={signupButtonRef} onClick={() => navigate("/signup")} className="text-zinc-200 bg-black rounded-md py-2 px-3">Signup</button>} */}
-            </div>
-          )}
-        </div>
+        {userInfo ? (
+          <div ref={profileRef}><ProfileInfo userInfo={userInfo} onLogout={onLogout} /></div>
+        ) : (
+          <div className="pr-20">
+            {location.pathname !== "/login" && <button ref={loginButtonRef} onClick={() => navigate("/login")} className=" text-white bg-gray-800 hover:bg-gray-700 transition duration-300 ease-in-out font-medium rounded-lg text-md px-4 py-1.5">Login</button>}
+            {/* {location.pathname !== "/signup" && <button ref={signupButtonRef} onClick={() => navigate("/signup")} className="text-zinc-200 bg-black rounded-md py-2 px-3">Signup</button>} */}
+          </div>
+        )}
       </div>
     </div>
   );
