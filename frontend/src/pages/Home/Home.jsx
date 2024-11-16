@@ -412,6 +412,11 @@ const Home = () => {
     }
   };
 
+  const truncateContent = (content) => {
+    const words = content.split(' ');
+    return words.length > 40 ? words.slice(0, 40).join(' ') + '...' : content;
+  }
+
   return (
     <div>
       {selectedNotes.length > 0 ? (
@@ -478,12 +483,12 @@ const Home = () => {
 
       <div className="container h-auto pr-6 p-6 pb-12 mx-auto">
         <div className="flex justify-end pr-8 mb-4">
-          <div className="flex justify-end text-white bg-slate-700  cursor-pointer p-1.5 rounded-md">
-            <MdSort className='mt-1 mr-1 text-gray-600 hover:text-gray-800 transition-all' />
+          <div className="flex justify-end text-white bg-slate-800  cursor-pointer p-1.5 rounded-md">
+            <MdSort className='mt-1 ml-1 mr-1 text-gray-100 hover:text-gray-800 transition-all' />
             <select
               value={sortOrder}
               onChange={handleSortOrderChange}
-              className="bg-slate-700 cursor-pointer text-white rounded-md"
+              className="bg-slate-800 cursor-pointer text-white rounded-md"
             >
               <option value="ascending">Ascending</option>
               <option value="descending">Descending</option>
@@ -507,14 +512,15 @@ const Home = () => {
             {pinnedNotes.length > 0 && (
               <div>
                 <h1 className="font-bold pl-2">PINNED</h1>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 mt-2 transition-all mb-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 mt-2 
+                transition-all mb-4">
                   {pinnedNotes.map((item) => (
                     <NoteCard
                       key={item._id}
                       id={item._id}
                       title={item.title}
                       date={item.createdOn}
-                      content={item.content}
+                      content={truncateContent(item.content)}
                       tags={item.tags}
                       isPinned={item.isPinned}
 
@@ -535,7 +541,7 @@ const Home = () => {
             {
               pinnedNotes.length > 0 && <h1 className="font-bold pl-2">OTHERS</h1>
             }
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 mt-2 transition-all">
+            <div className="grid grid-cols-1 pl-10 pr-10 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 mt-2 transition-all">
               {otherNotes.map((item) => (
                 <NoteCard
                   key={item._id}

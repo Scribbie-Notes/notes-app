@@ -22,6 +22,11 @@ const getContrastColor = (background) => {
   return luminance > 0.5 ? "black" : "white"; // Return black for light backgrounds, white for dark
 };
 
+const truncateContent = (content) => {
+  const words = content.split(" ");
+  return words.length > 25 ? words.slice(0, 25).join(" ") + "..." : content;
+};
+
 const NoteCard = ({
   id,
   title,
@@ -100,7 +105,7 @@ const NoteCard = ({
         }}
         className="text-xs mt-2"
       >
-        <ReactQuill value={content} readOnly={true} theme="bubble" />
+        <ReactQuill value={truncateContent(content)} readOnly={true} theme="bubble" />
       </p>
 
       <div className="flex items-center justify-between mb-[-8px]">
