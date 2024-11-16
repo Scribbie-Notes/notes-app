@@ -323,23 +323,22 @@ const ProfilePage = () => {
   return (
     <div className="bg-gray-50 ">
       <Navbar userInfo={user} />
-      <Link to="/dashboard">
-        <div className="p-5">
-          <button className="inline-flex items-center text-white bg-gray-800 hover:bg-gray-900 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-700">
-            <IoMdArrowRoundBack />
-          </button>
-        </div>
-      </Link>
+        <Link to="/dashboard">
+          <div className="p-5 pl-28">
+            <button className="inline-flex items-center text-white bg-gray-800 hover:bg-gray-900 focus:outline-none font-medium rounded-lg text-sm px-5 py-2 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-700">
+              <IoMdArrowRoundBack className="mr-2 ml-[-5px]" />Back
+            </button>
+          </div>
+        </Link>
       <div className="flex"  >
-        <div className="container items-center justify-center px-4 pb-28">
-          <div>
-            <div className="bg-white shadow rounded-lg w-full md:w-5/6 lg:w-4/6 xl:w-3/6 mx-auto mt-12" style={{zIndex:-1}}>
-              <div className="  flex justify-center" style={{zIndex:-1}}>
+        <div className="container items-center justify-center pl-24 pb-28">
+            <div className="bg-white p-4 border border-gray-400 shadow-md border-gray-800 rounded-lg md:w-5/6 lg:w-4/6 xl:w-3/6 mx-auto" style={{ zIndex: -1 }}>
+              <div className="  flex justify-center" style={{ zIndex: -1 }}>
                 <div
                   className="flex items-center justify-center p-3 mt-3 rounded-full text-slate-950 font-medium bg-gray-50 cursor-pointer mx-auto  w-24 md:w-32 h-24 md:h-32 shadow-md border-4 border-white transition duration-200 transform hover:scale-110 text-3xl md:text-4xl absolute"
                   onMouseEnter={() => setIsHovered(true)}
                   onMouseLeave={() => setIsHovered(false)}
-                  onClick={() => document.getElementById("fileInput").click()} style={{zIndex:-1}}
+                  onClick={() => document.getElementById("fileInput").click()} style={{ zIndex: -1 }}
                 >
                   {profilePhoto ? (
                     <img
@@ -621,7 +620,6 @@ const ProfilePage = () => {
                 </div>
               </div>
             </div>
-          </div>
         </div>
       </div>
       <Footer className="mt-10" />
