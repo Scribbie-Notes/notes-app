@@ -66,15 +66,15 @@ const Faq = () => {
 
   return (
     <div className="py-12 text-center rounded-2xl p-8">
-      <h1 className="text-4xl mb-6 font-extrabold text-black">
+      <h1 className="text-3xl mb-10 font-extrabold text-slate-900 ">
         Frequently Asked Questions
       </h1>
-      <div className="container mx-auto flex flex-col items-center justify-center text-left">
+      <div className="container mx-auto flex flex-col items-center justify-center text-left text-sm">
         {faqData.map((item, index) => (
           <AccordionItem
             key={index}
-            question={item.question}
-            answer={item.answer}
+            question={<span className="text-lg">{item.question}</span>}
+            answer={<span>{item.answer}</span>}
             isOpen={openIndex === index}
             onToggle={() => handleToggle(index)}
           />
