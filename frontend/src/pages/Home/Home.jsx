@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Navbar from "../../components/Navbar";
 import NoteCard from "../../components/Cards/NoteCard";
 import { templates } from "./Templates";
+import { BiSortAlt2 } from "react-icons/bi";
 
 import {
   MdAdd,
@@ -485,14 +486,14 @@ const Home = () => {
   <div className="flex justify-end mr-16 mb-4 pt-2 sm:pr-4">
     <div className="flex justify-end text-white bg-slate-800 rounded-lg cursor-pointer p-1 r
     ounded-md text-sm sm:text-base ml-12">
-      <MdSort className='mt-1 ml-1 mr-1 text-gray-100 transition-all' />
+      <BiSortAlt2 className='mt-1 ml-1 mr-1 text-gray-100 transition-all' />
       <select
         value={sortOrder}
         onChange={handleSortOrderChange}
         className="bg-slate-800 cursor-pointer text-white rounded-md text-sm sm:text-base"
       >
-        <option value="ascending">Ascending</option>
-        <option value="descending">Descending</option>
+        <option value="ascending">Oldest First</option>
+        <option value="descending">Newest First</option>
       </select>
     </div>
   </div>
