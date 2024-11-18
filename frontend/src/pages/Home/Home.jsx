@@ -1,5 +1,5 @@
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
 import { useState, useEffect } from "react";
 import Navbar from "../../components/Navbar";
 import NoteCard from "../../components/Cards/NoteCard";
@@ -16,7 +16,7 @@ import {
   MdOutlineUnarchive,
   MdOutlineArchive,
   MdListAlt,
-  MdSort
+  MdSort,
 } from "react-icons/md";
 
 import AddEditNotes from "./AddEditNotes";
@@ -29,7 +29,7 @@ import NoDataImg from "../../assets/images/no-data.svg";
 import toast from "react-hot-toast";
 import noFound from "../../assets/images/noFound.svg";
 import addPost from "../../assets/images/addPost.svg";
-import axios from 'axios';
+import axios from "axios";
 const apiBaseUrl = import.meta.env.VITE_BACKEND_URL;
 
 const Home = () => {
@@ -80,7 +80,7 @@ const Home = () => {
   const [userInfo, setUserInfo] = useState(null);
   const [isSearch, setIsSearch] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [sortOrder, setSortOrder] = useState('ascending'); // 'ascending' or 'descending'
+  const [sortOrder, setSortOrder] = useState("ascending"); // 'ascending' or 'descending'
 
   const navigate = useNavigate();
 
@@ -100,7 +100,6 @@ const Home = () => {
       if (response.data && response.data.user) {
         setUserInfo(response.data.user);
       }
-
     } catch (error) {
       // if (error.response.status === 401) {
       //   localStorage.clear();
@@ -111,7 +110,6 @@ const Home = () => {
 
   useEffect(() => {
     getUserInfo();
-
   }, []);
 
   // get all notes
@@ -173,7 +171,6 @@ const Home = () => {
   };
   // search notes
   const onSearchNote = async (query, queryType) => {
-
     setSearchQuery(query);
     if (query.trim() === "") {
       setIsSearch(false);
@@ -182,12 +179,15 @@ const Home = () => {
     }
 
     if (queryType == "text") {
-      const filteredNotes = allNotes.filter(note => note.title.toLowerCase().includes(query.toLowerCase()));
+      const filteredNotes = allNotes.filter((note) =>
+        note.title.toLowerCase().includes(query.toLowerCase())
+      );
       setIsSearch(true);
       setAllNotes(filteredNotes);
-    }
-    else if (queryType == "tag") {
-      const filteredNotes = allNotes.filter(note => note.tags.includes(query.toLowerCase()));
+    } else if (queryType == "tag") {
+      const filteredNotes = allNotes.filter((note) =>
+        note.tags.includes(query.toLowerCase())
+      );
       setIsSearch(true);
       setAllNotes(filteredNotes);
     }
@@ -219,7 +219,6 @@ const Home = () => {
     getAllNotes();
     getUserInfo();
   }, []);
-
 
   const handleSearchInputChange = (query, queryType) => {
     debouncedSearch(query, queryType);
@@ -267,9 +266,9 @@ const Home = () => {
   }, []);
 
   const handleNoteSelection = (noteId) => {
-    setSelectedNotes(prevSelected => {
+    setSelectedNotes((prevSelected) => {
       if (prevSelected.includes(noteId)) {
-        return prevSelected.filter(id => id !== noteId);
+        return prevSelected.filter((id) => id !== noteId);
       } else {
         return [...prevSelected, noteId];
       }
@@ -283,21 +282,30 @@ const Home = () => {
 
     const updateData = {
       noteIds: selectedNotes,
-      isPinned: isAllPinnedSelected // true to pin, false to unpin
+      isPinned: isAllPinnedSelected, // true to pin, false to unpin
     };
 
     try {
       // Send one API call to pin/unpin the selected notes
-      await axiosInstance.put(`${apiBaseUrl}/bulk-update-notes-pinned`, updateData);
+      await axiosInstance.put(
+        `${apiBaseUrl}/bulk-update-notes-pinned`,
+        updateData
+      );
 
       // Refresh notes and clear selection
       getAllNotes();
       setSelectedNotes([]);
-      toast.success(`Selected notes ${isAllPinnedSelected ? 'pinned' : 'unpinned'} successfully`);
+      toast.success(
+        `Selected notes ${
+          isAllPinnedSelected ? "pinned" : "unpinned"
+        } successfully`
+      );
       setIsColorPickerOpen(false);
     } catch (error) {
       console.error("Error updating notes:", error);
-      toast.error(`Failed to ${isAllPinnedSelected ? 'pin' : 'unpin'} selected notes`);
+      toast.error(
+        `Failed to ${isAllPinnedSelected ? "pin" : "unpin"} selected notes`
+      );
     }
   };
 
@@ -308,8 +316,8 @@ const Home = () => {
         noteIds: selectedNotes,
       });
 
-      getAllNotes();  // Refresh the notes after archiving
-      setSelectedNotes([]);  // Clear the selection
+      getAllNotes(); // Refresh the notes after archiving
+      setSelectedNotes([]); // Clear the selection
       toast.success("Selected notes archived successfully");
     } catch (error) {
       console.error("Error archiving notes:", error);
@@ -322,7 +330,7 @@ const Home = () => {
       const deletedNotes = selectedNotes;
       // Send selected note IDs via the data field, since Axios delete doesn't send req.body directly
       await axiosInstance({
-        method: 'delete',
+        method: "delete",
         url: `${apiBaseUrl}/delete-multiple-notes`,
         data: { noteIds: selectedNotes }, // Pass the noteIds in the data field
       });
@@ -330,10 +338,18 @@ const Home = () => {
       // After successful deletion, refresh the notes and reset selected notes
       getAllNotes();
       setSelectedNotes([]);
-      toast.success(<div>
-        Notes deleted. <button className='bg-green-500 p-2 text-white rounded' onClick={() => undoDelete(deletedNotes)}>Undo</button>
-      </div>,
-        { autoClose: 5000 });
+      toast.success(
+        <div>
+          Notes deleted.{" "}
+          <button
+            className="bg-green-500 p-2 text-white rounded"
+            onClick={() => undoDelete(deletedNotes)}
+          >
+            Undo
+          </button>
+        </div>,
+        { autoClose: 5000 }
+      );
     } catch (error) {
       console.error("Error deleting notes:", error);
       toast.error("Failed to delete selected notes");
@@ -342,7 +358,6 @@ const Home = () => {
 
   const handleBulkColor = async (color) => {
     try {
-
       // Send an array of selected note IDs and the new background color in one request
       await axiosInstance.put(`${apiBaseUrl}/update-notes-background`, {
         noteIds: selectedNotes,
@@ -371,7 +386,7 @@ const Home = () => {
       const dateB = new Date(b.createdOn);
 
       // Sorting logic based on selected order
-      if (order === 'ascending') {
+      if (order === "ascending") {
         return dateA - dateB;
       } else {
         return dateB - dateA;
@@ -395,14 +410,18 @@ const Home = () => {
     try {
       const accessToken = localStorage.getItem("token");
       // Send a request to restore the deleted notes
-      const response = await axios.put(`${apiBaseUrl}/undo-delete-notes`, {
-        noteIds: deletedNotes
-      }, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}` // Replace `yourToken` with your actual token variable
+      const response = await axios.put(
+        `${apiBaseUrl}/undo-delete-notes`,
+        {
+          noteIds: deletedNotes,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`, // Replace `yourToken` with your actual token variable
+          },
         }
-      });
+      );
 
       // Refresh the notes list
       getAllNotes();
@@ -414,21 +433,20 @@ const Home = () => {
   };
 
   const truncateContent = (content) => {
-    const words = content.split(' ');
-    return words.length > 40 ? words.slice(0, 40).join(' ') + '...' : content;
-  }
+    const words = content.split(" ");
+    return words.length > 40 ? words.slice(0, 40).join(" ") + "..." : content;
+  };
 
   return (
     <div>
       {selectedNotes.length > 0 ? (
         <div className="bg-white shadow z-50 p-[26px] pl-16 pr-20 flex justify-between items-center">
-          <span className="text-gray-800 text-2xl font-semibold">{selectedNotes.length} Notes Selected</span>
+          <span className="text-gray-800 text-2xl font-semibold">
+            {selectedNotes.length} Notes Selected
+          </span>
           <div className="flex items-center gap-x-5">
             <div className="relative  flex ">
-              <button
-                onClick={() => setIsColorPickerOpen(!isColorPickerOpen)}
-
-              >
+              <button onClick={() => setIsColorPickerOpen(!isColorPickerOpen)}>
                 <MdColorLens className="text-2xl text-gray-600 hover:text-gray-800 transition-all" />
               </button>
               {isColorPickerOpen && (
@@ -482,22 +500,23 @@ const Home = () => {
         />
       )}
 
-<div className="container h-auto pr-6 p-4 pb-8 mx-auto sm:p-3 sm:pb-6">
-  <div className="flex justify-end mr-16 mb-4 pt-2 sm:pr-4">
-    <div className="flex justify-end text-white bg-slate-800 rounded-lg cursor-pointer p-1 r
-    ounded-md text-sm sm:text-base ml-12">
-      <BiSortAlt2 className='mt-1 ml-1 mr-1 text-gray-100 transition-all' />
-      <select
-        value={sortOrder}
-        onChange={handleSortOrderChange}
-        className="bg-slate-800 cursor-pointer text-white rounded-md text-sm sm:text-base"
-      >
-        <option value="ascending">Oldest First</option>
-        <option value="descending">Newest First</option>
-      </select>
-    </div>
-  </div>
-
+      <div className="container h-auto pr-6 p-4 pb-8 mx-auto sm:p-3 sm:pb-6">
+        <div className="flex justify-end mr-16 mb-4 pt-2 sm:pr-4">
+          <div
+            className="flex justify-end text-white bg-slate-800 rounded-lg cursor-pointer p-1 r
+    ounded-md text-sm sm:text-base ml-12"
+          >
+            <BiSortAlt2 className="mt-1 ml-1 mr-1 text-gray-100 transition-all" />
+            <select
+              value={sortOrder}
+              onChange={handleSortOrderChange}
+              className="bg-slate-800 cursor-pointer text-white rounded-md text-sm sm:text-base"
+            >
+              <option value="ascending">Oldest First</option>
+              <option value="descending">Newest First</option>
+            </select>
+          </div>
+        </div>
 
         {isLoading ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 mt-4 transition-all">
@@ -514,9 +533,8 @@ const Home = () => {
           <>
             {pinnedNotes.length > 0 && (
               <div>
-                <h1 className="font-bold pl-2">PINNED</h1>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 mt-2 
-                transition-all mb-4">
+                <h1 className="font-bold pl-2 ml-16">PINNED</h1>
+                <div className="grid grid-cols-1 ml-16 pr-20 pt-2 pb-12 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-10 mt-2 transition-all">
                   {pinnedNotes.map((item) => (
                     <NoteCard
                       key={item._id}
@@ -526,7 +544,6 @@ const Home = () => {
                       content={truncateContent(item.content)}
                       tags={item.tags}
                       isPinned={item.isPinned}
-
                       background={item.background}
                       onEdit={() => handleEdit(item)}
                       onDelete={() => handleDeleteModalOpen(item._id)}
@@ -541,10 +558,10 @@ const Home = () => {
                 </div>
               </div>
             )}
-            {
-              pinnedNotes.length > 0 && <h1 className="font-bold pl-2">OTHERS</h1>
-            }
-            <div className="grid grid-cols-1 pl-20 pr-20 pt-2 pb-24 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-10 mt-2 transition-all">
+            {pinnedNotes.length > 0 && (
+              <h1 className="font-bold ml-16">OTHERS</h1>
+            )}
+            <div className="grid grid-cols-1 ml-16 pr-20 pt-2 pb-24 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-10 mt-2 transition-all">
               {otherNotes.map((item) => (
                 <NoteCard
                   key={item._id}
@@ -554,7 +571,6 @@ const Home = () => {
                   content={item.content}
                   tags={item.tags}
                   isPinned={item.isPinned}
-
                   background={item.background}
                   onEdit={() => handleEdit(item)}
                   onDelete={() => handleDeleteModalOpen(item._id)}
@@ -594,123 +610,124 @@ const Home = () => {
         <MdAdd className="text-[30px] text-white transition-all" />
       </button>
 
-      {/* Button to toggle the templates visibility */ }
-  <button
-    onClick={toggleTemplates}
-    className="fixed right-44 bottom-10 z-50 text-white bg-gray-800 p-2 rounded-full hover:bg-gray-900"
-  >
-    <MdListAlt className="text-[31px]" />
-  </button>
+      {/* Button to toggle the templates visibility */}
+      <button
+        onClick={toggleTemplates}
+        className="fixed right-44 bottom-10 z-50 text-white bg-gray-800 p-2 rounded-full hover:bg-gray-900"
+      >
+        <MdListAlt className="text-[31px]" />
+      </button>
 
-  {/* Pre-built templates section */ }
-  {
-    showTemplates && (
-      <div className="fixed inset-0 flex items-center justify-center z-50">
-        <div className="absolute inset-0 bg-black opacity-50"></div>
-        <div className="relative bg-white p-5 rounded-lg shadow-lg z-10 w-[90%] sm:w-[80%] md:w-[60%] lg:w-[40%]">
-          <h2 className="text-xl font-semibold mb-4">Choose a Template and Start Writing!</h2>
-          <div className="flex flex-col items-start gap-4">
-            {Object.keys(templates).map((templateKey) => (
-              <button
-                key={templateKey}
-                onClick={() => handleAddTemplate(templates[templateKey])}
-                className="px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-900 transition-all text-white rounded"
-              >
-                {templates[templateKey].title}
-              </button>
-            ))}
-          </div>
-          <div className="flex justify-end mt-4">
-            <button
-              onClick={closeTemplateModal}
-              className="justify-end text-gray-900 bg-gray-200 hover:bg-red-200 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-sm font-semibold dark:bg-gray-300  border-gray-800 transition-all"
-            >
-              Close
-            </button>
-          </div>
-        </div>
-      </div>
-    )
-  }
-
-  {
-    openAddEditModal.isShown && (
-      <div className="fixed inset-0 flex items-center justify-center z-50">
-        <div className="absolute inset-0 bg-black opacity-50"></div>
-        <div className="bg-white p-5 rounded-lg shadow-lg z-10 w-[90%] sm:w-[80%] md:w-[60%] lg:w-[55%] max-h-3/4 overflow-hidden">
-          <AddEditNotes
-            type={openAddEditModal.type}
-            noteData={openAddEditModal.data}
-            onClose={() =>
-              setOpenAddEditModal({ isShown: false, type: "add", data: null })
-            }
-            getAllNotes={getAllNotes}
-          />
-        </div>
-      </div>
-    )
-  }
-
-  {
-    viewNoteModal.isShown && (
-      <div className="fixed inset-0 flex items-center justify-center z-50">
-        <div className="absolute inset-0 bg-black opacity-50"></div>
-        <div className="relative bg-white p-5 rounded-lg shadow-lg z-10 w-[90%] sm:w-[80%] md:w-[60%] lg:w-[40%] max-h-3/4 overflow-hidden">
-          <button
-            className="absolute top-3 right-3 text-gray-900 transition-all bg-gray-50 hover:bg-red-100 hover:text-gray-500 focus:outline-none font-medium rounded-full text-sm px-2.5 py-2.5 text-xs"
-            onClick={() => setViewNoteModal({ isShown: false, data: null })}
-          >
-            <MdClose className="text-xl text-slate-400" />
-          </button>
-          <div className="overflow-auto">
-            <h2 className="text-2xl font-semibold">
-              {viewNoteModal.data.title}
+      {/* Pre-built templates section */}
+      {showTemplates && (
+        <div className="fixed inset-0 flex items-center justify-center z-50">
+          <div className="absolute inset-0 bg-black opacity-50"></div>
+          <div className="relative bg-white p-5 rounded-lg shadow-lg z-10 w-[90%] sm:w-[80%] md:w-[60%] lg:w-[40%]">
+            <h2 className="text-xl font-semibold mb-4">
+              Choose a Template and Start Writing!
             </h2>
-            <span className="text-xs text-slate-500">
-              {moment(viewNoteModal.data.date).format("Do MMM YYYY")}
-            </span>
-            <p className="text-gray-700 mt-4"><ReactQuill value={viewNoteModal.data.content} readOnly={true} theme="bubble" /></p>
-            <div className="mt-4">
-              {viewNoteModal.data.tags.map((tag, index) => (
-                <span
-                  key={index}
-                  className="inline-block bg-gray-100 mr-2 text-gray-800  font-medium px-1.5 py-0.5 rounded  "
-                >#{tag}
-                </span>
+            <div className="flex flex-col items-start gap-4">
+              {Object.keys(templates).map((templateKey) => (
+                <button
+                  key={templateKey}
+                  onClick={() => handleAddTemplate(templates[templateKey])}
+                  className="px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-900 transition-all text-white rounded"
+                >
+                  {templates[templateKey].title}
+                </button>
               ))}
+            </div>
+            <div className="flex justify-end mt-4">
+              <button
+                onClick={closeTemplateModal}
+                className="justify-end text-gray-900 bg-gray-200 hover:bg-red-200 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-sm font-semibold dark:bg-gray-300  border-gray-800 transition-all"
+              >
+                Close
+              </button>
             </div>
           </div>
         </div>
-      </div>
-    )
-  }
+      )}
 
-  {
-    isDeleteModalOpen && (
-      <div className="fixed inset-0 flex items-center justify-center z-50">
-        <div className="absolute inset-0 bg-black opacity-50"></div>
-        <div className="bg-white p-5 rounded-lg shadow-lg z-10 w-[90%] max-w-md">
-          <h2 className="text-lg font-bold mb-4">Confirm Delete</h2>
-          <p>Are you sure you want to delete this note?</p>
-          <div className="flex justify-end gap-2 mt-4">
-            <button
-              onClick={handleDeleteModalClose}
-              className="inline-flex items-center text-gray-900 bg-gray-200 hover:bg-red-200 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-xs dark:bg-gray-300  border-gray-800 transition-all"
-            >
-              Cancel
-            </button>
-            <button
-              onClick={deleteNote}
-              className="inline-flex items-center text-white bg-gray-800 hover:bg-gray-900 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-xs dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-700 transition-all"
-            >
-              Delete
-            </button>
+      {openAddEditModal.isShown && (
+        <div className="fixed inset-0 flex items-center justify-center z-50">
+          <div className="absolute inset-0 bg-black opacity-50"></div>
+          <div className="bg-white p-5 rounded-lg shadow-lg z-10 w-[90%] sm:w-[80%] md:w-[60%] lg:w-[55%] max-h-3/4 overflow-hidden">
+            <AddEditNotes
+              type={openAddEditModal.type}
+              noteData={openAddEditModal.data}
+              onClose={() =>
+                setOpenAddEditModal({ isShown: false, type: "add", data: null })
+              }
+              getAllNotes={getAllNotes}
+            />
           </div>
         </div>
-      </div>
-    )
-  }
-    </div >
+      )}
+
+      {viewNoteModal.isShown && (
+        <div className="fixed inset-0 flex items-center justify-center z-50">
+          <div className="absolute inset-0 bg-black opacity-50"></div>
+          <div className="relative bg-white p-5 rounded-lg shadow-lg z-10 w-[90%] sm:w-[80%] md:w-[60%] lg:w-[40%] max-h-3/4 overflow-hidden">
+            <button
+              className="absolute top-3 right-3 text-gray-900 transition-all bg-gray-50 hover:bg-red-100 hover:text-gray-500 focus:outline-none font-medium rounded-full text-sm px-2.5 py-2.5 text-xs"
+              onClick={() => setViewNoteModal({ isShown: false, data: null })}
+            >
+              <MdClose className="text-xl text-slate-400" />
+            </button>
+            <div className="overflow-auto">
+              <h2 className="text-2xl font-semibold">
+                {viewNoteModal.data.title}
+              </h2>
+              <span className="text-xs text-slate-500">
+                {moment(viewNoteModal.data.date).format("Do MMM YYYY")}
+              </span>
+              <p className="text-gray-700 mt-4">
+                <ReactQuill
+                  value={viewNoteModal.data.content}
+                  readOnly={true}
+                  theme="bubble"
+                />
+              </p>
+              <div className="mt-4">
+                {viewNoteModal.data.tags.map((tag, index) => (
+                  <span
+                    key={index}
+                    className="inline-block bg-gray-100 mr-2 text-gray-800  font-medium px-1.5 py-0.5 rounded  "
+                  >
+                    #{tag}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {isDeleteModalOpen && (
+        <div className="fixed inset-0 flex items-center justify-center z-50">
+          <div className="absolute inset-0 bg-black opacity-50"></div>
+          <div className="bg-white p-5 rounded-lg shadow-lg z-10 w-[90%] max-w-md">
+            <h2 className="text-lg font-bold mb-4">Confirm Delete</h2>
+            <p>Are you sure you want to delete this note?</p>
+            <div className="flex justify-end gap-2 mt-4">
+              <button
+                onClick={handleDeleteModalClose}
+                className="inline-flex items-center text-gray-900 bg-gray-200 hover:bg-red-200 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-xs dark:bg-gray-300  border-gray-800 transition-all"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={deleteNote}
+                className="inline-flex items-center text-white bg-gray-800 hover:bg-gray-900 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-xs dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-700 transition-all"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
   );
 };
 
