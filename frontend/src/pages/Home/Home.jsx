@@ -482,7 +482,7 @@ const Home = () => {
       )}
 
 <div className="container h-auto pr-6 p-4 pb-8 mx-auto sm:p-3 sm:pb-6">
-  <div className="flex justify-end mr-16 mb-4 sm:pr-4">
+  <div className="flex justify-end mr-16 mb-4 pt-2 sm:pr-4">
     <div className="flex justify-end text-white bg-slate-800 rounded-lg cursor-pointer p-1 r
     ounded-md text-sm sm:text-base ml-12">
       <MdSort className='mt-1 ml-1 mr-1 text-gray-100 transition-all' />
