@@ -289,9 +289,9 @@ const StickyFooter = () => {
               <i className="fa-brands fa-github cursor-pointer hover:text-gray-700"></i>
             </a>
           </div>
-          <div className="translate flex ml-4 my-auto">
+          {/* <div className="translate flex ml-4 my-auto">
             <GoogleTranslate />
-          </div>
+          </div> */}
         </div>
       </div>
 

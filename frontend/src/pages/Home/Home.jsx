@@ -514,7 +514,7 @@ const Home = () => {
             {pinnedNotes.length > 0 && (
               <div>
                 <h1 className="font-bold pl-2">PINNED</h1>
-                <div className="grid grid-cols-1  sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 mt-2 
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 mt-2 
                 transition-all mb-4">
                   {pinnedNotes.map((item) => (
                     <NoteCard
