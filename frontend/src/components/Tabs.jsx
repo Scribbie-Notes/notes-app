@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 
-// Accept theme as a prop in SlideTabsExample
+// Main component that decides the theme and renders SlideTabs
 export const SlideTabsExample = ({ theme }) => {
   return (
     <div className={theme === "dark" ? "bg-slate-800" : "bg-white py-2"}>
@@ -10,40 +10,24 @@ export const SlideTabsExample = ({ theme }) => {
   );
 };
 
+// SlideTabs component that handles rendering the tabs
 const SlideTabs = ({ theme }) => {
   const location = useLocation();
-  const [position, setPosition] = useState({
-    left: 0,
-    width: 0,
-    opacity: 0,
-  });
+  const [position, setPosition] = useState({ left: 0, width: 0, opacity: 0 });
   const [hoveredTab, setHoveredTab] = useState(null);
   const currentPathName = location.pathname;
 
   return (
     <ul
       onMouseLeave={() => {
-        setPosition((pv) => ({
-          ...pv,
-          opacity: 0,
-        }));
+        setPosition((prev) => ({ ...prev, opacity: 0 }));
         setHoveredTab(null);
       }}
-      className={`relative mx-auto flex w-fit p-1 flex-col md:flex-row gap-5  ${
+      className={`relative mx-auto flex w-fit p-1 flex-col md:flex-row gap-5 ${
         theme === "dark" ? "bg-black" : "bg-white"
       }`}
     >
       {/* <Tab
-        theme={theme}
-        setPosition={setPosition}
-        to="/"
-        currentPathName={currentPathName}
-        hoveredTab={hoveredTab}
-        setHoveredTab={setHoveredTab}
-      >
-        Home
-      </Tab>
-      <Tab
         theme={theme}
         setPosition={setPosition}
         to="/calendar"
@@ -58,6 +42,7 @@ const SlideTabs = ({ theme }) => {
   );
 };
 
+// Tab component that renders individual tabs
 const Tab = ({
   children,
   setPosition,
@@ -77,22 +62,14 @@ const Tab = ({
       onMouseEnter={() => {
         if (!ref?.current) return;
         const { width } = ref.current.getBoundingClientRect();
-        setPosition({
-          left: ref.current.offsetLeft,
-          width,
-          opacity: 1,
-        });
+        setPosition({ left: ref.current.offsetLeft, width, opacity: 1 });
         setHoveredTab(to);
       }}
-      className={`relative z-10 block cursor-pointer px-3 py-1.5 text-xs uppercase md:px-5 md:py-3 md:text-base ${
-        isActive
-          ? "bg-black text-white rounded-lg"
-          : isHovered
-          ? "bg-gray-700 text-white rounded-lg"
-          : theme === "dark"
-          ? "text-white"
-          : "text-black"
-      }`}
+      className={`relative z-10 mt-1.5 cursor-pointer text-xs 
+        ${isActive ? "bg-black text-white rounded-lg" : "text-black"}
+        ${isHovered && !isActive ? "bg-gray-700 text-white rounded-lg" : ""}
+        ${theme === "dark" && !isActive && !isHovered ? "text-white" : ""}
+        hover:bg-gray-700 hover:text-white`}
     >
       <Link to={to} className="block w-full text-center">
         {children}
@@ -101,7 +78,7 @@ const Tab = ({
   );
 };
 
-// Cursor component without animation
+// Cursor component for the sliding effect
 const Cursor = ({ position, theme }) => {
   return (
     <li
@@ -110,7 +87,7 @@ const Cursor = ({ position, theme }) => {
         width: position.width,
         opacity: position.opacity,
       }}
-      className={`absolute z-0 h-7 rounded-lg md:h-12 ${
+      className={`absolute z-0 h-2 rounded-lg md:h-12 ${
         theme === "dark" ? "bg-gray-900" : "bg-gray-300"
       }`}
     />
