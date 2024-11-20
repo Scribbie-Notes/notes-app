@@ -300,8 +300,8 @@ const ArchivedNotes = () => {
             <>
             {pinnedNotes.length > 0 && (
               <div>
-                <h1 className="font-bold pl-2">PINNED</h1>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 mt-2 transition-all mb-3">
+                <h1 className="font-bold pl-20">PINNED</h1>
+                <div className="grid grid-cols-1 pl-20 pr-20 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 mt-2 transition-all mb-3">
                   {pinnedNotes.map((item) => (
                     <NoteCard
                       key={item._id}
@@ -327,9 +327,9 @@ const ArchivedNotes = () => {
               </div>
             )}
             {
-              pinnedNotes.length > 0 && <h1 className="font-bold pl-2">OTHERS</h1>
+              pinnedNotes.length > 0 && <h1 className="font-bold pl-20">OTHERS</h1>
             }
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 mt-2 transition-all">
+            <div className="grid grid-cols-1 pl-20 pr-20 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 mt-2 transition-all">
               {otherNotes.map((item) => (
                 <NoteCard
                   key={item._id}

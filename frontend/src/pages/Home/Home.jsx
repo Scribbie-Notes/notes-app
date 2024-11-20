@@ -192,7 +192,6 @@ const Home = () => {
       setIsSearch(true);
       setAllNotes(filteredNotes);
     }
-    /*
 
     try {
       const response = await axiosInstance.get(`${apiBaseUrl}/search-notes`, { params: { query } });
@@ -203,7 +202,6 @@ const Home = () => {
     } catch (error) {
       console.log("Error while searching notes");
     }
-      */
   };
 
   // Debounce function to limit the rate of search
