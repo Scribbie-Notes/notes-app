@@ -83,7 +83,7 @@ const handleArchivedNotes = () => {
             </span>
             <span className="text-md font-medium">Profile Settings</span>
           </button>
-          <button
+          {/* <button
             className="flex items-center gap-2 w-full text-start px-4 py-2 text-gray-700 hover:bg-gray-100"
             onClick={handleArchivedNotes}
           >
@@ -91,7 +91,7 @@ const handleArchivedNotes = () => {
               <MdOutlineArchive />
             </span>
             <span className="text-md font-medium">Archived Notes </span>
-          </button>
+          </button> */}
           <button
             className="flex gap-2 items-center w-full text-start px-4 py-2  text-gray-700 hover:bg-gray-100"
             onClick={handleAbout}
