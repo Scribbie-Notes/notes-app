@@ -5,17 +5,17 @@ import { IoMdClose } from 'react-icons/io';
 const SearchBar = ({ value, tag, searchType, onChange, onTagChange, onClearSearch, handleSearch, onSearchTypeChange }) => {
     return (
         <div
-            className="w-64 flex items-center px-4 bg-slate-100 rounded-md relative"
+            className="w-64 flex items-center px-4 h-[37px] ml-20 bg-slate-200 border border-gray-300 rounded-md relative"
         >
             {/* Dropdown to select search type */}
-            <select
+            {/* <select
                 value={searchType}
                 onChange={onSearchTypeChange}
                 className="text-xs bg-transparent outline-none mr-4"
             >
                 <option value="text">Title</option>
                 <option value="tag">Tag</option>
-            </select>
+            </select> */}
 
             {/* Display appropriate input based on search type */}
             {searchType === 'text' ? (
@@ -45,7 +45,7 @@ const SearchBar = ({ value, tag, searchType, onChange, onTagChange, onClearSearc
             ) : null}
 
             <FaMagnifyingGlass
-                className="text-slate-400 cursor-pointer hover:text-black"
+                className="text-slate-400 text-2xl cursor-pointer hover:text-black"
                 onClick={handleSearch}
             />
         </div>

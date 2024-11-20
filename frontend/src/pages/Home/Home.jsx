@@ -30,6 +30,7 @@ import toast from "react-hot-toast";
 import noFound from "../../assets/images/noFound.svg";
 import addPost from "../../assets/images/addPost.svg";
 import axios from "axios";
+import SearchBar from "../../components/SearchBar/SearchBar";
 const apiBaseUrl = import.meta.env.VITE_BACKEND_URL;
 
 const Home = () => {
@@ -500,21 +501,28 @@ const Home = () => {
         />
       )}
 
-      <div className="container h-auto pr-6 p-4 pb-8 mx-auto sm:p-3 sm:pb-6">
-        <div className="flex justify-end mr-16 mb-4 pt-2 sm:pr-4">
-          <div
-            className="flex justify-end text-white bg-slate-800 rounded-lg cursor-pointer p-1 r
-    ounded-md text-sm sm:text-base ml-12"
-          >
-            <BiSortAlt2 className="mt-1 ml-1 mr-1 text-gray-100 transition-all" />
-            <select
-              value={sortOrder}
-              onChange={handleSortOrderChange}
-              className="bg-slate-800 cursor-pointer text-white rounded-md text-sm sm:text-base"
+      <div className="container h-auto pr-6 p-4 pb-8 mx-auto sm:p-3 sm:pb-6 ">
+        <div className="flex justify-between items-center">
+          <div>
+            <SearchBar
+              onSearchNote={handleSearchInputChange}
+              handleClearSearch={handleClearSearch}
+            />
+          </div>
+          <div className="flex justify-end mr-20 mb-4">
+            <div
+              className="flex justify-end text-white bg-slate-800 rounded-lg cursor-pointer p-1.5 mt-3.5 rounded-md text-sm sm:text-base ml-6"
             >
-              <option value="ascending">Oldest First</option>
-              <option value="descending">Newest First</option>
-            </select>
+              <BiSortAlt2 className="mt-1 ml-1 mr-1 text-gray-100 transition-all" />
+              <select
+                value={sortOrder}
+                onChange={handleSortOrderChange}
+                className="bg-slate-800 cursor-pointer text-white rounded-md text-sm sm:text-base"
+              >
+                <option value="ascending">Oldest First</option>
+                <option value="descending">Newest First</option>
+              </select>
+            </div>
           </div>
         </div>
 
@@ -534,7 +542,7 @@ const Home = () => {
             {pinnedNotes.length > 0 && (
               <div>
                 <h1 className="font-bold pl-2 ml-16">PINNED</h1>
-                <div className="grid grid-cols-1 ml-16 pr-20 pt-2 pb-12 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-10 mt-2 transition-all">
+                <div className="grid grid-cols-1 ml-20 pr-20 pt-2 pb-12 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-10 mt-2 transition-all">
                   {pinnedNotes.map((item) => (
                     <NoteCard
                       key={item._id}
@@ -561,7 +569,7 @@ const Home = () => {
             {pinnedNotes.length > 0 && (
               <h1 className="font-bold ml-16">OTHERS</h1>
             )}
-            <div className="grid grid-cols-1 ml-16 pr-20 pt-2 pb-24 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-10 mt-2 transition-all">
+            <div className="grid grid-cols-1 ml-20 pr-20 pt-2 pb-24 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-10 mt-2 transition-all">
               {otherNotes.map((item) => (
                 <NoteCard
                   key={item._id}
