@@ -74,16 +74,13 @@ const verifyAccountController = async(req, res) => {
                 .json({ error: true, message: ERROR_MESSAGES.USER_NOT_FOUND });
         }
 
-<<<<<<< HEAD
-        user.isEmailVerified = true;
-        await user.save();
-=======
-  // if (!userInfo.isEmailVerified) {
-  //   return res
-  //     .status(HTTP_STATUS.BAD_REQUEST)
-  //     .json({ message: ERROR_MESSAGES.EMAIL_NOT_VERIFIED });
-  // }
->>>>>>> 676f2dfdafdb2f2def8c3b320c01c85aa45fce78
+        // user.isEmailVerified = true;
+        // await user.save();
+        // if (!userInfo.isEmailVerified) {
+        //   return res
+        //     .status(HTTP_STATUS.BAD_REQUEST)
+        //     .json({ message: ERROR_MESSAGES.EMAIL_NOT_VERIFIED });
+        // }
 
         return res.json({
             error: false,
@@ -156,7 +153,9 @@ const getCurrentAccountController = async(req, res) => {
 
 const deleteUserController = async(req, res) => {
     try {
-        const { user: { _id: userId } } = req.user;
+        const {
+            user: { _id: userId },
+        } = req.user;
         if (!userId) {
             return res.status(400).json({ error: true, message: "User Id required" });
         }
@@ -170,7 +169,9 @@ const deleteUserController = async(req, res) => {
         return res.json({ error: false, message: "User deleted successfully" });
     } catch (error) {
         console.log("Error while deleting user", { error });
-        return res.status(500).json({ error: true, message: "Something went wrong" });
+        return res
+            .status(500)
+            .json({ error: true, message: "Something went wrong" });
     }
 };
 
@@ -260,12 +261,18 @@ const updatePhoneController = async(req, res) => {
         if (user) {
             user.phone = newPhone;
             await user.save();
-            res.status(HTTP_STATUS.OK).json({ message: MESSAGES.PHONE_UPDATED_SUCCESSFULLY });
+            res
+                .status(HTTP_STATUS.OK)
+                .json({ message: MESSAGES.PHONE_UPDATED_SUCCESSFULLY });
         } else {
-            res.status(HTTP_STATUS.NOT_FOUND).json({ message: ERROR_MESSAGES.USER_NOT_FOUND });
+            res
+                .status(HTTP_STATUS.NOT_FOUND)
+                .json({ message: ERROR_MESSAGES.USER_NOT_FOUND });
         }
     } catch (error) {
-        res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({ message: ERROR_MESSAGES.INTERNAL_SERVER_ERROR, error });
+        res
+            .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
+            .json({ message: ERROR_MESSAGES.INTERNAL_SERVER_ERROR, error });
     }
 };
 
@@ -286,7 +293,9 @@ const updateProfilePhotoController = async(req, res) => {
         });
     } catch (error) {
         console.error("Error updating profile photo:", error);
-        res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({ message: ERROR_MESSAGES.INTERNAL_SERVER_ERROR });
+        res
+            .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
+            .json({ message: ERROR_MESSAGES.INTERNAL_SERVER_ERROR });
     }
 };
 
