@@ -66,7 +66,7 @@ const handleArchivedNotes = () => {
   return (
     <div className="relative z-50" ref={dropdownRef}>
       <div
-        className="w-12 h-12 flex items-center hover:bg-slate-200 justify-center p-3 rounded-full text-slate-950 font-medium bg-slate-100 cursor-pointer transition-all"
+        className="w-12 h-12  flex items-center hover:bg-slate- hover:border-gray-950 hover:border justify-center p-3 rounded-full text-slate-950 font-medium bg-slate-200 cursor-pointer  border-gray-700 transition-all"
         onClick={toggleDropdown}
       >
         {getInitials(userInfo?.fullName)}

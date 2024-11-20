@@ -112,9 +112,9 @@ const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
           <SlideTabsExample theme={theme} />
         </div>
 
-        <div className="flex items-center gap-x-5">
+        <div className="flex items-center gap-x-2">
           <Link to="/calendar">
-            <button className="text-white bg-gray-800 hover:bg-gray-700 transition duration-300 ease-in-out font-medium rounded-lg text-md px-4 py-1.5">
+            <button className="border border-gray-900 bg-slate-800 mt-1.5 hover:bg-slate-700 text-white transition duration-300 ease-in-out font-medium rounded-lg text-sm px-3 py-1.5">
               Calendar
             </button>
           </Link>
@@ -129,7 +129,7 @@ const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
                 <button
                   ref={loginButtonRef}
                   onClick={() => navigate("/login")}
-                  className="text-white bg-gray-800 hover:bg-gray-700 transition duration-300 ease-in-out font-medium rounded-lg text-md px-4 py-1.5"
+                  className="text-white bg-gray-800 border  hover:bg-gray-700 transition duration-300 ease-in-out font-medium rounded-lg text-md px-4 py-1.5"
                 >
                   Login
                 </button>
