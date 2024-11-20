@@ -171,7 +171,7 @@ const Calendar = () => {
       <Backdrop open={loading}>
         <CircularProgress color="inherit" />
       </Backdrop>
-      <div className="flex container mx-auto p-4">
+      <div className="flex container mx-auto p-4 pl-20 pr-20">
         <div className="w-1/3 p-4 border-r">
           <h1 className="text-xl font-bold mb-4">Add New Event</h1>
           <input
@@ -190,7 +190,7 @@ const Calendar = () => {
             }
             className="border p-1 mb-2 w-full"
           />
-          <input
+          {/* <input
             type="text"
             placeholder="Event Description"
             value={newEvent.description}
@@ -207,20 +207,17 @@ const Calendar = () => {
             }
             className="mb-2"
           />
-          <br />
+          <br /> */}
 
-          <Button
+          <button
+          className="bg-slate-800 hover:bg-slate-700 text-white  py-1.5 px-3 rounded-lg mt-2"
             onClick={handleAddEvent}
-            variant="contained"
-            color="primary"
-            className="mb-2"
-
           >
             Add Event
-          </Button>
+          </button>
           <br />
 
-          <Button
+          {/* <Button
             onClick={handleGoogleAuth}
             variant="contained"
             color="secondary"
@@ -228,14 +225,14 @@ const Calendar = () => {
 
           >
             Sync with Google Calendar
-          </Button>
+          </Button> */}
         </div>
 
         <div className="w-2/3 p-4">
           <div className="flex justify-between items-center mb-4">
             <button
               onClick={handlePrevMonth}
-              className="bg-gray-300 p-2 rounded"
+              className="bg-slate-800 hover:bg-slate-700 text-white px-2.5 py-1 rounded-lg"
             >
               Prev
             </button>
@@ -245,7 +242,7 @@ const Calendar = () => {
             </h2>
             <button
               onClick={handleNextMonth}
-              className="bg-gray-300 p-2 rounded"
+              className="bg-slate-800 hover:bg-slate-700 text-white px-2.5 py-1 rounded-lg"
             >
               Next
             </button>
