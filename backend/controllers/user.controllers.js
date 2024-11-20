@@ -74,15 +74,14 @@ const verifyAccountController = async(req, res) => {
                 .json({ error: true, message: ERROR_MESSAGES.USER_NOT_FOUND });
         }
 
-
         // user.isEmailVerified = true;
         // await user.save();
 
-  // if (!userInfo.isEmailVerified) {
-  //   return res
-  //     .status(HTTP_STATUS.BAD_REQUEST)
-  //     .json({ message: ERROR_MESSAGES.EMAIL_NOT_VERIFIED });
-  // }
+        // if (!userInfo.isEmailVerified) {
+        //   return res
+        //     .status(HTTP_STATUS.BAD_REQUEST)
+        //     .json({ message: ERROR_MESSAGES.EMAIL_NOT_VERIFIED });
+        // }
 
         return res.json({
             error: false,
