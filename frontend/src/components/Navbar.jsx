@@ -126,7 +126,7 @@ const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
           </Link>
 
           {userInfo ? (
-            <div className="sm:pr-20 sm:pl-10 " ref={profileRef}>
+            <div className="sm:pr-20 " ref={profileRef}>
               <ProfileInfo userInfo={userInfo} onLogout={onLogout} />
             </div>
           ) : (

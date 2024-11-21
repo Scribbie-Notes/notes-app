@@ -5,7 +5,7 @@ import { IoMdClose } from 'react-icons/io';
 const SearchBar = ({ value, tag, searchType, onChange, onTagChange, onClearSearch, handleSearch, onSearchTypeChange }) => {
     return (
         <div
-            className="w-64 flex items-center px-4 h-[37px] ml-20 bg-slate-200 border border-gray-300 rounded-md relative"
+            className="w-64 flex items-center px-4 h-[37px] ml-20 bg-slate-200 border border-gray-300 rounded-md relative focus-within:border-2 focus-within:border-slate-500"
         >
             {/* Dropdown to select search type */}
             {/* <select
