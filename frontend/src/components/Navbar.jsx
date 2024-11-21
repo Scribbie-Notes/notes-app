@@ -6,6 +6,9 @@ import { toast } from "react-hot-toast";
 import gsap from "gsap/all";
 import { FiMenu } from "react-icons/fi";
 import { SlideTabsExample } from "./Tabs";
+import { MdNightsStay } from "react-icons/md";
+import { IoSunnySharp } from "react-icons/io5";
+
 
 const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
   const [theme, setTheme] = useState("light");
@@ -125,8 +128,13 @@ const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
             </button>
           </Link>
 
+          {/* <div>
+          <MdNightsStay />
+          <IoSunnySharp />
+          </div> */}
+
           {userInfo ? (
-            <div className="sm:pr-20 " ref={profileRef}>
+            <div className="sm:pr-20 ml-2" ref={profileRef}>
               <ProfileInfo userInfo={userInfo} onLogout={onLogout} />
             </div>
           ) : (
