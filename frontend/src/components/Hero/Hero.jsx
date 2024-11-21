@@ -83,7 +83,6 @@ const Hero = () => {
         </div>
       </section>
 
-
       <section ref={sectionRef} className="pl-6 pr-6 py-12 mt-8 mb-4 sm:pl-10 sm:pr-10 lg:pl-20 lg:pr-20">
         <h1 className="section-title text-4xl font-bold text-center text-gray-900">
           Unlock Powerful Features to
@@ -134,7 +133,6 @@ const Hero = () => {
           </div>
         </div>
       </section>
-
 
       <Testimonial />
       <Pricing />

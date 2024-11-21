@@ -85,7 +85,7 @@ const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
       }`}
     >
       <Link to={userInfo ? "/dashboard" : "/"}>
-        <div ref={logoRef} className="flex items-center xl:pl-16 p-2">
+        <div ref={logoRef} className="flex items-center xl:pl-20 p-2">
           <img src="/logo.png" className="h-12" alt="logo" />
           <h2 className="text-3xl font-medium ml-[-12px] mt-2 tracking-tight">
             cribbie
