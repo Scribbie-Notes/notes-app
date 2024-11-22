@@ -15,10 +15,10 @@ const ProfileInfo = ({ userInfo, onLogout }) => {
     setIsDropdownOpen(!isDropdownOpen);
   };
 
-  const handleMyProfile = () => {
-    navigate("/my-profile");
-    setIsDropdownOpen(false);
-  };
+  // const handleMyProfile = () => {
+  //   navigate("/my-profile");
+  //   setIsDropdownOpen(false);
+  // };
 
 const handleArchivedNotes = () => {
     navigate("/archived-notes");
@@ -74,7 +74,7 @@ const handleArchivedNotes = () => {
 
       {isDropdownOpen && (
         <div className="absolute right-0  w-48  bg-white rounded-md shadow-lg py-2  border border-1 mt-3" style={{zIndex:100}}>
-          <button
+          {/* <button
             className="flex items-center gap-2 w-full text-start px-4 py-2 text-gray-700 hover:bg-gray-100"
             onClick={handleMyProfile}
           >
@@ -82,7 +82,7 @@ const handleArchivedNotes = () => {
               <CiUser />
             </span>
             <span className="text-md font-medium">Profile Settings</span>
-          </button>
+          </button> */}
           {/* <button
             className="flex items-center gap-2 w-full text-start px-4 py-2 text-gray-700 hover:bg-gray-100"
             onClick={handleArchivedNotes}
