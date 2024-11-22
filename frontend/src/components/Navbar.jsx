@@ -128,6 +128,12 @@ const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
             </button>
           </Link>
 
+          <Link to="/my-profile"  >
+            <button className="border border-gray-900 bg-slate-800 mt-1.5 hover:bg-slate-700 text-white transition duration-300 ease-in-out font-medium rounded-lg text-sm px-3 py-1.5">
+              My Profile
+            </button>
+          </Link>
+
           {/* <div>
           <MdNightsStay />
           <IoSunnySharp />
