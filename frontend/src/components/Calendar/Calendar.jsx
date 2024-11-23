@@ -242,7 +242,7 @@ const Calendar = () => {
           <div className="flex justify-between items-center mb-4">
             <button
               onClick={handlePrevMonth}
-              className="bg-slate-800 hover:bg-slate-700 text-white px-2.5 py-1 rounded-lg"
+              className="bg-slate-800 hover:bg-slate-700 text-white px-2.5 py-1 rounded-lg "
             >
               Prev
             </button>
