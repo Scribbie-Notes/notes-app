@@ -84,7 +84,7 @@ const StickyFooter = () => {
   };
 
   return (
-    <div className="bg-gradient-to-b from-white to-gray-300 py-16 pl-20 pr-20 pb-6">
+    <div className="bg-gradient-to-b from-white to-slate-300 py-16 pl-20 pr-20 pb-6">
       {/* Flex container for company description and grid layout */}
       {/* Feedback Model */}
       <Modal
