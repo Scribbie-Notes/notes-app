@@ -115,7 +115,7 @@ const About = () => {
             </button>
           </div>
         </Link>
-        <div className="flex flex-col items-start pl-8 pr-52 ">
+        <div className="flex flex-col items-start pr-52 ">
           <div className="container text-gray-800 mx-auto rounded-lg p-6 bg-white max-w-screen-lg">
             <h1 className="text-3xl font-bold mb-6">
               About Scribbie
