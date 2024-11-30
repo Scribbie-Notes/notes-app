@@ -116,11 +116,11 @@ const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
         </div>
 
         <div className="flex items-center gap-x-5">
-          <Link to="/calendar">
+          {/* <Link to="/calendar">
             <button className="border border-gray-900 bg-slate-800 mt-1.5 hover:bg-slate-700 text-white transition duration-300 ease-in-out font-medium rounded-lg text-sm px-3 py-1.5">
               Calendar
             </button>
-          </Link>
+          </Link> */}
 
           <Link to="/archived-notes"  >
             <button className="border border-gray-900 bg-slate-800 mt-1.5 hover:bg-slate-700 text-white transition duration-300 ease-in-out font-medium rounded-lg text-sm px-3 py-1.5">
