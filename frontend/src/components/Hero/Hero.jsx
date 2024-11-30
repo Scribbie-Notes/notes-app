@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import Navbar from '../Navbar';
+import Navbar2 from '../Navbar-2';
 import { Link } from 'react-router-dom';
 // import gsap from 'gsap';
 // import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -28,7 +28,7 @@ const Hero = () => {
 
   return (
     <div className="h-full scroll-smooth">
-      <Navbar userInfo={user} />
+      <Navbar2 userInfo={user} />
 
       <section className="bg-white pt-12" ref={whiteSectionRef}>
         <div className="grid max-w-screen-xl px-4 py-8 mx-auto lg:gap-8 xl:gap-0 lg:py-16 lg:grid-cols-12 pl-16">

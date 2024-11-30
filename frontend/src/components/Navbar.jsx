@@ -88,7 +88,7 @@ const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
       }`}
     >
       <Link to={userInfo ? "/dashboard" : "/"}>
-        <div ref={logoRef} className="flex items-center xl:pl-20 p-2">
+      <div ref={logoRef} className="flex items-center xl:pl-20 p-2">
           <img src="/logo.png" className="h-12" alt="logo" />
           <h2 className="text-3xl font-medium ml-[-12px] mt-2 tracking-tight">
             cribbie
@@ -140,11 +140,11 @@ const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
           </div> */}
 
           {userInfo ? (
-            <div className="sm:pr-20 ml-2" ref={profileRef}>
+            <div className="sm:pr-20 pr-24 ml-2" ref={profileRef}>
               <ProfileInfo userInfo={userInfo} onLogout={onLogout} />
             </div>
           ) : (
-            <div className="pr-20 sm:pr-20 sm:pl-10 ">
+            <div className="pr-24 sm:pr-20 sm:pl-10 ">
               {location.pathname !== "/login" && (
                 <button
                   ref={loginButtonRef}
