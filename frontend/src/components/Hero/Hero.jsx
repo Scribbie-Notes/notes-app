@@ -44,7 +44,7 @@ const Hero = () => {
             </h1>
             <p
               ref={heroParagraph}
-              className="max-w-2xl mb-6 font-light text-gray-500 lg:mb-8 md:text-lg lg:text-xl dark:text-gray-800 text-base sm:text-lg"
+              className="max-w-2xl mb-6 font-light text-slate-700 lg:mb-8 md:text-lg lg:text-xl dark:text-gray-800 text-base sm:text-lg"
             >
               Capture every thought and organize with ease. Unlock your full potential with <span className="font-semibold">Scribbie</span>
             </p>

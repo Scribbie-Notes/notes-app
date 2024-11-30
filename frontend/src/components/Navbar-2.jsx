@@ -79,7 +79,7 @@ const Navbar2 = ({ userInfo, onSearchNote, handleClearSearch }) => {
   };
 
   return (
-    <div className={`flex items-center shadow justify-between px-4 py-3  ${theme === "dark" ? "bg-black text-white" : "bg-white text-black"}`}>
+  <div className={`flex items-center shadow justify-between  px-4 py-3  ${theme === "dark" ? "bg-black text-white" : "bg-white text-black"}`}>
       <Link to={userInfo ? "/dashboard" : "/"}>
         <div ref={logoRef} className="flex items-center pl-20 p-2">
           <img src="/logo.png" className="h-12" alt="logo" />
